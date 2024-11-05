@@ -1,5 +1,6 @@
 babbage-002
 chatgpt-4o-latest
+cua-text-emb-small
 curie:ft-sutter-hill-ventures-2021-12-15-16-47-18
 curie:ft-sutter-hill-ventures-2022-03-31-21-54-04
 curie:ft-sutter-hill-ventures-2023-01-24-20-00-04
