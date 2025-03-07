@@ -29,6 +29,7 @@ models/gemini-2.0-flash-thinking-exp-01-21
 models/gemini-2.0-flash-thinking-exp-1219
 models/gemini-2.0-pro-exp
 models/gemini-2.0-pro-exp-02-05
+models/gemini-embedding-exp-03-07
 models/gemini-exp-1206
 models/gemini-pro-vision
 models/imagen-3.0-generate-002
