@@ -1,5 +1,7 @@
 babbage-002
 chatgpt-4o-latest
+computer-use-preview
+computer-use-preview-2025-03-11
 curie:ft-sutter-hill-ventures-2021-12-15-16-47-18
 curie:ft-sutter-hill-ventures-2022-03-31-21-54-04
 curie:ft-sutter-hill-ventures-2023-01-24-20-00-04
@@ -45,9 +47,13 @@ gpt-4o-mini-audio-preview
 gpt-4o-mini-audio-preview-2024-12-17
 gpt-4o-mini-realtime-preview
 gpt-4o-mini-realtime-preview-2024-12-17
+gpt-4o-mini-search-preview
+gpt-4o-mini-search-preview-2025-03-11
 gpt-4o-realtime-preview
 gpt-4o-realtime-preview-2024-10-01
 gpt-4o-realtime-preview-2024-12-17
+gpt-4o-search-preview
+gpt-4o-search-preview-2025-03-11
 o1
 o1-2024-12-17
 o1-mini
