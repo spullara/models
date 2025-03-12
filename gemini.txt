@@ -33,6 +33,7 @@ models/gemini-embedding-exp
 models/gemini-embedding-exp-03-07
 models/gemini-exp-1206
 models/gemini-pro-vision
+models/gemma-3-27b-it
 models/imagen-3.0-generate-002
 models/learnlm-1.5-pro-experimental
 models/text-bison-001
