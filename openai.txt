@@ -69,7 +69,6 @@ o3-mini
 o3-mini-2025-01-31
 omni-moderation-2024-09-26
 omni-moderation-latest
-omni-moderation-latest-ev3
 text-embedding-3-large
 text-embedding-3-small
 text-embedding-ada-002
