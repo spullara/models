@@ -25,6 +25,7 @@ models/gemini-2.0-flash-lite
 models/gemini-2.0-flash-lite-001
 models/gemini-2.0-flash-lite-preview
 models/gemini-2.0-flash-lite-preview-02-05
+models/gemini-2.0-flash-live-001
 models/gemini-2.0-flash-thinking-exp
 models/gemini-2.0-flash-thinking-exp-01-21
 models/gemini-2.0-flash-thinking-exp-1219
@@ -44,3 +45,4 @@ models/imagen-3.0-generate-002
 models/learnlm-1.5-pro-experimental
 models/text-bison-001
 models/text-embedding-004
+models/veo-2.0-generate-001
