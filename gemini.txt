@@ -43,6 +43,7 @@ models/gemma-3-27b-it
 models/gemma-3-4b-it
 models/imagen-3.0-generate-002
 models/learnlm-1.5-pro-experimental
+models/learnlm-2.0-flash-experimental
 models/text-bison-001
 models/text-embedding-004
 models/veo-2.0-generate-001
