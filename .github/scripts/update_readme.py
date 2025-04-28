@@ -200,7 +200,7 @@ def main():
         update_readme(changes)
         print(f"README.md updated with changes from {', '.join(changes.keys())}")
     else:
-        print("No model changes detected in the last 30 days.")
+        print("No model changes detected in the last 60 days.")
 
 if __name__ == "__main__":
     main()

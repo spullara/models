@@ -1,5 +1,5 @@
 These are the model lists from OpenAI, Anthropic and Gemini.
-It is updated automatically every hour.
+It is updated automatically when model files change.
 
 Last updated: 2025-04-28 00:03:47
 

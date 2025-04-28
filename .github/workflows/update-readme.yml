@@ -4,9 +4,6 @@ on:
   push:
     paths:
       - '**.txt'
-  schedule:
-    # Run daily at midnight UTC
-    - cron: '0 0 * * *'
 
 jobs:
   update-readme:
