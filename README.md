@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic and Gemini.
 It is updated automatically when model files change.
 
-Last updated: 2025-05-07 08:00:15
+Last updated: 2025-05-07 16:00:18
 
 ## Model Changes (Last 60 Days)
 
@@ -45,6 +45,7 @@ Last updated: 2025-05-07 08:00:15
 ### Gemini
 
 + models/gemini-2.0-flash-exp-image-generation
++ models/gemini-2.0-flash-preview-image-generation
 + models/gemini-2.5-flash-preview-04-17
 + models/gemini-2.5-flash-preview-04-17-thinking
 + models/gemini-2.5-pro-exp-03-25
@@ -55,4 +56,5 @@ Last updated: 2025-05-07 08:00:15
 + models/gemma-3-27b-it
 + models/gemma-3-4b-it
 + models/learnlm-2.0-flash-experimental
+- models/imagen-3.0-generate-002
 
