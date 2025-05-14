@@ -77,7 +77,6 @@ o3-mini
 o3-mini-2025-01-31
 o4-mini
 o4-mini-2025-04-16
-o4-mini-gumdrop-pt-0514
 omni-moderation-2024-09-26
 omni-moderation-latest
 text-embedding-3-large
