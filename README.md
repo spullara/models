@@ -1,12 +1,13 @@
 These are the model lists from OpenAI, Anthropic and Gemini.
 It is updated automatically when model files change.
 
-Last updated: 2025-05-14 21:30:14
+Last updated: 2025-05-16 15:30:17
 
 ## Model Changes (Last 60 Days)
 
 ### OpenAI
 
++ codex-mini-latest
 + gpt-4.1
 + gpt-4.1-2025-04-14
 + gpt-4.1-mini
