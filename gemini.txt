@@ -1,5 +1,4 @@
 models/aqa
-models/chat-bison-001
 models/embedding-001
 models/embedding-gecko-001
 models/gemini-1.0-pro-vision-latest
@@ -25,6 +24,7 @@ models/gemini-2.0-flash-lite
 models/gemini-2.0-flash-lite-001
 models/gemini-2.0-flash-lite-preview
 models/gemini-2.0-flash-lite-preview-02-05
+models/gemini-2.0-flash-live-001
 models/gemini-2.0-flash-preview-image-generation
 models/gemini-2.0-flash-thinking-exp
 models/gemini-2.0-flash-thinking-exp-01-21
@@ -46,5 +46,5 @@ models/gemma-3-27b-it
 models/gemma-3-4b-it
 models/imagen-3.0-generate-002
 models/learnlm-2.0-flash-experimental
-models/text-bison-001
 models/text-embedding-004
+models/veo-2.0-generate-001
