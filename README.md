@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic and Gemini.
 It is updated automatically when model files change.
 
-Last updated: 2025-05-21 03:00:17
+Last updated: 2025-05-22 16:52:44
 
 ## Model Changes (Last 60 Days)
 
@@ -23,15 +23,8 @@ Last updated: 2025-05-21 03:00:17
 
 ### Anthropic
 
-+ claude-2.0
-+ claude-2.1
-+ claude-3-5-haiku-20241022
-+ claude-3-5-sonnet-20240620
-+ claude-3-5-sonnet-20241022
-+ claude-3-7-sonnet-20250219
-+ claude-3-haiku-20240307
-+ claude-3-opus-20240229
-+ claude-3-sonnet-20240229
++ claude-opus-4-20250514
++ claude-sonnet-4-20250514
 
 ### Gemini
 
