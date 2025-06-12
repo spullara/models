@@ -10,7 +10,6 @@ models/gemini-1.5-flash-8b-001
 models/gemini-1.5-flash-8b-latest
 models/gemini-1.5-flash-latest
 models/gemini-1.5-pro
-models/gemini-1.5-pro-001
 models/gemini-1.5-pro-002
 models/gemini-1.5-pro-latest
 models/gemini-2.0-flash
@@ -48,3 +47,4 @@ models/gemma-3n-e4b-it
 models/imagen-3.0-generate-002
 models/learnlm-2.0-flash-experimental
 models/text-embedding-004
+models/veo-2.0-generate-001
