@@ -3,7 +3,6 @@ models/embedding-001
 models/embedding-gecko-001
 models/gemini-1.0-pro-vision-latest
 models/gemini-1.5-flash
-models/gemini-1.5-flash-001
 models/gemini-1.5-flash-001-tuning
 models/gemini-1.5-flash-002
 models/gemini-1.5-flash-8b
@@ -46,5 +45,6 @@ models/gemma-3-1b-it
 models/gemma-3-27b-it
 models/gemma-3-4b-it
 models/gemma-3n-e4b-it
+models/imagen-3.0-generate-002
 models/learnlm-2.0-flash-experimental
 models/text-embedding-004
