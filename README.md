@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic and Gemini.
 It is updated automatically when model files change.
 
-Last updated: 2025-06-26 17:00:15
+Last updated: 2025-06-26 18:30:12
 
 ## Model Changes (Last 60 Days)
 
@@ -39,7 +39,6 @@ Last updated: 2025-06-26 17:00:15
 + models/gemini-2.5-pro-preview-tts
 + models/gemma-3n-e2b-it
 + models/gemma-3n-e4b-it
-- models/aqa
 - models/chat-bison-001
 - models/gemini-1.5-flash-001
 - models/gemini-1.5-flash-001-tuning
@@ -47,6 +46,7 @@ Last updated: 2025-06-26 17:00:15
 - models/gemini-1.5-flash-8b-exp-0924
 - models/gemini-1.5-pro-001
 - models/gemini-2.0-flash-live-001
+- models/gemini-2.5-pro-exp-03-25
 - models/imagen-3.0-generate-002
 - models/learnlm-1.5-pro-experimental
 - models/text-bison-001
