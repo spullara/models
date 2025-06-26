@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic and Gemini.
 It is updated automatically when model files change.
 
-Last updated: 2025-06-26 16:00:17
+Last updated: 2025-06-26 17:00:15
 
 ## Model Changes (Last 60 Days)
 
@@ -11,8 +11,12 @@ Last updated: 2025-06-26 16:00:17
 + gpt-4o-audio-preview-2025-06-03
 + gpt-4o-realtime-preview-2025-06-03
 + gpt-image-1
++ o3-deep-research
++ o3-deep-research-2025-06-26
 + o3-pro
 + o3-pro-2025-06-10
++ o4-mini-deep-research
++ o4-mini-deep-research-2025-06-26
 - gpt-3.5-turbo-16k-0613
 - gpt-4-32k-0314
 
