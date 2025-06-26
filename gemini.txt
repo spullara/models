@@ -1,4 +1,3 @@
-models/aqa
 models/embedding-001
 models/embedding-gecko-001
 models/gemini-1.0-pro-vision-latest
@@ -45,6 +44,7 @@ models/gemma-3-12b-it
 models/gemma-3-1b-it
 models/gemma-3-27b-it
 models/gemma-3-4b-it
+models/gemma-3n-e2b-it
 models/gemma-3n-e4b-it
 models/learnlm-2.0-flash-experimental
 models/text-embedding-004
