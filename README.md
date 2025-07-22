@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic and Gemini.
 It is updated automatically when model files change.
 
-Last updated: 2025-07-21 16:30:12
+Last updated: 2025-07-22 16:00:11
 
 ## Model Changes (Last 60 Days)
 
@@ -21,8 +21,6 @@ Last updated: 2025-07-21 16:30:12
 
 ### Anthropic
 
-+ claude-opus-4-20250514
-+ claude-sonnet-4-20250514
 - claude-2.0
 - claude-2.1
 - claude-3-sonnet-20240229
@@ -31,12 +29,12 @@ Last updated: 2025-07-21 16:30:12
 
 + models/aqa
 + models/gemini-2.5-flash
++ models/gemini-2.5-flash-lite
 + models/gemini-2.5-flash-lite-preview-06-17
 + models/gemini-2.5-pro
 + models/gemini-2.5-pro-preview-06-05
 + models/gemini-embedding-001
 + models/gemma-3n-e2b-it
-+ models/imagen-3.0-generate-002
 - models/gemini-1.5-flash-001
 - models/gemini-1.5-flash-001-tuning
 - models/gemini-1.5-flash-8b-exp-0827
