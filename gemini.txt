@@ -25,6 +25,7 @@ models/gemini-2.0-flash-thinking-exp-1219
 models/gemini-2.0-pro-exp
 models/gemini-2.0-pro-exp-02-05
 models/gemini-2.5-flash
+models/gemini-2.5-flash-image-preview
 models/gemini-2.5-flash-lite
 models/gemini-2.5-flash-lite-preview-06-17
 models/gemini-2.5-flash-preview-05-20
@@ -45,6 +46,5 @@ models/gemma-3-4b-it
 models/gemma-3n-e2b-it
 models/gemma-3n-e4b-it
 models/imagen-3.0-generate-002
-models/imagen-4.0-generate-preview-06-06
 models/learnlm-2.0-flash-experimental
 models/text-embedding-004
