@@ -70,6 +70,8 @@ gpt-5-mini-2025-08-07
 gpt-5-nano
 gpt-5-nano-2025-08-07
 gpt-image-1
+gpt-realtime
+gpt-realtime-2025-08-28
 o1
 o1-2024-12-17
 o1-mini
