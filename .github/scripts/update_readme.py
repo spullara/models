@@ -14,7 +14,8 @@ from datetime import datetime, timedelta
 PROVIDER_MAP = {
     'openai.txt': 'OpenAI',
     'anthropic.txt': 'Anthropic',
-    'gemini.txt': 'Gemini'
+    'gemini.txt': 'Gemini',
+    'grok.txt': 'Grok'
 }
 
 def get_changed_files():
