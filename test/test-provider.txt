@@ -1,2 +1,0 @@
-test-model-1
-test-model-2
