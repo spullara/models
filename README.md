@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2025-09-25 16:00:18
+Last updated: 2025-09-25 17:00:13
 
 ## Model Changes (Last 60 Days)
 
@@ -29,9 +29,19 @@ Last updated: 2025-09-25 16:00:18
 ### Gemini
 
 + models/gemini-2.5-flash-image-preview
++ models/gemini-2.5-flash-lite-preview-09-2025
++ models/gemini-2.5-flash-preview-09-2025
++ models/gemini-flash-latest
++ models/gemini-flash-lite-latest
++ models/gemini-pro-latest
 + models/gemini-robotics-er-1.5-preview
+- models/aqa
 - models/gemini-1.0-pro-vision-latest
+- models/gemini-embedding-001
+- models/gemini-embedding-exp
+- models/gemini-embedding-exp-03-07
 - models/gemini-pro-vision
+- models/text-embedding-004
 
 ### Grok
 
