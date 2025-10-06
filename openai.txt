@@ -73,6 +73,7 @@ gpt-5-nano-2025-08-07
 gpt-audio
 gpt-audio-2025-08-28
 gpt-image-1
+gpt-image-1-mini
 gpt-realtime
 gpt-realtime-2025-08-28
 o1
@@ -95,6 +96,7 @@ o4-mini-deep-research
 o4-mini-deep-research-2025-06-26
 omni-moderation-2024-09-26
 omni-moderation-latest
+sora-2
 text-embedding-3-large
 text-embedding-3-small
 text-embedding-ada-002
