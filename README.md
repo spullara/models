@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2025-10-07 18:30:12
+Last updated: 2025-10-14 17:30:12
 
 ## Model Changes (Last 60 Days)
 
@@ -10,6 +10,8 @@ Last updated: 2025-10-07 18:30:12
 + gpt-5-codex
 + gpt-5-pro
 + gpt-5-pro-2025-10-06
++ gpt-5-search-api
++ gpt-5-search-api-2025-10-14
 + gpt-audio
 + gpt-audio-2025-08-28
 + gpt-audio-mini
