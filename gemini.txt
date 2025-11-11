@@ -44,7 +44,7 @@ models/gemma-3-27b-it
 models/gemma-3-4b-it
 models/gemma-3n-e2b-it
 models/gemma-3n-e4b-it
-models/imagen-3.0-generate-002
 models/imagen-4.0-generate-preview-06-06
+models/imagen-4.0-ultra-generate-preview-06-06
 models/learnlm-2.0-flash-experimental
 models/text-embedding-004
