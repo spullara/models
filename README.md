@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2025-11-13 19:00:11
+Last updated: 2025-11-14 17:30:12
 
 ## Model Changes (Last 60 Days)
 
@@ -25,6 +25,7 @@ Last updated: 2025-11-13 19:00:11
 + gpt-realtime-mini-2025-10-06
 + sora-2
 + sora-2-pro
+- o1-mini
 
 ### Anthropic
 
