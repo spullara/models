@@ -1,71 +1,303 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2025-11-20 16:00:13
+Last updated: 2025-11-20 16:46:12
 
-## Model Changes (Last 60 Days)
+## Anthropic
 
-### OpenAI
+### Current Models
 
-+ gpt-4o-transcribe-diarize
-+ gpt-5-codex
-+ gpt-5-pro
-+ gpt-5-pro-2025-10-06
-+ gpt-5-search-api
-+ gpt-5-search-api-2025-10-14
-+ gpt-5.1
-+ gpt-5.1-2025-11-13
-+ gpt-5.1-chat-latest
-+ gpt-5.1-codex
-+ gpt-5.1-codex-mini
-+ gpt-audio-mini
-+ gpt-audio-mini-2025-10-06
-+ gpt-image-1-mini
-+ gpt-realtime-mini
-+ gpt-realtime-mini-2025-10-06
-+ sora-2
-+ sora-2-pro
-- o1-mini
-- o1-mini-2024-09-12
+- claude-haiku-4-5-20251001 (added: 2025-10-15)
+- claude-sonnet-4-5-20250929 (added: 2025-09-29)
+- claude-opus-4-1-20250805 (added: 2025-08-05)
+- claude-sonnet-4-20250514 (added: 2025-05-22)
+- claude-opus-4-20250514 (added: 2025-05-22)
+- claude-3-opus-20240229 (added: 2025-03-12)
+- claude-3-haiku-20240307 (added: 2025-03-12)
+- claude-3-7-sonnet-20250219 (added: 2025-03-12)
+- claude-3-5-haiku-20241022 (added: 2025-03-12)
 
-### Anthropic
+### Deleted Models
 
-+ claude-haiku-4-5-20251001
-+ claude-sonnet-4-5-20250929
-- claude-3-5-sonnet-20240620
-- claude-3-5-sonnet-20241022
+- claude-3-5-sonnet-20241022 (deleted: 2025-10-28)
+- claude-3-5-sonnet-20240620 (deleted: 2025-10-28)
+- claude-3-sonnet-20240229 (deleted: 2025-07-21)
+- claude-2.1 (deleted: 2025-07-21)
+- claude-2.0 (deleted: 2025-07-21)
 
-### Gemini
+## Gemini
 
-+ models/gemini-2.5-computer-use-preview-10-2025
-+ models/gemini-2.5-flash-image
-+ models/gemini-2.5-flash-lite-preview-09-2025
-+ models/gemini-2.5-flash-preview-09-2025
-+ models/gemini-3-pro-image-preview
-+ models/gemini-3-pro-preview
-+ models/gemini-flash-latest
-+ models/gemini-flash-lite-latest
-+ models/gemini-pro-latest
-+ models/gemini-robotics-er-1.5-preview
-+ models/imagen-4.0-generate-preview-06-06
-+ models/imagen-4.0-ultra-generate-preview-06-06
-+ models/nano-banana-pro-preview
-- models/gemini-1.5-flash
-- models/gemini-1.5-flash-002
-- models/gemini-1.5-flash-8b
-- models/gemini-1.5-flash-8b-001
-- models/gemini-1.5-flash-8b-latest
-- models/gemini-1.5-flash-latest
-- models/gemini-1.5-pro
-- models/gemini-1.5-pro-002
-- models/gemini-1.5-pro-latest
-- models/gemini-2.0-flash-preview-image-generation
-- models/gemini-2.5-flash-lite-preview-06-17
-- models/gemini-2.5-flash-preview-05-20
-- models/imagen-3.0-generate-002
+### Current Models
 
-### Grok
+- models/nano-banana-pro-preview (added: 2025-11-20)
+- models/gemini-3-pro-image-preview (added: 2025-11-20)
+- models/gemini-3-pro-preview (added: 2025-11-18)
+- models/gemini-2.5-computer-use-preview-10-2025 (added: 2025-10-07)
+- models/gemini-2.5-flash-image (added: 2025-10-02)
+- models/imagen-4.0-ultra-generate-preview-06-06 (added: 2025-09-27)
+- models/gemini-robotics-er-1.5-preview (added: 2025-09-25)
+- models/gemini-pro-latest (added: 2025-09-25)
+- models/gemini-flash-lite-latest (added: 2025-09-25)
+- models/gemini-flash-latest (added: 2025-09-25)
+- models/gemini-2.5-flash-preview-09-2025 (added: 2025-09-25)
+- models/gemini-2.5-flash-lite-preview-09-2025 (added: 2025-09-25)
+- models/gemini-2.5-flash-image-preview (added: 2025-08-26)
+- models/imagen-4.0-generate-preview-06-06 (added: 2025-07-28)
+- models/gemini-2.5-flash-lite (added: 2025-07-22)
+- models/gemini-embedding-001 (added: 2025-07-14)
+- models/gemma-3n-e2b-it (added: 2025-06-26)
+- models/gemini-2.5-pro (added: 2025-06-17)
+- models/gemini-2.5-flash (added: 2025-06-17)
+- models/gemini-2.5-pro-preview-06-05 (added: 2025-06-05)
+- models/gemini-2.5-pro-preview-tts (added: 2025-05-21)
+- models/gemini-2.5-flash-preview-tts (added: 2025-05-21)
+- models/gemma-3n-e4b-it (added: 2025-05-20)
+- models/gemini-2.5-pro-preview-05-06 (added: 2025-05-06)
+- models/learnlm-2.0-flash-experimental (added: 2025-04-17)
+- models/gemini-2.5-pro-preview-03-25 (added: 2025-04-04)
+- models/gemma-3-1b-it (added: 2025-04-02)
+- models/gemma-3-4b-it (added: 2025-04-01)
+- models/gemma-3-12b-it (added: 2025-04-01)
+- models/gemini-2.0-flash-exp-image-generation (added: 2025-03-14)
+- models/gemma-3-27b-it (added: 2025-03-12)
+- models/gemini-embedding-exp-03-07 (added: 2025-03-07)
+- models/gemini-embedding-exp (added: 2025-03-07)
+- models/gemini-2.0-flash-lite-001 (added: 2025-02-25)
+- models/gemini-2.0-flash-lite (added: 2025-02-25)
+- models/gemini-2.0-pro-exp-02-05 (added: 2025-02-05)
+- models/gemini-2.0-pro-exp (added: 2025-02-05)
+- models/gemini-2.0-flash-lite-preview-02-05 (added: 2025-02-05)
+- models/gemini-2.0-flash-lite-preview (added: 2025-02-05)
+- models/gemini-2.0-flash-001 (added: 2025-02-05)
+- models/gemini-2.0-flash (added: 2025-02-05)
+- models/gemini-2.0-flash-thinking-exp-01-21 (added: 2025-01-21)
+- models/gemini-2.0-flash-thinking-exp-1219 (added: 2024-12-19)
+- models/gemini-2.0-flash-thinking-exp (added: 2024-12-19)
+- models/gemini-2.0-flash-exp (added: 2024-12-11)
+- models/text-embedding-004 (added: 2024-12-07)
+- models/gemini-exp-1206 (added: 2024-12-07)
+- models/embedding-gecko-001 (added: 2024-12-07)
+- models/embedding-001 (added: 2024-12-07)
+- models/aqa (added: 2024-12-07)
 
-+ grok-4-1-fast-non-reasoning
-+ grok-4-1-fast-reasoning
+### Deleted Models
+
+- models/imagen-4.0-ultra-generate-001 (deleted: 2025-11-20)
+- models/imagen-4.0-generate-001 (deleted: 2025-11-20)
+- models/gemini-3-pro-preview-ais-applets (deleted: 2025-11-18)
+- models/gemini-2.5-flash-preview-05-20 (deleted: 2025-11-18)
+- models/gemini-2.5-flash-lite-preview-06-17 (deleted: 2025-11-18)
+- models/gemini-2.0-flash-preview-image-generation (deleted: 2025-11-15)
+- models/imagen-3.0-generate-002 (deleted: 2025-11-11)
+- models/gemini-1.5-pro-latest (deleted: 2025-09-27)
+- models/gemini-1.5-pro-002 (deleted: 2025-09-27)
+- models/gemini-1.5-pro (deleted: 2025-09-27)
+- models/gemini-1.5-flash-latest (deleted: 2025-09-27)
+- models/gemini-1.5-flash-8b-latest (deleted: 2025-09-27)
+- models/gemini-1.5-flash-8b-001 (deleted: 2025-09-27)
+- models/gemini-1.5-flash-8b (deleted: 2025-09-27)
+- models/gemini-1.5-flash-002 (deleted: 2025-09-27)
+- models/gemini-1.5-flash (deleted: 2025-09-27)
+- models/gemini-pro-vision (deleted: 2025-07-28)
+- models/gemini-1.0-pro-vision-latest (deleted: 2025-07-28)
+- models/gemini-2.5-flash-preview-04-17-thinking (deleted: 2025-07-15)
+- models/gemini-2.5-flash-preview-04-17 (deleted: 2025-07-15)
+- models/gemini-2.5-pro-exp-03-25 (deleted: 2025-06-26)
+- models/veo-2.0-generate-001 (deleted: 2025-06-17)
+- models/gemini-2.5-pro-1p-recitation-off (deleted: 2025-06-17)
+- models/gemini-2.5-pro-1p (deleted: 2025-06-17)
+- models/gemini-2.5-flash-preview-native-audio-dialog (deleted: 2025-06-17)
+- models/gemini-2.5-flash-lite-preview-06-11-summarized (deleted: 2025-06-17)
+- models/gemini-2.5-flash-1p-recitation-off (deleted: 2025-06-17)
+- models/gemini-2.5-flash-1p (deleted: 2025-06-17)
+- models/gemini-1.5-pro-001 (deleted: 2025-06-12)
+- models/gemini-1.5-flash-8b-exp-0924 (deleted: 2025-06-12)
+- models/gemini-1.5-flash-8b-exp-0827 (deleted: 2025-06-12)
+- models/gemini-1.5-flash-001-tuning (deleted: 2025-06-12)
+- models/gemini-1.5-flash-001 (deleted: 2025-06-12)
+- models/gemini-2.0-flash-live-001 (deleted: 2025-05-20)
+- models/text-bison-001 (deleted: 2025-05-17)
+- models/chat-bison-001 (deleted: 2025-05-17)
+- models/learnlm-1.5-pro-experimental (deleted: 2025-05-14)
+- models/gemini-pro (deleted: 2025-02-25)
+- models/gemini-1.0-pro-latest (deleted: 2025-02-25)
+- models/gemini-1.0-pro-001 (deleted: 2025-02-25)
+- models/gemini-1.0-pro (deleted: 2025-02-25)
+- models/gemini-exp-1121 (deleted: 2025-02-05)
+- models/gemini-exp-1114 (deleted: 2025-02-05)
+- models/gemini-1.5-pro-exp-0827 (deleted: 2025-02-05)
+- models/gemini-1.5-pro-exp-0801 (deleted: 2025-02-05)
+- models/gemini-1.5-flash-exp-0827 (deleted: 2025-02-05)
+
+## Grok
+
+### Current Models
+
+- grok-4-1-fast-reasoning (added: 2025-11-19)
+- grok-4-1-fast-non-reasoning (added: 2025-11-19)
+- grok-4-fast-reasoning (added: 2025-09-20)
+- grok-4-fast-non-reasoning (added: 2025-09-20)
+- grok-code-fast-1 (added: 2025-09-04)
+- grok-4-0709 (added: 2025-09-04)
+- grok-3-mini (added: 2025-09-04)
+- grok-3 (added: 2025-09-04)
+- grok-2-vision-1212 (added: 2025-09-04)
+- grok-2-1212 (added: 2025-09-04)
+
+### Deleted Models
+
+- grok-4-0709-eu (deleted: 2025-09-18)
+- grok-3-mini-fast (deleted: 2025-09-15)
+- grok-3-fast (deleted: 2025-09-15)
+
+## OpenAI
+
+### Current Models
+
+- gpt-5.1-codex-mini (added: 2025-11-13)
+- gpt-5.1-codex (added: 2025-11-13)
+- gpt-5.1-chat-latest (added: 2025-11-13)
+- gpt-5.1-2025-11-13 (added: 2025-11-13)
+- gpt-5.1 (added: 2025-11-13)
+- gpt-4o-transcribe-diarize (added: 2025-10-15)
+- gpt-5-search-api-2025-10-14 (added: 2025-10-14)
+- gpt-5-search-api (added: 2025-10-14)
+- sora-2-pro (added: 2025-10-06)
+- sora-2 (added: 2025-10-06)
+- gpt-realtime-mini-2025-10-06 (added: 2025-10-06)
+- gpt-realtime-mini (added: 2025-10-06)
+- gpt-image-1-mini (added: 2025-10-06)
+- gpt-audio-mini-2025-10-06 (added: 2025-10-06)
+- gpt-audio-mini (added: 2025-10-06)
+- gpt-5-pro-2025-10-06 (added: 2025-10-06)
+- gpt-5-pro (added: 2025-10-06)
+- gpt-5-codex (added: 2025-09-23)
+- gpt-realtime-2025-08-28 (added: 2025-08-28)
+- gpt-realtime (added: 2025-08-28)
+- gpt-audio-2025-08-28 (added: 2025-08-28)
+- gpt-audio (added: 2025-08-28)
+- gpt-5-nano-2025-08-07 (added: 2025-08-07)
+- gpt-5-nano (added: 2025-08-07)
+- gpt-5-mini-2025-08-07 (added: 2025-08-07)
+- gpt-5-mini (added: 2025-08-07)
+- gpt-5-chat-latest (added: 2025-08-07)
+- gpt-5-2025-08-07 (added: 2025-08-07)
+- gpt-5 (added: 2025-08-07)
+- o4-mini-deep-research-2025-06-26 (added: 2025-06-26)
+- o4-mini-deep-research (added: 2025-06-26)
+- o3-deep-research-2025-06-26 (added: 2025-06-26)
+- o3-deep-research (added: 2025-06-26)
+- o3-pro-2025-06-10 (added: 2025-06-10)
+- o3-pro (added: 2025-06-10)
+- gpt-4o-realtime-preview-2025-06-03 (added: 2025-06-03)
+- gpt-4o-audio-preview-2025-06-03 (added: 2025-06-03)
+- codex-mini-latest (added: 2025-05-16)
+- gpt-image-1 (added: 2025-04-25)
+- o4-mini-2025-04-16 (added: 2025-04-16)
+- o4-mini (added: 2025-04-16)
+- o3-2025-04-16 (added: 2025-04-16)
+- o3 (added: 2025-04-16)
+- gpt-4.1-nano-2025-04-14 (added: 2025-04-14)
+- gpt-4.1-nano (added: 2025-04-14)
+- gpt-4.1-mini-2025-04-14 (added: 2025-04-14)
+- gpt-4.1-mini (added: 2025-04-14)
+- gpt-4.1-2025-04-14 (added: 2025-04-14)
+- gpt-4.1 (added: 2025-04-14)
+- gpt-4o-transcribe (added: 2025-03-20)
+- gpt-4o-mini-tts (added: 2025-03-20)
+- gpt-4o-mini-transcribe (added: 2025-03-20)
+- o1-pro-2025-03-19 (added: 2025-03-19)
+- o1-pro (added: 2025-03-19)
+- gpt-4o-search-preview-2025-03-11 (added: 2025-03-11)
+- gpt-4o-search-preview (added: 2025-03-11)
+- gpt-4o-mini-search-preview-2025-03-11 (added: 2025-03-11)
+- gpt-4o-mini-search-preview (added: 2025-03-11)
+- computer-use-preview-2025-03-11 (added: 2025-03-11)
+- computer-use-preview (added: 2025-03-11)
+- o3-mini-2025-01-31 (added: 2025-01-31)
+- o3-mini (added: 2025-01-31)
+- o1-2024-12-17 (added: 2024-12-19)
+- o1 (added: 2024-12-19)
+- gpt-4o-mini-audio-preview-2024-12-17 (added: 2024-12-19)
+- gpt-4o-mini-audio-preview (added: 2024-12-19)
+- gpt-4o-realtime-preview-2024-12-17 (added: 2024-12-17)
+- gpt-4o-mini-realtime-preview-2024-12-17 (added: 2024-12-17)
+- gpt-4o-mini-realtime-preview (added: 2024-12-17)
+- gpt-4o-audio-preview-2024-12-17 (added: 2024-12-17)
+- omni-moderation-latest (added: 2024-12-04)
+- omni-moderation-2024-09-26 (added: 2024-12-04)
+- gpt-4o-2024-11-20 (added: 2024-11-20)
+- gpt-4o-audio-preview-2024-10-01 (added: 2024-10-17)
+- gpt-4o-audio-preview (added: 2024-10-17)
+- whisper-1 (added: 2024-10-14)
+- tts-1-hd-1106 (added: 2024-10-14)
+- tts-1-hd (added: 2024-10-14)
+- tts-1-1106 (added: 2024-10-14)
+- tts-1 (added: 2024-10-14)
+- text-embedding-ada-002 (added: 2024-10-14)
+- text-embedding-3-small (added: 2024-10-14)
+- text-embedding-3-large (added: 2024-10-14)
+- gpt-4o-realtime-preview-2024-10-01 (added: 2024-10-14)
+- gpt-4o-realtime-preview (added: 2024-10-14)
+- gpt-4o-mini-2024-07-18 (added: 2024-10-14)
+- gpt-4o-mini (added: 2024-10-14)
+- gpt-4o-2024-08-06 (added: 2024-10-14)
+- gpt-4o-2024-05-13 (added: 2024-10-14)
+- gpt-4o (added: 2024-10-14)
+- gpt-4-turbo-preview (added: 2024-10-14)
+- gpt-4-turbo-2024-04-09 (added: 2024-10-14)
+- gpt-4-turbo (added: 2024-10-14)
+- gpt-4-1106-preview (added: 2024-10-14)
+- gpt-4-0613 (added: 2024-10-14)
+- gpt-4-0314 (added: 2024-10-14)
+- gpt-4-0125-preview (added: 2024-10-14)
+- gpt-4 (added: 2024-10-14)
+- gpt-3.5-turbo-instruct-0914 (added: 2024-10-14)
+- gpt-3.5-turbo-instruct (added: 2024-10-14)
+- gpt-3.5-turbo-16k (added: 2024-10-14)
+- gpt-3.5-turbo-1106 (added: 2024-10-14)
+- gpt-3.5-turbo-0125 (added: 2024-10-14)
+- gpt-3.5-turbo (added: 2024-10-14)
+- ft:gpt-3.5-turbo-1106:sutter-hill-ventures::8gJSAY5w (added: 2024-10-14)
+- davinci:ft-sutter-hill-ventures-2023-01-24-21-16-10 (added: 2024-10-14)
+- davinci:ft-sutter-hill-ventures-2023-01-24-18-45-20 (added: 2024-10-14)
+- davinci:ft-sutter-hill-ventures-2023-01-24-18-31-11 (added: 2024-10-14)
+- davinci:ft-sutter-hill-ventures-2022-03-31-23-32-42 (added: 2024-10-14)
+- davinci:ft-sutter-hill-ventures-2021-12-17-19-58-22 (added: 2024-10-14)
+- davinci:ft-sutter-hill-ventures-2021-12-15-01-17-47 (added: 2024-10-14)
+- davinci:ft-sutter-hill-ventures-2021-12-14-18-40-47 (added: 2024-10-14)
+- davinci-002 (added: 2024-10-14)
+- dall-e-3 (added: 2024-10-14)
+- dall-e-2 (added: 2024-10-14)
+- curie:ft-sutter-hill-ventures-2023-01-24-20-00-04 (added: 2024-10-14)
+- curie:ft-sutter-hill-ventures-2022-03-31-21-54-04 (added: 2024-10-14)
+- curie:ft-sutter-hill-ventures-2021-12-15-16-47-18 (added: 2024-10-14)
+- chatgpt-4o-latest (added: 2024-10-14)
+- babbage-002 (added: 2024-10-14)
+
+### Deleted Models
+
+- o1-mini-2024-09-12 (deleted: 2025-11-14)
+- o1-mini (deleted: 2025-11-14)
+- text-embedding-3-small-okan-test (deleted: 2025-10-02)
+- o1-preview-2024-09-12 (deleted: 2025-07-29)
+- o1-preview (deleted: 2025-07-29)
+- gpt-4.5-preview-2025-02-27 (deleted: 2025-07-14)
+- gpt-4.5-preview (deleted: 2025-07-14)
+- gpt-4-32k-0314 (deleted: 2025-06-09)
+- gpt-4.1-nano-2025-04-14-codex-offline-mon (deleted: 2025-06-03)
+- o4-mini-gumdrop-pt-0514 (deleted: 2025-05-14)
+- o4-mini-gumdrop-pt-0513 (deleted: 2025-05-14)
+- gpt-3.5-turbo-16k-0613 (deleted: 2025-05-07)
+- gpt4o-sd (deleted: 2025-04-03)
+- omni-moderation-latest-ev3 (deleted: 2025-03-24)
+- gpt-4o-2411-kl (deleted: 2025-03-18)
+- gpt4o-dream-ev3 (deleted: 2025-02-28)
+- gpt-4-vision-preview (deleted: 2025-01-09)
+- gpt-4-1106-vision-preview (deleted: 2025-01-09)
+- gpt4o-1p-cbv4-v43-2120-api-dev (deleted: 2024-12-20)
+- gpt4o-1p-cbv4-v43-2120-api (deleted: 2024-12-20)
+- gpt-3.5-turbo-0613 (deleted: 2024-12-11)
+- gpt-3.5-turbo-0301 (deleted: 2024-11-22)
+- cua-text-emb-small (deleted: 2024-11-05)
 

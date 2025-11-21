@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 """
-Script to update README.md with model changes from txt files.
+Script to update README.md with current and deleted models from txt files.
 This script is meant to be run by GitHub Actions when txt files change.
 """
 
 import os
 import subprocess
-import re
-import json
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # Map of file names to provider names
 PROVIDER_MAP = {
@@ -18,122 +16,103 @@ PROVIDER_MAP = {
     'grok.txt': 'Grok'
 }
 
-def get_changed_files():
-    """Get list of changed txt files in the last commit."""
-    # For testing outside of GitHub Actions
-    if os.environ.get('GITHUB_ACTIONS') != 'true':
-        return [f for f in PROVIDER_MAP.keys() if os.path.exists(f)]
+def get_current_models(file_path):
+    """Get current models from a file."""
+    if not os.path.exists(file_path):
+        return set()
 
-    result = subprocess.run(
-        ['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'],
-        capture_output=True, text=True, check=True
-    )
-    changed_files = result.stdout.strip().split('\n')
-    return [f for f in changed_files if f.endswith('.txt') and f in PROVIDER_MAP]
+    with open(file_path, 'r') as f:
+        return set(line.strip() for line in f if line.strip())
 
-def get_file_changes(file_path, since_date=None):
-    """Get added and removed lines from a file.
+def get_model_history(file_path):
+    """Get the complete history of models (added and deleted) with dates.
 
-    Args:
-        file_path: Path to the file to check for changes
-        since_date: If provided, get changes since this date (ISO format YYYY-MM-DD)
-                   If None, only get changes in the last commit
+    Returns:
+        dict: {
+            'current': set of current models,
+            'added': {model: date_added},
+            'deleted': {model: date_deleted}
+        }
     """
-    # For testing outside of GitHub Actions
-    if os.environ.get('GITHUB_ACTIONS') != 'true' and since_date is None:
-        # For testing, we'll simulate changes by reading the current file
-        with open(file_path, 'r') as f:
-            current_models = [line.strip() for line in f if line.strip()]
+    current_models = get_current_models(file_path)
 
-        # For testing purposes, we'll consider the last model as newly added
-        if current_models:
-            return [current_models[-1]], []
-        return [], []
-
-    # If we need to get changes since a specific date
-    if since_date:
-        try:
-            # Check if the file exists in git history
-            file_exists_cmd = ['git', 'ls-files', '--error-unmatch', file_path]
-            subprocess.run(file_exists_cmd, capture_output=True, check=True)
-
-            # Get the commit hash from the specified date
-            date_cmd = ['git', 'log', '--since', since_date, '--format=%H', '--', file_path]
-            date_result = subprocess.run(date_cmd, capture_output=True, text=True, check=True)
-            commit_hashes = date_result.stdout.strip().split('\n')
-
-            # If no commits since that date, try to get the current content
-            if not commit_hashes or not commit_hashes[0]:
-                # If the file exists but has no commits in the time range,
-                # consider all current content as added
-                if os.path.exists(file_path):
-                    with open(file_path, 'r') as f:
-                        current_models = [line.strip() for line in f if line.strip()]
-                    return current_models, []
-                return [], []
-
-            # Get the oldest commit since the specified date
-            oldest_commit = commit_hashes[-1] if commit_hashes else 'HEAD'
-
-            # Try to get the commit before the oldest one to use as a reference
-            try:
-                ref_cmd = ['git', 'rev-parse', f'{oldest_commit}^']
-                ref_result = subprocess.run(ref_cmd, capture_output=True, text=True, check=True)
-                reference_commit = ref_result.stdout.strip()
-
-                # Get changes between the reference commit and HEAD
-                diff_cmd = ['git', 'diff', reference_commit, 'HEAD', '--', file_path]
-            except subprocess.CalledProcessError:
-                # If there's no parent commit (e.g., first commit), consider all content as added
-                if os.path.exists(file_path):
-                    with open(file_path, 'r') as f:
-                        current_models = [line.strip() for line in f if line.strip()]
-                    return current_models, []
-                return [], []
-        except subprocess.CalledProcessError:
-            # File doesn't exist in git history, but might exist on disk
-            if os.path.exists(file_path):
-                with open(file_path, 'r') as f:
-                    current_models = [line.strip() for line in f if line.strip()]
-                return current_models, []
-            return [], []
-    else:
-        # Just get changes in the last commit
-        try:
-            # Check if we have at least one commit
-            subprocess.run(['git', 'rev-parse', 'HEAD~1'], capture_output=True, check=True)
-            diff_cmd = ['git', 'diff', 'HEAD~1', 'HEAD', '--', file_path]
-        except subprocess.CalledProcessError:
-            # If there's only one commit or no commits, consider all content as added
-            if os.path.exists(file_path):
-                with open(file_path, 'r') as f:
-                    current_models = [line.strip() for line in f if line.strip()]
-                return current_models, []
-            return [], []
+    # Track when each model was first added and last deleted
+    model_added = {}
+    model_deleted = {}
 
     try:
-        result = subprocess.run(diff_cmd, capture_output=True, text=True, check=True)
+        # Get all commits that modified this file, in reverse chronological order
+        result = subprocess.run(
+            ['git', 'log', '--all', '--format=%H|%ad', '--date=short', '--', file_path],
+            capture_output=True, text=True, check=True
+        )
 
-        added_models = []
-        removed_models = []
+        commits = []
+        for line in result.stdout.strip().split('\n'):
+            if line and '|' in line:
+                commit_hash, date = line.split('|', 1)
+                commits.append((commit_hash.strip(), date.strip()))
 
-        for line in result.stdout.split('\n'):
-            if line.startswith('+') and not line.startswith('++'):
-                model = line[1:].strip()
-                if model:  # Skip empty lines
-                    added_models.append(model)
-            elif line.startswith('-') and not line.startswith('--'):
-                model = line[1:].strip()
-                if model:  # Skip empty lines
-                    removed_models.append(model)
+        if not commits:
+            # No history, all current models were just added
+            for model in current_models:
+                model_added[model] = datetime.now().strftime('%Y-%m-%d')
+            return {
+                'current': current_models,
+                'added': model_added,
+                'deleted': model_deleted
+            }
 
-        return added_models, removed_models
+        # Process commits from oldest to newest to track additions and deletions
+        commits.reverse()
+
+        previous_models = set()
+        for commit_hash, date in commits:
+            # Get file content at this commit
+            try:
+                content_result = subprocess.run(
+                    ['git', 'show', f'{commit_hash}:{file_path}'],
+                    capture_output=True, text=True, check=True
+                )
+                commit_models = set(line.strip() for line in content_result.stdout.split('\n') if line.strip())
+            except subprocess.CalledProcessError:
+                commit_models = set()
+
+            # Find models added in this commit
+            added_in_commit = commit_models - previous_models
+            for model in added_in_commit:
+                if model not in model_added:
+                    model_added[model] = date
+
+            # Find models removed in this commit
+            removed_in_commit = previous_models - commit_models
+            for model in removed_in_commit:
+                model_deleted[model] = date
+
+            previous_models = commit_models
+
+        # Any model that was deleted but then re-added should not be in deleted list
+        for model in current_models:
+            if model in model_deleted:
+                del model_deleted[model]
+
     except subprocess.CalledProcessError:
-        # If git diff fails, return empty lists
-        return [], []
+        # If git commands fail, just use current models
+        for model in current_models:
+            model_added[model] = datetime.now().strftime('%Y-%m-%d')
 
-def update_readme(changes):
-    """Update README.md with model changes."""
+    return {
+        'current': current_models,
+        'added': model_added,
+        'deleted': model_deleted
+    }
+
+def update_readme(all_provider_data):
+    """Update README.md with current and deleted models.
+
+    Args:
+        all_provider_data: dict mapping provider name to model history data
+    """
     with open('README.md', 'r') as f:
         content = f.read()
 
@@ -145,63 +124,69 @@ def update_readme(changes):
     new_content = header[0] + '\n' + header[1] + '\n\n'
     new_content += f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
 
-    # Add changes section
-    new_content += "## Model Changes (Last 60 Days)\n\n"
+    # Process each provider
+    for provider in sorted(PROVIDER_MAP.values()):
+        if provider not in all_provider_data:
+            continue
 
-    # Get all providers, including those without changes
-    all_providers = set(PROVIDER_MAP.values())
-    providers_with_changes = set(changes.keys())
+        data = all_provider_data[provider]
+        current_models = data['current']
+        added_dates = data['added']
+        deleted_dates = data['deleted']
 
-    # First show providers with changes
-    for provider, provider_changes in changes.items():
-        if provider_changes['added'] or provider_changes['removed']:
-            new_content += f"### {provider}\n\n"
+        new_content += f"## {provider}\n\n"
 
-            for model in provider_changes['added']:
-                new_content += f"+ {model}\n"
-
-            for model in provider_changes['removed']:
-                new_content += f"- {model}\n"
-
+        # Current models section - sorted by most recently added
+        if current_models:
+            new_content += "### Current Models\n\n"
+            # Sort by date added (most recent first), then by name
+            sorted_current = sorted(
+                current_models,
+                key=lambda m: (added_dates.get(m, '0000-00-00'), m),
+                reverse=True
+            )
+            for model in sorted_current:
+                date_str = added_dates.get(model, 'unknown')
+                new_content += f"- {model} (added: {date_str})\n"
             new_content += "\n"
 
-    # Then show providers without changes
-    for provider in sorted(all_providers - providers_with_changes):
-        new_content += f"### {provider}\n\n"
-        new_content += "No changes\n\n"
+        # Deleted models section - sorted by most recently deleted
+        if deleted_dates:
+            new_content += "### Deleted Models\n\n"
+            # Sort by date deleted (most recent first), then by name
+            sorted_deleted = sorted(
+                deleted_dates.items(),
+                key=lambda x: (x[1], x[0]),
+                reverse=True
+            )
+            for model, date in sorted_deleted:
+                new_content += f"- {model} (deleted: {date})\n"
+            new_content += "\n"
 
     # Write updated content back to README
     with open('README.md', 'w') as f:
         f.write(new_content)
 
 def main():
-    # Get the date 60 days ago in ISO format (YYYY-MM-DD)
-    sixty_days_ago = (datetime.now() - timedelta(days=60)).strftime('%Y-%m-%d')
-
-    # Always check all provider files for the last 60 days of changes
+    # Check all provider files
     all_files = [f for f in PROVIDER_MAP.keys() if os.path.exists(f)]
 
-    changes = {}
+    all_provider_data = {}
 
     for file_path in all_files:
         provider = PROVIDER_MAP.get(file_path)
         if not provider:
             continue
 
-        # Get changes from the last 60 days
-        added, removed = get_file_changes(file_path, since_date=sixty_days_ago)
+        # Get complete model history
+        history = get_model_history(file_path)
+        all_provider_data[provider] = history
 
-        if added or removed:
-            changes[provider] = {
-                'added': added,
-                'removed': removed
-            }
-
-    if changes:
-        update_readme(changes)
-        print(f"README.md updated with changes from {', '.join(changes.keys())}")
+    if all_provider_data:
+        update_readme(all_provider_data)
+        print(f"README.md updated with model data from {', '.join(all_provider_data.keys())}")
     else:
-        print("No model changes detected in the last 60 days.")
+        print("No provider data found.")
 
 if __name__ == "__main__":
     main()
