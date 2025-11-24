@@ -13,7 +13,8 @@ PROVIDER_MAP = {
     'openai.txt': 'OpenAI',
     'anthropic.txt': 'Anthropic',
     'gemini.txt': 'Gemini',
-    'grok.txt': 'Grok'
+    'grok.txt': 'Grok',
+    'mistral.txt': 'Mistral'
 }
 
 def get_current_models(file_path):
@@ -124,8 +125,19 @@ def update_readme(all_provider_data):
     new_content = header[0] + '\n' + header[1] + '\n\n'
     new_content += f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
 
-    # Process each provider
-    for provider in sorted(PROVIDER_MAP.values()):
+    # Add summary of models per provider
+    new_content += "## Summary\n\n"
+    new_content += "Model counts shown as: **Available/Deleted**\n\n"
+    for provider in PROVIDER_MAP.values():
+        if provider in all_provider_data:
+            data = all_provider_data[provider]
+            current_count = len(data['current'])
+            deleted_count = len(data['deleted'])
+            new_content += f"**{provider}**: {current_count}/{deleted_count}\n\n"
+    new_content += "\n"
+
+    # Process each provider in the order they appear in PROVIDER_MAP
+    for provider in PROVIDER_MAP.values():
         if provider not in all_provider_data:
             continue
 
