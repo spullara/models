@@ -5,6 +5,7 @@ on:
     paths:
       - '**.txt'
       - .github/scripts/update_readme.py
+      - .github/workflows/update-readme.yml
 
 jobs:
   update-readme:
