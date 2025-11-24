@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '**.txt'
+      - .github/scripts/update_readme.py
 
 jobs:
   update-readme:
