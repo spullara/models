@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2025-11-26 16:30:13
+Last updated: 2025-11-30 12:00:11
 
 ## Summary
 
@@ -15,7 +15,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/3
 
-**Mistral**: 60/0
+**Mistral**: 49/11
 
 
 ## OpenAI
@@ -341,9 +341,6 @@ Model counts shown as: **Available/Deleted**
 - mistral-tiny (added: 2025-11-24)
 - mistral-small-latest (added: 2025-11-24)
 - mistral-small-2506 (added: 2025-11-24)
-- mistral-small-2503 (added: 2025-11-24)
-- mistral-small-2501 (added: 2025-11-24)
-- mistral-small-2409 (added: 2025-11-24)
 - mistral-ocr-latest (added: 2025-11-24)
 - mistral-ocr-2505 (added: 2025-11-24)
 - mistral-ocr-2503 (added: 2025-11-24)
@@ -364,22 +361,28 @@ Model counts shown as: **Available/Deleted**
 - ministral-3b-2410 (added: 2025-11-24)
 - magistral-small-latest (added: 2025-11-24)
 - magistral-small-2509 (added: 2025-11-24)
-- magistral-small-2507 (added: 2025-11-24)
-- magistral-small-2506 (added: 2025-11-24)
 - magistral-medium-latest (added: 2025-11-24)
 - magistral-medium-2509 (added: 2025-11-24)
-- magistral-medium-2507 (added: 2025-11-24)
-- magistral-medium-2506 (added: 2025-11-24)
 - devstral-small-latest (added: 2025-11-24)
 - devstral-small-2507 (added: 2025-11-24)
-- devstral-small-2505 (added: 2025-11-24)
 - devstral-medium-latest (added: 2025-11-24)
 - devstral-medium-2507 (added: 2025-11-24)
 - codestral-latest (added: 2025-11-24)
 - codestral-embed-2505 (added: 2025-11-24)
 - codestral-embed (added: 2025-11-24)
 - codestral-2508 (added: 2025-11-24)
-- codestral-2501 (added: 2025-11-24)
-- codestral-2412 (added: 2025-11-24)
-- codestral-2411-rc5 (added: 2025-11-24)
+
+### Deleted Models
+
+- mistral-small-2503 (deleted: 2025-11-30)
+- mistral-small-2501 (deleted: 2025-11-30)
+- mistral-small-2409 (deleted: 2025-11-30)
+- magistral-small-2507 (deleted: 2025-11-30)
+- magistral-small-2506 (deleted: 2025-11-30)
+- magistral-medium-2507 (deleted: 2025-11-30)
+- magistral-medium-2506 (deleted: 2025-11-30)
+- devstral-small-2505 (deleted: 2025-11-30)
+- codestral-2501 (deleted: 2025-11-30)
+- codestral-2412 (deleted: 2025-11-30)
+- codestral-2411-rc5 (deleted: 2025-11-30)
 
