@@ -138,11 +138,11 @@ def main():
         print(f"Git reset error: {e}")
     
     # Push changes
-    print("Pushing changes...")
-    try:
-        subprocess.run(['git', 'push'], check=True, cwd=MODELS_DIR)
-    except Exception as e:
-        print(f"Git push error: {e}")
+    # print("Pushing changes...")
+    # try:
+    #     subprocess.run(['git', 'push'], check=True, cwd=MODELS_DIR)
+    # except Exception as e:
+    #     print(f"Git push error: {e}")
     
     print("\nDone!")
 
