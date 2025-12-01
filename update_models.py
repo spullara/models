@@ -53,6 +53,18 @@ PROVIDERS = {
     }
 }
 
+def is_fine_tuned_model(model_name):
+    """Check if a model is a fine-tuned model."""
+    if not model_name:
+        return False
+    # Check if starts with "ft:"
+    if model_name.startswith('ft:'):
+        return True
+    # Check if contains ":ft-" pattern
+    if ':ft-' in model_name:
+        return True
+    return False
+
 def extract_from_json(data, path):
     """Extract values from JSON using a path like ['data', 'id']."""
     if len(path) == 1:
@@ -60,7 +72,7 @@ def extract_from_json(data, path):
         if isinstance(data, list):
             return [item.get(path[0]) for item in data if path[0] in item]
         return []
-    
+
     # Recursive case: navigate deeper
     if isinstance(data, dict) and path[0] in data:
         return extract_from_json(data[path[0]], path[1:])
@@ -69,24 +81,32 @@ def extract_from_json(data, path):
 def fetch_models(provider_name, config):
     """Fetch models for a given provider."""
     print(f"Fetching models for {provider_name}...")
-    
+
     try:
         headers = config['headers']()
         response = requests.get(config['url'], headers=headers, timeout=30)
         response.raise_for_status()
-        
+
         data = response.json()
         models = extract_from_json(data, config['json_path'])
-        
+
         if not models:
             print(f"  Warning: No models found for {provider_name}")
             return []
-        
+
+        # Filter out fine-tuned models
+        original_count = len(models)
+        models = [m for m in models if not is_fine_tuned_model(m)]
+        filtered_count = original_count - len(models)
+
+        if filtered_count > 0:
+            print(f"  Filtered out {filtered_count} fine-tuned models")
+
         # Sort models
         models = sorted(models)
         print(f"  Found {len(models)} models")
         return models
-        
+
     except requests.exceptions.RequestException as e:
         print(f"  Error fetching {provider_name}: {e}")
         return []

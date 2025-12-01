@@ -23,7 +23,7 @@ def get_current_models(file_path):
         return set()
 
     with open(file_path, 'r') as f:
-        return set(line.strip() for line in f if line.strip())
+        return set(line.strip() for line in f if line.strip() and 'sutter-hill-ventures' not in line.strip())
 
 def get_model_history(file_path):
     """Get the complete history of models (added and deleted) with dates.
@@ -75,7 +75,7 @@ def get_model_history(file_path):
                     ['git', 'show', f'{commit_hash}:{file_path}'],
                     capture_output=True, text=True, check=True
                 )
-                commit_models = set(line.strip() for line in content_result.stdout.split('\n') if line.strip())
+                commit_models = set(line.strip() for line in content_result.stdout.split('\n') if line.strip() and 'sutter-hill-ventures' not in line.strip())
             except subprocess.CalledProcessError:
                 commit_models = set()
 
