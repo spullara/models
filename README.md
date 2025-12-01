@@ -1,13 +1,13 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2025-12-01 17:31:06
+Last updated: 2025-12-01 17:58:31
 
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 120/23
+**OpenAI**: 109/23
 
 **Anthropic**: 10/5
 
@@ -126,20 +126,9 @@ Model counts shown as: **Available/Deleted**
 - gpt-3.5-turbo-1106 (added: 2024-10-14)
 - gpt-3.5-turbo-0125 (added: 2024-10-14)
 - gpt-3.5-turbo (added: 2024-10-14)
-- ft:gpt-3.5-turbo-1106:sutter-hill-ventures::8gJSAY5w (added: 2024-10-14)
-- davinci:ft-sutter-hill-ventures-2023-01-24-21-16-10 (added: 2024-10-14)
-- davinci:ft-sutter-hill-ventures-2023-01-24-18-45-20 (added: 2024-10-14)
-- davinci:ft-sutter-hill-ventures-2023-01-24-18-31-11 (added: 2024-10-14)
-- davinci:ft-sutter-hill-ventures-2022-03-31-23-32-42 (added: 2024-10-14)
-- davinci:ft-sutter-hill-ventures-2021-12-17-19-58-22 (added: 2024-10-14)
-- davinci:ft-sutter-hill-ventures-2021-12-15-01-17-47 (added: 2024-10-14)
-- davinci:ft-sutter-hill-ventures-2021-12-14-18-40-47 (added: 2024-10-14)
 - davinci-002 (added: 2024-10-14)
 - dall-e-3 (added: 2024-10-14)
 - dall-e-2 (added: 2024-10-14)
-- curie:ft-sutter-hill-ventures-2023-01-24-20-00-04 (added: 2024-10-14)
-- curie:ft-sutter-hill-ventures-2022-03-31-21-54-04 (added: 2024-10-14)
-- curie:ft-sutter-hill-ventures-2021-12-15-16-47-18 (added: 2024-10-14)
 - chatgpt-4o-latest (added: 2024-10-14)
 - babbage-002 (added: 2024-10-14)
 
