@@ -1,13 +1,13 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2025-12-03 12:25:13
+Last updated: 2025-12-03 18:15:11
 
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 109/23
+**OpenAI**: 107/25
 
 **Anthropic**: 10/5
 
@@ -95,7 +95,6 @@ Model counts shown as: **Available/Deleted**
 - omni-moderation-latest (added: 2024-12-04)
 - omni-moderation-2024-09-26 (added: 2024-12-04)
 - gpt-4o-2024-11-20 (added: 2024-11-20)
-- gpt-4o-audio-preview-2024-10-01 (added: 2024-10-17)
 - gpt-4o-audio-preview (added: 2024-10-17)
 - whisper-1 (added: 2024-10-14)
 - tts-1-hd-1106 (added: 2024-10-14)
@@ -105,7 +104,6 @@ Model counts shown as: **Available/Deleted**
 - text-embedding-ada-002 (added: 2024-10-14)
 - text-embedding-3-small (added: 2024-10-14)
 - text-embedding-3-large (added: 2024-10-14)
-- gpt-4o-realtime-preview-2024-10-01 (added: 2024-10-14)
 - gpt-4o-realtime-preview (added: 2024-10-14)
 - gpt-4o-mini-2024-07-18 (added: 2024-10-14)
 - gpt-4o-mini (added: 2024-10-14)
@@ -134,6 +132,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- gpt-4o-realtime-preview-2024-10-01 (deleted: 2025-12-03)
+- gpt-4o-audio-preview-2024-10-01 (deleted: 2025-12-03)
 - o1-mini-2024-09-12 (deleted: 2025-11-14)
 - o1-mini (deleted: 2025-11-14)
 - text-embedding-3-small-okan-test (deleted: 2025-10-02)
