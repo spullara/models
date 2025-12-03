@@ -6,6 +6,7 @@ devstral-medium-2507
 devstral-medium-latest
 devstral-small-2507
 devstral-small-latest
+labs:(* ^ ω ^)
 magistral-medium-2509
 magistral-medium-latest
 magistral-small-2509
