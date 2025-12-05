@@ -1,3 +1,6 @@
+codestral-2411-rc5
+codestral-2412
+codestral-2501
 codestral-2508
 codestral-embed
 codestral-embed-2505
