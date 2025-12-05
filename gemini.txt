@@ -9,9 +9,6 @@ models/gemini-2.0-flash-lite
 models/gemini-2.0-flash-lite-001
 models/gemini-2.0-flash-lite-preview
 models/gemini-2.0-flash-lite-preview-02-05
-models/gemini-2.0-flash-thinking-exp
-models/gemini-2.0-flash-thinking-exp-01-21
-models/gemini-2.0-flash-thinking-exp-1219
 models/gemini-2.0-pro-exp
 models/gemini-2.0-pro-exp-02-05
 models/gemini-2.5-computer-use-preview-10-2025
@@ -23,9 +20,6 @@ models/gemini-2.5-flash-lite-preview-09-2025
 models/gemini-2.5-flash-preview-09-2025
 models/gemini-2.5-flash-preview-tts
 models/gemini-2.5-pro
-models/gemini-2.5-pro-preview-03-25
-models/gemini-2.5-pro-preview-05-06
-models/gemini-2.5-pro-preview-06-05
 models/gemini-2.5-pro-preview-tts
 models/gemini-3-pro-image-preview
 models/gemini-3-pro-preview
@@ -43,8 +37,14 @@ models/gemma-3-27b-it
 models/gemma-3-4b-it
 models/gemma-3n-e2b-it
 models/gemma-3n-e4b-it
+models/imagen-4.0-fast-generate-001
+models/imagen-4.0-generate-001
 models/imagen-4.0-generate-preview-06-06
+models/imagen-4.0-ultra-generate-001
 models/imagen-4.0-ultra-generate-preview-06-06
-models/learnlm-2.0-flash-experimental
 models/nano-banana-pro-preview
 models/text-embedding-004
+models/veo-2.0-generate-001
+models/veo-3.0-fast-generate-001
+models/veo-3.0-generate-001
+models/veo-3.1-generate-preview
