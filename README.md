@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2025-12-05 13:15:13
+Last updated: 2025-12-05 22:05:34
 
 ## Summary
 
@@ -11,7 +11,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 10/5
 
-**Gemini**: 50/47
+**Gemini**: 50/51
 
 **Grok**: 10/3
 
@@ -186,12 +186,18 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/veo-3.1-generate-preview (added: 2025-12-05)
+- models/veo-3.0-generate-001 (added: 2025-12-05)
+- models/veo-3.0-fast-generate-001 (added: 2025-12-05)
+- models/imagen-4.0-fast-generate-001 (added: 2025-12-05)
 - models/nano-banana-pro-preview (added: 2025-11-20)
 - models/gemini-3-pro-image-preview (added: 2025-11-20)
+- models/imagen-4.0-ultra-generate-001 (added: 2025-11-18)
 - models/gemini-3-pro-preview (added: 2025-11-18)
 - models/gemini-2.5-computer-use-preview-10-2025 (added: 2025-10-07)
 - models/gemini-2.5-flash-image (added: 2025-10-02)
 - models/imagen-4.0-ultra-generate-preview-06-06 (added: 2025-09-27)
+- models/imagen-4.0-generate-001 (added: 2025-09-27)
 - models/gemini-robotics-er-1.5-preview (added: 2025-09-25)
 - models/gemini-pro-latest (added: 2025-09-25)
 - models/gemini-flash-lite-latest (added: 2025-09-25)
@@ -205,13 +211,10 @@ Model counts shown as: **Available/Deleted**
 - models/gemma-3n-e2b-it (added: 2025-06-26)
 - models/gemini-2.5-pro (added: 2025-06-17)
 - models/gemini-2.5-flash (added: 2025-06-17)
-- models/gemini-2.5-pro-preview-06-05 (added: 2025-06-05)
 - models/gemini-2.5-pro-preview-tts (added: 2025-05-21)
 - models/gemini-2.5-flash-preview-tts (added: 2025-05-21)
 - models/gemma-3n-e4b-it (added: 2025-05-20)
-- models/gemini-2.5-pro-preview-05-06 (added: 2025-05-06)
-- models/learnlm-2.0-flash-experimental (added: 2025-04-17)
-- models/gemini-2.5-pro-preview-03-25 (added: 2025-04-04)
+- models/veo-2.0-generate-001 (added: 2025-04-09)
 - models/gemma-3-1b-it (added: 2025-04-02)
 - models/gemma-3-4b-it (added: 2025-04-01)
 - models/gemma-3-12b-it (added: 2025-04-01)
@@ -227,9 +230,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-2.0-flash-lite-preview (added: 2025-02-05)
 - models/gemini-2.0-flash-001 (added: 2025-02-05)
 - models/gemini-2.0-flash (added: 2025-02-05)
-- models/gemini-2.0-flash-thinking-exp-01-21 (added: 2025-01-21)
-- models/gemini-2.0-flash-thinking-exp-1219 (added: 2024-12-19)
-- models/gemini-2.0-flash-thinking-exp (added: 2024-12-19)
 - models/gemini-2.0-flash-exp (added: 2024-12-11)
 - models/text-embedding-004 (added: 2024-12-07)
 - models/gemini-exp-1206 (added: 2024-12-07)
@@ -239,9 +239,14 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/learnlm-2.0-flash-experimental (deleted: 2025-12-05)
+- models/gemini-2.5-pro-preview-06-05 (deleted: 2025-12-05)
+- models/gemini-2.5-pro-preview-05-06 (deleted: 2025-12-05)
+- models/gemini-2.5-pro-preview-03-25 (deleted: 2025-12-05)
+- models/gemini-2.0-flash-thinking-exp-1219 (deleted: 2025-12-05)
+- models/gemini-2.0-flash-thinking-exp-01-21 (deleted: 2025-12-05)
+- models/gemini-2.0-flash-thinking-exp (deleted: 2025-12-05)
 - models/gemini-2.5-pro-vtea-da-csi (deleted: 2025-11-26)
-- models/imagen-4.0-ultra-generate-001 (deleted: 2025-11-20)
-- models/imagen-4.0-generate-001 (deleted: 2025-11-20)
 - models/gemini-3-pro-preview-ais-applets (deleted: 2025-11-18)
 - models/gemini-2.5-flash-preview-05-20 (deleted: 2025-11-18)
 - models/gemini-2.5-flash-lite-preview-06-17 (deleted: 2025-11-18)
@@ -261,7 +266,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-2.5-flash-preview-04-17-thinking (deleted: 2025-07-15)
 - models/gemini-2.5-flash-preview-04-17 (deleted: 2025-07-15)
 - models/gemini-2.5-pro-exp-03-25 (deleted: 2025-06-26)
-- models/veo-2.0-generate-001 (deleted: 2025-06-17)
 - models/gemini-2.5-pro-1p-recitation-off (deleted: 2025-06-17)
 - models/gemini-2.5-pro-1p (deleted: 2025-06-17)
 - models/gemini-2.5-flash-preview-native-audio-dialog (deleted: 2025-06-17)
