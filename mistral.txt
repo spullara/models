@@ -5,10 +5,13 @@ codestral-2508
 codestral-embed
 codestral-embed-2505
 codestral-latest
+devstral-2512
 devstral-medium-2507
+devstral-medium-2512
 devstral-medium-latest
 devstral-small-2507
 devstral-small-latest
+labs-devstral-small-2512
 magistral-medium-2509
 magistral-medium-latest
 magistral-small-2509
@@ -45,6 +48,7 @@ mistral-tiny
 mistral-tiny-2312
 mistral-tiny-2407
 mistral-tiny-latest
+mistral-vibe-cli-latest
 open-mistral-7b
 open-mistral-nemo
 open-mistral-nemo-2407
