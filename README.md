@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2025-12-09 14:40:12
+Last updated: 2025-12-10 08:50:11
 
 ## Summary
 
@@ -15,7 +15,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/3
 
-**Mistral**: 62/8
+**Mistral**: 61/9
 
 
 ## OpenAI
@@ -319,7 +319,6 @@ Model counts shown as: **Available/Deleted**
 
 - mistral-vibe-cli-latest (added: 2025-12-09)
 - labs-devstral-small-2512 (added: 2025-12-09)
-- devstral-medium-2512 (added: 2025-12-09)
 - devstral-2512 (added: 2025-12-09)
 - mistral-large-2512 (added: 2025-12-02)
 - ministral-8b-2512 (added: 2025-12-02)
@@ -382,6 +381,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- devstral-medium-2512 (deleted: 2025-12-10)
 - labs:(* ^ ω ^) (deleted: 2025-12-03)
 - mistral-small-2503 (deleted: 2025-11-30)
 - mistral-small-2409 (deleted: 2025-11-30)
