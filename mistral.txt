@@ -7,7 +7,6 @@ codestral-embed-2505
 codestral-latest
 devstral-2512
 devstral-medium-2507
-devstral-medium-2512
 devstral-medium-latest
 devstral-small-2507
 devstral-small-latest
