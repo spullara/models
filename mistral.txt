@@ -12,6 +12,7 @@ devstral-medium-latest
 devstral-small-2507
 devstral-small-latest
 labs-devstral-small-2512
+labs-mistral-small-creative
 magistral-medium-2509
 magistral-medium-latest
 magistral-small-2509
