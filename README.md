@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2025-12-17 15:00:14
+Last updated: 2025-12-17 15:35:12
 
 ## Summary
 
@@ -199,9 +199,9 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- models/gemini-3-flash-preview-ais-applets (added: 2025-12-17)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
+- models/veo-3.1-generate-preview (added: 2025-12-05)
 - models/veo-3.0-generate-001 (added: 2025-12-05)
 - models/veo-3.0-fast-generate-001 (added: 2025-12-05)
 - models/imagen-4.0-fast-generate-001 (added: 2025-12-05)
@@ -252,8 +252,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- models/veo-3.1-generate-preview (deleted: 2025-12-17)
 - models/veo-3.1-fast-generate-preview (deleted: 2025-12-17)
+- models/gemini-3-flash-preview-ais-applets (deleted: 2025-12-17)
 - models/gemini-2.5-flash-native-audio-latest (deleted: 2025-12-11)
 - models/gemini-2.0-flash-live-001 (deleted: 2025-12-10)
 - models/gemini-2.0-pro-exp-02-05 (deleted: 2025-12-09)
