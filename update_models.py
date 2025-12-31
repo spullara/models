@@ -50,6 +50,24 @@ PROVIDERS = {
         'headers': lambda: {'Authorization': f"Bearer {os.getenv('MISTRAL_API_KEY')}"},
         'json_path': ['data', 'id'],
         'output_file': 'mistral.txt'
+    },
+    'deepseek': {
+        'url': 'https://api.deepseek.com/models',
+        'headers': lambda: {'Authorization': f"Bearer {os.getenv('DEEPSEEK_API_KEY')}"},
+        'json_path': ['data', 'id'],
+        'output_file': 'deepseek.txt'
+    },
+    'kimi': {
+        'url': 'https://api.moonshot.ai/v1/models',
+        'headers': lambda: {'Authorization': f"Bearer {os.getenv('MOONSHOT_API_KEY')}"},
+        'json_path': ['data', 'id'],
+        'output_file': 'kimi.txt'
+    },
+    'qwen': {
+        'url': 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/models',
+        'headers': lambda: {'Authorization': f"Bearer {os.getenv('DASHSCOPE_API_KEY')}"},
+        'json_path': ['data', 'id'],
+        'output_file': 'qwen.txt'
     }
 }
 
