@@ -19,8 +19,10 @@ magistral-small-2509
 magistral-small-latest
 ministral-14b-2512
 ministral-14b-latest
+ministral-3b-2410
 ministral-3b-2512
 ministral-3b-latest
+ministral-8b-2410
 ministral-8b-2512
 ministral-8b-latest
 mistral-embed
