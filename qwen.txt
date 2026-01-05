@@ -1,10 +1,13 @@
 ccai-pro
 qvq-max
 qwen-coder-plus
+qwen-flash
 qwen-image-edit
 qwen-image-edit-plus
 qwen-image-edit-plus-2025-10-30
 qwen-image-edit-plus-2025-12-15
+qwen-image-max
+qwen-image-max-2025-12-30
 qwen-image-plus
 qwen-max
 qwen-max-2025-01-25
@@ -93,9 +96,11 @@ qwen3-vl-flash
 qwen3-vl-flash-2025-10-15
 qwen3-vl-plus
 qwen3-vl-plus-2025-09-23
+qwen3-vl-plus-2025-12-19
 qwq-plus
 qwq-plus-2025-03-05
 text-embedding-v3
 text-embedding-v4
 tongyi-skynet-llm-cm-2511
 tongyi-tingwu-slp
+z-image-turbo
