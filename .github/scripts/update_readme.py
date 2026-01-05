@@ -14,7 +14,10 @@ PROVIDER_MAP = {
     'anthropic.txt': 'Anthropic',
     'gemini.txt': 'Gemini',
     'grok.txt': 'Grok',
-    'mistral.txt': 'Mistral'
+    'mistral.txt': 'Mistral',
+    'deepseek.txt': 'DeepSeek',
+    'kimi.txt': 'Kimi',
+    'qwen.txt': 'Qwen'
 }
 
 def get_current_models(file_path):
