@@ -1,13 +1,13 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-01-05 19:05:10
+Last updated: 2026-01-05 19:10:13
 
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 118/28
+**OpenAI**: 121/25
 
 **Anthropic**: 9/6
 
@@ -21,7 +21,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 13/0
 
-**Qwen**: 101/0
+**Qwen**: 106/0
 
 
 ## OpenAI
@@ -100,6 +100,8 @@ Model counts shown as: **Available/Deleted**
 - gpt-4o-search-preview (added: 2025-03-11)
 - gpt-4o-mini-search-preview-2025-03-11 (added: 2025-03-11)
 - gpt-4o-mini-search-preview (added: 2025-03-11)
+- computer-use-preview-2025-03-11 (added: 2025-03-11)
+- computer-use-preview (added: 2025-03-11)
 - o3-mini-2025-01-31 (added: 2025-01-31)
 - o3-mini (added: 2025-01-31)
 - o1-2024-12-17 (added: 2024-12-19)
@@ -133,6 +135,7 @@ Model counts shown as: **Available/Deleted**
 - gpt-4-turbo (added: 2024-10-14)
 - gpt-4-1106-preview (added: 2024-10-14)
 - gpt-4-0613 (added: 2024-10-14)
+- gpt-4-0314 (added: 2024-10-14)
 - gpt-4-0125-preview (added: 2024-10-14)
 - gpt-4 (added: 2024-10-14)
 - gpt-3.5-turbo-instruct-0914 (added: 2024-10-14)
@@ -149,9 +152,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- gpt-4-0314 (deleted: 2025-12-18)
-- computer-use-preview-2025-03-11 (deleted: 2025-12-18)
-- computer-use-preview (deleted: 2025-12-18)
 - gpt-4o-realtime-preview-2024-10-01 (deleted: 2025-12-03)
 - gpt-4o-audio-preview-2024-10-01 (deleted: 2025-12-03)
 - o1-mini-2024-09-12 (deleted: 2025-11-14)
@@ -446,6 +446,11 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- z-image-turbo (added: 2026-01-05)
+- qwen3-vl-plus-2025-12-19 (added: 2026-01-05)
+- qwen-image-max-2025-12-30 (added: 2026-01-05)
+- qwen-image-max (added: 2026-01-05)
+- qwen-flash (added: 2026-01-05)
 - tongyi-tingwu-slp (added: 2025-12-18)
 - tongyi-skynet-llm-cm-2511 (added: 2025-12-18)
 - text-embedding-v4 (added: 2025-12-18)
