@@ -1,13 +1,13 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-01-05 17:15:12
+Last updated: 2026-01-05 19:05:10
 
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 121/25
+**OpenAI**: 118/28
 
 **Anthropic**: 9/6
 
@@ -16,6 +16,12 @@ Model counts shown as: **Available/Deleted**
 **Grok**: 9/4
 
 **Mistral**: 64/9
+
+**DeepSeek**: 2/0
+
+**Kimi**: 13/0
+
+**Qwen**: 101/0
 
 
 ## OpenAI
@@ -94,8 +100,6 @@ Model counts shown as: **Available/Deleted**
 - gpt-4o-search-preview (added: 2025-03-11)
 - gpt-4o-mini-search-preview-2025-03-11 (added: 2025-03-11)
 - gpt-4o-mini-search-preview (added: 2025-03-11)
-- computer-use-preview-2025-03-11 (added: 2025-03-11)
-- computer-use-preview (added: 2025-03-11)
 - o3-mini-2025-01-31 (added: 2025-01-31)
 - o3-mini (added: 2025-01-31)
 - o1-2024-12-17 (added: 2024-12-19)
@@ -129,7 +133,6 @@ Model counts shown as: **Available/Deleted**
 - gpt-4-turbo (added: 2024-10-14)
 - gpt-4-1106-preview (added: 2024-10-14)
 - gpt-4-0613 (added: 2024-10-14)
-- gpt-4-0314 (added: 2024-10-14)
 - gpt-4-0125-preview (added: 2024-10-14)
 - gpt-4 (added: 2024-10-14)
 - gpt-3.5-turbo-instruct-0914 (added: 2024-10-14)
@@ -146,6 +149,9 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- gpt-4-0314 (deleted: 2025-12-18)
+- computer-use-preview-2025-03-11 (deleted: 2025-12-18)
+- computer-use-preview (deleted: 2025-12-18)
 - gpt-4o-realtime-preview-2024-10-01 (deleted: 2025-12-03)
 - gpt-4o-audio-preview-2024-10-01 (deleted: 2025-12-03)
 - o1-mini-2024-09-12 (deleted: 2025-11-14)
@@ -410,4 +416,135 @@ Model counts shown as: **Available/Deleted**
 - magistral-medium-2507 (deleted: 2025-11-30)
 - magistral-medium-2506 (deleted: 2025-11-30)
 - devstral-small-2505 (deleted: 2025-11-30)
+
+## DeepSeek
+
+### Current Models
+
+- deepseek-reasoner (added: 2025-12-18)
+- deepseek-chat (added: 2025-12-18)
+
+## Kimi
+
+### Current Models
+
+- moonshot-v1-auto (added: 2025-12-18)
+- moonshot-v1-8k-vision-preview (added: 2025-12-18)
+- moonshot-v1-8k (added: 2025-12-18)
+- moonshot-v1-32k-vision-preview (added: 2025-12-18)
+- moonshot-v1-32k (added: 2025-12-18)
+- moonshot-v1-128k-vision-preview (added: 2025-12-18)
+- moonshot-v1-128k (added: 2025-12-18)
+- kimi-latest (added: 2025-12-18)
+- kimi-k2-turbo-preview (added: 2025-12-18)
+- kimi-k2-thinking-turbo (added: 2025-12-18)
+- kimi-k2-thinking (added: 2025-12-18)
+- kimi-k2-0905-preview (added: 2025-12-18)
+- kimi-k2-0711-preview (added: 2025-12-18)
+
+## Qwen
+
+### Current Models
+
+- tongyi-tingwu-slp (added: 2025-12-18)
+- tongyi-skynet-llm-cm-2511 (added: 2025-12-18)
+- text-embedding-v4 (added: 2025-12-18)
+- text-embedding-v3 (added: 2025-12-18)
+- qwq-plus-2025-03-05 (added: 2025-12-18)
+- qwq-plus (added: 2025-12-18)
+- qwen3-vl-plus-2025-09-23 (added: 2025-12-18)
+- qwen3-vl-plus (added: 2025-12-18)
+- qwen3-vl-flash-2025-10-15 (added: 2025-12-18)
+- qwen3-vl-flash (added: 2025-12-18)
+- qwen3-vl-235b-a22b-thinking (added: 2025-12-18)
+- qwen3-vl-235b-a22b-instruct (added: 2025-12-18)
+- qwen3-tts-vd-realtime-2025-12-16 (added: 2025-12-18)
+- qwen3-tts-vc-realtime-2025-11-27 (added: 2025-12-18)
+- qwen3-tts-flash-realtime-2025-11-27 (added: 2025-12-18)
+- qwen3-tts-flash-realtime-2025-09-18 (added: 2025-12-18)
+- qwen3-tts-flash-realtime (added: 2025-12-18)
+- qwen3-tts-flash-2025-11-27 (added: 2025-12-18)
+- qwen3-tts-flash-2025-09-18 (added: 2025-12-18)
+- qwen3-tts-flash (added: 2025-12-18)
+- qwen3-s2s-flash-realtime (added: 2025-12-18)
+- qwen3-omni-flash-realtime-2025-12-01 (added: 2025-12-18)
+- qwen3-omni-flash-realtime-2025-09-15 (added: 2025-12-18)
+- qwen3-omni-flash-realtime (added: 2025-12-18)
+- qwen3-omni-flash-2025-12-01 (added: 2025-12-18)
+- qwen3-omni-flash-2025-09-15 (added: 2025-12-18)
+- qwen3-omni-flash (added: 2025-12-18)
+- qwen3-omni-30b-a3b-captioner (added: 2025-12-18)
+- qwen3-next-80b-a3b-thinking (added: 2025-12-18)
+- qwen3-next-80b-a3b-instruct (added: 2025-12-18)
+- qwen3-max-preview (added: 2025-12-18)
+- qwen3-max-2025-10-30 (added: 2025-12-18)
+- qwen3-max-2025-09-23 (added: 2025-12-18)
+- qwen3-max (added: 2025-12-18)
+- qwen3-livetranslate-flash-realtime-2025-09-22 (added: 2025-12-18)
+- qwen3-livetranslate-flash-realtime (added: 2025-12-18)
+- qwen3-livetranslate-flash-2025-12-01 (added: 2025-12-18)
+- qwen3-livetranslate-flash (added: 2025-12-18)
+- qwen3-coder-plus-2025-09-23 (added: 2025-12-18)
+- qwen3-coder-plus-2025-07-22 (added: 2025-12-18)
+- qwen3-coder-plus (added: 2025-12-18)
+- qwen3-coder-flash (added: 2025-12-18)
+- qwen3-coder-480b-a35b-instruct (added: 2025-12-18)
+- qwen3-asr-flash-realtime-2025-10-27 (added: 2025-12-18)
+- qwen3-asr-flash-realtime (added: 2025-12-18)
+- qwen3-8b (added: 2025-12-18)
+- qwen3-4b (added: 2025-12-18)
+- qwen3-32b (added: 2025-12-18)
+- qwen3-30b-a3b-thinking-2507 (added: 2025-12-18)
+- qwen3-30b-a3b-instruct-2507 (added: 2025-12-18)
+- qwen3-30b-a3b (added: 2025-12-18)
+- qwen3-235b-a22b-thinking-2507 (added: 2025-12-18)
+- qwen3-235b-a22b-instruct-2507 (added: 2025-12-18)
+- qwen3-235b-a22b (added: 2025-12-18)
+- qwen3-14b (added: 2025-12-18)
+- qwen3-1.7b (added: 2025-12-18)
+- qwen3-0.6b (added: 2025-12-18)
+- qwen2.5-vl-32b-instruct (added: 2025-12-18)
+- qwen2.5-7b-instruct-1m (added: 2025-12-18)
+- qwen2.5-7b-instruct (added: 2025-12-18)
+- qwen2.5-72b-instruct (added: 2025-12-18)
+- qwen2.5-32b-instruct (added: 2025-12-18)
+- qwen2.5-14b-instruct-1m (added: 2025-12-18)
+- qwen2.5-14b-instruct (added: 2025-12-18)
+- qwen2-7b-instruct (added: 2025-12-18)
+- qwen-vl-plus-latest (added: 2025-12-18)
+- qwen-vl-plus-2025-05-07 (added: 2025-12-18)
+- qwen-vl-plus-2025-01-25 (added: 2025-12-18)
+- qwen-vl-plus (added: 2025-12-18)
+- qwen-vl-ocr-2025-11-20 (added: 2025-12-18)
+- qwen-vl-max-latest (added: 2025-12-18)
+- qwen-vl-max-2025-08-13 (added: 2025-12-18)
+- qwen-vl-max-2025-04-08 (added: 2025-12-18)
+- qwen-vl-max (added: 2025-12-18)
+- qwen-turbo-latest (added: 2025-12-18)
+- qwen-turbo-2025-04-28 (added: 2025-12-18)
+- qwen-turbo-2024-11-01 (added: 2025-12-18)
+- qwen-turbo (added: 2025-12-18)
+- qwen-plus-latest (added: 2025-12-18)
+- qwen-plus-2025-12-01 (added: 2025-12-18)
+- qwen-plus-2025-09-11 (added: 2025-12-18)
+- qwen-plus-2025-07-14 (added: 2025-12-18)
+- qwen-plus-2025-04-28 (added: 2025-12-18)
+- qwen-plus-2025-01-25 (added: 2025-12-18)
+- qwen-plus (added: 2025-12-18)
+- qwen-omni-turbo (added: 2025-12-18)
+- qwen-mt-turbo (added: 2025-12-18)
+- qwen-mt-plus (added: 2025-12-18)
+- qwen-mt-lite (added: 2025-12-18)
+- qwen-mt-flash (added: 2025-12-18)
+- qwen-max-latest (added: 2025-12-18)
+- qwen-max-2025-01-25 (added: 2025-12-18)
+- qwen-max (added: 2025-12-18)
+- qwen-image-plus (added: 2025-12-18)
+- qwen-image-edit-plus-2025-12-15 (added: 2025-12-18)
+- qwen-image-edit-plus-2025-10-30 (added: 2025-12-18)
+- qwen-image-edit-plus (added: 2025-12-18)
+- qwen-image-edit (added: 2025-12-18)
+- qwen-coder-plus (added: 2025-12-18)
+- qvq-max (added: 2025-12-18)
+- ccai-pro (added: 2025-12-18)
 
