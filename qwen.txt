@@ -2,6 +2,7 @@ ccai-pro
 qvq-max
 qwen-coder-plus
 qwen-flash
+qwen-flash-character
 qwen-image-edit
 qwen-image-edit-plus
 qwen-image-edit-plus-2025-10-30
@@ -23,6 +24,7 @@ qwen-plus-2025-04-28
 qwen-plus-2025-07-14
 qwen-plus-2025-09-11
 qwen-plus-2025-12-01
+qwen-plus-character
 qwen-plus-latest
 qwen-turbo
 qwen-turbo-2024-11-01
