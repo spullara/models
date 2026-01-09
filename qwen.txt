@@ -10,6 +10,7 @@ qwen-image-edit-plus-2025-12-15
 qwen-image-max
 qwen-image-max-2025-12-30
 qwen-image-plus
+qwen-image-plus-2026-01-09
 qwen-max
 qwen-max-2025-01-25
 qwen-max-latest
