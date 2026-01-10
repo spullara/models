@@ -2,6 +2,7 @@
 """
 Script to fetch model lists from various AI providers and update txt files.
 Uses .env file for API keys instead of hardcoding them.
+When new models are detected, runs an evaluation prompt on them.
 """
 
 import os
@@ -9,6 +10,7 @@ import subprocess
 import requests
 from pathlib import Path
 from dotenv import load_dotenv
+from evaluate_model import run_evaluation
 
 # Load environment variables from .env file
 load_dotenv()
@@ -132,6 +134,15 @@ def fetch_models(provider_name, config):
         print(f"  Unexpected error for {provider_name}: {e}")
         return []
 
+def read_existing_models(output_file):
+    """Read existing models from a file."""
+    file_path = MODELS_DIR / output_file
+    if not file_path.exists():
+        return set()
+    with open(file_path, 'r') as f:
+        return set(line.strip() for line in f if line.strip())
+
+
 def write_models_file(output_file, models):
     """Write models to a file."""
     file_path = MODELS_DIR / output_file
@@ -150,38 +161,74 @@ def git_commit_if_changed(file_path):
     except Exception as e:
         print(f"  Git error: {e}")
 
+def evaluate_new_models(provider_name, new_models):
+    """Evaluate newly detected models."""
+    if not new_models:
+        return
+
+    print(f"\n  Found {len(new_models)} new model(s) for {provider_name}:")
+    for model in sorted(new_models):
+        print(f"    - {model}")
+
+    for model in sorted(new_models):
+        try:
+            run_evaluation(provider_name, model)
+        except Exception as e:
+            print(f"    Error evaluating {model}: {e}")
+
+
 def main():
     """Main function to update all provider model lists."""
     os.chdir(MODELS_DIR)
-    
+
     # Pull latest changes
     print("Pulling latest changes...")
     try:
         subprocess.run(['git', 'pull'], check=True, cwd=MODELS_DIR)
     except Exception as e:
         print(f"Git pull error: {e}")
-    
+
+    # Track all new models for evaluation
+    all_new_models = {}
+
     # Process each provider
     for provider_name, config in PROVIDERS.items():
+        # Read existing models before fetching
+        existing_models = read_existing_models(config['output_file'])
+
+        # Fetch current models
         models = fetch_models(provider_name, config)
         if models:
+            # Detect new models
+            new_models = set(models) - existing_models
+            if new_models:
+                all_new_models[provider_name] = new_models
+
             write_models_file(config['output_file'], models)
             git_commit_if_changed(MODELS_DIR / config['output_file'])
-    
+
+    # Evaluate new models
+    if all_new_models:
+        print("\n" + "=" * 50)
+        print("EVALUATING NEW MODELS")
+        print("=" * 50)
+        for provider_name, new_models in all_new_models.items():
+            evaluate_new_models(provider_name, new_models)
+
     # Reset any uncommitted changes
     print("\nResetting uncommitted changes...")
     try:
         subprocess.run(['git', 'reset', '--hard'], check=True, cwd=MODELS_DIR)
     except Exception as e:
         print(f"Git reset error: {e}")
-    
+
     # Push changes
     print("Pushing changes...")
     try:
         subprocess.run(['git', 'push'], check=True, cwd=MODELS_DIR)
     except Exception as e:
         print(f"Git push error: {e}")
-    
+
     print("\nDone!")
 
 if __name__ == "__main__":
