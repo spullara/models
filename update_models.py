@@ -215,6 +215,19 @@ def main():
         for provider_name, new_models in all_new_models.items():
             evaluate_new_models(provider_name, new_models)
 
+        # Commit evaluation results
+        print("\nCommitting evaluation results...")
+        try:
+            evals_dir = MODELS_DIR / "evals"
+            if evals_dir.exists():
+                subprocess.run(['git', 'add', 'evals/'], check=True, cwd=MODELS_DIR)
+                subprocess.run(
+                    ['git', 'commit', '-m', 'Add model evaluation results'],
+                    check=False, cwd=MODELS_DIR
+                )
+        except Exception as e:
+            print(f"  Git error committing evals: {e}")
+
     # Reset any uncommitted changes
     print("\nResetting uncommitted changes...")
     try:
