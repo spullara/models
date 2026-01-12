@@ -1,0 +1,152 @@
+Model: claude-sonnet-4-5-20250929
+Provider: anthropic
+Evaluated: 2026-01-12T17:45:03.914448+00:00
+
+=== TIMING ===
+Response time: 8.62s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    memo = {}
+    
+    def dp(row, col, move_count):
+        if row == n - 1 and col == n - 1:
+            return (grid[row][col], "")
+        
+        if (row, col, move_count) in memo:
+            return memo[(row, col, move_count)]
+        
+        next_move = move_count + 1
+        must_diagonal = (next_move % 3 == 0)
+        
+        best_sum = float('-inf')
+        best_path = ""
+        
+        if must_diagonal:
+            if row + 1 < n and col + 1 < n:
+                future_sum, future_path = dp(row + 1, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "X" + future_path
+            else:
+                if row + 1 < n:
+                    future_sum, future_path = dp(row + 1, col, next_move)
+                    total = grid[row][col] + future_sum
+                    if total > best_sum:
+                        best_sum = total
+                        best_path = "D" + future_path
+                
+                if col + 1 < n:
+                    future_sum, future_path = dp(row, col + 1, next_move)
+                    total = grid[row][col] + future_sum
+                    if total > best_sum:
+                        best_sum = total
+                        best_path = "R" + future_path
+        else:
+            if row + 1 < n:
+                future_sum, future_path = dp(row + 1, col, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "D" + future_path
+            
+            if col + 1 < n:
+                future_sum, future_path = dp(row, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "R" + future_path
+            
+            if row + 1 < n and col + 1 < n:
+                future_sum, future_path = dp(row + 1, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "X" + future_path
+        
+        memo[(row, col, move_count)] = (best_sum, best_path)
+        return (best_sum, best_path)
+    
+    return dp(0, 0, 0)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    memo = {}
+    
+    def dp(row, col, move_count):
+        if row == n - 1 and col == n - 1:
+            return (grid[row][col], "")
+        
+        if (row, col, move_count) in memo:
+            return memo[(row, col, move_count)]
+        
+        next_move = move_count + 1
+        must_diagonal = (next_move % 3 == 0)
+        
+        best_sum = float('-inf')
+        best_path = ""
+        
+        if must_diagonal:
+            if row + 1 < n and col + 1 < n:
+                future_sum, future_path = dp(row + 1, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "X" + future_path
+            else:
+                if row + 1 < n:
+                    future_sum, future_path = dp(row + 1, col, next_move)
+                    total = grid[row][col] + future_sum
+                    if total > best_sum:
+                        best_sum = total
+                        best_path = "D" + future_path
+                
+                if col + 1 < n:
+                    future_sum, future_path = dp(row, col + 1, next_move)
+                    total = grid[row][col] + future_sum
+                    if total > best_sum:
+                        best_sum = total
+                        best_path = "R" + future_path
+        else:
+            if row + 1 < n:
+                future_sum, future_path = dp(row + 1, col, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "D" + future_path
+            
+            if col + 1 < n:
+                future_sum, future_path = dp(row, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "R" + future_path
+            
+            if row + 1 < n and col + 1 < n:
+                future_sum, future_path = dp(row + 1, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "X" + future_path
+        
+        memo[(row, col, move_count)] = (best_sum, best_path)
+        return (best_sum, best_path)
+    
+    return dp(0, 0, 0)

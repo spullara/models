@@ -1,0 +1,116 @@
+Model: gemini-3-pro-preview
+Provider: gemini
+Evaluated: 2026-01-12T17:47:09.501169+00:00
+
+=== TIMING ===
+Response time: 102.63s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+import sys
+
+sys.setrecursionlimit(100000)
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    memo = {}
+
+    def dfs(r: int, c: int, k: int) -> tuple[int, str]:
+        # state is (row, col, next_move_index % 3)
+        state = (r, c, k % 3)
+        if state in memo:
+            return memo[state]
+
+        if r == N - 1 and c == N - 1:
+            return (grid[r][c], "")
+
+        candidates = []
+        can_r = c + 1 < N
+        can_d = r + 1 < N
+        can_x = can_r and can_d
+
+        # k is the index of the move we are about to make
+        if k % 3 == 0:
+            if can_x:
+                candidates.append((1, 1, 'X'))
+            else:
+                if can_r: candidates.append((0, 1, 'R'))
+                if can_d: candidates.append((1, 0, 'D'))
+        else:
+            if can_r: candidates.append((0, 1, 'R'))
+            if can_d: candidates.append((1, 0, 'D'))
+            if can_x: candidates.append((1, 1, 'X'))
+
+        best_res = (-float('inf'), "")
+
+        for dr, dc, char in candidates:
+            res_sum, res_path = dfs(r + dr, c + dc, k + 1)
+            if res_sum != -float('inf'):
+                # Tuple comparison works: compares sum first, then string lexicographically
+                current = (grid[r][c] + res_sum, char + res_path)
+                if current > best_res:
+                    best_res = current
+        
+        memo[state] = best_res
+        return best_res
+
+    return dfs(0, 0, 1)
+
+=== EXTRACTED CODE ===
+import sys
+
+sys.setrecursionlimit(100000)
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    memo = {}
+
+    def dfs(r: int, c: int, k: int) -> tuple[int, str]:
+        # state is (row, col, next_move_index % 3)
+        state = (r, c, k % 3)
+        if state in memo:
+            return memo[state]
+
+        if r == N - 1 and c == N - 1:
+            return (grid[r][c], "")
+
+        candidates = []
+        can_r = c + 1 < N
+        can_d = r + 1 < N
+        can_x = can_r and can_d
+
+        # k is the index of the move we are about to make
+        if k % 3 == 0:
+            if can_x:
+                candidates.append((1, 1, 'X'))
+            else:
+                if can_r: candidates.append((0, 1, 'R'))
+                if can_d: candidates.append((1, 0, 'D'))
+        else:
+            if can_r: candidates.append((0, 1, 'R'))
+            if can_d: candidates.append((1, 0, 'D'))
+            if can_x: candidates.append((1, 1, 'X'))
+
+        best_res = (-float('inf'), "")
+
+        for dr, dc, char in candidates:
+            res_sum, res_path = dfs(r + dr, c + dc, k + 1)
+            if res_sum != -float('inf'):
+                # Tuple comparison works: compares sum first, then string lexicographically
+                current = (grid[r][c] + res_sum, char + res_path)
+                if current > best_res:
+                    best_res = current
+        
+        memo[state] = best_res
+        return best_res
+
+    return dfs(0, 0, 1)
