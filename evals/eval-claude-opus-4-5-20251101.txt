@@ -1,0 +1,190 @@
+Model: claude-opus-4-5-20251101
+Provider: anthropic
+Evaluated: 2026-01-12T17:44:06.427269+00:00
+
+=== TIMING ===
+Response time: 10.8s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    
+    n = len(grid)
+    
+    if n == 1:
+        return (grid[0][0], "")
+    
+    # State: (row, col, move_count)
+    # We need to track move_count to know when diagonal is required
+    from functools import lru_cache
+    
+    @lru_cache(maxsize=None)
+    def dp(row: int, col: int, move_count: int) -> tuple[int, str]:
+        # Base case: reached destination
+        if row == n - 1 and col == n - 1:
+            return (grid[row][col], "")
+        
+        # If out of bounds
+        if row >= n or col >= n:
+            return (float('-inf'), "")
+        
+        next_move = move_count + 1
+        is_third_move = (next_move % 3 == 0)
+        
+        best_sum = float('-inf')
+        best_path = ""
+        
+        # Check if diagonal is possible
+        can_diagonal = (row + 1 < n and col + 1 < n)
+        can_right = (col + 1 < n)
+        can_down = (row + 1 < n)
+        
+        if is_third_move:
+            # Must use diagonal if possible
+            if can_diagonal:
+                # Only diagonal allowed
+                future_sum, future_path = dp(row + 1, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "X" + future_path
+            else:
+                # Diagonal not possible, can use R or D
+                if can_right:
+                    future_sum, future_path = dp(row, col + 1, next_move)
+                    total = grid[row][col] + future_sum
+                    if total > best_sum:
+                        best_sum = total
+                        best_path = "R" + future_path
+                
+                if can_down:
+                    future_sum, future_path = dp(row + 1, col, next_move)
+                    total = grid[row][col] + future_sum
+                    if total > best_sum:
+                        best_sum = total
+                        best_path = "D" + future_path
+        else:
+            # Can use any valid move
+            if can_right:
+                future_sum, future_path = dp(row, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "R" + future_path
+            
+            if can_down:
+                future_sum, future_path = dp(row + 1, col, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "D" + future_path
+            
+            if can_diagonal:
+                future_sum, future_path = dp(row + 1, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "X" + future_path
+        
+        return (best_sum, best_path)
+    
+    result = dp(0, 0, 0)
+    return result
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    
+    n = len(grid)
+    
+    if n == 1:
+        return (grid[0][0], "")
+    
+    # State: (row, col, move_count)
+    # We need to track move_count to know when diagonal is required
+    from functools import lru_cache
+    
+    @lru_cache(maxsize=None)
+    def dp(row: int, col: int, move_count: int) -> tuple[int, str]:
+        # Base case: reached destination
+        if row == n - 1 and col == n - 1:
+            return (grid[row][col], "")
+        
+        # If out of bounds
+        if row >= n or col >= n:
+            return (float('-inf'), "")
+        
+        next_move = move_count + 1
+        is_third_move = (next_move % 3 == 0)
+        
+        best_sum = float('-inf')
+        best_path = ""
+        
+        # Check if diagonal is possible
+        can_diagonal = (row + 1 < n and col + 1 < n)
+        can_right = (col + 1 < n)
+        can_down = (row + 1 < n)
+        
+        if is_third_move:
+            # Must use diagonal if possible
+            if can_diagonal:
+                # Only diagonal allowed
+                future_sum, future_path = dp(row + 1, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "X" + future_path
+            else:
+                # Diagonal not possible, can use R or D
+                if can_right:
+                    future_sum, future_path = dp(row, col + 1, next_move)
+                    total = grid[row][col] + future_sum
+                    if total > best_sum:
+                        best_sum = total
+                        best_path = "R" + future_path
+                
+                if can_down:
+                    future_sum, future_path = dp(row + 1, col, next_move)
+                    total = grid[row][col] + future_sum
+                    if total > best_sum:
+                        best_sum = total
+                        best_path = "D" + future_path
+        else:
+            # Can use any valid move
+            if can_right:
+                future_sum, future_path = dp(row, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "R" + future_path
+            
+            if can_down:
+                future_sum, future_path = dp(row + 1, col, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "D" + future_path
+            
+            if can_diagonal:
+                future_sum, future_path = dp(row + 1, col + 1, next_move)
+                total = grid[row][col] + future_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = "X" + future_path
+        
+        return (best_sum, best_path)
+    
+    result = dp(0, 0, 0)
+    return result
