@@ -1,87 +1,19 @@
 Model: grok-2-1212
 Provider: grok
-Evaluated: 2026-01-15T07:31:11.736917+00:00
+Evaluated: 2026-01-15T07:59:05.777906+00:00
 
 === TIMING ===
-Response time: 4.23s
+Response time: 0.17s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 73
-Calculated sum: 15
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+API Error: HTTP 404: {"code":"Some requested entity was not found","error":"The model grok-2-1212 was deprecated on 2025-09-15 and is no longer accessible via the API. Please use grok-3 instead."}
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    dp = [[(-float('inf'), '') for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], '')
-
-    def valid(x, y):
-        return 0 <= x < n and 0 <= y < n
-
-    for i in range(n * n):
-        for x in range(n):
-            for y in range(n):
-                if dp[x][y][0] == -float('inf'):
-                    continue
-                curr_sum, curr_path = dp[x][y]
-                move_num = len(curr_path) + 1
-                if move_num % 3 == 0 and valid(x+1, y+1):
-                    new_sum = curr_sum + grid[x+1][y+1]
-                    new_path = curr_path + 'X'
-                    if new_sum > dp[x+1][y+1][0]:
-                        dp[x+1][y+1] = (new_sum, new_path)
-                if valid(x, y+1):
-                    new_sum = curr_sum + grid[x][y+1]
-                    new_path = curr_path + 'R'
-                    if new_sum > dp[x][y+1][0]:
-                        dp[x][y+1] = (new_sum, new_path)
-                if valid(x+1, y):
-                    new_sum = curr_sum + grid[x+1][y]
-                    new_path = curr_path + 'D'
-                    if new_sum > dp[x+1][y][0]:
-                        dp[x+1][y] = (new_sum, new_path)
-
-    return dp[n-1][n-1]
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    dp = [[(-float('inf'), '') for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], '')
-
-    def valid(x, y):
-        return 0 <= x < n and 0 <= y < n
-
-    for i in range(n * n):
-        for x in range(n):
-            for y in range(n):
-                if dp[x][y][0] == -float('inf'):
-                    continue
-                curr_sum, curr_path = dp[x][y]
-                move_num = len(curr_path) + 1
-                if move_num % 3 == 0 and valid(x+1, y+1):
-                    new_sum = curr_sum + grid[x+1][y+1]
-                    new_path = curr_path + 'X'
-                    if new_sum > dp[x+1][y+1][0]:
-                        dp[x+1][y+1] = (new_sum, new_path)
-                if valid(x, y+1):
-                    new_sum = curr_sum + grid[x][y+1]
-                    new_path = curr_path + 'R'
-                    if new_sum > dp[x][y+1][0]:
-                        dp[x][y+1] = (new_sum, new_path)
-                if valid(x+1, y):
-                    new_sum = curr_sum + grid[x+1][y]
-                    new_path = curr_path + 'D'
-                    if new_sum > dp[x+1][y][0]:
-                        dp[x+1][y] = (new_sum, new_path)
-
-    return dp[n-1][n-1]
+(no code extracted)
