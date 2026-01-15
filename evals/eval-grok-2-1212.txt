@@ -1,76 +1,19 @@
 Model: grok-2-1212
 Provider: grok
-Evaluated: 2026-01-15T07:13:05.447552+00:00
+Evaluated: 2026-01-15T07:15:05.678476+00:00
 
 === TIMING ===
-Response time: 3.72s
+Response time: 0.16s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 51
-Calculated sum: 51
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 404: {"code":"Some requested entity was not found","error":"The model grok-2-1212 was deprecated on 2025-09-15 and is no longer accessible via the API. Please use grok-3 instead."}
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    dp = [[(-float('inf'), '') for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], '')
-
-    for i in range(n):
-        for j in range(n):
-            if i == 0 and j == 0:
-                continue
-            moves = []
-            if i > 0:
-                moves.append(('D', dp[i-1][j]))
-            if j > 0:
-                moves.append(('R', dp[i][j-1]))
-            if i > 0 and j > 0:
-                moves.append(('X', dp[i-1][j-1]))
-            
-            for move, (prev_sum, prev_path) in moves:
-                new_sum = prev_sum + grid[i][j]
-                new_path = prev_path + move
-                step = len(new_path)
-                if step % 3 == 0 and move != 'X' and 'X' in [m for m, _ in moves]:
-                    continue
-                if new_sum > dp[i][j][0]:
-                    dp[i][j] = (new_sum, new_path)
-
-    return dp[n-1][n-1]
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    dp = [[(-float('inf'), '') for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], '')
-
-    for i in range(n):
-        for j in range(n):
-            if i == 0 and j == 0:
-                continue
-            moves = []
-            if i > 0:
-                moves.append(('D', dp[i-1][j]))
-            if j > 0:
-                moves.append(('R', dp[i][j-1]))
-            if i > 0 and j > 0:
-                moves.append(('X', dp[i-1][j-1]))
-            
-            for move, (prev_sum, prev_path) in moves:
-                new_sum = prev_sum + grid[i][j]
-                new_path = prev_path + move
-                step = len(new_path)
-                if step % 3 == 0 and move != 'X' and 'X' in [m for m, _ in moves]:
-                    continue
-                if new_sum > dp[i][j][0]:
-                    dp[i][j] = (new_sum, new_path)
-
-    return dp[n-1][n-1]
+(no code extracted)
