@@ -103,6 +103,5 @@ qwq-plus
 qwq-plus-2025-03-05
 text-embedding-v3
 text-embedding-v4
-tongyi-skynet-llm-cm-2511
 tongyi-tingwu-slp
 z-image-turbo
