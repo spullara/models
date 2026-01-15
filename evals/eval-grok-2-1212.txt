@@ -1,17 +1,17 @@
 Model: grok-2-1212
 Provider: grok
-Evaluated: 2026-01-15T07:28:05.983225+00:00
+Evaluated: 2026-01-15T07:31:11.736917+00:00
 
 === TIMING ===
-Response time: 4.0s
+Response time: 4.23s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 61
-Calculated sum: 16
+Returned sum: 73
+Calculated sum: 15
 Sum matches: NO
 Path valid: NO
 Path error: Move 3 must be diagonal (X) but was D
@@ -20,30 +20,34 @@ Path error: Move 3 must be diagonal (X) but was D
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
-    dp = [[(float('-inf'), '') for _ in range(n)] for _ in range(n)]
+    dp = [[(-float('inf'), '') for _ in range(n)] for _ in range(n)]
     dp[0][0] = (grid[0][0], '')
 
-    def valid_moves(i, j, move_count):
-        moves = []
-        if j + 1 < n:
-            moves.append(('R', i, j + 1))
-        if i + 1 < n:
-            moves.append(('D', i + 1, j))
-        if i + 1 < n and j + 1 < n:
-            moves.append(('X', i + 1, j + 1))
-        if move_count % 3 == 2 and 'X' in [m[0] for m in moves]:
-            return [m for m in moves if m[0] == 'X']
-        return moves
+    def valid(x, y):
+        return 0 <= x < n and 0 <= y < n
 
-    for move_count in range(2 * n - 1):
-        for i in range(n):
-            for j in range(n):
-                if i + j == move_count:
-                    for move, ni, nj in valid_moves(i, j, move_count):
-                        new_sum = dp[i][j][0] + grid[ni][nj]
-                        new_path = dp[i][j][1] + move
-                        if new_sum > dp[ni][nj][0]:
-                            dp[ni][nj] = (new_sum, new_path)
+    for i in range(n * n):
+        for x in range(n):
+            for y in range(n):
+                if dp[x][y][0] == -float('inf'):
+                    continue
+                curr_sum, curr_path = dp[x][y]
+                move_num = len(curr_path) + 1
+                if move_num % 3 == 0 and valid(x+1, y+1):
+                    new_sum = curr_sum + grid[x+1][y+1]
+                    new_path = curr_path + 'X'
+                    if new_sum > dp[x+1][y+1][0]:
+                        dp[x+1][y+1] = (new_sum, new_path)
+                if valid(x, y+1):
+                    new_sum = curr_sum + grid[x][y+1]
+                    new_path = curr_path + 'R'
+                    if new_sum > dp[x][y+1][0]:
+                        dp[x][y+1] = (new_sum, new_path)
+                if valid(x+1, y):
+                    new_sum = curr_sum + grid[x+1][y]
+                    new_path = curr_path + 'D'
+                    if new_sum > dp[x+1][y][0]:
+                        dp[x+1][y] = (new_sum, new_path)
 
     return dp[n-1][n-1]
 ```
@@ -51,29 +55,33 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
-    dp = [[(float('-inf'), '') for _ in range(n)] for _ in range(n)]
+    dp = [[(-float('inf'), '') for _ in range(n)] for _ in range(n)]
     dp[0][0] = (grid[0][0], '')
 
-    def valid_moves(i, j, move_count):
-        moves = []
-        if j + 1 < n:
-            moves.append(('R', i, j + 1))
-        if i + 1 < n:
-            moves.append(('D', i + 1, j))
-        if i + 1 < n and j + 1 < n:
-            moves.append(('X', i + 1, j + 1))
-        if move_count % 3 == 2 and 'X' in [m[0] for m in moves]:
-            return [m for m in moves if m[0] == 'X']
-        return moves
+    def valid(x, y):
+        return 0 <= x < n and 0 <= y < n
 
-    for move_count in range(2 * n - 1):
-        for i in range(n):
-            for j in range(n):
-                if i + j == move_count:
-                    for move, ni, nj in valid_moves(i, j, move_count):
-                        new_sum = dp[i][j][0] + grid[ni][nj]
-                        new_path = dp[i][j][1] + move
-                        if new_sum > dp[ni][nj][0]:
-                            dp[ni][nj] = (new_sum, new_path)
+    for i in range(n * n):
+        for x in range(n):
+            for y in range(n):
+                if dp[x][y][0] == -float('inf'):
+                    continue
+                curr_sum, curr_path = dp[x][y]
+                move_num = len(curr_path) + 1
+                if move_num % 3 == 0 and valid(x+1, y+1):
+                    new_sum = curr_sum + grid[x+1][y+1]
+                    new_path = curr_path + 'X'
+                    if new_sum > dp[x+1][y+1][0]:
+                        dp[x+1][y+1] = (new_sum, new_path)
+                if valid(x, y+1):
+                    new_sum = curr_sum + grid[x][y+1]
+                    new_path = curr_path + 'R'
+                    if new_sum > dp[x][y+1][0]:
+                        dp[x][y+1] = (new_sum, new_path)
+                if valid(x+1, y):
+                    new_sum = curr_sum + grid[x+1][y]
+                    new_path = curr_path + 'D'
+                    if new_sum > dp[x+1][y][0]:
+                        dp[x+1][y] = (new_sum, new_path)
 
     return dp[n-1][n-1]
