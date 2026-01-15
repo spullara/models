@@ -1,19 +1,81 @@
 Model: grok-2-1212
 Provider: grok
-Evaluated: 2026-01-15T07:59:05.777906+00:00
+Evaluated: 2026-01-15T08:05:05.472713+00:00
 
 === TIMING ===
-Response time: 0.17s
+Response time: 3.83s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: {"code":"Some requested entity was not found","error":"The model grok-2-1212 was deprecated on 2025-09-15 and is no longer accessible via the API. Please use grok-3 instead."}
+Returned sum: 73
+Calculated sum: 15
+Sum matches: NO
+Path valid: NO
+Path error: Move 3 must be diagonal (X) but was D
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    dp = [[(float('-inf'), '') for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], '')
+
+    def valid_moves(i, j, move_count):
+        moves = []
+        if j + 1 < n:
+            moves.append(('R', i, j + 1))
+        if i + 1 < n:
+            moves.append(('D', i + 1, j))
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1))
+        if move_count % 3 == 2 and 'X' in [m[0] for m in moves]:
+            return [m for m in moves if m[0] == 'X']
+        return moves
+
+    for move_count in range(n * 2 - 1):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][0] == float('-inf'):
+                    continue
+                for move, ni, nj in valid_moves(i, j, move_count):
+                    new_sum = dp[i][j][0] + grid[ni][nj]
+                    new_path = dp[i][j][1] + move
+                    if new_sum > dp[ni][nj][0]:
+                        dp[ni][nj] = (new_sum, new_path)
+
+    return dp[n-1][n-1]
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    dp = [[(float('-inf'), '') for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], '')
+
+    def valid_moves(i, j, move_count):
+        moves = []
+        if j + 1 < n:
+            moves.append(('R', i, j + 1))
+        if i + 1 < n:
+            moves.append(('D', i + 1, j))
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1))
+        if move_count % 3 == 2 and 'X' in [m[0] for m in moves]:
+            return [m for m in moves if m[0] == 'X']
+        return moves
+
+    for move_count in range(n * 2 - 1):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][0] == float('-inf'):
+                    continue
+                for move, ni, nj in valid_moves(i, j, move_count):
+                    new_sum = dp[i][j][0] + grid[ni][nj]
+                    new_path = dp[i][j][1] + move
+                    if new_sum > dp[ni][nj][0]:
+                        dp[ni][nj] = (new_sum, new_path)
+
+    return dp[n-1][n-1]
