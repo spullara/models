@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-01-15 07:34:13
+Last updated: 2026-01-15 07:36:12
 
 ## Summary
 
@@ -21,7 +21,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 13/0
 
-**Qwen**: 108/1
+**Qwen**: 107/2
 
 
 ## OpenAI
@@ -457,7 +457,6 @@ Model counts shown as: **Available/Deleted**
 - qwen-image-max (added: 2026-01-05)
 - qwen-flash (added: 2026-01-05)
 - tongyi-tingwu-slp (added: 2025-12-18)
-- tongyi-skynet-llm-cm-2511 (added: 2025-12-18)
 - text-embedding-v4 (added: 2025-12-18)
 - text-embedding-v3 (added: 2025-12-18)
 - qwq-plus-2025-03-05 (added: 2025-12-18)
@@ -559,5 +558,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- tongyi-skynet-llm-cm-2511 (deleted: 2026-01-15)
 - qwen3-max-2025-10-30 (deleted: 2026-01-09)
 
