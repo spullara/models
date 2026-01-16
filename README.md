@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-01-16 02:39:13
+Last updated: 2026-01-16 02:40:13
 
 ## Summary
 
@@ -209,7 +209,6 @@ Model counts shown as: **Available/Deleted**
 
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
-- models/veo-3.1-fast-generate-preview (added: 2025-12-09)
 - models/veo-3.1-generate-preview (added: 2025-12-05)
 - models/veo-3.0-generate-001 (added: 2025-12-05)
 - models/veo-3.0-fast-generate-001 (added: 2025-12-05)
@@ -228,6 +227,7 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-flash-latest (added: 2025-09-25)
 - models/gemini-2.5-flash-preview-09-2025 (added: 2025-09-25)
 - models/gemini-2.5-flash-lite-preview-09-2025 (added: 2025-09-25)
+- models/gemini-2.5-flash-image-preview (added: 2025-08-26)
 - models/imagen-4.0-generate-preview-06-06 (added: 2025-07-28)
 - models/gemini-2.5-flash-lite (added: 2025-07-22)
 - models/gemini-embedding-001 (added: 2025-07-14)
@@ -260,7 +260,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- models/gemini-2.5-flash-image-preview (deleted: 2026-01-16)
+- models/veo-3.1-fast-generate-preview (deleted: 2026-01-16)
 - models/gemini-3-flash-preview-ais-applets (deleted: 2025-12-17)
 - models/gemini-2.5-flash-native-audio-latest (deleted: 2025-12-11)
 - models/gemini-2.0-flash-live-001 (deleted: 2025-12-10)
