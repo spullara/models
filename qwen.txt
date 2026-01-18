@@ -4,6 +4,7 @@ qwen-coder-plus
 qwen-flash
 qwen-flash-character
 qwen-image-edit
+qwen-image-edit-max
 qwen-image-edit-plus
 qwen-image-edit-plus-2025-10-30
 qwen-image-edit-plus-2025-12-15
