@@ -1,0 +1,19 @@
+Model: qwen-image-edit-max
+Provider: qwen
+Evaluated: 2026-01-18T08:24:05.796169+00:00
+
+=== TIMING ===
+Response time: 0.86s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-6a26b920-1bb1-930a-8b1d-9d91ee900692","request_id":"6a26b920-1bb1-930a-8b1d-9d91ee900692"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
