@@ -1,0 +1,26 @@
+Model: osb-120b
+Provider: openai
+Evaluated: 2026-01-21T19:37:05.474756+00:00
+
+=== TIMING ===
+Response time: 0.25s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 500: {
+  "error": {
+    "message": "The server had an error while processing your request. Sorry about that!",
+    "type": "server_error",
+    "param": null,
+    "code": null
+  }
+}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
