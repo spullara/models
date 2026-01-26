@@ -75,6 +75,7 @@ qwen3-livetranslate-flash-realtime
 qwen3-livetranslate-flash-realtime-2025-09-22
 qwen3-max
 qwen3-max-2025-09-23
+qwen3-max-2026-01-23
 qwen3-max-preview
 qwen3-next-80b-a3b-instruct
 qwen3-next-80b-a3b-thinking
