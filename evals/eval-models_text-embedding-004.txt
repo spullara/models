@@ -1,9 +1,9 @@
 Model: models/text-embedding-004
 Provider: gemini
-Evaluated: 2026-01-27T19:11:06.234779+00:00
+Evaluated: 2026-01-27T20:42:06.942473+00:00
 
 === TIMING ===
-Response time: 0.17s
+Response time: 0.13s
 
 === CODE EXTRACTION ===
 Method: None
