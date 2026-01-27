@@ -1,0 +1,19 @@
+Model: kimi-k2.5
+Provider: kimi
+Evaluated: 2026-01-27T02:32:04.753870+00:00
+
+=== TIMING ===
+Response time: 0.26s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 429: {"error":{"message":"Your account org-07df307cbaf647e5a218f2bd6c3fb31c \u003cak-f7g1i8zicoii11hxpu9i\u003e is suspended due to insufficient balance, please recharge your account or check your plan and billing details","type":"exceeded_current_quota_error"}}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
