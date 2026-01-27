@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-01-27 21:40:14
+Last updated: 2026-01-27 22:11:15
 
 ## Summary
 
@@ -11,7 +11,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/7
 
-**Gemini**: 50/58
+**Gemini**: 48/60
 
 **Grok**: 9/4
 
@@ -208,8 +208,11 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (added: 2026-01-27)
+- models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
+- models/gemini-2.5-flash-native-audio-latest (added: 2025-12-10)
 - models/veo-3.1-fast-generate-preview (added: 2025-12-09)
 - models/veo-3.1-generate-preview (added: 2025-12-05)
 - models/veo-3.0-generate-001 (added: 2025-12-05)
@@ -244,8 +247,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemma-3-12b-it (added: 2025-04-01)
 - models/gemini-2.0-flash-exp-image-generation (added: 2025-03-14)
 - models/gemma-3-27b-it (added: 2025-03-12)
-- models/gemini-embedding-exp-03-07 (added: 2025-03-07)
-- models/gemini-embedding-exp (added: 2025-03-07)
 - models/gemini-2.0-flash-lite-001 (added: 2025-02-25)
 - models/gemini-2.0-flash-lite (added: 2025-02-25)
 - models/gemini-2.0-flash-lite-preview-02-05 (added: 2025-02-05)
@@ -253,17 +254,16 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-2.0-flash-001 (added: 2025-02-05)
 - models/gemini-2.0-flash (added: 2025-02-05)
 - models/gemini-2.0-flash-exp (added: 2024-12-11)
-- models/text-embedding-004 (added: 2024-12-07)
 - models/gemini-exp-1206 (added: 2024-12-07)
-- models/embedding-gecko-001 (added: 2024-12-07)
-- models/embedding-001 (added: 2024-12-07)
 - models/aqa (added: 2024-12-07)
 
 ### Deleted Models
 
-- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-01-27)
-- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-01-27)
-- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-01-27)
+- models/text-embedding-004 (deleted: 2026-01-27)
+- models/gemini-embedding-exp-03-07 (deleted: 2026-01-27)
+- models/gemini-embedding-exp (deleted: 2026-01-27)
+- models/embedding-gecko-001 (deleted: 2026-01-27)
+- models/embedding-001 (deleted: 2026-01-27)
 - models/gemini-2.5-flash-image-preview (deleted: 2026-01-16)
 - models/gemini-3-flash-preview-ais-applets (deleted: 2025-12-17)
 - models/gemini-2.0-flash-live-001 (deleted: 2025-12-10)
