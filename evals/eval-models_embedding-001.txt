@@ -1,6 +1,6 @@
 Model: models/embedding-001
 Provider: gemini
-Evaluated: 2026-01-27T22:15:04.927647+00:00
+Evaluated: 2026-01-27T22:23:05.358453+00:00
 
 === TIMING ===
 Response time: 0.14s
