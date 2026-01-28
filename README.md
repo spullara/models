@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-01-28 20:45:15
+Last updated: 2026-01-28 20:49:14
 
 ## Summary
 
@@ -11,7 +11,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/7
 
-**Gemini**: 47/61
+**Gemini**: 45/63
 
 **Grok**: 9/4
 
@@ -251,19 +251,19 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-2.0-flash-lite (added: 2025-02-25)
 - models/gemini-2.0-flash-001 (added: 2025-02-05)
 - models/gemini-2.0-flash (added: 2025-02-05)
-- models/text-embedding-004 (added: 2024-12-07)
 - models/gemini-exp-1206 (added: 2024-12-07)
-- models/embedding-001 (added: 2024-12-07)
 - models/aqa (added: 2024-12-07)
 
 ### Deleted Models
 
+- models/text-embedding-004 (deleted: 2026-01-28)
 - models/gemini-embedding-exp-03-07 (deleted: 2026-01-28)
 - models/gemini-embedding-exp (deleted: 2026-01-28)
 - models/gemini-2.0-flash-lite-preview-02-05 (deleted: 2026-01-28)
 - models/gemini-2.0-flash-lite-preview (deleted: 2026-01-28)
 - models/gemini-2.0-flash-exp (deleted: 2026-01-28)
 - models/embedding-gecko-001 (deleted: 2026-01-28)
+- models/embedding-001 (deleted: 2026-01-28)
 - models/gemini-2.5-flash-image-preview (deleted: 2026-01-16)
 - models/gemini-3-flash-preview-ais-applets (deleted: 2025-12-17)
 - models/gemini-2.0-flash-live-001 (deleted: 2025-12-10)
