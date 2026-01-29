@@ -42,7 +42,11 @@ PROVIDERS = {
         'output_file': 'gemini.txt'
     },
     'grok': {
-        'url': 'https://api.x.ai/v1/language-models',
+        'urls': [
+            'https://api.x.ai/v1/language-models',
+            'https://api.x.ai/v1/embedding-models',
+            'https://api.x.ai/v1/image-generation-models'
+        ],
         'headers': lambda: {'Authorization': f"Bearer {os.getenv('GROK_API_KEY')}"},
         'json_path': ['models', 'id'],
         'output_file': 'grok.txt'
@@ -104,32 +108,40 @@ def fetch_models(provider_name, config):
 
     try:
         headers = config['headers']()
-        response = requests.get(config['url'], headers=headers, timeout=30)
-        response.raise_for_status()
 
-        data = response.json()
-        models = extract_from_json(data, config['json_path'])
+        # Support both single 'url' and multiple 'urls'
+        urls = config.get('urls', [config['url']] if 'url' in config else [])
+        all_models = []
 
-        if not models:
+        for url in urls:
+            try:
+                response = requests.get(url, headers=headers, timeout=30)
+                response.raise_for_status()
+                data = response.json()
+                models = extract_from_json(data, config['json_path'])
+                if models:
+                    all_models.extend(models)
+            except requests.exceptions.RequestException as e:
+                print(f"  Warning: Error fetching from {url}: {e}")
+                continue
+
+        if not all_models:
             print(f"  Warning: No models found for {provider_name}")
             return []
 
         # Filter out fine-tuned models
-        original_count = len(models)
-        models = [m for m in models if not is_fine_tuned_model(m)]
-        filtered_count = original_count - len(models)
+        original_count = len(all_models)
+        all_models = [m for m in all_models if not is_fine_tuned_model(m)]
+        filtered_count = original_count - len(all_models)
 
         if filtered_count > 0:
             print(f"  Filtered out {filtered_count} fine-tuned models")
 
         # Sort models
-        models = sorted(models)
-        print(f"  Found {len(models)} models")
-        return models
+        all_models = sorted(set(all_models))  # Use set to remove any duplicates
+        print(f"  Found {len(all_models)} models")
+        return all_models
 
-    except requests.exceptions.RequestException as e:
-        print(f"  Error fetching {provider_name}: {e}")
-        return []
     except Exception as e:
         print(f"  Unexpected error for {provider_name}: {e}")
         return []
