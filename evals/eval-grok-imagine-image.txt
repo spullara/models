@@ -1,0 +1,19 @@
+Model: grok-imagine-image
+Provider: grok
+Evaluated: 2026-01-29T19:19:06.345018+00:00
+
+=== TIMING ===
+Response time: 0.2s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"code":"Client specified an invalid argument","error":"The model grok-imagine-image is an image model and is therefore not available on this endpoint. Please use a compatible endpoint such as https://api.x.ai/v1/images/generations. For more information, see https://docs.x.ai/docs/api-reference#image-generations"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
