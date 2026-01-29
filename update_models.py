@@ -45,7 +45,8 @@ PROVIDERS = {
         'urls': [
             'https://api.x.ai/v1/language-models',
             'https://api.x.ai/v1/embedding-models',
-            'https://api.x.ai/v1/image-generation-models'
+            'https://api.x.ai/v1/image-generation-models',
+            'https://api.x.ai/v1/video-generation-models'
         ],
         'headers': lambda: {'Authorization': f"Bearer {os.getenv('GROK_API_KEY')}"},
         'json_path': ['models', 'id'],
