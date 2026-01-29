@@ -9,3 +9,4 @@ grok-4-fast-non-reasoning
 grok-4-fast-reasoning
 grok-code-fast-1
 grok-imagine-image
+grok-imagine-video
