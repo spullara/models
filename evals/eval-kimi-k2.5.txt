@@ -1,19 +1,142 @@
 Model: kimi-k2.5
 Provider: kimi
-Evaluated: 2026-01-27T02:32:04.753870+00:00
+Evaluated: 2026-01-30T00:01:39.341919+00:00
 
 === TIMING ===
-Response time: 0.26s
+Response time: 124.98s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 429: {"error":{"message":"Your account org-07df307cbaf647e5a218f2bd6c3fb31c \u003cak-f7g1i8zicoii11hxpu9i\u003e is suspended due to insufficient balance, please recharge your account or check your plan and billing details","type":"exceeded_current_quota_error"}}
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    
+    # dp[i][j][r] stores (max_sum, path_string) where r is moves_made % 3
+    dp = [[[None for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
+    
+    for s in range(2 * n - 1):
+        for i in range(max(0, s - n + 1), min(n, s + 1)):
+            j = s - i
+            if j < 0 or j >= n:
+                continue
+            for r in range(3):
+                state = dp[i][j][r]
+                if state is None:
+                    continue
+                curr_sum, curr_path = state
+                
+                # Reached destination
+                if i == n - 1 and j == n - 1:
+                    continue
+                
+                forced = (r == 2)
+                next_r = (r + 1) % 3
+                
+                def update(ni, nj, move_char):
+                    new_sum = curr_sum + grid[ni][nj]
+                    new_path = curr_path + move_char
+                    old = dp[ni][nj][next_r]
+                    if old is None or new_sum > old[0] or (new_sum == old[0] and new_path < old[1]):
+                        dp[ni][nj][next_r] = (new_sum, new_path)
+                
+                if forced:
+                    if i + 1 < n and j + 1 < n:
+                        update(i + 1, j + 1, 'X')
+                    else:
+                        if j + 1 < n:
+                            update(i, j + 1, 'R')
+                        if i + 1 < n:
+                            update(i + 1, j, 'D')
+                else:
+                    if j + 1 < n:
+                        update(i, j + 1, 'R')
+                    if i + 1 < n:
+                        update(i + 1, j, 'D')
+                    if i + 1 < n and j + 1 < n:
+                        update(i + 1, j + 1, 'X')
+    
+    best_sum = None
+    best_path = ""
+    for r in range(3):
+        if dp[n-1][n-1][r] is not None:
+            s, p = dp[n-1][n-1][r]
+            if best_sum is None or s > best_sum or (s == best_sum and p < best_path):
+                best_sum = s
+                best_path = p
+    
+    return (best_sum, best_path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    
+    # dp[i][j][r] stores (max_sum, path_string) where r is moves_made % 3
+    dp = [[[None for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
+    
+    for s in range(2 * n - 1):
+        for i in range(max(0, s - n + 1), min(n, s + 1)):
+            j = s - i
+            if j < 0 or j >= n:
+                continue
+            for r in range(3):
+                state = dp[i][j][r]
+                if state is None:
+                    continue
+                curr_sum, curr_path = state
+                
+                # Reached destination
+                if i == n - 1 and j == n - 1:
+                    continue
+                
+                forced = (r == 2)
+                next_r = (r + 1) % 3
+                
+                def update(ni, nj, move_char):
+                    new_sum = curr_sum + grid[ni][nj]
+                    new_path = curr_path + move_char
+                    old = dp[ni][nj][next_r]
+                    if old is None or new_sum > old[0] or (new_sum == old[0] and new_path < old[1]):
+                        dp[ni][nj][next_r] = (new_sum, new_path)
+                
+                if forced:
+                    if i + 1 < n and j + 1 < n:
+                        update(i + 1, j + 1, 'X')
+                    else:
+                        if j + 1 < n:
+                            update(i, j + 1, 'R')
+                        if i + 1 < n:
+                            update(i + 1, j, 'D')
+                else:
+                    if j + 1 < n:
+                        update(i, j + 1, 'R')
+                    if i + 1 < n:
+                        update(i + 1, j, 'D')
+                    if i + 1 < n and j + 1 < n:
+                        update(i + 1, j + 1, 'X')
+    
+    best_sum = None
+    best_path = ""
+    for r in range(3):
+        if dp[n-1][n-1][r] is not None:
+            s, p = dp[n-1][n-1][r]
+            if best_sum is None or s > best_sum or (s == best_sum and p < best_path):
+                best_sum = s
+                best_path = p
+    
+    return (best_sum, best_path)

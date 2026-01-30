@@ -123,13 +123,13 @@ def build_request_body(provider: str, model: str, prompt: str) -> dict:
         return {
             'model': model,
             'messages': [{'role': 'user', 'content': prompt}],
-            'max_tokens': 4096
+            'max_tokens': 16384  # Higher limit for reasoning models
         }
     elif fmt == 'anthropic':
         return {
             'model': model,
             'messages': [{'role': 'user', 'content': prompt}],
-            'max_tokens': 4096
+            'max_tokens': 16384
         }
     elif fmt == 'gemini':
         return {
@@ -148,7 +148,12 @@ def extract_response_text(provider: str, response_json: dict) -> str:
 
     try:
         if fmt == 'openai':
-            return response_json['choices'][0]['message']['content']
+            message = response_json['choices'][0]['message']
+            content = message.get('content') or ''
+            # Some reasoning models (like kimi-k2.5) put the response in reasoning_content
+            reasoning_content = message.get('reasoning_content') or ''
+            # Return content if non-empty, otherwise try reasoning_content
+            return content if content.strip() else reasoning_content
         elif fmt == 'anthropic':
             return response_json['content'][0]['text']
         elif fmt == 'gemini':
