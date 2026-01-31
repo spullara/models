@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-01-30 00:09:27
+Last updated: 2026-01-31 12:00:15
 
 ## Summary
 
@@ -15,7 +15,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 12/4
 
-**Mistral**: 64/9
+**Mistral**: 52/21
 
 **DeepSeek**: 2/0
 
@@ -366,19 +366,12 @@ Model counts shown as: **Available/Deleted**
 - voxtral-mini-2507 (added: 2025-11-24)
 - pixtral-large-latest (added: 2025-11-24)
 - pixtral-large-2411 (added: 2025-11-24)
-- pixtral-12b-latest (added: 2025-11-24)
-- pixtral-12b-2409 (added: 2025-11-24)
-- pixtral-12b (added: 2025-11-24)
 - open-mistral-nemo-2407 (added: 2025-11-24)
 - open-mistral-nemo (added: 2025-11-24)
-- open-mistral-7b (added: 2025-11-24)
 - mistral-tiny-latest (added: 2025-11-24)
 - mistral-tiny-2407 (added: 2025-11-24)
-- mistral-tiny-2312 (added: 2025-11-24)
-- mistral-tiny (added: 2025-11-24)
 - mistral-small-latest (added: 2025-11-24)
 - mistral-small-2506 (added: 2025-11-24)
-- mistral-small-2501 (added: 2025-11-24)
 - mistral-ocr-latest (added: 2025-11-24)
 - mistral-ocr-2505 (added: 2025-11-24)
 - mistral-ocr-2503 (added: 2025-11-24)
@@ -394,9 +387,7 @@ Model counts shown as: **Available/Deleted**
 - mistral-embed-2312 (added: 2025-11-24)
 - mistral-embed (added: 2025-11-24)
 - ministral-8b-latest (added: 2025-11-24)
-- ministral-8b-2410 (added: 2025-11-24)
 - ministral-3b-latest (added: 2025-11-24)
-- ministral-3b-2410 (added: 2025-11-24)
 - magistral-small-latest (added: 2025-11-24)
 - magistral-small-2509 (added: 2025-11-24)
 - magistral-medium-latest (added: 2025-11-24)
@@ -409,12 +400,21 @@ Model counts shown as: **Available/Deleted**
 - codestral-embed-2505 (added: 2025-11-24)
 - codestral-embed (added: 2025-11-24)
 - codestral-2508 (added: 2025-11-24)
-- codestral-2501 (added: 2025-11-24)
-- codestral-2412 (added: 2025-11-24)
-- codestral-2411-rc5 (added: 2025-11-24)
 
 ### Deleted Models
 
+- pixtral-12b-latest (deleted: 2026-01-31)
+- pixtral-12b-2409 (deleted: 2026-01-31)
+- pixtral-12b (deleted: 2026-01-31)
+- open-mistral-7b (deleted: 2026-01-31)
+- mistral-tiny-2312 (deleted: 2026-01-31)
+- mistral-tiny (deleted: 2026-01-31)
+- mistral-small-2501 (deleted: 2026-01-31)
+- ministral-8b-2410 (deleted: 2026-01-31)
+- ministral-3b-2410 (deleted: 2026-01-31)
+- codestral-2501 (deleted: 2026-01-31)
+- codestral-2412 (deleted: 2026-01-31)
+- codestral-2411-rc5 (deleted: 2026-01-31)
 - devstral-medium-2512 (deleted: 2025-12-10)
 - labs:(* ^ ω ^) (deleted: 2025-12-03)
 - mistral-small-2503 (deleted: 2025-11-30)
