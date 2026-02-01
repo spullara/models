@@ -1,0 +1,156 @@
+Model: grok-4-fast-reasoning
+Provider: grok
+Evaluated: 2026-02-01T04:33:08.658607+00:00
+
+=== TIMING ===
+Response time: 38.87s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    memo = {}
+    
+    def dp(i: int, j: int, mod: int):
+        key = (i, j, mod)
+        if key in memo:
+            return memo[key]
+        
+        if i == N - 1 and j == N - 1:
+            res = (grid[i][j], "")
+            memo[key] = res
+            return res
+        
+        is_forced = ((mod + 1) % 3 == 0)
+        candidates = []
+        
+        if is_forced:
+            x_possible = (i + 1 < N and j + 1 < N)
+            if x_possible:
+                ni, nj, nmod = i + 1, j + 1, (mod + 1) % 3
+                sub_sum, sub_path = dp(ni, nj, nmod)
+                if sub_sum is not None:
+                    candidates.append((grid[i][j] + sub_sum, 'X' + sub_path))
+            if not x_possible or not candidates:
+                # try R
+                if j + 1 < N:
+                    ni, nj, nmod = i, j + 1, (mod + 1) % 3
+                    sub_sum, sub_path = dp(ni, nj, nmod)
+                    if sub_sum is not None:
+                        candidates.append((grid[i][j] + sub_sum, 'R' + sub_path))
+                # try D
+                if i + 1 < N:
+                    ni, nj, nmod = i + 1, j, (mod + 1) % 3
+                    sub_sum, sub_path = dp(ni, nj, nmod)
+                    if sub_sum is not None:
+                        candidates.append((grid[i][j] + sub_sum, 'D' + sub_path))
+        else:
+            # try R
+            if j + 1 < N:
+                ni, nj, nmod = i, j + 1, (mod + 1) % 3
+                sub_sum, sub_path = dp(ni, nj, nmod)
+                if sub_sum is not None:
+                    candidates.append((grid[i][j] + sub_sum, 'R' + sub_path))
+            # try D
+            if i + 1 < N:
+                ni, nj, nmod = i + 1, j, (mod + 1) % 3
+                sub_sum, sub_path = dp(ni, nj, nmod)
+                if sub_sum is not None:
+                    candidates.append((grid[i][j] + sub_sum, 'D' + sub_path))
+            # try X
+            if i + 1 < N and j + 1 < N:
+                ni, nj, nmod = i + 1, j + 1, (mod + 1) % 3
+                sub_sum, sub_path = dp(ni, nj, nmod)
+                if sub_sum is not None:
+                    candidates.append((grid[i][j] + sub_sum, 'X' + sub_path))
+        
+        if not candidates:
+            res = (None, "")
+        else:
+            candidates.sort(key=lambda x: x[0], reverse=True)
+            res = candidates[0]
+        memo[key] = res
+        return res
+    
+    total, path = dp(0, 0, 0)
+    return total, path
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    memo = {}
+    
+    def dp(i: int, j: int, mod: int):
+        key = (i, j, mod)
+        if key in memo:
+            return memo[key]
+        
+        if i == N - 1 and j == N - 1:
+            res = (grid[i][j], "")
+            memo[key] = res
+            return res
+        
+        is_forced = ((mod + 1) % 3 == 0)
+        candidates = []
+        
+        if is_forced:
+            x_possible = (i + 1 < N and j + 1 < N)
+            if x_possible:
+                ni, nj, nmod = i + 1, j + 1, (mod + 1) % 3
+                sub_sum, sub_path = dp(ni, nj, nmod)
+                if sub_sum is not None:
+                    candidates.append((grid[i][j] + sub_sum, 'X' + sub_path))
+            if not x_possible or not candidates:
+                # try R
+                if j + 1 < N:
+                    ni, nj, nmod = i, j + 1, (mod + 1) % 3
+                    sub_sum, sub_path = dp(ni, nj, nmod)
+                    if sub_sum is not None:
+                        candidates.append((grid[i][j] + sub_sum, 'R' + sub_path))
+                # try D
+                if i + 1 < N:
+                    ni, nj, nmod = i + 1, j, (mod + 1) % 3
+                    sub_sum, sub_path = dp(ni, nj, nmod)
+                    if sub_sum is not None:
+                        candidates.append((grid[i][j] + sub_sum, 'D' + sub_path))
+        else:
+            # try R
+            if j + 1 < N:
+                ni, nj, nmod = i, j + 1, (mod + 1) % 3
+                sub_sum, sub_path = dp(ni, nj, nmod)
+                if sub_sum is not None:
+                    candidates.append((grid[i][j] + sub_sum, 'R' + sub_path))
+            # try D
+            if i + 1 < N:
+                ni, nj, nmod = i + 1, j, (mod + 1) % 3
+                sub_sum, sub_path = dp(ni, nj, nmod)
+                if sub_sum is not None:
+                    candidates.append((grid[i][j] + sub_sum, 'D' + sub_path))
+            # try X
+            if i + 1 < N and j + 1 < N:
+                ni, nj, nmod = i + 1, j + 1, (mod + 1) % 3
+                sub_sum, sub_path = dp(ni, nj, nmod)
+                if sub_sum is not None:
+                    candidates.append((grid[i][j] + sub_sum, 'X' + sub_path))
+        
+        if not candidates:
+            res = (None, "")
+        else:
+            candidates.sort(key=lambda x: x[0], reverse=True)
+            res = candidates[0]
+        memo[key] = res
+        return res
+    
+    total, path = dp(0, 0, 0)
+    return total, path

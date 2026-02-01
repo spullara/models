@@ -1,0 +1,148 @@
+Model: grok-3-mini
+Provider: grok
+Evaluated: 2026-02-01T04:32:17.790811+00:00
+
+=== TIMING ===
+Response time: 46.71s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 1:
+        return grid[0][0], ""
+    
+    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
+    prev = [[[(None, None, None, None) for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for row in range(N):
+        for col in range(N):
+            for mod in range(3):
+                if dp[row][col][mod] != float('-inf'):
+                    required = (mod + 1) % 3 == 0
+                    
+                    possible_moves = []
+                    if not required:
+                        if row + 1 < N and col + 1 < N:
+                            possible_moves.append('X')
+                        if row + 1 < N:
+                            possible_moves.append('D')
+                        if col + 1 < N:
+                            possible_moves.append('R')
+                    else:
+                        if row + 1 < N and col + 1 < N:
+                            possible_moves.append('X')
+                        else:
+                            if row + 1 < N:
+                                possible_moves.append('D')
+                            if col + 1 < N:
+                                possible_moves.append('R')
+                    
+                    for move in possible_moves:
+                        if move == 'X':
+                            next_row, next_col = row + 1, col + 1
+                        elif move == 'D':
+                            next_row, next_col = row + 1, col
+                        elif move == 'R':
+                            next_row, next_col = row, col + 1
+                        
+                        if next_row < N and next_col < N:
+                            new_sum = dp[row][col][mod] + grid[next_row][next_col]
+                            new_mod = (mod + 1) % 3
+                            
+                            if new_sum > dp[next_row][next_col][new_mod]:
+                                dp[next_row][next_col][new_mod] = new_sum
+                                prev[next_row][next_col][new_mod] = (row, col, mod, move)
+    
+    max_sum = max(dp[N-1][N-1])
+    best_mod = dp[N-1][N-1].index(max_sum)
+    
+    path = []
+    current_row, current_col, current_mod = N-1, N-1, best_mod
+    while current_row > 0 or current_col > 0:
+        prev_row, prev_col, prev_mod, move = prev[current_row][current_col][current_mod]
+        path.append(move)
+        current_row, current_col, current_mod = prev_row, prev_col, prev_mod
+    
+    path.reverse()
+    path_string = ''.join(path)
+    
+    return max_sum, path_string
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 1:
+        return grid[0][0], ""
+    
+    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
+    prev = [[[(None, None, None, None) for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for row in range(N):
+        for col in range(N):
+            for mod in range(3):
+                if dp[row][col][mod] != float('-inf'):
+                    required = (mod + 1) % 3 == 0
+                    
+                    possible_moves = []
+                    if not required:
+                        if row + 1 < N and col + 1 < N:
+                            possible_moves.append('X')
+                        if row + 1 < N:
+                            possible_moves.append('D')
+                        if col + 1 < N:
+                            possible_moves.append('R')
+                    else:
+                        if row + 1 < N and col + 1 < N:
+                            possible_moves.append('X')
+                        else:
+                            if row + 1 < N:
+                                possible_moves.append('D')
+                            if col + 1 < N:
+                                possible_moves.append('R')
+                    
+                    for move in possible_moves:
+                        if move == 'X':
+                            next_row, next_col = row + 1, col + 1
+                        elif move == 'D':
+                            next_row, next_col = row + 1, col
+                        elif move == 'R':
+                            next_row, next_col = row, col + 1
+                        
+                        if next_row < N and next_col < N:
+                            new_sum = dp[row][col][mod] + grid[next_row][next_col]
+                            new_mod = (mod + 1) % 3
+                            
+                            if new_sum > dp[next_row][next_col][new_mod]:
+                                dp[next_row][next_col][new_mod] = new_sum
+                                prev[next_row][next_col][new_mod] = (row, col, mod, move)
+    
+    max_sum = max(dp[N-1][N-1])
+    best_mod = dp[N-1][N-1].index(max_sum)
+    
+    path = []
+    current_row, current_col, current_mod = N-1, N-1, best_mod
+    while current_row > 0 or current_col > 0:
+        prev_row, prev_col, prev_mod, move = prev[current_row][current_col][current_mod]
+        path.append(move)
+        current_row, current_col, current_mod = prev_row, prev_col, prev_mod
+    
+    path.reverse()
+    path_string = ''.join(path)
+    
+    return max_sum, path_string
