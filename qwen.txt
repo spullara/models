@@ -96,6 +96,7 @@ qwen3-tts-flash-realtime-2025-11-27
 qwen3-tts-vc-realtime-2025-11-27
 qwen3-tts-vc-realtime-2026-01-15
 qwen3-tts-vd-realtime-2025-12-16
+qwen3-tts-vd-realtime-2026-01-15
 qwen3-vl-235b-a22b-instruct
 qwen3-vl-235b-a22b-thinking
 qwen3-vl-flash
