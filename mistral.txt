@@ -49,6 +49,5 @@ pixtral-large-latest
 voxtral-mini-2507
 voxtral-mini-latest
 voxtral-mini-transcribe-2507
-voxtral-mini-transcribe-latest
 voxtral-small-2507
 voxtral-small-latest
