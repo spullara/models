@@ -1,9 +1,9 @@
 Model: voxtral-mini-transcribe-latest
 Provider: mistral
-Evaluated: 2026-02-03T14:58:05.603594+00:00
+Evaluated: 2026-02-03T15:01:09.960355+00:00
 
 === TIMING ===
-Response time: 0.37s
+Response time: 0.31s
 
 === CODE EXTRACTION ===
 Method: None
