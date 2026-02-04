@@ -47,6 +47,7 @@ open-mistral-nemo-2407
 pixtral-large-2411
 pixtral-large-latest
 voxtral-mini-2507
+voxtral-mini-2602
 voxtral-mini-latest
 voxtral-mini-transcribe-2507
 voxtral-small-2507
