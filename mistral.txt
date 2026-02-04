@@ -42,6 +42,7 @@ mistral-small-latest
 mistral-tiny-2407
 mistral-tiny-latest
 mistral-vibe-cli-latest
+mistral-vibe-cli-with-tools
 open-mistral-nemo
 open-mistral-nemo-2407
 pixtral-large-2411
