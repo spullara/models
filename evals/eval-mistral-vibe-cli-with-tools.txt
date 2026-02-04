@@ -1,0 +1,132 @@
+Model: mistral-vibe-cli-with-tools
+Provider: mistral
+Evaluated: 2026-02-04T13:01:06.313486+00:00
+
+=== TIMING ===
+Response time: 3.27s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    from heapq import heappop, heappush
+
+    max_heap = []
+    initial_sum = grid[0][0]
+    heappush(max_heap, (-initial_sum, 0, 0, "", 0))
+
+    visited = {}
+    max_sum = -1
+    best_path = ""
+
+    while max_heap:
+        neg_sum, i, j, path, move_count = heappop(max_heap)
+        current_sum = -neg_sum
+
+        if i == n - 1 and j == n - 1:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
+            continue
+
+        if (i, j, move_count) in visited and visited[(i, j, move_count)] >= current_sum:
+            continue
+        visited[(i, j, move_count)] = current_sum
+
+        next_move_count = move_count + 1
+        is_third_move = (next_move_count % 3 == 0)
+
+        directions = []
+        if is_third_move:
+            if i + 1 < n and j + 1 < n:
+                directions.append(('X', i + 1, j + 1))
+            if not directions:
+                if i + 1 < n:
+                    directions.append(('D', i + 1, j))
+                if j + 1 < n:
+                    directions.append(('R', i, j + 1))
+        else:
+            if j + 1 < n:
+                directions.append(('R', i, j + 1))
+            if i + 1 < n:
+                directions.append(('D', i + 1, j))
+            if i + 1 < n and j + 1 < n:
+                directions.append(('X', i + 1, j + 1))
+
+        for direction, ni, nj in directions:
+            new_sum = current_sum + grid[ni][nj]
+            new_path = path + direction
+            heappush(max_heap, (-new_sum, ni, nj, new_path, next_move_count))
+
+    return (max_sum, best_path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    from heapq import heappop, heappush
+
+    max_heap = []
+    initial_sum = grid[0][0]
+    heappush(max_heap, (-initial_sum, 0, 0, "", 0))
+
+    visited = {}
+    max_sum = -1
+    best_path = ""
+
+    while max_heap:
+        neg_sum, i, j, path, move_count = heappop(max_heap)
+        current_sum = -neg_sum
+
+        if i == n - 1 and j == n - 1:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
+            continue
+
+        if (i, j, move_count) in visited and visited[(i, j, move_count)] >= current_sum:
+            continue
+        visited[(i, j, move_count)] = current_sum
+
+        next_move_count = move_count + 1
+        is_third_move = (next_move_count % 3 == 0)
+
+        directions = []
+        if is_third_move:
+            if i + 1 < n and j + 1 < n:
+                directions.append(('X', i + 1, j + 1))
+            if not directions:
+                if i + 1 < n:
+                    directions.append(('D', i + 1, j))
+                if j + 1 < n:
+                    directions.append(('R', i, j + 1))
+        else:
+            if j + 1 < n:
+                directions.append(('R', i, j + 1))
+            if i + 1 < n:
+                directions.append(('D', i + 1, j))
+            if i + 1 < n and j + 1 < n:
+                directions.append(('X', i + 1, j + 1))
+
+        for direction, ni, nj in directions:
+            new_sum = current_sum + grid[ni][nj]
+            new_path = path + direction
+            heappush(max_heap, (-new_sum, ni, nj, new_path, next_move_count))
+
+    return (max_sum, best_path)
