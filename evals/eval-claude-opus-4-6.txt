@@ -1,0 +1,150 @@
+Model: claude-opus-4-6
+Provider: anthropic
+Evaluated: 2026-02-05T17:33:11.927988+00:00
+
+=== TIMING ===
+Response time: 9.54s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+    
+    # State: (row, col, move_count)
+    # We want to go from (0,0) to (n-1, n-1)
+    # move_count tracks how many moves we've made so far (next move will be move_count+1)
+    
+    from functools import lru_cache
+    
+    @lru_cache(maxsize=None)
+    def dp(r, c, move_count):
+        # Returns (max_sum_from_here, path_string)
+        if r == n - 1 and c == n - 1:
+            return (grid[r][c], "")
+        
+        next_move_number = move_count + 1
+        must_diagonal = (next_move_number % 3 == 0)
+        
+        candidates = []
+        
+        # Check if diagonal is possible
+        can_diagonal = (r + 1 < n and c + 1 < n)
+        # Check if right is possible
+        can_right = (c + 1 < n)
+        # Check if down is possible
+        can_down = (r + 1 < n)
+        
+        if must_diagonal:
+            if can_diagonal:
+                # Must use diagonal
+                val, path = dp(r + 1, c + 1, next_move_number)
+                candidates.append((val, "X" + path))
+            else:
+                # Diagonal not possible, can use R or D
+                if can_right:
+                    val, path = dp(r, c + 1, next_move_number)
+                    candidates.append((val, "R" + path))
+                if can_down:
+                    val, path = dp(r + 1, c, next_move_number)
+                    candidates.append((val, "D" + path))
+        else:
+            # Can use any move
+            if can_right:
+                val, path = dp(r, c + 1, next_move_number)
+                candidates.append((val, "R" + path))
+            if can_down:
+                val, path = dp(r + 1, c, next_move_number)
+                candidates.append((val, "D" + path))
+            if can_diagonal:
+                val, path = dp(r + 1, c + 1, next_move_number)
+                candidates.append((val, "X" + path))
+        
+        if not candidates:
+            # Shouldn't happen if grid is valid and we can reach (n-1, n-1)
+            return (float('-inf'), "")
+        
+        best = max(candidates, key=lambda x: x[0])
+        return (grid[r][c] + best[0], best[1])
+    
+    result_sum, result_path = dp(0, 0, 0)
+    return (result_sum, result_path)
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+    
+    # State: (row, col, move_count)
+    # We want to go from (0,0) to (n-1, n-1)
+    # move_count tracks how many moves we've made so far (next move will be move_count+1)
+    
+    from functools import lru_cache
+    
+    @lru_cache(maxsize=None)
+    def dp(r, c, move_count):
+        # Returns (max_sum_from_here, path_string)
+        if r == n - 1 and c == n - 1:
+            return (grid[r][c], "")
+        
+        next_move_number = move_count + 1
+        must_diagonal = (next_move_number % 3 == 0)
+        
+        candidates = []
+        
+        # Check if diagonal is possible
+        can_diagonal = (r + 1 < n and c + 1 < n)
+        # Check if right is possible
+        can_right = (c + 1 < n)
+        # Check if down is possible
+        can_down = (r + 1 < n)
+        
+        if must_diagonal:
+            if can_diagonal:
+                # Must use diagonal
+                val, path = dp(r + 1, c + 1, next_move_number)
+                candidates.append((val, "X" + path))
+            else:
+                # Diagonal not possible, can use R or D
+                if can_right:
+                    val, path = dp(r, c + 1, next_move_number)
+                    candidates.append((val, "R" + path))
+                if can_down:
+                    val, path = dp(r + 1, c, next_move_number)
+                    candidates.append((val, "D" + path))
+        else:
+            # Can use any move
+            if can_right:
+                val, path = dp(r, c + 1, next_move_number)
+                candidates.append((val, "R" + path))
+            if can_down:
+                val, path = dp(r + 1, c, next_move_number)
+                candidates.append((val, "D" + path))
+            if can_diagonal:
+                val, path = dp(r + 1, c + 1, next_move_number)
+                candidates.append((val, "X" + path))
+        
+        if not candidates:
+            # Shouldn't happen if grid is valid and we can reach (n-1, n-1)
+            return (float('-inf'), "")
+        
+        best = max(candidates, key=lambda x: x[0])
+        return (grid[r][c] + best[0], best[1])
+    
+    result_sum, result_path = dp(0, 0, 0)
+    return (result_sum, result_path)
