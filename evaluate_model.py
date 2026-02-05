@@ -53,6 +53,22 @@ def get_chat_endpoint(provider: str) -> dict:
             },
             'format': 'openai'
         },
+        'openai_completion': {
+            'url': 'https://api.openai.com/v1/completions',
+            'headers': lambda: {
+                'Authorization': f"Bearer {os.getenv('OPENAI_API_KEY')}",
+                'Content-Type': 'application/json'
+            },
+            'format': 'openai_completion'
+        },
+        'openai_responses': {
+            'url': 'https://api.openai.com/v1/responses',
+            'headers': lambda: {
+                'Authorization': f"Bearer {os.getenv('OPENAI_API_KEY')}",
+                'Content-Type': 'application/json'
+            },
+            'format': 'openai_responses'
+        },
         'anthropic': {
             'url': 'https://api.anthropic.com/v1/messages',
             'headers': lambda: {
@@ -125,6 +141,17 @@ def build_request_body(provider: str, model: str, prompt: str) -> dict:
             'messages': [{'role': 'user', 'content': prompt}],
             'max_tokens': 16384  # Higher limit for reasoning models
         }
+    elif fmt == 'openai_completion':
+        return {
+            'model': model,
+            'prompt': prompt,
+            'max_tokens': 16384
+        }
+    elif fmt == 'openai_responses':
+        return {
+            'model': model,
+            'input': [{'role': 'user', 'content': prompt}]
+        }
     elif fmt == 'anthropic':
         return {
             'model': model,
@@ -154,6 +181,32 @@ def extract_response_text(provider: str, response_json: dict) -> str:
             reasoning_content = message.get('reasoning_content') or ''
             # Return content if non-empty, otherwise try reasoning_content
             return content if content.strip() else reasoning_content
+        elif fmt == 'openai_completion':
+            # Legacy completions API returns text directly in choices
+            return response_json['choices'][0]['text']
+        elif fmt == 'openai_responses':
+            # Responses API returns output array with message objects
+            # Find the first message with text content
+            for item in response_json.get('output', []):
+                if item.get('type') == 'message':
+                    for content_item in item.get('content', []):
+                        if content_item.get('type') == 'output_text':
+                            return content_item.get('text', '')
+                        elif content_item.get('type') == 'text':
+                            return content_item.get('text', '')
+            # Fallback: try to get text from first output item directly
+            if response_json.get('output'):
+                first_output = response_json['output'][0]
+                if isinstance(first_output, dict):
+                    if 'text' in first_output:
+                        return first_output['text']
+                    if 'content' in first_output:
+                        content = first_output['content']
+                        if isinstance(content, str):
+                            return content
+                        if isinstance(content, list) and content:
+                            return content[0].get('text', '')
+            return None
         elif fmt == 'anthropic':
             return response_json['content'][0]['text']
         elif fmt == 'gemini':
