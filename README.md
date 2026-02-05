@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-02-04 13:01:18
+Last updated: 2026-02-05 17:33:31
 
 ## Summary
 
@@ -9,7 +9,7 @@ Model counts shown as: **Available/Deleted**
 
 **OpenAI**: 122/26
 
-**Anthropic**: 9/7
+**Anthropic**: 10/7
 
 **Gemini**: 47/61
 
@@ -184,6 +184,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- claude-opus-4-6 (added: 2026-02-05)
 - claude-opus-4-5-20251101 (added: 2025-11-24)
 - claude-haiku-4-5-20251001 (added: 2025-10-15)
 - claude-sonnet-4-5-20250929 (added: 2025-09-29)
