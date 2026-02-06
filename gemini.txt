@@ -1,5 +1,6 @@
 models/aqa
 models/deep-research-pro-preview-12-2025
+models/embedding-001
 models/gemini-2.0-flash
 models/gemini-2.0-flash-001
 models/gemini-2.0-flash-exp-image-generation
@@ -38,6 +39,7 @@ models/imagen-4.0-generate-preview-06-06
 models/imagen-4.0-ultra-generate-001
 models/imagen-4.0-ultra-generate-preview-06-06
 models/nano-banana-pro-preview
+models/text-embedding-004
 models/veo-2.0-generate-001
 models/veo-3.0-fast-generate-001
 models/veo-3.0-generate-001
