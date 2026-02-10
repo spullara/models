@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-02-10 10:09:17
+Last updated: 2026-02-10 11:16:16
 
 ## Summary
 
@@ -21,7 +21,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 14/0
 
-**Qwen**: 116/2
+**Qwen**: 117/2
 
 
 ## OpenAI
@@ -461,6 +461,7 @@ Model counts shown as: **Available/Deleted**
 ### Current Models
 
 - qwen3-tts-vd-2026-01-26 (added: 2026-02-10)
+- qwen3-tts-instruct-flash (added: 2026-02-10)
 - qwen3-tts-instruct-flash-realtime-2026-01-22 (added: 2026-02-04)
 - qwen3-tts-instruct-flash-realtime (added: 2026-02-04)
 - qwen3-tts-vd-realtime-2026-01-15 (added: 2026-02-02)
