@@ -1,0 +1,19 @@
+Model: qwen3-tts-vd-2026-01-26
+Provider: qwen
+Evaluated: 2026-02-10T10:09:05.952865+00:00
+
+=== TIMING ===
+Response time: 0.74s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-eb4d0f74-e2cf-919c-a0ac-4623a3f348ec","request_id":"eb4d0f74-e2cf-919c-a0ac-4623a3f348ec"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
