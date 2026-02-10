@@ -97,6 +97,7 @@ qwen3-tts-instruct-flash
 qwen3-tts-instruct-flash-2026-01-26
 qwen3-tts-instruct-flash-realtime
 qwen3-tts-instruct-flash-realtime-2026-01-22
+qwen3-tts-vc-2026-01-22
 qwen3-tts-vc-realtime-2025-11-27
 qwen3-tts-vc-realtime-2026-01-15
 qwen3-tts-vd-2026-01-26
