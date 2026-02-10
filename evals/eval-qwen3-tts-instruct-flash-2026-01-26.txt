@@ -1,0 +1,19 @@
+Model: qwen3-tts-instruct-flash-2026-01-26
+Provider: qwen
+Evaluated: 2026-02-10T11:18:05.859825+00:00
+
+=== TIMING ===
+Response time: 0.76s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-8c9c7875-9abb-957b-b966-59b557f2e293","request_id":"8c9c7875-9abb-957b-b966-59b557f2e293"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
