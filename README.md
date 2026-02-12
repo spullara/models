@@ -1,13 +1,13 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-02-10 11:19:21
+Last updated: 2026-02-12 18:12:16
 
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 122/26
+**OpenAI**: 121/27
 
 **Anthropic**: 10/7
 
@@ -80,7 +80,6 @@ Model counts shown as: **Available/Deleted**
 - o3-pro (added: 2025-06-10)
 - gpt-4o-realtime-preview-2025-06-03 (added: 2025-06-03)
 - gpt-4o-audio-preview-2025-06-03 (added: 2025-06-03)
-- codex-mini-latest (added: 2025-05-16)
 - gpt-image-1 (added: 2025-04-25)
 - o4-mini-2025-04-16 (added: 2025-04-16)
 - o4-mini (added: 2025-04-16)
@@ -153,6 +152,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- codex-mini-latest (deleted: 2026-02-12)
 - osb-120b (deleted: 2026-01-21)
 - gpt-4o-realtime-preview-2024-10-01 (deleted: 2025-12-03)
 - gpt-4o-audio-preview-2024-10-01 (deleted: 2025-12-03)
