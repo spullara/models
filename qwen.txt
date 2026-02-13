@@ -64,6 +64,7 @@ qwen3-4b
 qwen3-8b
 qwen3-asr-flash-realtime
 qwen3-asr-flash-realtime-2025-10-27
+qwen3-asr-flash-realtime-2026-02-10
 qwen3-coder-480b-a35b-instruct
 qwen3-coder-flash
 qwen3-coder-plus
