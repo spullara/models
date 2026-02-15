@@ -1,148 +1,139 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-02-01T04:32:17.790811+00:00
+Evaluated: 2026-02-15T03:40:20.819344+00:00
 
 === TIMING ===
-Response time: 46.71s
+Response time: 67.16s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Execution Error: can only concatenate tuple (not "int") to tuple
 
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return 0, ""
     N = len(grid)
-    if N == 1:
-        return grid[0][0], ""
+    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
-    prev = [[[(None, None, None, None) for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    def dp(i, j, mod3):
+        if memo[i][j][mod3] is not None:
+            return memo[i][j]
+        
+        if i == 0 and j == 0:
+            if mod3 == 0:
+                memo[i][j][mod3] = (grid[0][0], None, None, None, None)
+            else:
+                memo[i][j][mod3] = (float('-inf'), None, None, None, None)
+            return memo[i][j]
+        
+        candidates = []
+        previous_mod = (mod3 - 1) % 3
+        
+        if mod3 == 0:
+            if i > 0 and j > 0:
+                prev_result = dp(i-1, j-1, previous_mod)
+                if prev_result[0] != float('-inf'):
+                    candidates.append((prev_result[0] + grid[i][j], i-1, j-1, previous_mod, 'X'))
+        else:
+            if j > 0:
+                prev_result = dp(i, j-1, previous_mod)
+                if prev_result[0] != float('-inf'):
+                    candidates.append((prev_result[0] + grid[i][j], i, j-1, previous_mod, 'R'))
+            if i > 0:
+                prev_result = dp(i-1, j, previous_mod)
+                if prev_result[0] != float('-inf'):
+                    candidates.append((prev_result[0] + grid[i][j], i-1, j, previous_mod, 'D'))
+            if i > 0 and j > 0:
+                prev_result = dp(i-1, j-1, previous_mod)
+                if prev_result[0] != float('-inf'):
+                    candidates.append((prev_result[0] + grid[i][j], i-1, j-1, previous_mod, 'X'))
+        
+        if candidates:
+            max_candidate = max(candidates, key=lambda x: x[0])
+            memo[i][j][mod3] = max_candidate
+        else:
+            memo[i][j][mod3] = (float('-inf'), None, None, None, None)
+        
+        return memo[i][j]
     
-    dp[0][0][0] = grid[0][0]
+    dp_values = [dp(N-1, N-1, k) for k in range(3)]
+    max_sum_index = max(range(3), key=lambda k: dp_values[k][0])
+    max_sum = dp_values[max_sum_index][0]
+    best_mod3 = max_sum_index
     
-    for row in range(N):
-        for col in range(N):
-            for mod in range(3):
-                if dp[row][col][mod] != float('-inf'):
-                    required = (mod + 1) % 3 == 0
-                    
-                    possible_moves = []
-                    if not required:
-                        if row + 1 < N and col + 1 < N:
-                            possible_moves.append('X')
-                        if row + 1 < N:
-                            possible_moves.append('D')
-                        if col + 1 < N:
-                            possible_moves.append('R')
-                    else:
-                        if row + 1 < N and col + 1 < N:
-                            possible_moves.append('X')
-                        else:
-                            if row + 1 < N:
-                                possible_moves.append('D')
-                            if col + 1 < N:
-                                possible_moves.append('R')
-                    
-                    for move in possible_moves:
-                        if move == 'X':
-                            next_row, next_col = row + 1, col + 1
-                        elif move == 'D':
-                            next_row, next_col = row + 1, col
-                        elif move == 'R':
-                            next_row, next_col = row, col + 1
-                        
-                        if next_row < N and next_col < N:
-                            new_sum = dp[row][col][mod] + grid[next_row][next_col]
-                            new_mod = (mod + 1) % 3
-                            
-                            if new_sum > dp[next_row][next_col][new_mod]:
-                                dp[next_row][next_col][new_mod] = new_sum
-                                prev[next_row][next_col][new_mod] = (row, col, mod, move)
+    i, j, mod3 = N-1, N-1, best_mod3
+    path = ""
+    while i > 0 or j > 0:
+        _, prev_i, prev_j, prev_mod3, move = memo[i][j][mod3]
+        path = move + path
+        i, j, mod3 = prev_i, prev_j, prev_mod3
     
-    max_sum = max(dp[N-1][N-1])
-    best_mod = dp[N-1][N-1].index(max_sum)
-    
-    path = []
-    current_row, current_col, current_mod = N-1, N-1, best_mod
-    while current_row > 0 or current_col > 0:
-        prev_row, prev_col, prev_mod, move = prev[current_row][current_col][current_mod]
-        path.append(move)
-        current_row, current_col, current_mod = prev_row, prev_col, prev_mod
-    
-    path.reverse()
-    path_string = ''.join(path)
-    
-    return max_sum, path_string
+    return max_sum, path
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return 0, ""
     N = len(grid)
-    if N == 1:
-        return grid[0][0], ""
+    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
-    prev = [[[(None, None, None, None) for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    def dp(i, j, mod3):
+        if memo[i][j][mod3] is not None:
+            return memo[i][j]
+        
+        if i == 0 and j == 0:
+            if mod3 == 0:
+                memo[i][j][mod3] = (grid[0][0], None, None, None, None)
+            else:
+                memo[i][j][mod3] = (float('-inf'), None, None, None, None)
+            return memo[i][j]
+        
+        candidates = []
+        previous_mod = (mod3 - 1) % 3
+        
+        if mod3 == 0:
+            if i > 0 and j > 0:
+                prev_result = dp(i-1, j-1, previous_mod)
+                if prev_result[0] != float('-inf'):
+                    candidates.append((prev_result[0] + grid[i][j], i-1, j-1, previous_mod, 'X'))
+        else:
+            if j > 0:
+                prev_result = dp(i, j-1, previous_mod)
+                if prev_result[0] != float('-inf'):
+                    candidates.append((prev_result[0] + grid[i][j], i, j-1, previous_mod, 'R'))
+            if i > 0:
+                prev_result = dp(i-1, j, previous_mod)
+                if prev_result[0] != float('-inf'):
+                    candidates.append((prev_result[0] + grid[i][j], i-1, j, previous_mod, 'D'))
+            if i > 0 and j > 0:
+                prev_result = dp(i-1, j-1, previous_mod)
+                if prev_result[0] != float('-inf'):
+                    candidates.append((prev_result[0] + grid[i][j], i-1, j-1, previous_mod, 'X'))
+        
+        if candidates:
+            max_candidate = max(candidates, key=lambda x: x[0])
+            memo[i][j][mod3] = max_candidate
+        else:
+            memo[i][j][mod3] = (float('-inf'), None, None, None, None)
+        
+        return memo[i][j]
     
-    dp[0][0][0] = grid[0][0]
+    dp_values = [dp(N-1, N-1, k) for k in range(3)]
+    max_sum_index = max(range(3), key=lambda k: dp_values[k][0])
+    max_sum = dp_values[max_sum_index][0]
+    best_mod3 = max_sum_index
     
-    for row in range(N):
-        for col in range(N):
-            for mod in range(3):
-                if dp[row][col][mod] != float('-inf'):
-                    required = (mod + 1) % 3 == 0
-                    
-                    possible_moves = []
-                    if not required:
-                        if row + 1 < N and col + 1 < N:
-                            possible_moves.append('X')
-                        if row + 1 < N:
-                            possible_moves.append('D')
-                        if col + 1 < N:
-                            possible_moves.append('R')
-                    else:
-                        if row + 1 < N and col + 1 < N:
-                            possible_moves.append('X')
-                        else:
-                            if row + 1 < N:
-                                possible_moves.append('D')
-                            if col + 1 < N:
-                                possible_moves.append('R')
-                    
-                    for move in possible_moves:
-                        if move == 'X':
-                            next_row, next_col = row + 1, col + 1
-                        elif move == 'D':
-                            next_row, next_col = row + 1, col
-                        elif move == 'R':
-                            next_row, next_col = row, col + 1
-                        
-                        if next_row < N and next_col < N:
-                            new_sum = dp[row][col][mod] + grid[next_row][next_col]
-                            new_mod = (mod + 1) % 3
-                            
-                            if new_sum > dp[next_row][next_col][new_mod]:
-                                dp[next_row][next_col][new_mod] = new_sum
-                                prev[next_row][next_col][new_mod] = (row, col, mod, move)
+    i, j, mod3 = N-1, N-1, best_mod3
+    path = ""
+    while i > 0 or j > 0:
+        _, prev_i, prev_j, prev_mod3, move = memo[i][j][mod3]
+        path = move + path
+        i, j, mod3 = prev_i, prev_j, prev_mod3
     
-    max_sum = max(dp[N-1][N-1])
-    best_mod = dp[N-1][N-1].index(max_sum)
-    
-    path = []
-    current_row, current_col, current_mod = N-1, N-1, best_mod
-    while current_row > 0 or current_col > 0:
-        prev_row, prev_col, prev_mod, move = prev[current_row][current_col][current_mod]
-        path.append(move)
-        current_row, current_col, current_mod = prev_row, prev_col, prev_mod
-    
-    path.reverse()
-    path_string = ''.join(path)
-    
-    return max_sum, path_string
+    return max_sum, path
