@@ -1,0 +1,104 @@
+Model: grok-4-0709
+Provider: grok
+Evaluated: 2026-02-15T03:41:28.008885+00:00
+
+=== TIMING ===
+Response time: 128.29s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    from functools import cache
+    @cache
+    def recurse(i, j, moves_made):
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        next_num = moves_made + 1
+        is_forced = (next_num % 3 == 0)
+        possible = []
+        can_x = (i + 1 < N and j + 1 < N)
+        can_r = (j + 1 < N)
+        can_d = (i + 1 < N)
+        if is_forced:
+            if can_x:
+                possible.append(('X', i + 1, j + 1))
+            else:
+                if can_r:
+                    possible.append(('R', i, j + 1))
+                if can_d:
+                    possible.append(('D', i + 1, j))
+        else:
+            if can_r:
+                possible.append(('R', i, j + 1))
+            if can_d:
+                possible.append(('D', i + 1, j))
+            if can_x:
+                possible.append(('X', i + 1, j + 1))
+        if not possible:
+            return -float('inf'), ""
+        max_sum = -float('inf')
+        best_suffix = ""
+        for letter, ni, nj in possible:
+            sub_sum, sub_suffix = recurse(ni, nj, moves_made + 1)
+            cand_sum = grid[i][j] + sub_sum
+            if cand_sum > max_sum:
+                max_sum = cand_sum
+                best_suffix = letter + sub_suffix
+        return max_sum, best_suffix
+    result_sum, result_path = recurse(0, 0, 0)
+    return (result_sum, result_path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    from functools import cache
+    @cache
+    def recurse(i, j, moves_made):
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        next_num = moves_made + 1
+        is_forced = (next_num % 3 == 0)
+        possible = []
+        can_x = (i + 1 < N and j + 1 < N)
+        can_r = (j + 1 < N)
+        can_d = (i + 1 < N)
+        if is_forced:
+            if can_x:
+                possible.append(('X', i + 1, j + 1))
+            else:
+                if can_r:
+                    possible.append(('R', i, j + 1))
+                if can_d:
+                    possible.append(('D', i + 1, j))
+        else:
+            if can_r:
+                possible.append(('R', i, j + 1))
+            if can_d:
+                possible.append(('D', i + 1, j))
+            if can_x:
+                possible.append(('X', i + 1, j + 1))
+        if not possible:
+            return -float('inf'), ""
+        max_sum = -float('inf')
+        best_suffix = ""
+        for letter, ni, nj in possible:
+            sub_sum, sub_suffix = recurse(ni, nj, moves_made + 1)
+            cand_sum = grid[i][j] + sub_sum
+            if cand_sum > max_sum:
+                max_sum = cand_sum
+                best_suffix = letter + sub_suffix
+        return max_sum, best_suffix
+    result_sum, result_path = recurse(0, 0, 0)
+    return (result_sum, result_path)

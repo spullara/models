@@ -1,0 +1,96 @@
+Model: grok-code-fast-1
+Provider: grok
+Evaluated: 2026-02-15T03:44:37.045197+00:00
+
+=== TIMING ===
+Response time: 17.93s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+import functools
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    
+    @functools.lru_cache(None)
+    def dfs(i: int, j: int, mod: int) -> tuple[int, str]:
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        
+        must_X = ((mod + 1) % 3 == 0)
+        possible = []
+        if j < N - 1:
+            possible.append(('R', i, j + 1))
+        if i < N - 1:
+            possible.append(('D', i + 1, j))
+        if i < N - 1 and j < N - 1:
+            possible.append(('X', i + 1, j + 1))
+        
+        if must_X:
+            if any(m[0] == 'X' for m in possible):
+                possible = [m for m in possible if m[0] == 'X']
+            else:
+                possible = [m for m in possible if m[0] != 'X']
+        
+        max_sum = float('-inf')
+        best_path = ""
+        for move, ni, nj in possible:
+            sub_sum, sub_path = dfs(ni, nj, (mod + 1) % 3)
+            total = sub_sum + grid[i][j]
+            if total > max_sum:
+                max_sum = total
+                best_path = move + sub_path
+        
+        return max_sum, best_path
+    
+    return dfs(0, 0, 0)
+```
+
+=== EXTRACTED CODE ===
+import functools
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    
+    @functools.lru_cache(None)
+    def dfs(i: int, j: int, mod: int) -> tuple[int, str]:
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        
+        must_X = ((mod + 1) % 3 == 0)
+        possible = []
+        if j < N - 1:
+            possible.append(('R', i, j + 1))
+        if i < N - 1:
+            possible.append(('D', i + 1, j))
+        if i < N - 1 and j < N - 1:
+            possible.append(('X', i + 1, j + 1))
+        
+        if must_X:
+            if any(m[0] == 'X' for m in possible):
+                possible = [m for m in possible if m[0] == 'X']
+            else:
+                possible = [m for m in possible if m[0] != 'X']
+        
+        max_sum = float('-inf')
+        best_path = ""
+        for move, ni, nj in possible:
+            sub_sum, sub_path = dfs(ni, nj, (mod + 1) % 3)
+            total = sub_sum + grid[i][j]
+            if total > max_sum:
+                max_sum = total
+                best_path = move + sub_path
+        
+        return max_sum, best_path
+    
+    return dfs(0, 0, 0)
