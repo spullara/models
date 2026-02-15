@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-02-15 03:38:25
+Last updated: 2026-02-15 03:39:19
 
 ## Summary
 
@@ -13,7 +13,7 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 45/63
 
-**Grok**: 13/4
+**Grok**: 4/13
 
 **Mistral**: 55/21
 
@@ -329,18 +329,18 @@ Model counts shown as: **Available/Deleted**
 - grok-imagine-video (added: 2026-01-29)
 - grok-imagine-image (added: 2026-01-29)
 - grok-2-image-1212 (added: 2026-01-29)
-- grok-4-1-fast-reasoning (added: 2025-11-19)
-- grok-4-1-fast-non-reasoning (added: 2025-11-19)
-- grok-4-fast-reasoning (added: 2025-09-20)
-- grok-4-fast-non-reasoning (added: 2025-09-20)
-- grok-code-fast-1 (added: 2025-09-04)
-- grok-4-0709 (added: 2025-09-04)
-- grok-3-mini (added: 2025-09-04)
-- grok-3 (added: 2025-09-04)
-- grok-2-vision-1212 (added: 2025-09-04)
 
 ### Deleted Models
 
+- grok-code-fast-1 (deleted: 2026-02-15)
+- grok-4-fast-reasoning (deleted: 2026-02-15)
+- grok-4-fast-non-reasoning (deleted: 2026-02-15)
+- grok-4-1-fast-reasoning (deleted: 2026-02-15)
+- grok-4-1-fast-non-reasoning (deleted: 2026-02-15)
+- grok-4-0709 (deleted: 2026-02-15)
+- grok-3-mini (deleted: 2026-02-15)
+- grok-3 (deleted: 2026-02-15)
+- grok-2-vision-1212 (deleted: 2026-02-15)
 - grok-2-1212 (deleted: 2026-01-17)
 - grok-4-0709-eu (deleted: 2025-09-18)
 - grok-3-mini-fast (deleted: 2025-09-15)
