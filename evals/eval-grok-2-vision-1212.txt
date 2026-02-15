@@ -1,20 +1,19 @@
 Model: grok-2-vision-1212
 Provider: grok
-Evaluated: 2026-02-01T04:32:06.145443+00:00
+Evaluated: 2026-02-15T03:40:10.649441+00:00
 
 === TIMING ===
-Response time: 3.39s
+Response time: 3.29s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 52
-Calculated sum: 6
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+Returned sum: 51
+Calculated sum: 51
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
 ```python
@@ -30,20 +29,21 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         for j in range(n):
             if i == 0 and j == 0:
                 continue
-            current_sum, path = float('-inf'), ''
-            for dx, dy, move in [(1, 0, 'R'), (0, 1, 'D'), (1, 1, 'X')]:
-                px, py = i - dx, j - dy
-                if is_valid(px, py):
-                    prev_sum, prev_path = dp[px][py]
-                    new_sum = prev_sum + grid[i][j]
-                    new_path = prev_path + move
-                    if len(new_path) % 3 == 2 and move != 'X' and is_valid(i - 1, j - 1):
+            current = float('-inf')
+            path = ''
+            moves = [('R', j-1, i), ('D', j, i-1), ('X', j-1, i-1)]
+            for move, prev_j, prev_i in moves:
+                if is_valid(prev_i, prev_j):
+                    prev_sum, prev_path = dp[prev_i][prev_j]
+                    move_count = len(prev_path) + 1
+                    if move_count % 3 == 0 and move != 'X' and is_valid(i-1, j-1):
                         continue
-                    if new_sum > current_sum:
-                        current_sum, path = new_sum, new_path
-            dp[i][j] = (current_sum, path)
+                    if prev_sum + grid[i][j] > current:
+                        current = prev_sum + grid[i][j]
+                        path = prev_path + move
+            dp[i][j] = (current, path)
 
-    return dp[n - 1][n - 1]
+    return dp[n-1][n-1]
 ```
 
 === EXTRACTED CODE ===
@@ -59,17 +59,18 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         for j in range(n):
             if i == 0 and j == 0:
                 continue
-            current_sum, path = float('-inf'), ''
-            for dx, dy, move in [(1, 0, 'R'), (0, 1, 'D'), (1, 1, 'X')]:
-                px, py = i - dx, j - dy
-                if is_valid(px, py):
-                    prev_sum, prev_path = dp[px][py]
-                    new_sum = prev_sum + grid[i][j]
-                    new_path = prev_path + move
-                    if len(new_path) % 3 == 2 and move != 'X' and is_valid(i - 1, j - 1):
+            current = float('-inf')
+            path = ''
+            moves = [('R', j-1, i), ('D', j, i-1), ('X', j-1, i-1)]
+            for move, prev_j, prev_i in moves:
+                if is_valid(prev_i, prev_j):
+                    prev_sum, prev_path = dp[prev_i][prev_j]
+                    move_count = len(prev_path) + 1
+                    if move_count % 3 == 0 and move != 'X' and is_valid(i-1, j-1):
                         continue
-                    if new_sum > current_sum:
-                        current_sum, path = new_sum, new_path
-            dp[i][j] = (current_sum, path)
+                    if prev_sum + grid[i][j] > current:
+                        current = prev_sum + grid[i][j]
+                        path = prev_path + move
+            dp[i][j] = (current, path)
 
-    return dp[n - 1][n - 1]
+    return dp[n-1][n-1]
