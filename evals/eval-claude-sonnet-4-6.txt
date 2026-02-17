@@ -1,0 +1,140 @@
+Model: claude-sonnet-4-6
+Provider: anthropic
+Evaluated: 2026-02-17T17:45:05.930411+00:00
+
+=== TIMING ===
+Response time: 6.65s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+    
+    from functools import lru_cache
+    
+    @lru_cache(maxsize=None)
+    def dp(row, col, move_count):
+        # move_count is the number of moves made so far
+        # We need to make moves to reach (n-1, n-1) from (row, col)
+        if row == n - 1 and col == n - 1:
+            return (grid[row][col], "")
+        
+        best_sum = float('-inf')
+        best_path = None
+        
+        next_move_number = move_count + 1
+        must_diagonal = (next_move_number % 3 == 0)
+        
+        can_diagonal = (row + 1 < n and col + 1 < n)
+        can_right = (col + 1 < n)
+        can_down = (row + 1 < n)
+        
+        moves = []
+        
+        if must_diagonal:
+            if can_diagonal:
+                moves = [('X', row + 1, col + 1)]
+            else:
+                # diagonal not possible, use R or D
+                if can_right:
+                    moves.append(('R', row, col + 1))
+                if can_down:
+                    moves.append(('D', row + 1, col))
+        else:
+            if can_right:
+                moves.append(('R', row, col + 1))
+            if can_down:
+                moves.append(('D', row + 1, col))
+            if can_diagonal:
+                moves.append(('X', row + 1, col + 1))
+        
+        for move_char, nr, nc in moves:
+            sub_sum, sub_path = dp(nr, nc, next_move_number)
+            total = grid[row][col] + sub_sum
+            if total > best_sum:
+                best_sum = total
+                best_path = move_char + sub_path
+        
+        if best_path is None:
+            return (grid[row][col], "")
+        
+        return (best_sum, best_path)
+    
+    result = dp(0, 0, 0)
+    return result
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+    
+    from functools import lru_cache
+    
+    @lru_cache(maxsize=None)
+    def dp(row, col, move_count):
+        # move_count is the number of moves made so far
+        # We need to make moves to reach (n-1, n-1) from (row, col)
+        if row == n - 1 and col == n - 1:
+            return (grid[row][col], "")
+        
+        best_sum = float('-inf')
+        best_path = None
+        
+        next_move_number = move_count + 1
+        must_diagonal = (next_move_number % 3 == 0)
+        
+        can_diagonal = (row + 1 < n and col + 1 < n)
+        can_right = (col + 1 < n)
+        can_down = (row + 1 < n)
+        
+        moves = []
+        
+        if must_diagonal:
+            if can_diagonal:
+                moves = [('X', row + 1, col + 1)]
+            else:
+                # diagonal not possible, use R or D
+                if can_right:
+                    moves.append(('R', row, col + 1))
+                if can_down:
+                    moves.append(('D', row + 1, col))
+        else:
+            if can_right:
+                moves.append(('R', row, col + 1))
+            if can_down:
+                moves.append(('D', row + 1, col))
+            if can_diagonal:
+                moves.append(('X', row + 1, col + 1))
+        
+        for move_char, nr, nc in moves:
+            sub_sum, sub_path = dp(nr, nc, next_move_number)
+            total = grid[row][col] + sub_sum
+            if total > best_sum:
+                best_sum = total
+                best_path = move_char + sub_path
+        
+        if best_path is None:
+            return (grid[row][col], "")
+        
+        return (best_sum, best_path)
+    
+    result = dp(0, 0, 0)
+    return result
