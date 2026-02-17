@@ -1,0 +1,26 @@
+Model: us-40-51r-vm-ev3
+Provider: openai
+Evaluated: 2026-02-17T06:55:05.665799+00:00
+
+=== TIMING ===
+Response time: 0.5s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: {
+  "error": {
+    "message": "This is not a chat model and thus not supported in the v1/chat/completions endpoint. Did you mean to use v1/completions?",
+    "type": "invalid_request_error",
+    "param": "model",
+    "code": null
+  }
+}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
