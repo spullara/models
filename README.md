@@ -1,13 +1,13 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-02-16 06:38:16
+Last updated: 2026-02-17 06:55:14
 
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 121/27
+**OpenAI**: 122/27
 
 **Anthropic**: 10/7
 
@@ -28,6 +28,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- us-40-51r-vm-ev3 (added: 2026-02-17)
 - gpt-5.2-codex (added: 2026-01-14)
 - chatgpt-image-latest (added: 2025-12-17)
 - gpt-image-1.5 (added: 2025-12-16)
