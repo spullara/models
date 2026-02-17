@@ -1,5 +1,4 @@
 babbage-002
-chatgpt-4o-latest
 chatgpt-image-latest
 computer-use-preview
 computer-use-preview-2025-03-11
