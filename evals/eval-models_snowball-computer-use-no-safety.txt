@@ -1,6 +1,6 @@
 Model: models/snowball-computer-use-no-safety
 Provider: gemini
-Evaluated: 2026-02-19T15:44:06.421625+00:00
+Evaluated: 2026-02-19T15:49:06.203521+00:00
 
 === TIMING ===
 Response time: 0.13s
