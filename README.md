@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-02-17 17:57:14
+Last updated: 2026-02-19 15:00:19
 
 ## Summary
 
@@ -11,7 +11,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 11/7
 
-**Gemini**: 45/63
+**Gemini**: 49/63
 
 **Grok**: 13/4
 
@@ -211,6 +211,10 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/snowball-computer-use-no-safety (added: 2026-02-19)
+- models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
+- models/gemini-3.1-pro-preview-ais-applets (added: 2026-02-19)
+- models/gemini-3.1-pro-preview (added: 2026-02-19)
 - models/gemini-2.5-flash-native-audio-preview-12-2025 (added: 2026-01-27)
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
