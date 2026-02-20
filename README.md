@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-02-20 04:17:19
+Last updated: 2026-02-20 04:20:14
 
 ## Summary
 
@@ -11,7 +11,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/9
 
-**Gemini**: 47/65
+**Gemini**: 43/69
 
 **Grok**: 13/4
 
@@ -229,15 +229,12 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3-pro-preview (added: 2025-11-18)
 - models/gemini-2.5-computer-use-preview-10-2025 (added: 2025-10-07)
 - models/gemini-2.5-flash-image (added: 2025-10-02)
-- models/imagen-4.0-ultra-generate-preview-06-06 (added: 2025-09-27)
 - models/imagen-4.0-generate-001 (added: 2025-09-27)
 - models/gemini-robotics-er-1.5-preview (added: 2025-09-25)
 - models/gemini-pro-latest (added: 2025-09-25)
 - models/gemini-flash-lite-latest (added: 2025-09-25)
 - models/gemini-flash-latest (added: 2025-09-25)
-- models/gemini-2.5-flash-preview-09-2025 (added: 2025-09-25)
 - models/gemini-2.5-flash-lite-preview-09-2025 (added: 2025-09-25)
-- models/imagen-4.0-generate-preview-06-06 (added: 2025-07-28)
 - models/gemini-2.5-flash-lite (added: 2025-07-22)
 - models/gemini-embedding-001 (added: 2025-07-14)
 - models/gemma-3n-e2b-it (added: 2025-06-26)
@@ -256,11 +253,14 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-2.0-flash-lite (added: 2025-02-25)
 - models/gemini-2.0-flash-001 (added: 2025-02-05)
 - models/gemini-2.0-flash (added: 2025-02-05)
-- models/gemini-exp-1206 (added: 2024-12-07)
 - models/aqa (added: 2024-12-07)
 
 ### Deleted Models
 
+- models/imagen-4.0-ultra-generate-preview-06-06 (deleted: 2026-02-20)
+- models/imagen-4.0-generate-preview-06-06 (deleted: 2026-02-20)
+- models/gemini-exp-1206 (deleted: 2026-02-20)
+- models/gemini-2.5-flash-preview-09-2025 (deleted: 2026-02-20)
 - models/snowball-computer-use-no-safety (deleted: 2026-02-19)
 - models/gemini-3.1-pro-preview-ais-applets (deleted: 2026-02-19)
 - models/text-embedding-004 (deleted: 2026-02-06)
