@@ -78,6 +78,7 @@ gpt-5.2-codex
 gpt-5.2-pro
 gpt-5.2-pro-2025-12-11
 gpt-audio
+gpt-audio-1.5
 gpt-audio-2025-08-28
 gpt-audio-mini
 gpt-audio-mini-2025-10-06
