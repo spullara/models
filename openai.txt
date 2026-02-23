@@ -86,6 +86,7 @@ gpt-image-1
 gpt-image-1-mini
 gpt-image-1.5
 gpt-realtime
+gpt-realtime-1.5
 gpt-realtime-2025-08-28
 gpt-realtime-mini
 gpt-realtime-mini-2025-10-06
