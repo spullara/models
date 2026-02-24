@@ -1,13 +1,13 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-02-24 03:21:13
+Last updated: 2026-02-24 04:00:17
 
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 120/31
+**OpenAI**: 121/30
 
 **Anthropic**: 9/9
 
@@ -98,6 +98,7 @@ Model counts shown as: **Available/Deleted**
 - gpt-4o-mini-transcribe (added: 2025-03-20)
 - o1-pro-2025-03-19 (added: 2025-03-19)
 - o1-pro (added: 2025-03-19)
+- gpt-4o-search-preview (added: 2025-03-11)
 - gpt-4o-mini-search-preview-2025-03-11 (added: 2025-03-11)
 - gpt-4o-mini-search-preview (added: 2025-03-11)
 - computer-use-preview-2025-03-11 (added: 2025-03-11)
@@ -152,7 +153,6 @@ Model counts shown as: **Available/Deleted**
 ### Deleted Models
 
 - gpt-4o-search-preview-2025-03-11 (deleted: 2026-02-24)
-- gpt-4o-search-preview (deleted: 2026-02-24)
 - us-40-51r-vm-ev3 (deleted: 2026-02-17)
 - chatgpt-4o-latest (deleted: 2026-02-17)
 - codex-mini-latest (deleted: 2026-02-12)
