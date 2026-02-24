@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-02-24 11:45:15
+Last updated: 2026-02-24 11:46:15
 
 ## Summary
 
@@ -21,7 +21,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 14/0
 
-**Qwen**: 126/2
+**Qwen**: 127/2
 
 
 ## OpenAI
@@ -470,6 +470,7 @@ Model counts shown as: **Available/Deleted**
 
 - qwen3.5-35b-a3b (added: 2026-02-24)
 - qwen3.5-27b (added: 2026-02-24)
+- qwen3.5-122b-a10b (added: 2026-02-24)
 - qwen3-coder-next (added: 2026-02-19)
 - qwen3.5-plus-2026-02-15 (added: 2026-02-16)
 - qwen3.5-plus (added: 2026-02-16)
