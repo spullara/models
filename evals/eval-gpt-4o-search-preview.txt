@@ -1,0 +1,27 @@
+Model: gpt-4o-search-preview
+Provider: openai
+Evaluated: 2026-02-24T04:00:07.015919+00:00
+
+=== TIMING ===
+Response time: 0.34s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: {
+    "error": {
+        "message": "The model `gpt-4o-search-preview` does not exist or you do not have access to it.",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": "model_not_found"
+    }
+}
+
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
