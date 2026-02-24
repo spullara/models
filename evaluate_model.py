@@ -539,8 +539,36 @@ def save_evaluation(results: dict) -> str:
     return str(filepath)
 
 
+def resolve_openai_provider(model: str) -> str:
+    """Auto-detect the correct OpenAI provider/endpoint based on model name.
+
+    - gpt-* and o-series models use the Responses API (openai_responses)
+    - legacy completion-only models use the Completions API (openai_completion)
+    - everything else uses the Chat Completions API (openai)
+    """
+    lower = model.lower()
+
+    # Legacy completion-only models -> Completions API
+    completion_models = ('babbage-002', 'davinci-002', 'gpt-3.5-turbo-instruct')
+    if any(lower.startswith(m) for m in completion_models):
+        return 'openai_completion'
+
+    # gpt-* and o-series models -> Responses API
+    if lower.startswith('gpt-') or lower.startswith('o1') or lower.startswith('o3') or lower.startswith('o4'):
+        return 'openai_responses'
+
+    return 'openai'
+
+
 def run_evaluation(provider: str, model: str) -> dict:
     """Main entry point: evaluate a model and save results."""
+    # Auto-detect the correct endpoint for generic 'openai' provider
+    if provider == 'openai':
+        resolved = resolve_openai_provider(model)
+        if resolved != provider:
+            print(f"  Auto-detected provider: {provider} -> {resolved}")
+            provider = resolved
+
     print(f"Evaluating {provider}/{model}...")
     results = evaluate_model(provider, model)
     save_evaluation(results)

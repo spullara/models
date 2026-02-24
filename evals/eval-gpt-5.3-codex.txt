@@ -1,26 +1,128 @@
 Model: gpt-5.3-codex
-Provider: openai
-Evaluated: 2026-02-24T19:22:05.972589+00:00
+Provider: openai_responses
+Evaluated: 2026-02-24T20:46:53.987603+00:00
 
 === TIMING ===
-Response time: 0.27s
+Response time: 14.42s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: direct
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: {
-  "error": {
-    "message": "This is not a chat model and thus not supported in the v1/chat/completions endpoint. Did you mean to use v1/completions?",
-    "type": "invalid_request_error",
-    "param": "model",
-    "code": null
-  }
-}
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    NEG_INF = -10**18
+    # dp[i][j][k] = (best_sum_from_i_j_to_end, best_path_from_i_j), where k = moves_taken_so_far % 3
+    dp_sum = [[[NEG_INF] * 3 for _ in range(n)] for _ in range(n)]
+    dp_path = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+
+    # Fill bottom-up
+    for i in range(n - 1, -1, -1):
+        for j in range(n - 1, -1, -1):
+            for k in range(3):
+                if i == n - 1 and j == n - 1:
+                    dp_sum[i][j][k] = grid[i][j]
+                    dp_path[i][j][k] = ""
+                    continue
+
+                need_diag = (k == 2)  # next move number is multiple of 3
+
+                candidates = []
+
+                # Diagonal move
+                if i + 1 < n and j + 1 < n:
+                    ns = dp_sum[i + 1][j + 1][(k + 1) % 3]
+                    if ns != NEG_INF:
+                        candidates.append((grid[i][j] + ns, "X" + dp_path[i + 1][j + 1][(k + 1) % 3]))
+
+                # Right and Down moves only if not forced to diagonal or diagonal impossible
+                diag_possible = (i + 1 < n and j + 1 < n)
+                allow_rd = (not need_diag) or (need_diag and not diag_possible)
+
+                if allow_rd:
+                    if j + 1 < n:
+                        ns = dp_sum[i][j + 1][(k + 1) % 3]
+                        if ns != NEG_INF:
+                            candidates.append((grid[i][j] + ns, "R" + dp_path[i][j + 1][(k + 1) % 3]))
+                    if i + 1 < n:
+                        ns = dp_sum[i + 1][j][(k + 1) % 3]
+                        if ns != NEG_INF:
+                            candidates.append((grid[i][j] + ns, "D" + dp_path[i + 1][j][(k + 1) % 3]))
+
+                if candidates:
+                    # Max by sum, then lexicographically smallest path for determinism
+                    best_sum, best_path = max(candidates, key=lambda x: (x[0], tuple(-ord(c) for c in x[1])))
+                    # Fix lex tie explicitly
+                    best_candidates = [c for c in candidates if c[0] == best_sum]
+                    if len(best_candidates) > 1:
+                        best_path = min(c[1] for c in best_candidates)
+                    dp_sum[i][j][k] = best_sum
+                    dp_path[i][j][k] = best_path
+
+    return (dp_sum[0][0][0], dp_path[0][0][0])
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    NEG_INF = -10**18
+    # dp[i][j][k] = (best_sum_from_i_j_to_end, best_path_from_i_j), where k = moves_taken_so_far % 3
+    dp_sum = [[[NEG_INF] * 3 for _ in range(n)] for _ in range(n)]
+    dp_path = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+
+    # Fill bottom-up
+    for i in range(n - 1, -1, -1):
+        for j in range(n - 1, -1, -1):
+            for k in range(3):
+                if i == n - 1 and j == n - 1:
+                    dp_sum[i][j][k] = grid[i][j]
+                    dp_path[i][j][k] = ""
+                    continue
+
+                need_diag = (k == 2)  # next move number is multiple of 3
+
+                candidates = []
+
+                # Diagonal move
+                if i + 1 < n and j + 1 < n:
+                    ns = dp_sum[i + 1][j + 1][(k + 1) % 3]
+                    if ns != NEG_INF:
+                        candidates.append((grid[i][j] + ns, "X" + dp_path[i + 1][j + 1][(k + 1) % 3]))
+
+                # Right and Down moves only if not forced to diagonal or diagonal impossible
+                diag_possible = (i + 1 < n and j + 1 < n)
+                allow_rd = (not need_diag) or (need_diag and not diag_possible)
+
+                if allow_rd:
+                    if j + 1 < n:
+                        ns = dp_sum[i][j + 1][(k + 1) % 3]
+                        if ns != NEG_INF:
+                            candidates.append((grid[i][j] + ns, "R" + dp_path[i][j + 1][(k + 1) % 3]))
+                    if i + 1 < n:
+                        ns = dp_sum[i + 1][j][(k + 1) % 3]
+                        if ns != NEG_INF:
+                            candidates.append((grid[i][j] + ns, "D" + dp_path[i + 1][j][(k + 1) % 3]))
+
+                if candidates:
+                    # Max by sum, then lexicographically smallest path for determinism
+                    best_sum, best_path = max(candidates, key=lambda x: (x[0], tuple(-ord(c) for c in x[1])))
+                    # Fix lex tie explicitly
+                    best_candidates = [c for c in candidates if c[0] == best_sum]
+                    if len(best_candidates) > 1:
+                        best_path = min(c[1] for c in best_candidates)
+                    dp_sum[i][j][k] = best_sum
+                    dp_path[i][j][k] = best_path
+
+    return (dp_sum[0][0][0], dp_path[0][0][0])
