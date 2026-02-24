@@ -1,0 +1,19 @@
+Model: qwen3.5-122b-a10b
+Provider: qwen
+Evaluated: 2026-02-24T11:46:06.399714+00:00
+
+=== TIMING ===
+Response time: 0.92s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-803ce261-a898-949c-bdaf-e4f7bcac5d57","request_id":"803ce261-a898-949c-bdaf-e4f7bcac5d57"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
