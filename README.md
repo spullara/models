@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-02-24 20:50:36
+Last updated: 2026-02-26 07:07:16
 
 ## Summary
 
@@ -19,7 +19,7 @@ Model counts shown as: **Available/Deleted**
 
 **DeepSeek**: 2/0
 
-**Kimi**: 14/0
+**Kimi**: 13/1
 
 **Qwen**: 129/2
 
@@ -458,12 +458,15 @@ Model counts shown as: **Available/Deleted**
 - moonshot-v1-32k (added: 2025-12-18)
 - moonshot-v1-128k-vision-preview (added: 2025-12-18)
 - moonshot-v1-128k (added: 2025-12-18)
-- kimi-latest (added: 2025-12-18)
 - kimi-k2-turbo-preview (added: 2025-12-18)
 - kimi-k2-thinking-turbo (added: 2025-12-18)
 - kimi-k2-thinking (added: 2025-12-18)
 - kimi-k2-0905-preview (added: 2025-12-18)
 - kimi-k2-0711-preview (added: 2025-12-18)
+
+### Deleted Models
+
+- kimi-latest (deleted: 2026-02-26)
 
 ## Qwen
 
