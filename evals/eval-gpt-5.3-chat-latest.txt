@@ -1,0 +1,116 @@
+Model: gpt-5.3-chat-latest
+Provider: openai_responses
+Evaluated: 2026-03-03T18:14:05.898986+00:00
+
+=== TIMING ===
+Response time: 41.12s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+from functools import lru_cache
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+
+    @lru_cache(None)
+    def dfs(i: int, j: int, k_mod3: int):
+        if i == n - 1 and j == n - 1:
+            return (0, "")
+
+        next_mod = (k_mod3 + 1) % 3
+        forced = (k_mod3 + 1) % 3 == 0
+        diag_possible = i + 1 < n and j + 1 < n
+
+        candidates = []
+        if forced:
+            if diag_possible:
+                candidates = ['X']
+            else:
+                candidates = ['R', 'D']
+        else:
+            candidates = ['R', 'D', 'X']
+
+        best_sum = float('-inf')
+        best_path = ""
+
+        for m in candidates:
+            ni, nj = i, j
+            if m == 'R':
+                nj = j + 1
+            elif m == 'D':
+                ni = i + 1
+            else:
+                ni = i + 1
+                nj = j + 1
+
+            if 0 <= ni < n and 0 <= nj < n:
+                sub_sum, sub_path = dfs(ni, nj, next_mod)
+                total = grid[ni][nj] + sub_sum
+                path = m + sub_path
+                if total > best_sum or (total == best_sum and path < best_path):
+                    best_sum = total
+                    best_path = path
+
+        return best_sum, best_path
+
+    add_sum, path = dfs(0, 0, 0)
+    return grid[0][0] + add_sum, path
+
+=== EXTRACTED CODE ===
+from functools import lru_cache
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+
+    @lru_cache(None)
+    def dfs(i: int, j: int, k_mod3: int):
+        if i == n - 1 and j == n - 1:
+            return (0, "")
+
+        next_mod = (k_mod3 + 1) % 3
+        forced = (k_mod3 + 1) % 3 == 0
+        diag_possible = i + 1 < n and j + 1 < n
+
+        candidates = []
+        if forced:
+            if diag_possible:
+                candidates = ['X']
+            else:
+                candidates = ['R', 'D']
+        else:
+            candidates = ['R', 'D', 'X']
+
+        best_sum = float('-inf')
+        best_path = ""
+
+        for m in candidates:
+            ni, nj = i, j
+            if m == 'R':
+                nj = j + 1
+            elif m == 'D':
+                ni = i + 1
+            else:
+                ni = i + 1
+                nj = j + 1
+
+            if 0 <= ni < n and 0 <= nj < n:
+                sub_sum, sub_path = dfs(ni, nj, next_mod)
+                total = grid[ni][nj] + sub_sum
+                path = m + sub_path
+                if total > best_sum or (total == best_sum and path < best_path):
+                    best_sum = total
+                    best_path = path
+
+        return best_sum, best_path
+
+    add_sum, path = dfs(0, 0, 0)
+    return grid[0][0] + add_sum, path
