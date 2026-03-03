@@ -1,0 +1,19 @@
+Model: qwen3-asr-flash-2026-02-10
+Provider: qwen
+Evaluated: 2026-03-03T09:30:06.226659+00:00
+
+=== TIMING ===
+Response time: 0.7s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-94b409c4-1f64-9d3a-970c-3ae98a4e39c5","request_id":"94b409c4-1f64-9d3a-970c-3ae98a4e39c5"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
