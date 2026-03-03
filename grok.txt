@@ -1,5 +1,3 @@
-grok-2-image-1212
-grok-2-vision-1212
 grok-3
 grok-3-mini
 grok-4-0709
