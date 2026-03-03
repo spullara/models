@@ -20,6 +20,7 @@ models/gemini-3-flash-preview
 models/gemini-3-pro-image-preview
 models/gemini-3-pro-preview
 models/gemini-3.1-flash-image-preview
+models/gemini-3.1-flash-lite-preview
 models/gemini-3.1-pro-preview
 models/gemini-3.1-pro-preview-customtools
 models/gemini-embedding-001
