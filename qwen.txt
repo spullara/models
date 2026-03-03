@@ -62,6 +62,7 @@ qwen3-30b-a3b-thinking-2507
 qwen3-32b
 qwen3-4b
 qwen3-8b
+qwen3-asr-flash-2026-02-10
 qwen3-asr-flash-realtime
 qwen3-asr-flash-realtime-2025-10-27
 qwen3-asr-flash-realtime-2026-02-10
