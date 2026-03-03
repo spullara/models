@@ -1,0 +1,19 @@
+Model: qwen-image-2.0
+Provider: qwen
+Evaluated: 2026-03-03T12:00:06.591283+00:00
+
+=== TIMING ===
+Response time: 0.7s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-1c96cd91-b6b5-9f46-8986-f20bf10762f9","request_id":"1c96cd91-b6b5-9f46-8986-f20bf10762f9"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
