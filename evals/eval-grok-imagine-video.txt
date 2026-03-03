@@ -1,16 +1,16 @@
 Model: grok-imagine-video
 Provider: grok
-Evaluated: 2026-01-29T19:23:42.124016+00:00
+Evaluated: 2026-03-03T12:40:05.774758+00:00
 
 === TIMING ===
-Response time: 0.22s
+Response time: 0.19s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 404: {"code":"Some requested entity was not found","error":"The model grok-imagine-video does not exist or your team 4e0859c1-4ce2-4198-b0c9-49b52ca20612 does not have access to it. Please ensure you're using the correct API key. If you believe this is a mistake, please contact support and quote your team ID and the model name."}
+API Error: HTTP 400: {"code":"Client specified an invalid argument","error":"Model not found: grok-imagine-video"}
 
 === RAW RESPONSE ===
 (no response)
