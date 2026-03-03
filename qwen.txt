@@ -3,6 +3,10 @@ qvq-max
 qwen-coder-plus
 qwen-flash
 qwen-flash-character
+qwen-image-2.0
+qwen-image-2.0-2026-03-03
+qwen-image-2.0-pro
+qwen-image-2.0-pro-2026-03-03
 qwen-image-edit
 qwen-image-edit-max
 qwen-image-edit-max-2026-01-16
