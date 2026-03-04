@@ -1,9 +1,9 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-04T20:40:42.369766+00:00
+Evaluated: 2026-03-04T22:07:31.109002+00:00
 
 === TIMING ===
-Response time: 2.75s
+Response time: 6.35s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -34,28 +34,38 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
             if curr_sum == INF:
                 continue
             
-            # Try right
+            # Try right move
             if j + 1 < n:
                 new_sum = curr_sum + grid[i][j + 1]
-                new_path = curr_path + "R"
+                new_path = curr_path + 'R'
                 if new_sum > dp[i][j + 1][0]:
                     dp[i][j + 1] = (new_sum, new_path)
+                elif new_sum == dp[i][j + 1][0]:
+                    if len(new_path) < len(dp[i][j + 1][1]):
+                        dp[i][j + 1] = (new_sum, new_path)
             
-            # Try down
+            # Try down move
             if i + 1 < n:
                 new_sum = curr_sum + grid[i + 1][j]
-                new_path = curr_path + "D"
+                new_path = curr_path + 'D'
                 if new_sum > dp[i + 1][j][0]:
                     dp[i + 1][j] = (new_sum, new_path)
+                elif new_sum == dp[i + 1][j][0]:
+                    if len(new_path) < len(dp[i + 1][j][1]):
+                        dp[i + 1][j] = (new_sum, new_path)
             
-            # Try diagonal
+            # Try diagonal move
             if i + 1 < n and j + 1 < n:
                 new_sum = curr_sum + grid[i + 1][j + 1]
-                new_path = curr_path + "X"
+                new_path = curr_path + 'X'
                 if new_sum > dp[i + 1][j + 1][0]:
                     dp[i + 1][j + 1] = (new_sum, new_path)
+                elif new_sum == dp[i + 1][j + 1][0]:
+                    if len(new_path) < len(dp[i + 1][j + 1][1]):
+                        dp[i + 1][j + 1] = (new_sum, new_path)
     
-    return dp[n - 1][n - 1]
+    final_sum, final_path = dp[n-1][n-1]
+    return final_sum, final_path
 ```
 
 === EXTRACTED CODE ===
@@ -75,25 +85,35 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
             if curr_sum == INF:
                 continue
             
-            # Try right
+            # Try right move
             if j + 1 < n:
                 new_sum = curr_sum + grid[i][j + 1]
-                new_path = curr_path + "R"
+                new_path = curr_path + 'R'
                 if new_sum > dp[i][j + 1][0]:
                     dp[i][j + 1] = (new_sum, new_path)
+                elif new_sum == dp[i][j + 1][0]:
+                    if len(new_path) < len(dp[i][j + 1][1]):
+                        dp[i][j + 1] = (new_sum, new_path)
             
-            # Try down
+            # Try down move
             if i + 1 < n:
                 new_sum = curr_sum + grid[i + 1][j]
-                new_path = curr_path + "D"
+                new_path = curr_path + 'D'
                 if new_sum > dp[i + 1][j][0]:
                     dp[i + 1][j] = (new_sum, new_path)
+                elif new_sum == dp[i + 1][j][0]:
+                    if len(new_path) < len(dp[i + 1][j][1]):
+                        dp[i + 1][j] = (new_sum, new_path)
             
-            # Try diagonal
+            # Try diagonal move
             if i + 1 < n and j + 1 < n:
                 new_sum = curr_sum + grid[i + 1][j + 1]
-                new_path = curr_path + "X"
+                new_path = curr_path + 'X'
                 if new_sum > dp[i + 1][j + 1][0]:
                     dp[i + 1][j + 1] = (new_sum, new_path)
+                elif new_sum == dp[i + 1][j + 1][0]:
+                    if len(new_path) < len(dp[i + 1][j + 1][1]):
+                        dp[i + 1][j + 1] = (new_sum, new_path)
     
-    return dp[n - 1][n - 1]
+    final_sum, final_path = dp[n-1][n-1]
+    return final_sum, final_path
