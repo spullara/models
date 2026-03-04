@@ -1,9 +1,9 @@
 Model: grok-imagine-video
 Provider: grok
-Evaluated: 2026-03-03T12:40:05.774758+00:00
+Evaluated: 2026-03-04T19:20:06.232193+00:00
 
 === TIMING ===
-Response time: 0.19s
+Response time: 0.18s
 
 === CODE EXTRACTION ===
 Method: None
