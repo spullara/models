@@ -1,125 +1,139 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-03-05T14:06:18.780801+00:00
+Evaluated: 2026-03-05T15:21:44.781284+00:00
 
 === TIMING ===
-Response time: 21.0s
+Response time: 74.32s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 0
-Calculated sum: 1
+Returned sum: 61
+Calculated sum: 16
 Sum matches: NO
 Path valid: NO
-Path error: Path ended at (0, 0) instead of (3, 3)
+Path error: Move 3 must be diagonal (X) but was D
 
 === RAW RESPONSE ===
 ```python
-import sys
+from typing import Dict, Tuple
 
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
     N = len(grid)
-    if N == 0:
-        return (0, "")
-    INF = -sys.maxsize
-    dp = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
-    prev = [[[None] * 3 for _ in range(N)] for _ in range(N)]  # (pi, pj, pmod, move)
-    dp[0][0][0] = grid[0][0]
-    for s in range(1, 2 * N - 1):
-        for i in range(N):
-            j = s - i
-            if j < 0 or j >= N:
-                continue
-            for mod in range(3):
-                if dp[i][j][mod] == INF:
-                    continue
-                next_mod = (mod + 1) % 3
-                must_X = (next_mod == 0)
-                possible = []
+    memo: Dict[Tuple[int, int], Tuple[int, str]] = {}
+
+    def dfs(i: int, j: int) -> Tuple[int, str]:
+        if (i, j) in memo:
+            return memo[(i, j)]
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        m = i + j
+        next_m = m + 1
+        is_forced_diagonal = (next_m % 3 == 0)
+        possible: list[Tuple[int, str]] = []
+        if is_forced_diagonal:
+            if i + 1 < N and j + 1 < N:
+                sum_next, path_next = dfs(i + 1, j + 1)
+                total_sum = sum_next + grid[i][j]
+                total_path = "X" + path_next
+                possible.append((total_sum, total_path))
+            else:
                 if j + 1 < N:
-                    possible.append(('R', i, j + 1))
+                    sum_next, path_next = dfs(i, j + 1)
+                    total_sum = sum_next + grid[i][j]
+                    total_path = "R" + path_next
+                    possible.append((total_sum, total_path))
                 if i + 1 < N:
-                    possible.append(('D', i + 1, j))
-                if i + 1 < N and j + 1 < N:
-                    possible.append(('X', i + 1, j + 1))
-                if must_X:
-                    x_possible = any(m == 'X' for m, _, _ in possible)
-                    if x_possible:
-                        possible = [('X', i + 1, j + 1)]
-                for move, ni, nj in possible:
-                    new_sum = dp[i][j][mod] + grid[ni][nj]
-                    if new_sum > dp[ni][nj][next_mod]:
-                        dp[ni][nj][next_mod] = new_sum
-                        prev[ni][nj][next_mod] = (i, j, mod, move)
-    max_sum = max(dp[N - 1][N - 1])
-    if max_sum == INF:
-        return (0, "")
-    for mod in range(3):
-        if dp[N - 1][N - 1][mod] == max_sum:
-            best_mod = mod
-            break
-    path = []
-    ci, cj, cmod = N - 1, N - 1, best_mod
-    while ci != 0 or cj != 0:
-        pi, pj, pmod, move = prev[ci][cj][cmod]
-        path.append(move)
-        ci, cj, cmod = pi, pj, pmod
-    path.reverse()
-    return max_sum, ''.join(path)
+                    sum_next, path_next = dfs(i + 1, j)
+                    total_sum = sum_next + grid[i][j]
+                    total_path = "D" + path_next
+                    possible.append((total_sum, total_path))
+        else:
+            if j + 1 < N:
+                sum_next, path_next = dfs(i, j + 1)
+                total_sum = sum_next + grid[i][j]
+                total_path = "R" + path_next
+                possible.append((total_sum, total_path))
+            if i + 1 < N:
+                sum_next, path_next = dfs(i + 1, j)
+                total_sum = sum_next + grid[i][j]
+                total_path = "D" + path_next
+                possible.append((total_sum, total_path))
+            if i + 1 < N and j + 1 < N:
+                sum_next, path_next = dfs(i + 1, j + 1)
+                total_sum = sum_next + grid[i][j]
+                total_path = "X" + path_next
+                possible.append((total_sum, total_path))
+        if not possible:
+            # Should not happen if grid is valid
+            return float('-inf'), ""
+        max_sum, max_path = max(possible, key=lambda x: x[0])
+        memo[(i, j)] = (max_sum, max_path)
+        return max_sum, max_path
+
+    return dfs(0, 0)
 ```
 
 === EXTRACTED CODE ===
-import sys
+from typing import Dict, Tuple
 
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
     N = len(grid)
-    if N == 0:
-        return (0, "")
-    INF = -sys.maxsize
-    dp = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
-    prev = [[[None] * 3 for _ in range(N)] for _ in range(N)]  # (pi, pj, pmod, move)
-    dp[0][0][0] = grid[0][0]
-    for s in range(1, 2 * N - 1):
-        for i in range(N):
-            j = s - i
-            if j < 0 or j >= N:
-                continue
-            for mod in range(3):
-                if dp[i][j][mod] == INF:
-                    continue
-                next_mod = (mod + 1) % 3
-                must_X = (next_mod == 0)
-                possible = []
+    memo: Dict[Tuple[int, int], Tuple[int, str]] = {}
+
+    def dfs(i: int, j: int) -> Tuple[int, str]:
+        if (i, j) in memo:
+            return memo[(i, j)]
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        m = i + j
+        next_m = m + 1
+        is_forced_diagonal = (next_m % 3 == 0)
+        possible: list[Tuple[int, str]] = []
+        if is_forced_diagonal:
+            if i + 1 < N and j + 1 < N:
+                sum_next, path_next = dfs(i + 1, j + 1)
+                total_sum = sum_next + grid[i][j]
+                total_path = "X" + path_next
+                possible.append((total_sum, total_path))
+            else:
                 if j + 1 < N:
-                    possible.append(('R', i, j + 1))
+                    sum_next, path_next = dfs(i, j + 1)
+                    total_sum = sum_next + grid[i][j]
+                    total_path = "R" + path_next
+                    possible.append((total_sum, total_path))
                 if i + 1 < N:
-                    possible.append(('D', i + 1, j))
-                if i + 1 < N and j + 1 < N:
-                    possible.append(('X', i + 1, j + 1))
-                if must_X:
-                    x_possible = any(m == 'X' for m, _, _ in possible)
-                    if x_possible:
-                        possible = [('X', i + 1, j + 1)]
-                for move, ni, nj in possible:
-                    new_sum = dp[i][j][mod] + grid[ni][nj]
-                    if new_sum > dp[ni][nj][next_mod]:
-                        dp[ni][nj][next_mod] = new_sum
-                        prev[ni][nj][next_mod] = (i, j, mod, move)
-    max_sum = max(dp[N - 1][N - 1])
-    if max_sum == INF:
-        return (0, "")
-    for mod in range(3):
-        if dp[N - 1][N - 1][mod] == max_sum:
-            best_mod = mod
-            break
-    path = []
-    ci, cj, cmod = N - 1, N - 1, best_mod
-    while ci != 0 or cj != 0:
-        pi, pj, pmod, move = prev[ci][cj][cmod]
-        path.append(move)
-        ci, cj, cmod = pi, pj, pmod
-    path.reverse()
-    return max_sum, ''.join(path)
+                    sum_next, path_next = dfs(i + 1, j)
+                    total_sum = sum_next + grid[i][j]
+                    total_path = "D" + path_next
+                    possible.append((total_sum, total_path))
+        else:
+            if j + 1 < N:
+                sum_next, path_next = dfs(i, j + 1)
+                total_sum = sum_next + grid[i][j]
+                total_path = "R" + path_next
+                possible.append((total_sum, total_path))
+            if i + 1 < N:
+                sum_next, path_next = dfs(i + 1, j)
+                total_sum = sum_next + grid[i][j]
+                total_path = "D" + path_next
+                possible.append((total_sum, total_path))
+            if i + 1 < N and j + 1 < N:
+                sum_next, path_next = dfs(i + 1, j + 1)
+                total_sum = sum_next + grid[i][j]
+                total_path = "X" + path_next
+                possible.append((total_sum, total_path))
+        if not possible:
+            # Should not happen if grid is valid
+            return float('-inf'), ""
+        max_sum, max_path = max(possible, key=lambda x: x[0])
+        memo[(i, j)] = (max_sum, max_path)
+        return max_sum, max_path
+
+    return dfs(0, 0)
