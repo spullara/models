@@ -1,12 +1,12 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-05T21:39:12.030391+00:00
+Evaluated: 2026-03-05T22:19:11.376728+00:00
 
 === TIMING ===
-Response time: 48.79s
+Response time: 43.12s
 
 === CODE EXTRACTION ===
-Method: markdown_python
+Method: markdown_generic
 Syntax valid: YES
 
 === EXECUTION ===
@@ -16,135 +16,147 @@ Sum matches: YES
 Path valid: YES
 
 === RAW RESPONSE ===
-```python
+```
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
     N = len(grid)
-    dp = [[[-1 for _ in range(2 * N + 1)] for _ in range(N)] for _ in range(N)]
-    prev = [[[-1 for _ in range(2 * N + 1)] for _ in range(N)] for _ in range(N)]
+    if N == 0:
+        return 0, ""
     
-    def get_max_sum(i, j, moves_made):
-        if i == N - 1 and j == N - 1:
-            return grid[i][j]
-        
-        if dp[i][j][moves_made] != -1:
-            return dp[i][j][moves_made]
-        
-        next_move_num = moves_made + 1
-        possible_moves = []
-        
-        if next_move_num % 3 == 0:
-            if i + 1 < N and j + 1 < N:
-                possible_moves = ['X']
-            else:
-                if i + 1 < N:
-                    possible_moves.append('D')
-                if j + 1 < N:
-                    possible_moves.append('R')
-        else:
-            if i + 1 < N:
-                possible_moves.append('D')
-            if j + 1 < N:
-                possible_moves.append('R')
-            if i + 1 < N and j + 1 < N:
-                possible_moves.append('X')
-        
-        max_sum_so_far = float('-inf')
-        for move in possible_moves:
-            if move == 'R':
-                new_i, new_j = i, j + 1
-            elif move == 'D':
-                new_i, new_j = i + 1, j
-            elif move == 'X':
-                new_i, new_j = i + 1, j + 1
-            sub_sum = get_max_sum(new_i, new_j, moves_made + 1)
-            candidate = grid[i][j] + sub_sum
-            if candidate > max_sum_so_far:
-                max_sum_so_far = candidate
-                prev[i][j][moves_made] = move
-        dp[i][j][moves_made] = max_sum_so_far
-        return max_sum_so_far
+    dp = [[[0] * 3 for _ in range(N)] for _ in range(N)]
     
-    max_sum = get_max_sum(0, 0, 0)
+    for i in range(N-1, -1, -1):
+        for j in range(N-1, -1, -1):
+            for mod in range(3):
+                if i == N-1 and j == N-1:
+                    dp[i][j][mod] = grid[i][j]
+                else:
+                    required_X = ((mod + 1) % 3 == 0)
+                    candidates = []
+                    if i+1 < N and j+1 < N:
+                        candidates.append(dp[i+1][j+1][(mod + 1) % 3])
+                    if j+1 < N:
+                        candidates.append(dp[i][j+1][(mod + 1) % 3])
+                    if i+1 < N:
+                        candidates.append(dp[i+1][j][(mod + 1) % 3])
+                    
+                    if required_X and len(candidates) >= 1:  # X is the first in candidates if possible
+                        if i+1 < N and j+1 < N:
+                            dp[i][j][mod] = grid[i][j] + candidates[0]  # X
+                        else:
+                            if candidates:  # Not empty, take max of remaining
+                                dp[i][j][mod] = grid[i][j] + max(candidates)
+                            else:
+                                dp[i][j][mod] = float('-inf')
+                    elif candidates:
+                        dp[i][j][mod] = grid[i][j] + max(candidates)
+                    else:
+                        dp[i][j][mod] = float('-inf')
+    
+    if N == 1:
+        return grid[0][0], ""
+    
     path = []
-    current_i, current_j, current_moves = 0, 0, 0
-    while current_i != N - 1 or current_j != N - 1:
-        move = prev[current_i][current_j][current_moves]
-        path.append(move)
-        if move == 'R':
-            current_j += 1
-        elif move == 'D':
-            current_i += 1
-        elif move == 'X':
-            current_i += 1
-            current_j += 1
-        current_moves += 1
-    return max_sum, ''.join(path)
+    i, j, mod = 0, 0, 0
+    while i < N-1 or j < N-1:
+        required_X = ((mod + 1) % 3 == 0)
+        candidates = []
+        if i+1 < N and j+1 < N:
+            candidates.append(('X', dp[i+1][j+1][(mod + 1) % 3], i+1, j+1))
+        if j+1 < N:
+            candidates.append(('R', dp[i][j+1][(mod + 1) % 3], i, j+1))
+        if i+1 < N:
+            candidates.append(('D', dp[i+1][j][(mod + 1) % 3], i+1, j))
+        
+        if required_X:
+            x_candidates = [c for c in candidates if c[0] == 'X']
+            if x_candidates:
+                candidates = x_candidates
+            elif candidates:
+                candidates = sorted(candidates, key=lambda x: x[1], reverse=True)  # Sort by dp value
+                candidates = [candidates[0]]  # Take the best
+        else:
+            if candidates:
+                candidates = sorted(candidates, key=lambda x: x[1], reverse=True)[:1]  # Top one
+        
+        if candidates:
+            next_move = candidates[0]
+            path.append(next_move[0])
+            i, j = next_move[2], next_move[3]
+            mod = (mod + 1) % 3
+        else:
+            break  # Should not happen
+    
+    return dp[0][0][0], ''.join(path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
     N = len(grid)
-    dp = [[[-1 for _ in range(2 * N + 1)] for _ in range(N)] for _ in range(N)]
-    prev = [[[-1 for _ in range(2 * N + 1)] for _ in range(N)] for _ in range(N)]
+    if N == 0:
+        return 0, ""
     
-    def get_max_sum(i, j, moves_made):
-        if i == N - 1 and j == N - 1:
-            return grid[i][j]
-        
-        if dp[i][j][moves_made] != -1:
-            return dp[i][j][moves_made]
-        
-        next_move_num = moves_made + 1
-        possible_moves = []
-        
-        if next_move_num % 3 == 0:
-            if i + 1 < N and j + 1 < N:
-                possible_moves = ['X']
-            else:
-                if i + 1 < N:
-                    possible_moves.append('D')
-                if j + 1 < N:
-                    possible_moves.append('R')
-        else:
-            if i + 1 < N:
-                possible_moves.append('D')
-            if j + 1 < N:
-                possible_moves.append('R')
-            if i + 1 < N and j + 1 < N:
-                possible_moves.append('X')
-        
-        max_sum_so_far = float('-inf')
-        for move in possible_moves:
-            if move == 'R':
-                new_i, new_j = i, j + 1
-            elif move == 'D':
-                new_i, new_j = i + 1, j
-            elif move == 'X':
-                new_i, new_j = i + 1, j + 1
-            sub_sum = get_max_sum(new_i, new_j, moves_made + 1)
-            candidate = grid[i][j] + sub_sum
-            if candidate > max_sum_so_far:
-                max_sum_so_far = candidate
-                prev[i][j][moves_made] = move
-        dp[i][j][moves_made] = max_sum_so_far
-        return max_sum_so_far
+    dp = [[[0] * 3 for _ in range(N)] for _ in range(N)]
     
-    max_sum = get_max_sum(0, 0, 0)
+    for i in range(N-1, -1, -1):
+        for j in range(N-1, -1, -1):
+            for mod in range(3):
+                if i == N-1 and j == N-1:
+                    dp[i][j][mod] = grid[i][j]
+                else:
+                    required_X = ((mod + 1) % 3 == 0)
+                    candidates = []
+                    if i+1 < N and j+1 < N:
+                        candidates.append(dp[i+1][j+1][(mod + 1) % 3])
+                    if j+1 < N:
+                        candidates.append(dp[i][j+1][(mod + 1) % 3])
+                    if i+1 < N:
+                        candidates.append(dp[i+1][j][(mod + 1) % 3])
+                    
+                    if required_X and len(candidates) >= 1:  # X is the first in candidates if possible
+                        if i+1 < N and j+1 < N:
+                            dp[i][j][mod] = grid[i][j] + candidates[0]  # X
+                        else:
+                            if candidates:  # Not empty, take max of remaining
+                                dp[i][j][mod] = grid[i][j] + max(candidates)
+                            else:
+                                dp[i][j][mod] = float('-inf')
+                    elif candidates:
+                        dp[i][j][mod] = grid[i][j] + max(candidates)
+                    else:
+                        dp[i][j][mod] = float('-inf')
+    
+    if N == 1:
+        return grid[0][0], ""
+    
     path = []
-    current_i, current_j, current_moves = 0, 0, 0
-    while current_i != N - 1 or current_j != N - 1:
-        move = prev[current_i][current_j][current_moves]
-        path.append(move)
-        if move == 'R':
-            current_j += 1
-        elif move == 'D':
-            current_i += 1
-        elif move == 'X':
-            current_i += 1
-            current_j += 1
-        current_moves += 1
-    return max_sum, ''.join(path)
+    i, j, mod = 0, 0, 0
+    while i < N-1 or j < N-1:
+        required_X = ((mod + 1) % 3 == 0)
+        candidates = []
+        if i+1 < N and j+1 < N:
+            candidates.append(('X', dp[i+1][j+1][(mod + 1) % 3], i+1, j+1))
+        if j+1 < N:
+            candidates.append(('R', dp[i][j+1][(mod + 1) % 3], i, j+1))
+        if i+1 < N:
+            candidates.append(('D', dp[i+1][j][(mod + 1) % 3], i+1, j))
+        
+        if required_X:
+            x_candidates = [c for c in candidates if c[0] == 'X']
+            if x_candidates:
+                candidates = x_candidates
+            elif candidates:
+                candidates = sorted(candidates, key=lambda x: x[1], reverse=True)  # Sort by dp value
+                candidates = [candidates[0]]  # Take the best
+        else:
+            if candidates:
+                candidates = sorted(candidates, key=lambda x: x[1], reverse=True)[:1]  # Top one
+        
+        if candidates:
+            next_move = candidates[0]
+            path.append(next_move[0])
+            i, j = next_move[2], next_move[3]
+            mod = (mod + 1) % 3
+        else:
+            break  # Should not happen
+    
+    return dp[0][0][0], ''.join(path)
