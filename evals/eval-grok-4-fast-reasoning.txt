@@ -1,9 +1,9 @@
 Model: grok-4-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-05T10:18:34.701470+00:00
+Evaluated: 2026-03-05T12:56:19.208808+00:00
 
 === TIMING ===
-Response time: 57.63s
+Response time: 37.31s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,132 +17,154 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+from typing import Tuple
+import sys
+
+def solve_grid(grid: list[list[int]]) -> Tuple[int, str]:
     N = len(grid)
     if N == 0:
-        return (0, "")
-    NEG_INF = -10**18
-    dp = [[[NEG_INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    best_move = [[['' for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    for i in range(N - 1, -1, -1):
-        for j in range(N - 1, -1, -1):
+        return 0, ""
+    INF = float('-inf')
+    dp = [[[INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    
+    max_dist = 2 * (N - 1)
+    for dist in range(max_dist + 1):
+        for i in range(max(0, dist - (N - 1)), min(dist, N - 1) + 1):
+            j = dist - i
+            if not (0 <= j < N):
+                continue
             for mod in range(3):
-                if i == N - 1 and j == N - 1:
-                    dp[i][j][mod] = grid[i][j]
+                if dp[i][j][mod] == INF:
                     continue
-                is_must_x = (mod == 2)
-                can_x = (i + 1 < N and j + 1 < N)
-                can_r = (j + 1 < N)
-                can_d = (i + 1 < N)
+                current_sum = dp[i][j][mod]
                 possible_moves = []
-                if is_must_x:
-                    if can_x:
-                        possible_moves.append(('X', i + 1, j + 1))
+                if j + 1 < N:
+                    possible_moves.append(('R', i, j + 1))
+                if i + 1 < N:
+                    possible_moves.append(('D', i + 1, j))
+                if i + 1 < N and j + 1 < N:
+                    possible_moves.append(('X', i + 1, j + 1))
+                
+                must_diag = (mod == 2)
+                if must_diag:
+                    x_possible = any(m[0] == 'X' for m in possible_moves)
+                    if x_possible:
+                        move_char, ni, nj = next(m for m in possible_moves if m[0] == 'X')
+                        new_mod = (mod + 1) % 3
+                        new_sum = current_sum + grid[ni][nj]
+                        if new_sum > dp[ni][nj][new_mod]:
+                            dp[ni][nj][new_mod] = new_sum
+                            prev[ni][nj][new_mod] = (i, j, mod, move_char)
                     else:
-                        if can_r:
-                            possible_moves.append(('R', i, j + 1))
-                        if can_d:
-                            possible_moves.append(('D', i + 1, j))
+                        for move_char, ni, nj in possible_moves:
+                            new_mod = (mod + 1) % 3
+                            new_sum = current_sum + grid[ni][nj]
+                            if new_sum > dp[ni][nj][new_mod]:
+                                dp[ni][nj][new_mod] = new_sum
+                                prev[ni][nj][new_mod] = (i, j, mod, move_char)
                 else:
-                    if can_r:
-                        possible_moves.append(('R', i, j + 1))
-                    if can_d:
-                        possible_moves.append(('D', i + 1, j))
-                    if can_x:
-                        possible_moves.append(('X', i + 1, j + 1))
-                max_sum = NEG_INF
-                best_char = ''
-                for mchar, ni, nj in possible_moves:
-                    next_mod = (mod + 1) % 3
-                    next_dp = dp[ni][nj][next_mod]
-                    if next_dp == NEG_INF:
-                        continue
-                    cand = grid[i][j] + next_dp
-                    if cand > max_sum:
-                        max_sum = cand
-                        best_char = mchar
-                dp[i][j][mod] = max_sum
-                best_move[i][j][mod] = best_char
-    max_sum = dp[0][0][0]
-    if max_sum == NEG_INF:
-        return (0, "")
+                    for move_char, ni, nj in possible_moves:
+                        new_mod = (mod + 1) % 3
+                        new_sum = current_sum + grid[ni][nj]
+                        if new_sum > dp[ni][nj][new_mod]:
+                            dp[ni][nj][new_mod] = new_sum
+                            prev[ni][nj][new_mod] = (i, j, mod, move_char)
+    
+    max_sum = INF
+    best_mod = -1
+    for m in range(3):
+        if dp[N-1][N-1][m] > max_sum:
+            max_sum = dp[N-1][N-1][m]
+            best_mod = m
+    if max_sum == INF:
+        return 0, ""
+    
+    # Reconstruct path
     path = []
-    i, j, mod = 0, 0, 0
-    while i != N - 1 or j != N - 1:
-        mchar = best_move[i][j][mod]
-        path.append(mchar)
-        if mchar == 'R':
-            j += 1
-        elif mchar == 'D':
-            i += 1
-        elif mchar == 'X':
-            i += 1
-            j += 1
-        mod = (mod + 1) % 3
-    return (max_sum, ''.join(path))
+    ci, cj, cm = N - 1, N - 1, best_mod
+    while ci != 0 or cj != 0:
+        pi, pj, pm, move = prev[ci][cj][cm]
+        path.append(move)
+        ci, cj, cm = pi, pj, pm
+    path_string = ''.join(reversed(path))
+    
+    return int(max_sum), path_string
 ```
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+from typing import Tuple
+import sys
+
+def solve_grid(grid: list[list[int]]) -> Tuple[int, str]:
     N = len(grid)
     if N == 0:
-        return (0, "")
-    NEG_INF = -10**18
-    dp = [[[NEG_INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    best_move = [[['' for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    for i in range(N - 1, -1, -1):
-        for j in range(N - 1, -1, -1):
+        return 0, ""
+    INF = float('-inf')
+    dp = [[[INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    
+    max_dist = 2 * (N - 1)
+    for dist in range(max_dist + 1):
+        for i in range(max(0, dist - (N - 1)), min(dist, N - 1) + 1):
+            j = dist - i
+            if not (0 <= j < N):
+                continue
             for mod in range(3):
-                if i == N - 1 and j == N - 1:
-                    dp[i][j][mod] = grid[i][j]
+                if dp[i][j][mod] == INF:
                     continue
-                is_must_x = (mod == 2)
-                can_x = (i + 1 < N and j + 1 < N)
-                can_r = (j + 1 < N)
-                can_d = (i + 1 < N)
+                current_sum = dp[i][j][mod]
                 possible_moves = []
-                if is_must_x:
-                    if can_x:
-                        possible_moves.append(('X', i + 1, j + 1))
+                if j + 1 < N:
+                    possible_moves.append(('R', i, j + 1))
+                if i + 1 < N:
+                    possible_moves.append(('D', i + 1, j))
+                if i + 1 < N and j + 1 < N:
+                    possible_moves.append(('X', i + 1, j + 1))
+                
+                must_diag = (mod == 2)
+                if must_diag:
+                    x_possible = any(m[0] == 'X' for m in possible_moves)
+                    if x_possible:
+                        move_char, ni, nj = next(m for m in possible_moves if m[0] == 'X')
+                        new_mod = (mod + 1) % 3
+                        new_sum = current_sum + grid[ni][nj]
+                        if new_sum > dp[ni][nj][new_mod]:
+                            dp[ni][nj][new_mod] = new_sum
+                            prev[ni][nj][new_mod] = (i, j, mod, move_char)
                     else:
-                        if can_r:
-                            possible_moves.append(('R', i, j + 1))
-                        if can_d:
-                            possible_moves.append(('D', i + 1, j))
+                        for move_char, ni, nj in possible_moves:
+                            new_mod = (mod + 1) % 3
+                            new_sum = current_sum + grid[ni][nj]
+                            if new_sum > dp[ni][nj][new_mod]:
+                                dp[ni][nj][new_mod] = new_sum
+                                prev[ni][nj][new_mod] = (i, j, mod, move_char)
                 else:
-                    if can_r:
-                        possible_moves.append(('R', i, j + 1))
-                    if can_d:
-                        possible_moves.append(('D', i + 1, j))
-                    if can_x:
-                        possible_moves.append(('X', i + 1, j + 1))
-                max_sum = NEG_INF
-                best_char = ''
-                for mchar, ni, nj in possible_moves:
-                    next_mod = (mod + 1) % 3
-                    next_dp = dp[ni][nj][next_mod]
-                    if next_dp == NEG_INF:
-                        continue
-                    cand = grid[i][j] + next_dp
-                    if cand > max_sum:
-                        max_sum = cand
-                        best_char = mchar
-                dp[i][j][mod] = max_sum
-                best_move[i][j][mod] = best_char
-    max_sum = dp[0][0][0]
-    if max_sum == NEG_INF:
-        return (0, "")
+                    for move_char, ni, nj in possible_moves:
+                        new_mod = (mod + 1) % 3
+                        new_sum = current_sum + grid[ni][nj]
+                        if new_sum > dp[ni][nj][new_mod]:
+                            dp[ni][nj][new_mod] = new_sum
+                            prev[ni][nj][new_mod] = (i, j, mod, move_char)
+    
+    max_sum = INF
+    best_mod = -1
+    for m in range(3):
+        if dp[N-1][N-1][m] > max_sum:
+            max_sum = dp[N-1][N-1][m]
+            best_mod = m
+    if max_sum == INF:
+        return 0, ""
+    
+    # Reconstruct path
     path = []
-    i, j, mod = 0, 0, 0
-    while i != N - 1 or j != N - 1:
-        mchar = best_move[i][j][mod]
-        path.append(mchar)
-        if mchar == 'R':
-            j += 1
-        elif mchar == 'D':
-            i += 1
-        elif mchar == 'X':
-            i += 1
-            j += 1
-        mod = (mod + 1) % 3
-    return (max_sum, ''.join(path))
+    ci, cj, cm = N - 1, N - 1, best_mod
+    while ci != 0 or cj != 0:
+        pi, pj, pm, move = prev[ci][cj][cm]
+        path.append(move)
+        ci, cj, cm = pi, pj, pm
+    path_string = ''.join(reversed(path))
+    
+    return int(max_sum), path_string
