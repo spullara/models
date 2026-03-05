@@ -1,0 +1,27 @@
+Model: souffle-api-v0-api-ev3
+Provider: openai
+Evaluated: 2026-03-05T22:08:06.053600+00:00
+
+=== TIMING ===
+Response time: 0.59s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 503: {
+    "error": {
+        "message": "No available capacity was found for the model",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
