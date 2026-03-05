@@ -1,0 +1,19 @@
+Model: gpt-5.4-pro
+Provider: openai_responses
+Evaluated: 2026-03-05T18:05:11.400934+00:00
+
+=== TIMING ===
+Response time: 300s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: Request timed out (5 min)
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)

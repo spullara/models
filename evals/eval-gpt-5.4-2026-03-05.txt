@@ -1,0 +1,136 @@
+Model: gpt-5.4-2026-03-05
+Provider: openai_responses
+Evaluated: 2026-03-05T18:05:06.176330+00:00
+
+=== TIMING ===
+Response time: 5.19s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    NEG = -10**18
+
+    dp = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    path = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+
+    dp[0][0][0] = grid[0][0]
+
+    for i in range(n):
+        for j in range(n):
+            for k in range(3):
+                if dp[i][j][k] == NEG:
+                    continue
+
+                next_move_num = k + 1
+                require_diag = (next_move_num % 3 == 0)
+
+                moves = []
+                if require_diag:
+                    if i + 1 < n and j + 1 < n:
+                        moves.append((i + 1, j + 1, "X"))
+                    else:
+                        if i + 1 < n:
+                            moves.append((i + 1, j, "D"))
+                        if j + 1 < n:
+                            moves.append((i, j + 1, "R"))
+                else:
+                    if j + 1 < n:
+                        moves.append((i, j + 1, "R"))
+                    if i + 1 < n:
+                        moves.append((i + 1, j, "D"))
+                    if i + 1 < n and j + 1 < n:
+                        moves.append((i + 1, j + 1, "X"))
+
+                for ni, nj, ch in moves:
+                    nk = (k + 1) % 3
+                    new_sum = dp[i][j][k] + grid[ni][nj]
+                    new_path = path[i][j][k] + ch
+                    if new_sum > dp[ni][nj][nk]:
+                        dp[ni][nj][nk] = new_sum
+                        path[ni][nj][nk] = new_path
+                    elif new_sum == dp[ni][nj][nk] and new_path < path[ni][nj][nk]:
+                        path[ni][nj][nk] = new_path
+
+    best_sum = NEG
+    best_path = ""
+    for k in range(3):
+        if dp[n - 1][n - 1][k] > best_sum:
+            best_sum = dp[n - 1][n - 1][k]
+            best_path = path[n - 1][n - 1][k]
+        elif dp[n - 1][n - 1][k] == best_sum and path[n - 1][n - 1][k] < best_path:
+            best_path = path[n - 1][n - 1][k]
+
+    return (best_sum, best_path)
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    NEG = -10**18
+
+    dp = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    path = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+
+    dp[0][0][0] = grid[0][0]
+
+    for i in range(n):
+        for j in range(n):
+            for k in range(3):
+                if dp[i][j][k] == NEG:
+                    continue
+
+                next_move_num = k + 1
+                require_diag = (next_move_num % 3 == 0)
+
+                moves = []
+                if require_diag:
+                    if i + 1 < n and j + 1 < n:
+                        moves.append((i + 1, j + 1, "X"))
+                    else:
+                        if i + 1 < n:
+                            moves.append((i + 1, j, "D"))
+                        if j + 1 < n:
+                            moves.append((i, j + 1, "R"))
+                else:
+                    if j + 1 < n:
+                        moves.append((i, j + 1, "R"))
+                    if i + 1 < n:
+                        moves.append((i + 1, j, "D"))
+                    if i + 1 < n and j + 1 < n:
+                        moves.append((i + 1, j + 1, "X"))
+
+                for ni, nj, ch in moves:
+                    nk = (k + 1) % 3
+                    new_sum = dp[i][j][k] + grid[ni][nj]
+                    new_path = path[i][j][k] + ch
+                    if new_sum > dp[ni][nj][nk]:
+                        dp[ni][nj][nk] = new_sum
+                        path[ni][nj][nk] = new_path
+                    elif new_sum == dp[ni][nj][nk] and new_path < path[ni][nj][nk]:
+                        path[ni][nj][nk] = new_path
+
+    best_sum = NEG
+    best_path = ""
+    for k in range(3):
+        if dp[n - 1][n - 1][k] > best_sum:
+            best_sum = dp[n - 1][n - 1][k]
+            best_path = path[n - 1][n - 1][k]
+        elif dp[n - 1][n - 1][k] == best_sum and path[n - 1][n - 1][k] < best_path:
+            best_path = path[n - 1][n - 1][k]
+
+    return (best_sum, best_path)
