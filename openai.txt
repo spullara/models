@@ -118,6 +118,7 @@ omni-moderation-2024-09-26
 omni-moderation-latest
 sora-2
 sora-2-pro
+souffle-api-v0-api-ev3
 text-embedding-3-large
 text-embedding-3-small
 text-embedding-ada-002
