@@ -1,19 +1,19 @@
 Model: grok-4-1-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-05T12:55:37.162839+00:00
+Evaluated: 2026-03-05T14:04:57.600062+00:00
 
 === TIMING ===
-Response time: 39.1s
+Response time: 36.92s
 
 === CODE EXTRACTION ===
-Method: extraction_failed
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: None
-Calculated sum: None
-Sum matches: NO
-Path valid: NO
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
 ```python
@@ -22,10 +22,133 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if N == 0:
         return 0, ""
     NEG_INF = -10**18
-    dp = [[[NEG_INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    parent = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp = [[[NEG_INF] * 3 for _ in range(N)] for _ in range(N)]
+    back = [[[None] * 3 for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
-    for r in
+    for s in range(1, 2 * N - 1):
+        for i in range(max(0, s - N + 1), min(s, N - 1) + 1):
+            j = s - i
+            if j < 0 or j >= N:
+                continue
+            # R from left
+            if j > 0:
+                pi, pj = i, j - 1
+                for pmod in range(3):
+                    if dp[pi][pj][pmod] == NEG_INF:
+                        continue
+                    cmod = (pmod + 1) % 3
+                    is_req = ((pmod + 1) % 3 == 0)
+                    x_pos = (pi + 1 < N and pj + 1 < N)
+                    if is_req and x_pos:
+                        continue
+                    new_sum = dp[pi][pj][pmod] + grid[i][j]
+                    if new_sum > dp[i][j][cmod]:
+                        dp[i][j][cmod] = new_sum
+                        back[i][j][cmod] = (pi, pj, pmod, 'R')
+            # D from up
+            if i > 0:
+                pi, pj = i - 1, j
+                for pmod in range(3):
+                    if dp[pi][pj][pmod] == NEG_INF:
+                        continue
+                    cmod = (pmod + 1) % 3
+                    is_req = ((pmod + 1) % 3 == 0)
+                    x_pos = (pi + 1 < N and pj + 1 < N)
+                    if is_req and x_pos:
+                        continue
+                    new_sum = dp[pi][pj][pmod] + grid[i][j]
+                    if new_sum > dp[i][j][cmod]:
+                        dp[i][j][cmod] = new_sum
+                        back[i][j][cmod] = (pi, pj, pmod, 'D')
+            # X from diagonal
+            if i > 0 and j > 0:
+                pi, pj = i - 1, j - 1
+                for pmod in range(3):
+                    if dp[pi][pj][pmod] == NEG_INF:
+                        continue
+                    cmod = (pmod + 1) % 3
+                    new_sum = dp[pi][pj][pmod] + grid[i][j]
+                    if new_sum > dp[i][j][cmod]:
+                        dp[i][j][cmod] = new_sum
+                        back[i][j][cmod] = (pi, pj, pmod, 'X')
+    max_sums = dp[N-1][N-1]
+    max_sum = max(max_sums)
+    best_mod = max_sums.index(max_sum)
+    path = []
+    ci, cj, cmod = N - 1, N - 1, best_mod
+    while ci != 0 or cj != 0:
+        pi, pj, pmod, move = back[ci][cj][cmod]
+        path.append(move)
+        ci, cj, cmod = pi, pj, pmod
+    path.reverse()
+    path_str = ''.join(path)
+    return max_sum, path_str
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return 0, ""
+    NEG_INF = -10**18
+    dp = [[[NEG_INF] * 3 for _ in range(N)] for _ in range(N)]
+    back = [[[None] * 3 for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    for s in range(1, 2 * N - 1):
+        for i in range(max(0, s - N + 1), min(s, N - 1) + 1):
+            j = s - i
+            if j < 0 or j >= N:
+                continue
+            # R from left
+            if j > 0:
+                pi, pj = i, j - 1
+                for pmod in range(3):
+                    if dp[pi][pj][pmod] == NEG_INF:
+                        continue
+                    cmod = (pmod + 1) % 3
+                    is_req = ((pmod + 1) % 3 == 0)
+                    x_pos = (pi + 1 < N and pj + 1 < N)
+                    if is_req and x_pos:
+                        continue
+                    new_sum = dp[pi][pj][pmod] + grid[i][j]
+                    if new_sum > dp[i][j][cmod]:
+                        dp[i][j][cmod] = new_sum
+                        back[i][j][cmod] = (pi, pj, pmod, 'R')
+            # D from up
+            if i > 0:
+                pi, pj = i - 1, j
+                for pmod in range(3):
+                    if dp[pi][pj][pmod] == NEG_INF:
+                        continue
+                    cmod = (pmod + 1) % 3
+                    is_req = ((pmod + 1) % 3 == 0)
+                    x_pos = (pi + 1 < N and pj + 1 < N)
+                    if is_req and x_pos:
+                        continue
+                    new_sum = dp[pi][pj][pmod] + grid[i][j]
+                    if new_sum > dp[i][j][cmod]:
+                        dp[i][j][cmod] = new_sum
+                        back[i][j][cmod] = (pi, pj, pmod, 'D')
+            # X from diagonal
+            if i > 0 and j > 0:
+                pi, pj = i - 1, j - 1
+                for pmod in range(3):
+                    if dp[pi][pj][pmod] == NEG_INF:
+                        continue
+                    cmod = (pmod + 1) % 3
+                    new_sum = dp[pi][pj][pmod] + grid[i][j]
+                    if new_sum > dp[i][j][cmod]:
+                        dp[i][j][cmod] = new_sum
+                        back[i][j][cmod] = (pi, pj, pmod, 'X')
+    max_sums = dp[N-1][N-1]
+    max_sum = max(max_sums)
+    best_mod = max_sums.index(max_sum)
+    path = []
+    ci, cj, cmod = N - 1, N - 1, best_mod
+    while ci != 0 or cj != 0:
+        pi, pj, pmod, move = back[ci][cj][cmod]
+        path.append(move)
+        ci, cj, cmod = pi, pj, pmod
+    path.reverse()
+    path_str = ''.join(path)
+    return max_sum, path_str
