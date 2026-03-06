@@ -1,19 +1,16 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-06T16:25:41.984688+00:00
+Evaluated: 2026-03-06T20:38:01.174103+00:00
 
 === TIMING ===
-Response time: 2.29s
+Response time: 4.57s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 51
-Calculated sum: 51
-Sum matches: YES
-Path valid: YES
+Execution Error: list index out of range
 
 === RAW RESPONSE ===
 ```python
@@ -22,33 +19,104 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         return 0, ""
     n = len(grid)
     INF = float('-inf')
-    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], "")
+    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = grid[0][0]
     
     for i in range(n):
         for j in range(n):
-            if i == 0 and j == 0:
-                continue
-            val = grid[i][j]
-            for di, dj, move in [(-1, 0, 'D'), (0, -1, 'R'), (-1, -1, 'X')]:
-                ni, nj = i + di, j + dj
-                if 0 <= ni < n and 0 <= nj < n and dp[ni][nj][0] != INF:
-                    prev_sum, prev_path = dp[ni][nj]
-                    new_sum = prev_sum + val
-                    new_path = prev_path + move
-                    moves_made = len(new_path)
-                    is_required_diag = (moves_made % 3 == 0)
-                    if is_required_diag and move != 'X':
-                        # Check if diagonal was possible
-                        diag_i, diag_j = i - 1, j - 1
-                        can_diag = 0 <= diag_i < n and 0 <= diag_j < n and dp[diag_i][diag_j][0] != INF
-                        if can_diag:
-                            continue  # Skip if diagonal was possible but not taken
-                    if new_sum > dp[i][j][0]:
-                        dp[i][j] = (new_sum, new_path)
+            for moves in range(3):
+                if dp[i][j][moves] == INF:
+                    continue
+                if i == n-1 and j == n-1:
+                    continue
+                is_forced = (moves % 3 == 0)
+                # Try right
+                if j + 1 < n:
+                    new_moves = moves + 1
+                    if is_forced:
+                        if i + 1 < n:
+                            # Can do diagonal, so right is not allowed if forced
+                            pass
+                        else:
+                            # Can't diagonal, so right is allowed
+                            dp[i][j + 1][new_moves] = max(dp[i][j + 1][new_moves], dp[i][j][moves] + grid[i][j + 1])
+                    else:
+                        dp[i][j + 1][new_moves] = max(dp[i][j + 1][new_moves], dp[i][j][moves] + grid[i][j + 1])
+                # Try down
+                if i + 1 < n:
+                    new_moves = moves + 1
+                    if is_forced:
+                        if j + 1 < n:
+                            # Can do diagonal, so down is not allowed if forced
+                            pass
+                        else:
+                            # Can't diagonal, so down is allowed
+                            dp[i + 1][j][new_moves] = max(dp[i + 1][j][new_moves], dp[i][j][moves] + grid[i + 1][j])
+                    else:
+                        dp[i + 1][j][new_moves] = max(dp[i + 1][j][new_moves], dp[i][j][moves] + grid[i + 1][j])
+                # Try diagonal
+                if i + 1 < n and j + 1 < n:
+                    new_moves = moves + 1
+                    dp[i + 1][j + 1][new_moves] = max(dp[i + 1][j + 1][new_moves], dp[i][j][moves] + grid[i + 1][j + 1])
     
-    max_sum, path = dp[n-1][n-1]
-    return max_sum, path
+    max_sum = INF
+    for moves in range(3):
+        max_sum = max(max_sum, dp[n-1][n-1][moves])
+    
+    # Backtrack to find path
+    if max_sum == INF:
+        return 0, ""
+    
+    path = []
+    i, j = n-1, n-1
+    moves = -1
+    for m in range(2, -1, -1):
+        if dp[i][j][m] == max_sum:
+            moves = m
+            break
+    
+    while i > 0 or j > 0:
+        is_forced = (moves % 3 == 0)
+        found = False
+        # Check diagonal
+        if i > 0 and j > 0 and dp[i][j][moves] == dp[i-1][j-1][moves-1] + grid[i][j]:
+            path.append('X')
+            i -= 1
+            j -= 1
+            moves -= 1
+            found = True
+        elif not found:
+            # Check right
+            if j > 0 and (not is_forced or i == 0):
+                if dp[i][j][moves] == dp[i][j-1][moves-1] + grid[i][j]:
+                    path.append('R')
+                    j -= 1
+                    moves -= 1
+                    found = True
+            # Check down
+            if not found and i > 0 and (not is_forced or j == 0):
+                if dp[i][j][moves] == dp[i-1][j][moves-1] + grid[i][j]:
+                    path.append('D')
+                    i -= 1
+                    moves -= 1
+                    found = True
+        if not found:
+            # If no valid predecessor, try forced move logic
+            if is_forced and i > 0 and j > 0:
+                # Must have come via diagonal
+                path.append('X')
+                i -= 1
+                j -= 1
+            elif j > 0:
+                path.append('R')
+                j -= 1
+            elif i > 0:
+                path.append('D')
+                i -= 1
+            moves -= 1
+    
+    path.reverse()
+    return max_sum, ''.join(path)
 ```
 
 === EXTRACTED CODE ===
@@ -57,30 +125,101 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         return 0, ""
     n = len(grid)
     INF = float('-inf')
-    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], "")
+    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = grid[0][0]
     
     for i in range(n):
         for j in range(n):
-            if i == 0 and j == 0:
-                continue
-            val = grid[i][j]
-            for di, dj, move in [(-1, 0, 'D'), (0, -1, 'R'), (-1, -1, 'X')]:
-                ni, nj = i + di, j + dj
-                if 0 <= ni < n and 0 <= nj < n and dp[ni][nj][0] != INF:
-                    prev_sum, prev_path = dp[ni][nj]
-                    new_sum = prev_sum + val
-                    new_path = prev_path + move
-                    moves_made = len(new_path)
-                    is_required_diag = (moves_made % 3 == 0)
-                    if is_required_diag and move != 'X':
-                        # Check if diagonal was possible
-                        diag_i, diag_j = i - 1, j - 1
-                        can_diag = 0 <= diag_i < n and 0 <= diag_j < n and dp[diag_i][diag_j][0] != INF
-                        if can_diag:
-                            continue  # Skip if diagonal was possible but not taken
-                    if new_sum > dp[i][j][0]:
-                        dp[i][j] = (new_sum, new_path)
+            for moves in range(3):
+                if dp[i][j][moves] == INF:
+                    continue
+                if i == n-1 and j == n-1:
+                    continue
+                is_forced = (moves % 3 == 0)
+                # Try right
+                if j + 1 < n:
+                    new_moves = moves + 1
+                    if is_forced:
+                        if i + 1 < n:
+                            # Can do diagonal, so right is not allowed if forced
+                            pass
+                        else:
+                            # Can't diagonal, so right is allowed
+                            dp[i][j + 1][new_moves] = max(dp[i][j + 1][new_moves], dp[i][j][moves] + grid[i][j + 1])
+                    else:
+                        dp[i][j + 1][new_moves] = max(dp[i][j + 1][new_moves], dp[i][j][moves] + grid[i][j + 1])
+                # Try down
+                if i + 1 < n:
+                    new_moves = moves + 1
+                    if is_forced:
+                        if j + 1 < n:
+                            # Can do diagonal, so down is not allowed if forced
+                            pass
+                        else:
+                            # Can't diagonal, so down is allowed
+                            dp[i + 1][j][new_moves] = max(dp[i + 1][j][new_moves], dp[i][j][moves] + grid[i + 1][j])
+                    else:
+                        dp[i + 1][j][new_moves] = max(dp[i + 1][j][new_moves], dp[i][j][moves] + grid[i + 1][j])
+                # Try diagonal
+                if i + 1 < n and j + 1 < n:
+                    new_moves = moves + 1
+                    dp[i + 1][j + 1][new_moves] = max(dp[i + 1][j + 1][new_moves], dp[i][j][moves] + grid[i + 1][j + 1])
     
-    max_sum, path = dp[n-1][n-1]
-    return max_sum, path
+    max_sum = INF
+    for moves in range(3):
+        max_sum = max(max_sum, dp[n-1][n-1][moves])
+    
+    # Backtrack to find path
+    if max_sum == INF:
+        return 0, ""
+    
+    path = []
+    i, j = n-1, n-1
+    moves = -1
+    for m in range(2, -1, -1):
+        if dp[i][j][m] == max_sum:
+            moves = m
+            break
+    
+    while i > 0 or j > 0:
+        is_forced = (moves % 3 == 0)
+        found = False
+        # Check diagonal
+        if i > 0 and j > 0 and dp[i][j][moves] == dp[i-1][j-1][moves-1] + grid[i][j]:
+            path.append('X')
+            i -= 1
+            j -= 1
+            moves -= 1
+            found = True
+        elif not found:
+            # Check right
+            if j > 0 and (not is_forced or i == 0):
+                if dp[i][j][moves] == dp[i][j-1][moves-1] + grid[i][j]:
+                    path.append('R')
+                    j -= 1
+                    moves -= 1
+                    found = True
+            # Check down
+            if not found and i > 0 and (not is_forced or j == 0):
+                if dp[i][j][moves] == dp[i-1][j][moves-1] + grid[i][j]:
+                    path.append('D')
+                    i -= 1
+                    moves -= 1
+                    found = True
+        if not found:
+            # If no valid predecessor, try forced move logic
+            if is_forced and i > 0 and j > 0:
+                # Must have come via diagonal
+                path.append('X')
+                i -= 1
+                j -= 1
+            elif j > 0:
+                path.append('R')
+                j -= 1
+            elif i > 0:
+                path.append('D')
+                i -= 1
+            moves -= 1
+    
+    path.reverse()
+    return max_sum, ''.join(path)
