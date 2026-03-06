@@ -1,9 +1,9 @@
 Model: grok-4-1-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-06T01:01:58.765708+00:00
+Evaluated: 2026-03-06T05:54:26.555913+00:00
 
 === TIMING ===
-Response time: 34.62s
+Response time: 38.47s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,90 +17,118 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-from functools import cache
-from typing import Tuple
-
-def solve_grid(grid: list[list[int]]) -> Tuple[int, str]:
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
     N = len(grid)
-    @cache
-    def rec(i: int, j: int, mod: int) -> Tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        candidates = []
-        if j + 1 < N:
-            candidates.append((i, j + 1, 'R'))
-        if i + 1 < N:
-            candidates.append((i + 1, j, 'D'))
-        if i + 1 < N and j + 1 < N:
-            candidates.append((i + 1, j + 1, 'X'))
-        forced = (mod == 2)
-        x_possible = (i + 1 < N and j + 1 < N)
-        possible_moves = []
-        if forced and x_possible:
-            possible_moves = [c for c in candidates if c[2] == 'X']
-        else:
-            possible_moves = candidates
-        if not possible_moves:
-            return float('-inf'), ""
-        best_sum = float('-inf')
-        best_path = ""
-        for ni, nj, move in possible_moves:
-            next_mod = (mod + 1) % 3
-            next_sum, next_path = rec(ni, nj, next_mod)
-            if next_sum == float('-inf'):
-                continue
-            this_sum = grid[i][j] + next_sum
-            this_path = move + next_path
-            if this_sum > best_sum:
-                best_sum = this_sum
-                best_path = this_path
-        return best_sum, best_path
-    total, path = rec(0, 0, 0)
-    return total, path
+    NEG_INF = - (10 ** 18)
+    dp = [[[NEG_INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    for r in range(N):
+        for c in range(N):
+            for m in range(3):
+                if dp[r][c][m] == NEG_INF:
+                    continue
+                forced = (m == 2)
+                possible = []
+                if forced:
+                    if r + 1 < N and c + 1 < N:
+                        possible = [('X', r + 1, c + 1)]
+                    else:
+                        if r + 1 < N:
+                            possible.append(('D', r + 1, c))
+                        if c + 1 < N:
+                            possible.append(('R', r, c + 1))
+                else:
+                    if r + 1 < N:
+                        possible.append(('D', r + 1, c))
+                    if c + 1 < N:
+                        possible.append(('R', r, c + 1))
+                    if r + 1 < N and c + 1 < N:
+                        possible.append(('X', r + 1, c + 1))
+                for move, nr, nc in possible:
+                    new_m = (m + 1) % 3
+                    new_sum = dp[r][c][m] + grid[nr][nc]
+                    if new_sum > dp[nr][nc][new_m]:
+                        dp[nr][nc][new_m] = new_sum
+                        prev[nr][nc][new_m] = (r, c, m, move)
+    max_sum = NEG_INF
+    best_m = -1
+    er, ec = N - 1, N - 1
+    for m in range(3):
+        if dp[er][ec][m] > max_sum:
+            max_sum = dp[er][ec][m]
+            best_m = m
+    if max_sum == NEG_INF:
+        return 0, ""
+    path = []
+    cr, cc, cm = er, ec, best_m
+    while cr != 0 or cc != 0:
+        p = prev[cr][cc][cm]
+        if p is None:
+            break
+        pr, pc, pm, move = p
+        path.append(move)
+        cr, cc, cm = pr, pc, pm
+    path.reverse()
+    return max_sum, ''.join(path)
 ```
 
 === EXTRACTED CODE ===
-from functools import cache
-from typing import Tuple
-
-def solve_grid(grid: list[list[int]]) -> Tuple[int, str]:
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
     N = len(grid)
-    @cache
-    def rec(i: int, j: int, mod: int) -> Tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        candidates = []
-        if j + 1 < N:
-            candidates.append((i, j + 1, 'R'))
-        if i + 1 < N:
-            candidates.append((i + 1, j, 'D'))
-        if i + 1 < N and j + 1 < N:
-            candidates.append((i + 1, j + 1, 'X'))
-        forced = (mod == 2)
-        x_possible = (i + 1 < N and j + 1 < N)
-        possible_moves = []
-        if forced and x_possible:
-            possible_moves = [c for c in candidates if c[2] == 'X']
-        else:
-            possible_moves = candidates
-        if not possible_moves:
-            return float('-inf'), ""
-        best_sum = float('-inf')
-        best_path = ""
-        for ni, nj, move in possible_moves:
-            next_mod = (mod + 1) % 3
-            next_sum, next_path = rec(ni, nj, next_mod)
-            if next_sum == float('-inf'):
-                continue
-            this_sum = grid[i][j] + next_sum
-            this_path = move + next_path
-            if this_sum > best_sum:
-                best_sum = this_sum
-                best_path = this_path
-        return best_sum, best_path
-    total, path = rec(0, 0, 0)
-    return total, path
+    NEG_INF = - (10 ** 18)
+    dp = [[[NEG_INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    for r in range(N):
+        for c in range(N):
+            for m in range(3):
+                if dp[r][c][m] == NEG_INF:
+                    continue
+                forced = (m == 2)
+                possible = []
+                if forced:
+                    if r + 1 < N and c + 1 < N:
+                        possible = [('X', r + 1, c + 1)]
+                    else:
+                        if r + 1 < N:
+                            possible.append(('D', r + 1, c))
+                        if c + 1 < N:
+                            possible.append(('R', r, c + 1))
+                else:
+                    if r + 1 < N:
+                        possible.append(('D', r + 1, c))
+                    if c + 1 < N:
+                        possible.append(('R', r, c + 1))
+                    if r + 1 < N and c + 1 < N:
+                        possible.append(('X', r + 1, c + 1))
+                for move, nr, nc in possible:
+                    new_m = (m + 1) % 3
+                    new_sum = dp[r][c][m] + grid[nr][nc]
+                    if new_sum > dp[nr][nc][new_m]:
+                        dp[nr][nc][new_m] = new_sum
+                        prev[nr][nc][new_m] = (r, c, m, move)
+    max_sum = NEG_INF
+    best_m = -1
+    er, ec = N - 1, N - 1
+    for m in range(3):
+        if dp[er][ec][m] > max_sum:
+            max_sum = dp[er][ec][m]
+            best_m = m
+    if max_sum == NEG_INF:
+        return 0, ""
+    path = []
+    cr, cc, cm = er, ec, best_m
+    while cr != 0 or cc != 0:
+        p = prev[cr][cc][cm]
+        if p is None:
+            break
+        pr, pc, pm, move = p
+        path.append(move)
+        cr, cc, cm = pr, pc, pm
+    path.reverse()
+    return max_sum, ''.join(path)
