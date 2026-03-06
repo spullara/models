@@ -1,9 +1,9 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-06T01:00:10.705600+00:00
+Evaluated: 2026-03-06T05:52:26.749928+00:00
 
 === TIMING ===
-Response time: 102.86s
+Response time: 116.28s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,79 +18,101 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    from functools import lru_cache
-    @lru_cache(maxsize=None)
-    def dfs(i, j, k):
-        if i == n - 1 and j == n - 1:
-            return grid[i][j], ""
-        move_num = k + 1
-        is_forced = (move_num % 3 == 0)
-        can_x = (i + 1 < n and j + 1 < n)
-        possibles = []
-        if is_forced:
-            if can_x:
-                possibles = [('X', i + 1, j + 1)]
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    memo = {}
+    INF = 10**18
+    def rec(i, j, k):
+        key = (i, j, k)
+        if key in memo:
+            return memo[key]
+        if i == N - 1 and j == N - 1:
+            result = (grid[i][j], "")
+            memo[key] = result
+            return result
+        m = k + 1
+        is_required = (m % 3 == 0)
+        possible_moves = []
+        if is_required:
+            if i + 1 < N and j + 1 < N:
+                possible_moves = [('X', i + 1, j + 1)]
             else:
-                if j + 1 < n:
-                    possibles.append(('R', i, j + 1))
-                if i + 1 < n:
-                    possibles.append(('D', i + 1, j))
+                if j + 1 < N:
+                    possible_moves.append(('R', i, j + 1))
+                if i + 1 < N:
+                    possible_moves.append(('D', i + 1, j))
         else:
-            if j + 1 < n:
-                possibles.append(('R', i, j + 1))
-            if i + 1 < n:
-                possibles.append(('D', i + 1, j))
-            if can_x:
-                possibles.append(('X', i + 1, j + 1))
-        max_sum = float('-inf')
-        best_path = ""
-        for char, ni, nj in possibles:
-            further_sum, further_path = dfs(ni, nj, k + 1)
-            total = grid[i][j] + further_sum
-            if total > max_sum:
-                max_sum = total
-                best_path = char + further_path
-        return max_sum, best_path
-    maxs, path = dfs(0, 0, 0)
-    return int(maxs), path
+            if j + 1 < N:
+                possible_moves.append(('R', i, j + 1))
+            if i + 1 < N:
+                possible_moves.append(('D', i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+        max_s = -INF
+        best_p = ""
+        for move_char, ni, nj in possible_moves:
+            sub_s, sub_p = rec(ni, nj, k + 1)
+            tot_s = grid[i][j] + sub_s
+            if tot_s > max_s:
+                max_s = tot_s
+                best_p = move_char + sub_p
+        if max_s == -INF:
+            result = (-INF, "")
+        else:
+            result = (max_s, best_p)
+        memo[key] = result
+        return result
+    max_sum, path = rec(0, 0, 0)
+    return (max_sum, path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    from functools import lru_cache
-    @lru_cache(maxsize=None)
-    def dfs(i, j, k):
-        if i == n - 1 and j == n - 1:
-            return grid[i][j], ""
-        move_num = k + 1
-        is_forced = (move_num % 3 == 0)
-        can_x = (i + 1 < n and j + 1 < n)
-        possibles = []
-        if is_forced:
-            if can_x:
-                possibles = [('X', i + 1, j + 1)]
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    memo = {}
+    INF = 10**18
+    def rec(i, j, k):
+        key = (i, j, k)
+        if key in memo:
+            return memo[key]
+        if i == N - 1 and j == N - 1:
+            result = (grid[i][j], "")
+            memo[key] = result
+            return result
+        m = k + 1
+        is_required = (m % 3 == 0)
+        possible_moves = []
+        if is_required:
+            if i + 1 < N and j + 1 < N:
+                possible_moves = [('X', i + 1, j + 1)]
             else:
-                if j + 1 < n:
-                    possibles.append(('R', i, j + 1))
-                if i + 1 < n:
-                    possibles.append(('D', i + 1, j))
+                if j + 1 < N:
+                    possible_moves.append(('R', i, j + 1))
+                if i + 1 < N:
+                    possible_moves.append(('D', i + 1, j))
         else:
-            if j + 1 < n:
-                possibles.append(('R', i, j + 1))
-            if i + 1 < n:
-                possibles.append(('D', i + 1, j))
-            if can_x:
-                possibles.append(('X', i + 1, j + 1))
-        max_sum = float('-inf')
-        best_path = ""
-        for char, ni, nj in possibles:
-            further_sum, further_path = dfs(ni, nj, k + 1)
-            total = grid[i][j] + further_sum
-            if total > max_sum:
-                max_sum = total
-                best_path = char + further_path
-        return max_sum, best_path
-    maxs, path = dfs(0, 0, 0)
-    return int(maxs), path
+            if j + 1 < N:
+                possible_moves.append(('R', i, j + 1))
+            if i + 1 < N:
+                possible_moves.append(('D', i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+        max_s = -INF
+        best_p = ""
+        for move_char, ni, nj in possible_moves:
+            sub_s, sub_p = rec(ni, nj, k + 1)
+            tot_s = grid[i][j] + sub_s
+            if tot_s > max_s:
+                max_s = tot_s
+                best_p = move_char + sub_p
+        if max_s == -INF:
+            result = (-INF, "")
+        else:
+            result = (max_s, best_p)
+        memo[key] = result
+        return result
+    max_sum, path = rec(0, 0, 0)
+    return (max_sum, path)
