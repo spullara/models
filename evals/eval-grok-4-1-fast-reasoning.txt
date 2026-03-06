@@ -1,9 +1,9 @@
 Model: grok-4-1-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-06T15:48:13.116335+00:00
+Evaluated: 2026-03-06T16:24:55.595890+00:00
 
 === TIMING ===
-Response time: 40.38s
+Response time: 46.36s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -21,55 +21,57 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
         return 0, ""
-    INF = float('inf')
-    dp = [[[-INF] * 3 for _ in range(N)] for _ in range(N)]
+    INF = float('-inf')
+    dp = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
     prev = [[[None] * 3 for _ in range(N)] for _ in range(N)]
-    moves = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
-    for i in range(N):
-        for j in range(N):
+    for total in range(2 * N - 1):
+        for i in range(max(0, total - N + 1), min(total, N - 1) + 1):
+            j = total - i
+            if j < 0 or j >= N:
+                continue
             for mod in range(3):
-                if i == 0 and j == 0 and mod == 0:
+                if dp[i][j][mod] == INF:
                     continue
-                max_sum = -INF
-                best_prev = None
-                for move_char, di, dj in moves:
-                    pi = i - di
-                    pj = j - dj
-                    if pi < 0 or pj < 0:
-                        continue
-                    prev_mod = (mod - 1) % 3
-                    prev_sum_val = dp[pi][pj][prev_mod]
-                    if prev_sum_val == -INF:
-                        continue
-                    ok = True
-                    if mod == 0:
-                        x_poss = (pi + 1 < N and pj + 1 < N)
-                        if move_char != 'X':
-                            ok = not x_poss
-                    if ok:
-                        candidate = prev_sum_val + grid[i][j]
-                        if candidate > max_sum:
-                            max_sum = candidate
-                            best_prev = (pi, pj, prev_mod, move_char)
-                if max_sum != -INF:
-                    dp[i][j][mod] = max_sum
-                    prev[i][j][mod] = best_prev
-    end_i, end_j = N - 1, N - 1
-    max_sum = -INF
-    best_mod = 0
-    for mod in range(3):
-        if dp[end_i][end_j][mod] > max_sum:
-            max_sum = dp[end_i][end_j][mod]
-            best_mod = mod
-    if max_sum == -INF:
+                curr_sum = dp[i][j][mod]
+                is_required = (mod == 2)
+                moves = []
+                if is_required:
+                    if i + 1 < N and j + 1 < N:
+                        moves.append(('X', i + 1, j + 1))
+                    else:
+                        if i + 1 < N:
+                            moves.append(('D', i + 1, j))
+                        if j + 1 < N:
+                            moves.append(('R', i, j + 1))
+                else:
+                    if i + 1 < N:
+                        moves.append(('D', i + 1, j))
+                    if j + 1 < N:
+                        moves.append(('R', i, j + 1))
+                    if i + 1 < N and j + 1 < N:
+                        moves.append(('X', i + 1, j + 1))
+                next_mod = (mod + 1) % 3
+                for move_char, ni, nj in moves:
+                    new_sum = curr_sum + grid[ni][nj]
+                    if new_sum > dp[ni][nj][next_mod]:
+                        dp[ni][nj][next_mod] = new_sum
+                        prev[ni][nj][next_mod] = (i, j, mod, move_char)
+    max_sum = INF
+    best_mod = -1
+    for m in range(3):
+        if dp[N - 1][N - 1][m] > max_sum:
+            max_sum = dp[N - 1][N - 1][m]
+            best_mod = m
+    if max_sum == INF:
         return 0, ""
     path = []
-    i, j, mod = end_i, end_j, best_mod
-    while prev[i][j][mod] is not None:
-        pi, pj, prev_mod, move_char = prev[i][j][mod]
-        path.append(move_char)
-        i, j, mod = pi, pj, prev_mod
+    ci, cj, cmod = N - 1, N - 1, best_mod
+    while ci != 0 or cj != 0:
+        p = prev[ci][cj][cmod]
+        pi, pj, pmod, move = p
+        path.append(move)
+        ci, cj, cmod = pi, pj, pmod
     path.reverse()
     path_str = ''.join(path)
     return int(max_sum), path_str
@@ -80,55 +82,57 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
         return 0, ""
-    INF = float('inf')
-    dp = [[[-INF] * 3 for _ in range(N)] for _ in range(N)]
+    INF = float('-inf')
+    dp = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
     prev = [[[None] * 3 for _ in range(N)] for _ in range(N)]
-    moves = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
-    for i in range(N):
-        for j in range(N):
+    for total in range(2 * N - 1):
+        for i in range(max(0, total - N + 1), min(total, N - 1) + 1):
+            j = total - i
+            if j < 0 or j >= N:
+                continue
             for mod in range(3):
-                if i == 0 and j == 0 and mod == 0:
+                if dp[i][j][mod] == INF:
                     continue
-                max_sum = -INF
-                best_prev = None
-                for move_char, di, dj in moves:
-                    pi = i - di
-                    pj = j - dj
-                    if pi < 0 or pj < 0:
-                        continue
-                    prev_mod = (mod - 1) % 3
-                    prev_sum_val = dp[pi][pj][prev_mod]
-                    if prev_sum_val == -INF:
-                        continue
-                    ok = True
-                    if mod == 0:
-                        x_poss = (pi + 1 < N and pj + 1 < N)
-                        if move_char != 'X':
-                            ok = not x_poss
-                    if ok:
-                        candidate = prev_sum_val + grid[i][j]
-                        if candidate > max_sum:
-                            max_sum = candidate
-                            best_prev = (pi, pj, prev_mod, move_char)
-                if max_sum != -INF:
-                    dp[i][j][mod] = max_sum
-                    prev[i][j][mod] = best_prev
-    end_i, end_j = N - 1, N - 1
-    max_sum = -INF
-    best_mod = 0
-    for mod in range(3):
-        if dp[end_i][end_j][mod] > max_sum:
-            max_sum = dp[end_i][end_j][mod]
-            best_mod = mod
-    if max_sum == -INF:
+                curr_sum = dp[i][j][mod]
+                is_required = (mod == 2)
+                moves = []
+                if is_required:
+                    if i + 1 < N and j + 1 < N:
+                        moves.append(('X', i + 1, j + 1))
+                    else:
+                        if i + 1 < N:
+                            moves.append(('D', i + 1, j))
+                        if j + 1 < N:
+                            moves.append(('R', i, j + 1))
+                else:
+                    if i + 1 < N:
+                        moves.append(('D', i + 1, j))
+                    if j + 1 < N:
+                        moves.append(('R', i, j + 1))
+                    if i + 1 < N and j + 1 < N:
+                        moves.append(('X', i + 1, j + 1))
+                next_mod = (mod + 1) % 3
+                for move_char, ni, nj in moves:
+                    new_sum = curr_sum + grid[ni][nj]
+                    if new_sum > dp[ni][nj][next_mod]:
+                        dp[ni][nj][next_mod] = new_sum
+                        prev[ni][nj][next_mod] = (i, j, mod, move_char)
+    max_sum = INF
+    best_mod = -1
+    for m in range(3):
+        if dp[N - 1][N - 1][m] > max_sum:
+            max_sum = dp[N - 1][N - 1][m]
+            best_mod = m
+    if max_sum == INF:
         return 0, ""
     path = []
-    i, j, mod = end_i, end_j, best_mod
-    while prev[i][j][mod] is not None:
-        pi, pj, prev_mod, move_char = prev[i][j][mod]
-        path.append(move_char)
-        i, j, mod = pi, pj, prev_mod
+    ci, cj, cmod = N - 1, N - 1, best_mod
+    while ci != 0 or cj != 0:
+        p = prev[ci][cj][cmod]
+        pi, pj, pmod, move = p
+        path.append(move)
+        ci, cj, cmod = pi, pj, pmod
     path.reverse()
     path_str = ''.join(path)
     return int(max_sum), path_str

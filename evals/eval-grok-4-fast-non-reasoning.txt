@@ -1,19 +1,86 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-06T15:48:53.529111+00:00
+Evaluated: 2026-03-06T16:25:41.984688+00:00
 
 === TIMING ===
-Response time: 200.92s
+Response time: 2.29s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 500: {"code":"Internal error","error":"Auth context expired."}
+Returned sum: 51
+Calculated sum: 51
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    n = len(grid)
+    INF = float('-inf')
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+    
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            val = grid[i][j]
+            for di, dj, move in [(-1, 0, 'D'), (0, -1, 'R'), (-1, -1, 'X')]:
+                ni, nj = i + di, j + dj
+                if 0 <= ni < n and 0 <= nj < n and dp[ni][nj][0] != INF:
+                    prev_sum, prev_path = dp[ni][nj]
+                    new_sum = prev_sum + val
+                    new_path = prev_path + move
+                    moves_made = len(new_path)
+                    is_required_diag = (moves_made % 3 == 0)
+                    if is_required_diag and move != 'X':
+                        # Check if diagonal was possible
+                        diag_i, diag_j = i - 1, j - 1
+                        can_diag = 0 <= diag_i < n and 0 <= diag_j < n and dp[diag_i][diag_j][0] != INF
+                        if can_diag:
+                            continue  # Skip if diagonal was possible but not taken
+                    if new_sum > dp[i][j][0]:
+                        dp[i][j] = (new_sum, new_path)
+    
+    max_sum, path = dp[n-1][n-1]
+    return max_sum, path
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    n = len(grid)
+    INF = float('-inf')
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+    
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            val = grid[i][j]
+            for di, dj, move in [(-1, 0, 'D'), (0, -1, 'R'), (-1, -1, 'X')]:
+                ni, nj = i + di, j + dj
+                if 0 <= ni < n and 0 <= nj < n and dp[ni][nj][0] != INF:
+                    prev_sum, prev_path = dp[ni][nj]
+                    new_sum = prev_sum + val
+                    new_path = prev_path + move
+                    moves_made = len(new_path)
+                    is_required_diag = (moves_made % 3 == 0)
+                    if is_required_diag and move != 'X':
+                        # Check if diagonal was possible
+                        diag_i, diag_j = i - 1, j - 1
+                        can_diag = 0 <= diag_i < n and 0 <= diag_j < n and dp[diag_i][diag_j][0] != INF
+                        if can_diag:
+                            continue  # Skip if diagonal was possible but not taken
+                    if new_sum > dp[i][j][0]:
+                        dp[i][j] = (new_sum, new_path)
+    
+    max_sum, path = dp[n-1][n-1]
+    return max_sum, path
