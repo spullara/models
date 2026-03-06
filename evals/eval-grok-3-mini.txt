@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-06T16:19:16.706839+00:00
+Evaluated: 2026-03-06T20:33:16.774327+00:00
 
 === TIMING ===
-Response time: 35.26s
+Response time: 58.74s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,117 +18,77 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    import sys
-    from functools import lru_cache
-    
     N = len(grid)
-    
-    @lru_cache(None)
-    def dp(i, j, moves_mod_3):
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        if i >= N or j >= N:
-            return float('-inf'), ""
-        
-        m = moves_mod_3
-        next_m = (m + 1) % 3
-        
-        if (m + 1) % 3 == 0:  # Next move must be X if possible
-            if i + 1 < N and j + 1 < N:
-                possible = ['X']
-            else:
-                possible = []
-                if j + 1 < N:
-                    possible.append('R')
-                if i + 1 < N:
-                    possible.append('D')
-        else:
-            possible = []
-            if j + 1 < N:
-                possible.append('R')
-            if i + 1 < N:
-                possible.append('D')
-            if i + 1 < N and j + 1 < N:
-                possible.append('X')
-        
-        best_sum = float('-inf')
-        best_str = ""
-        
-        for move in possible:
-            if move == 'R':
-                ni, nj = i, j + 1
-            elif move == 'D':
-                ni, nj = i + 1, j
-            elif move == 'X':
-                ni, nj = i + 1, j + 1
-            sub_sum, sub_str = dp(ni, nj, next_m)
-            current_sum = grid[i][j] + sub_sum
-            if current_sum > best_sum:
-                best_sum = current_sum
-                best_str = move + sub_str
-        
-        return best_sum, best_str
-    
     if N == 0:
-        return 0, ""
-    result = dp(0, 0, 0)
-    return result
+        return (0, "")
+    
+    dp = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = (grid[0][0], "")
+    
+    for i in range(N):
+        for j in range(N):
+            for mod3 in range(3):
+                if i == 0 and j == 0 and mod3 == 0:
+                    continue  # Already set
+                prev_mod3 = (mod3 - 1) % 3
+                if mod3 == 0:  # Must be from X
+                    if i >= 1 and j >= 1 and dp[i-1][j-1][prev_mod3] is not None:
+                        prev_sum, prev_string = dp[i-1][j-1][prev_mod3]
+                        dp[i][j][mod3] = (prev_sum + grid[i][j], prev_string + "X")
+                else:  # mod3 == 1 or 2
+                    candidates = []
+                    if j >= 1 and dp[i][j-1][prev_mod3] is not None:
+                        prev_sum, prev_string = dp[i][j-1][prev_mod3]
+                        candidates.append((prev_sum + grid[i][j], prev_string + "R"))
+                    if i >= 1 and dp[i-1][j][prev_mod3] is not None:
+                        prev_sum, prev_string = dp[i-1][j][prev_mod3]
+                        candidates.append((prev_sum + grid[i][j], prev_string + "D"))
+                    if i >= 1 and j >= 1 and dp[i-1][j-1][prev_mod3] is not None:
+                        prev_sum, prev_string = dp[i-1][j-1][prev_mod3]
+                        candidates.append((prev_sum + grid[i][j], prev_string + "X"))
+                    if candidates:
+                        dp[i][j][mod3] = max(candidates, key=lambda x: x[0])
+    
+    possible_ends = [dp[N-1][N-1][k] for k in range(3) if dp[N-1][N-1][k] is not None]
+    if possible_ends:
+        return max(possible_ends, key=lambda x: x[0])
+    return (0, "")  # Unreachable, but for safety
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    import sys
-    from functools import lru_cache
-    
     N = len(grid)
-    
-    @lru_cache(None)
-    def dp(i, j, moves_mod_3):
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        if i >= N or j >= N:
-            return float('-inf'), ""
-        
-        m = moves_mod_3
-        next_m = (m + 1) % 3
-        
-        if (m + 1) % 3 == 0:  # Next move must be X if possible
-            if i + 1 < N and j + 1 < N:
-                possible = ['X']
-            else:
-                possible = []
-                if j + 1 < N:
-                    possible.append('R')
-                if i + 1 < N:
-                    possible.append('D')
-        else:
-            possible = []
-            if j + 1 < N:
-                possible.append('R')
-            if i + 1 < N:
-                possible.append('D')
-            if i + 1 < N and j + 1 < N:
-                possible.append('X')
-        
-        best_sum = float('-inf')
-        best_str = ""
-        
-        for move in possible:
-            if move == 'R':
-                ni, nj = i, j + 1
-            elif move == 'D':
-                ni, nj = i + 1, j
-            elif move == 'X':
-                ni, nj = i + 1, j + 1
-            sub_sum, sub_str = dp(ni, nj, next_m)
-            current_sum = grid[i][j] + sub_sum
-            if current_sum > best_sum:
-                best_sum = current_sum
-                best_str = move + sub_str
-        
-        return best_sum, best_str
-    
     if N == 0:
-        return 0, ""
-    result = dp(0, 0, 0)
-    return result
+        return (0, "")
+    
+    dp = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = (grid[0][0], "")
+    
+    for i in range(N):
+        for j in range(N):
+            for mod3 in range(3):
+                if i == 0 and j == 0 and mod3 == 0:
+                    continue  # Already set
+                prev_mod3 = (mod3 - 1) % 3
+                if mod3 == 0:  # Must be from X
+                    if i >= 1 and j >= 1 and dp[i-1][j-1][prev_mod3] is not None:
+                        prev_sum, prev_string = dp[i-1][j-1][prev_mod3]
+                        dp[i][j][mod3] = (prev_sum + grid[i][j], prev_string + "X")
+                else:  # mod3 == 1 or 2
+                    candidates = []
+                    if j >= 1 and dp[i][j-1][prev_mod3] is not None:
+                        prev_sum, prev_string = dp[i][j-1][prev_mod3]
+                        candidates.append((prev_sum + grid[i][j], prev_string + "R"))
+                    if i >= 1 and dp[i-1][j][prev_mod3] is not None:
+                        prev_sum, prev_string = dp[i-1][j][prev_mod3]
+                        candidates.append((prev_sum + grid[i][j], prev_string + "D"))
+                    if i >= 1 and j >= 1 and dp[i-1][j-1][prev_mod3] is not None:
+                        prev_sum, prev_string = dp[i-1][j-1][prev_mod3]
+                        candidates.append((prev_sum + grid[i][j], prev_string + "X"))
+                    if candidates:
+                        dp[i][j][mod3] = max(candidates, key=lambda x: x[0])
+    
+    possible_ends = [dp[N-1][N-1][k] for k in range(3) if dp[N-1][N-1][k] is not None]
+    if possible_ends:
+        return max(possible_ends, key=lambda x: x[0])
+    return (0, "")  # Unreachable, but for safety
