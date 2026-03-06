@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-05T22:19:11.376728+00:00
+Evaluated: 2026-03-06T00:59:11.967851+00:00
 
 === TIMING ===
-Response time: 43.12s
+Response time: 58.71s
 
 === CODE EXTRACTION ===
 Method: markdown_generic
@@ -20,143 +20,97 @@ Path valid: YES
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
-        return 0, ""
+        return (0, "")
+    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
+    pred = [[[[-1, -1, -1, ''] for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    dp = [[[0] * 3 for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
     
-    for i in range(N-1, -1, -1):
-        for j in range(N-1, -1, -1):
-            for mod in range(3):
-                if i == N-1 and j == N-1:
-                    dp[i][j][mod] = grid[i][j]
-                else:
-                    required_X = ((mod + 1) % 3 == 0)
-                    candidates = []
-                    if i+1 < N and j+1 < N:
-                        candidates.append(dp[i+1][j+1][(mod + 1) % 3])
-                    if j+1 < N:
-                        candidates.append(dp[i][j+1][(mod + 1) % 3])
-                    if i+1 < N:
-                        candidates.append(dp[i+1][j][(mod + 1) % 3])
-                    
-                    if required_X and len(candidates) >= 1:  # X is the first in candidates if possible
-                        if i+1 < N and j+1 < N:
-                            dp[i][j][mod] = grid[i][j] + candidates[0]  # X
-                        else:
-                            if candidates:  # Not empty, take max of remaining
-                                dp[i][j][mod] = grid[i][j] + max(candidates)
-                            else:
-                                dp[i][j][mod] = float('-inf')
-                    elif candidates:
-                        dp[i][j][mod] = grid[i][j] + max(candidates)
-                    else:
-                        dp[i][j][mod] = float('-inf')
+    for i in range(N):
+        for j in range(N):
+            for current_mod in range(3):
+                if i == 0 and j == 0 and current_mod == 0:
+                    continue
+                prev_mod = (current_mod - 1) % 3
+                
+                if i > 0 and j > 0 and dp[i-1][j-1][prev_mod] != float('-inf'):
+                    new_sum = dp[i-1][j-1][prev_mod] + grid[i][j]
+                    if new_sum > dp[i][j][current_mod]:
+                        dp[i][j][current_mod] = new_sum
+                        pred[i][j][current_mod] = (i-1, j-1, prev_mod, 'X')
+                
+                if j > 0 and current_mod != 0 and dp[i][j-1][prev_mod] != float('-inf'):
+                    new_sum = dp[i][j-1][prev_mod] + grid[i][j]
+                    if new_sum > dp[i][j][current_mod]:
+                        dp[i][j][current_mod] = new_sum
+                        pred[i][j][current_mod] = (i, j-1, prev_mod, 'R')
+                
+                if i > 0 and current_mod != 0 and dp[i-1][j][prev_mod] != float('-inf'):
+                    new_sum = dp[i-1][j][prev_mod] + grid[i][j]
+                    if new_sum > dp[i][j][current_mod]:
+                        dp[i][j][current_mod] = new_sum
+                        pred[i][j][current_mod] = (i-1, j, prev_mod, 'D')
     
-    if N == 1:
-        return grid[0][0], ""
+    max_sum = max(dp[N-1][N-1])
+    best_mod = dp[N-1][N-1].index(max_sum)
     
     path = []
-    i, j, mod = 0, 0, 0
-    while i < N-1 or j < N-1:
-        required_X = ((mod + 1) % 3 == 0)
-        candidates = []
-        if i+1 < N and j+1 < N:
-            candidates.append(('X', dp[i+1][j+1][(mod + 1) % 3], i+1, j+1))
-        if j+1 < N:
-            candidates.append(('R', dp[i][j+1][(mod + 1) % 3], i, j+1))
-        if i+1 < N:
-            candidates.append(('D', dp[i+1][j][(mod + 1) % 3], i+1, j))
-        
-        if required_X:
-            x_candidates = [c for c in candidates if c[0] == 'X']
-            if x_candidates:
-                candidates = x_candidates
-            elif candidates:
-                candidates = sorted(candidates, key=lambda x: x[1], reverse=True)  # Sort by dp value
-                candidates = [candidates[0]]  # Take the best
-        else:
-            if candidates:
-                candidates = sorted(candidates, key=lambda x: x[1], reverse=True)[:1]  # Top one
-        
-        if candidates:
-            next_move = candidates[0]
-            path.append(next_move[0])
-            i, j = next_move[2], next_move[3]
-            mod = (mod + 1) % 3
-        else:
-            break  # Should not happen
+    current_i, current_j, current_mod = N-1, N-1, best_mod
+    while not (current_i == 0 and current_j == 0):
+        prev_i, prev_j, prev_mod, move = pred[current_i][current_j][current_mod]
+        path.append(move)
+        current_i, current_j, current_mod = prev_i, prev_j, prev_mod
+    path.reverse()
+    path_str = ''.join(path)
     
-    return dp[0][0][0], ''.join(path)
+    return (max_sum, path_str)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
-        return 0, ""
+        return (0, "")
+    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
+    pred = [[[[-1, -1, -1, ''] for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    dp = [[[0] * 3 for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
     
-    for i in range(N-1, -1, -1):
-        for j in range(N-1, -1, -1):
-            for mod in range(3):
-                if i == N-1 and j == N-1:
-                    dp[i][j][mod] = grid[i][j]
-                else:
-                    required_X = ((mod + 1) % 3 == 0)
-                    candidates = []
-                    if i+1 < N and j+1 < N:
-                        candidates.append(dp[i+1][j+1][(mod + 1) % 3])
-                    if j+1 < N:
-                        candidates.append(dp[i][j+1][(mod + 1) % 3])
-                    if i+1 < N:
-                        candidates.append(dp[i+1][j][(mod + 1) % 3])
-                    
-                    if required_X and len(candidates) >= 1:  # X is the first in candidates if possible
-                        if i+1 < N and j+1 < N:
-                            dp[i][j][mod] = grid[i][j] + candidates[0]  # X
-                        else:
-                            if candidates:  # Not empty, take max of remaining
-                                dp[i][j][mod] = grid[i][j] + max(candidates)
-                            else:
-                                dp[i][j][mod] = float('-inf')
-                    elif candidates:
-                        dp[i][j][mod] = grid[i][j] + max(candidates)
-                    else:
-                        dp[i][j][mod] = float('-inf')
+    for i in range(N):
+        for j in range(N):
+            for current_mod in range(3):
+                if i == 0 and j == 0 and current_mod == 0:
+                    continue
+                prev_mod = (current_mod - 1) % 3
+                
+                if i > 0 and j > 0 and dp[i-1][j-1][prev_mod] != float('-inf'):
+                    new_sum = dp[i-1][j-1][prev_mod] + grid[i][j]
+                    if new_sum > dp[i][j][current_mod]:
+                        dp[i][j][current_mod] = new_sum
+                        pred[i][j][current_mod] = (i-1, j-1, prev_mod, 'X')
+                
+                if j > 0 and current_mod != 0 and dp[i][j-1][prev_mod] != float('-inf'):
+                    new_sum = dp[i][j-1][prev_mod] + grid[i][j]
+                    if new_sum > dp[i][j][current_mod]:
+                        dp[i][j][current_mod] = new_sum
+                        pred[i][j][current_mod] = (i, j-1, prev_mod, 'R')
+                
+                if i > 0 and current_mod != 0 and dp[i-1][j][prev_mod] != float('-inf'):
+                    new_sum = dp[i-1][j][prev_mod] + grid[i][j]
+                    if new_sum > dp[i][j][current_mod]:
+                        dp[i][j][current_mod] = new_sum
+                        pred[i][j][current_mod] = (i-1, j, prev_mod, 'D')
     
-    if N == 1:
-        return grid[0][0], ""
+    max_sum = max(dp[N-1][N-1])
+    best_mod = dp[N-1][N-1].index(max_sum)
     
     path = []
-    i, j, mod = 0, 0, 0
-    while i < N-1 or j < N-1:
-        required_X = ((mod + 1) % 3 == 0)
-        candidates = []
-        if i+1 < N and j+1 < N:
-            candidates.append(('X', dp[i+1][j+1][(mod + 1) % 3], i+1, j+1))
-        if j+1 < N:
-            candidates.append(('R', dp[i][j+1][(mod + 1) % 3], i, j+1))
-        if i+1 < N:
-            candidates.append(('D', dp[i+1][j][(mod + 1) % 3], i+1, j))
-        
-        if required_X:
-            x_candidates = [c for c in candidates if c[0] == 'X']
-            if x_candidates:
-                candidates = x_candidates
-            elif candidates:
-                candidates = sorted(candidates, key=lambda x: x[1], reverse=True)  # Sort by dp value
-                candidates = [candidates[0]]  # Take the best
-        else:
-            if candidates:
-                candidates = sorted(candidates, key=lambda x: x[1], reverse=True)[:1]  # Top one
-        
-        if candidates:
-            next_move = candidates[0]
-            path.append(next_move[0])
-            i, j = next_move[2], next_move[3]
-            mod = (mod + 1) % 3
-        else:
-            break  # Should not happen
+    current_i, current_j, current_mod = N-1, N-1, best_mod
+    while not (current_i == 0 and current_j == 0):
+        prev_i, prev_j, prev_mod, move = pred[current_i][current_j][current_mod]
+        path.append(move)
+        current_i, current_j, current_mod = prev_i, prev_j, prev_mod
+    path.reverse()
+    path_str = ''.join(path)
     
-    return dp[0][0][0], ''.join(path)
+    return (max_sum, path_str)
