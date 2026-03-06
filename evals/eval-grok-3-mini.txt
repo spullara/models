@@ -1,12 +1,12 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-06T00:59:11.967851+00:00
+Evaluated: 2026-03-06T05:51:30.680906+00:00
 
 === TIMING ===
-Response time: 58.71s
+Response time: 56.04s
 
 === CODE EXTRACTION ===
-Method: markdown_generic
+Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
@@ -16,101 +16,119 @@ Sum matches: YES
 Path valid: YES
 
 === RAW RESPONSE ===
-```
+```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    import sys
     N = len(grid)
     if N == 0:
         return (0, "")
-    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
-    pred = [[[[-1, -1, -1, ''] for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    dp[0][0][0] = grid[0][0]
+    DP = [[[float('-inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    pred = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    for i in range(N):
-        for j in range(N):
-            for current_mod in range(3):
-                if i == 0 and j == 0 and current_mod == 0:
-                    continue
-                prev_mod = (current_mod - 1) % 3
-                
-                if i > 0 and j > 0 and dp[i-1][j-1][prev_mod] != float('-inf'):
-                    new_sum = dp[i-1][j-1][prev_mod] + grid[i][j]
-                    if new_sum > dp[i][j][current_mod]:
-                        dp[i][j][current_mod] = new_sum
-                        pred[i][j][current_mod] = (i-1, j-1, prev_mod, 'X')
-                
-                if j > 0 and current_mod != 0 and dp[i][j-1][prev_mod] != float('-inf'):
-                    new_sum = dp[i][j-1][prev_mod] + grid[i][j]
-                    if new_sum > dp[i][j][current_mod]:
-                        dp[i][j][current_mod] = new_sum
-                        pred[i][j][current_mod] = (i, j-1, prev_mod, 'R')
-                
-                if i > 0 and current_mod != 0 and dp[i-1][j][prev_mod] != float('-inf'):
-                    new_sum = dp[i-1][j][prev_mod] + grid[i][j]
-                    if new_sum > dp[i][j][current_mod]:
-                        dp[i][j][current_mod] = new_sum
-                        pred[i][j][current_mod] = (i-1, j, prev_mod, 'D')
+    DP[0][0][0] = grid[0][0]
     
-    max_sum = max(dp[N-1][N-1])
-    best_mod = dp[N-1][N-1].index(max_sum)
+    for sum_val in range(0, 2*(N-1) + 1):  # Up to 2*(N-1)
+        for i in range(max(0, sum_val - (N-1)), min(sum_val + 1, N)):
+            j = sum_val - i
+            if 0 <= j < N:
+                for mod in range(3):
+                    if DP[i][j][mod] != float('-inf'):
+                        next_mod = (mod + 1) % 3
+                        if next_mod == 0:  # Must be X if possible
+                            if i < N-1 and j < N-1:
+                                if DP[i+1][j+1][next_mod] < DP[i][j][mod] + grid[i+1][j+1]:
+                                    DP[i+1][j+1][next_mod] = DP[i][j][mod] + grid[i+1][j+1]
+                                    pred[i+1][j+1][next_mod] = (i, j, mod, 'X')
+                        else:  # Can be R, D, or X
+                            if j < N-1:  # R
+                                if DP[i][j+1][next_mod] < DP[i][j][mod] + grid[i][j+1]:
+                                    DP[i][j+1][next_mod] = DP[i][j][mod] + grid[i][j+1]
+                                    pred[i][j+1][next_mod] = (i, j, mod, 'R')
+                            if i < N-1:  # D
+                                if DP[i+1][j][next_mod] < DP[i][j][mod] + grid[i+1][j]:
+                                    DP[i+1][j][next_mod] = DP[i][j][mod] + grid[i+1][j]
+                                    pred[i+1][j][next_mod] = (i, j, mod, 'D')
+                            if i < N-1 and j < N-1:  # X
+                                if DP[i+1][j+1][next_mod] < DP[i][j][mod] + grid[i+1][j+1]:
+                                    DP[i+1][j+1][next_mod] = DP[i][j][mod] + grid[i+1][j+1]
+                                    pred[i+1][j+1][next_mod] = (i, j, mod, 'X')
     
+    max_sum_val = max(DP[N-1][N-1])
+    if max_sum_val == float('-inf'):
+        return (0, "")  # Impossible, though unlikely
+    
+    best_mod = DP[N-1][N-1].index(max_sum_val)
     path = []
     current_i, current_j, current_mod = N-1, N-1, best_mod
-    while not (current_i == 0 and current_j == 0):
-        prev_i, prev_j, prev_mod, move = pred[current_i][current_j][current_mod]
-        path.append(move)
-        current_i, current_j, current_mod = prev_i, prev_j, prev_mod
+    while (current_i, current_j, current_mod) != (0, 0, 0) or (current_i == 0 and current_j == 0 and current_mod == 0):
+        prev = pred[current_i][current_j][current_mod]
+        if prev:
+            prev_i, prev_j, prev_mod, move = prev
+            if move:  # Add move if it exists
+                path.append(move)
+            current_i, current_j, current_mod = prev_i, prev_j, prev_mod
+        else:
+            break  # Should not happen
     path.reverse()
-    path_str = ''.join(path)
-    
-    return (max_sum, path_str)
+    path_string = ''.join(path)
+    return (int(max_sum_val), path_string)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    import sys
     N = len(grid)
     if N == 0:
         return (0, "")
-    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
-    pred = [[[[-1, -1, -1, ''] for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    dp[0][0][0] = grid[0][0]
+    DP = [[[float('-inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    pred = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    for i in range(N):
-        for j in range(N):
-            for current_mod in range(3):
-                if i == 0 and j == 0 and current_mod == 0:
-                    continue
-                prev_mod = (current_mod - 1) % 3
-                
-                if i > 0 and j > 0 and dp[i-1][j-1][prev_mod] != float('-inf'):
-                    new_sum = dp[i-1][j-1][prev_mod] + grid[i][j]
-                    if new_sum > dp[i][j][current_mod]:
-                        dp[i][j][current_mod] = new_sum
-                        pred[i][j][current_mod] = (i-1, j-1, prev_mod, 'X')
-                
-                if j > 0 and current_mod != 0 and dp[i][j-1][prev_mod] != float('-inf'):
-                    new_sum = dp[i][j-1][prev_mod] + grid[i][j]
-                    if new_sum > dp[i][j][current_mod]:
-                        dp[i][j][current_mod] = new_sum
-                        pred[i][j][current_mod] = (i, j-1, prev_mod, 'R')
-                
-                if i > 0 and current_mod != 0 and dp[i-1][j][prev_mod] != float('-inf'):
-                    new_sum = dp[i-1][j][prev_mod] + grid[i][j]
-                    if new_sum > dp[i][j][current_mod]:
-                        dp[i][j][current_mod] = new_sum
-                        pred[i][j][current_mod] = (i-1, j, prev_mod, 'D')
+    DP[0][0][0] = grid[0][0]
     
-    max_sum = max(dp[N-1][N-1])
-    best_mod = dp[N-1][N-1].index(max_sum)
+    for sum_val in range(0, 2*(N-1) + 1):  # Up to 2*(N-1)
+        for i in range(max(0, sum_val - (N-1)), min(sum_val + 1, N)):
+            j = sum_val - i
+            if 0 <= j < N:
+                for mod in range(3):
+                    if DP[i][j][mod] != float('-inf'):
+                        next_mod = (mod + 1) % 3
+                        if next_mod == 0:  # Must be X if possible
+                            if i < N-1 and j < N-1:
+                                if DP[i+1][j+1][next_mod] < DP[i][j][mod] + grid[i+1][j+1]:
+                                    DP[i+1][j+1][next_mod] = DP[i][j][mod] + grid[i+1][j+1]
+                                    pred[i+1][j+1][next_mod] = (i, j, mod, 'X')
+                        else:  # Can be R, D, or X
+                            if j < N-1:  # R
+                                if DP[i][j+1][next_mod] < DP[i][j][mod] + grid[i][j+1]:
+                                    DP[i][j+1][next_mod] = DP[i][j][mod] + grid[i][j+1]
+                                    pred[i][j+1][next_mod] = (i, j, mod, 'R')
+                            if i < N-1:  # D
+                                if DP[i+1][j][next_mod] < DP[i][j][mod] + grid[i+1][j]:
+                                    DP[i+1][j][next_mod] = DP[i][j][mod] + grid[i+1][j]
+                                    pred[i+1][j][next_mod] = (i, j, mod, 'D')
+                            if i < N-1 and j < N-1:  # X
+                                if DP[i+1][j+1][next_mod] < DP[i][j][mod] + grid[i+1][j+1]:
+                                    DP[i+1][j+1][next_mod] = DP[i][j][mod] + grid[i+1][j+1]
+                                    pred[i+1][j+1][next_mod] = (i, j, mod, 'X')
     
+    max_sum_val = max(DP[N-1][N-1])
+    if max_sum_val == float('-inf'):
+        return (0, "")  # Impossible, though unlikely
+    
+    best_mod = DP[N-1][N-1].index(max_sum_val)
     path = []
     current_i, current_j, current_mod = N-1, N-1, best_mod
-    while not (current_i == 0 and current_j == 0):
-        prev_i, prev_j, prev_mod, move = pred[current_i][current_j][current_mod]
-        path.append(move)
-        current_i, current_j, current_mod = prev_i, prev_j, prev_mod
+    while (current_i, current_j, current_mod) != (0, 0, 0) or (current_i == 0 and current_j == 0 and current_mod == 0):
+        prev = pred[current_i][current_j][current_mod]
+        if prev:
+            prev_i, prev_j, prev_mod, move = prev
+            if move:  # Add move if it exists
+                path.append(move)
+            current_i, current_j, current_mod = prev_i, prev_j, prev_mod
+        else:
+            break  # Should not happen
     path.reverse()
-    path_str = ''.join(path)
-    
-    return (max_sum, path_str)
+    path_string = ''.join(path)
+    return (int(max_sum_val), path_string)
