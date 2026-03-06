@@ -1,19 +1,130 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-03-05T22:24:12.361354+00:00
+Evaluated: 2026-03-06T01:03:40.690618+00:00
 
 === TIMING ===
-Response time: 67.52s
+Response time: 43.75s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: direct
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 500: {"code":"Internal error","error":"Auth context expired."}
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    dp = [[[float('-inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    
+    def get_pos(direction, i, j):
+        if direction == 'R':
+            return i, j + 1
+        if direction == 'D':
+            return i + 1, j
+        if direction == 'X':
+            return i + 1, j + 1
+    
+    for i in range(N):
+        for j in range(N):
+            for mod in range(3):
+                if dp[i][j][mod] == float('-inf'):
+                    continue
+                for direction in ['R', 'D', 'X']:
+                    ni, nj = get_pos(direction, i, j)
+                    if ni >= N or nj >= N:
+                        continue
+                    allowed = False
+                    if mod == 2:
+                        if direction == 'X':
+                            allowed = True
+                        elif not (i + 1 < N and j + 1 < N):
+                            allowed = True
+                    else:
+                        allowed = True
+                    if not allowed:
+                        continue
+                    new_mod = (mod + 1) % 3
+                    new_sum = dp[i][j][mod] + grid[ni][nj]
+                    if new_sum > dp[ni][nj][new_mod]:
+                        dp[ni][nj][new_mod] = new_sum
+                        prev[ni][nj][new_mod] = (i, j, mod, direction)
+    
+    max_sum = max(dp[N - 1][N - 1])
+    best_mod = None
+    for mod in range(3):
+        if dp[N - 1][N - 1][mod] == max_sum:
+            best_mod = mod
+            break
+    path = []
+    ci, cj, cmod = N - 1, N - 1, best_mod
+    while ci != 0 or cj != 0 or cmod != 0:
+        pi, pj, pmod, dir = prev[ci][cj][cmod]
+        path.append(dir)
+        ci, cj, cmod = pi, pj, pmod
+    path.reverse()
+    return max_sum, ''.join(path)
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    dp = [[[float('-inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    
+    def get_pos(direction, i, j):
+        if direction == 'R':
+            return i, j + 1
+        if direction == 'D':
+            return i + 1, j
+        if direction == 'X':
+            return i + 1, j + 1
+    
+    for i in range(N):
+        for j in range(N):
+            for mod in range(3):
+                if dp[i][j][mod] == float('-inf'):
+                    continue
+                for direction in ['R', 'D', 'X']:
+                    ni, nj = get_pos(direction, i, j)
+                    if ni >= N or nj >= N:
+                        continue
+                    allowed = False
+                    if mod == 2:
+                        if direction == 'X':
+                            allowed = True
+                        elif not (i + 1 < N and j + 1 < N):
+                            allowed = True
+                    else:
+                        allowed = True
+                    if not allowed:
+                        continue
+                    new_mod = (mod + 1) % 3
+                    new_sum = dp[i][j][mod] + grid[ni][nj]
+                    if new_sum > dp[ni][nj][new_mod]:
+                        dp[ni][nj][new_mod] = new_sum
+                        prev[ni][nj][new_mod] = (i, j, mod, direction)
+    
+    max_sum = max(dp[N - 1][N - 1])
+    best_mod = None
+    for mod in range(3):
+        if dp[N - 1][N - 1][mod] == max_sum:
+            best_mod = mod
+            break
+    path = []
+    ci, cj, cmod = N - 1, N - 1, best_mod
+    while ci != 0 or cj != 0 or cmod != 0:
+        pi, pj, pmod, dir = prev[ci][cj][cmod]
+        path.append(dir)
+        ci, cj, cmod = pi, pj, pmod
+    path.reverse()
+    return max_sum, ''.join(path)
