@@ -1,19 +1,140 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-07T10:52:11.536984+00:00
+Evaluated: 2026-03-07T13:24:50.505099+00:00
 
 === TIMING ===
-Response time: 300s
+Response time: 123.67s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: Request timed out (5 min)
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    N = len(grid)
+    MAX_K = 2 * (N - 1)
+    INF = float('-inf')
+    dp = [[[INF for _ in range(MAX_K + 1)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(MAX_K + 1)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    for k in range(MAX_K):
+        for i in range(N):
+            for j in range(N):
+                curr_sum = dp[i][j][k]
+                if curr_sum == INF:
+                    continue
+                next_move_num = k + 1
+                is_req_diag = (next_move_num % 3 == 0)
+                poss = []
+                if is_req_diag:
+                    if i < N - 1 and j < N - 1:
+                        poss.append(('X', i + 1, j + 1))
+                    else:
+                        if j < N - 1:
+                            poss.append(('R', i, j + 1))
+                        if i < N - 1:
+                            poss.append(('D', i + 1, j))
+                else:
+                    if j < N - 1:
+                        poss.append(('R', i, j + 1))
+                    if i < N - 1:
+                        poss.append(('D', i + 1, j))
+                    if i < N - 1 and j < N - 1:
+                        poss.append(('X', i + 1, j + 1))
+                for move, ni, nj in poss:
+                    if next_move_num > MAX_K:
+                        continue
+                    new_sum = curr_sum + grid[ni][nj]
+                    if new_sum > dp[ni][nj][next_move_num]:
+                        dp[ni][nj][next_move_num] = new_sum
+                        prev[ni][nj][next_move_num] = (i, j, k, move)
+    best_sum = INF
+    best_k = -1
+    for kk in range(MAX_K + 1):
+        s = dp[N - 1][N - 1][kk]
+        if s > best_sum:
+            best_sum = s
+            best_k = kk
+    if best_sum == INF:
+        return (0, "")
+    # Reconstruct path
+    path = []
+    i, j, ck = N - 1, N - 1, best_k
+    while ck > 0:
+        pi, pj, pk, move = prev[i][j][ck]
+        path.append(move)
+        i, j, ck = pi, pj, pk
+    path.reverse()
+    path_str = ''.join(path)
+    return (int(best_sum), path_str)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    N = len(grid)
+    MAX_K = 2 * (N - 1)
+    INF = float('-inf')
+    dp = [[[INF for _ in range(MAX_K + 1)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(MAX_K + 1)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    for k in range(MAX_K):
+        for i in range(N):
+            for j in range(N):
+                curr_sum = dp[i][j][k]
+                if curr_sum == INF:
+                    continue
+                next_move_num = k + 1
+                is_req_diag = (next_move_num % 3 == 0)
+                poss = []
+                if is_req_diag:
+                    if i < N - 1 and j < N - 1:
+                        poss.append(('X', i + 1, j + 1))
+                    else:
+                        if j < N - 1:
+                            poss.append(('R', i, j + 1))
+                        if i < N - 1:
+                            poss.append(('D', i + 1, j))
+                else:
+                    if j < N - 1:
+                        poss.append(('R', i, j + 1))
+                    if i < N - 1:
+                        poss.append(('D', i + 1, j))
+                    if i < N - 1 and j < N - 1:
+                        poss.append(('X', i + 1, j + 1))
+                for move, ni, nj in poss:
+                    if next_move_num > MAX_K:
+                        continue
+                    new_sum = curr_sum + grid[ni][nj]
+                    if new_sum > dp[ni][nj][next_move_num]:
+                        dp[ni][nj][next_move_num] = new_sum
+                        prev[ni][nj][next_move_num] = (i, j, k, move)
+    best_sum = INF
+    best_k = -1
+    for kk in range(MAX_K + 1):
+        s = dp[N - 1][N - 1][kk]
+        if s > best_sum:
+            best_sum = s
+            best_k = kk
+    if best_sum == INF:
+        return (0, "")
+    # Reconstruct path
+    path = []
+    i, j, ck = N - 1, N - 1, best_k
+    while ck > 0:
+        pi, pj, pk, move = prev[i][j][ck]
+        path.append(move)
+        i, j, ck = pi, pj, pk
+    path.reverse()
+    path_str = ''.join(path)
+    return (int(best_sum), path_str)
