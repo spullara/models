@@ -1,16 +1,16 @@
 Model: grok-imagine-video
 Provider: grok
-Evaluated: 2026-03-07T01:05:11.941739+00:00
+Evaluated: 2026-03-07T03:34:05.655758+00:00
 
 === TIMING ===
-Response time: 300s
+Response time: 0.21s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: Request timed out (5 min)
+API Error: HTTP 400: {"code":"Client specified an invalid argument","error":"Model not found: grok-imagine-video"}
 
 === RAW RESPONSE ===
 (no response)
