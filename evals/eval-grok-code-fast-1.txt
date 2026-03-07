@@ -1,12 +1,12 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-03-07T13:28:13.806563+00:00
+Evaluated: 2026-03-07T18:28:13.176217+00:00
 
 === TIMING ===
-Response time: 18.26s
+Response time: 18.46s
 
 === CODE EXTRACTION ===
-Method: direct
+Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
@@ -16,79 +16,101 @@ Sum matches: YES
 Path valid: YES
 
 === RAW RESPONSE ===
+```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    from functools import lru_cache
-
-    @lru_cache(maxsize=None)
-    def dp(i: int, j: int, mod: int) -> tuple[int, str]:
+    memo = {}
+    
+    def dp(i, j, mod):
+        if (i, j, mod) in memo:
+            return memo[(i, j, mod)]
         if i == N - 1 and j == N - 1:
             return grid[i][j], ""
-        required_diagonal = (mod == 2)
-        options = []
-        if required_diagonal:
-            if i + 1 < N and j + 1 < N:
-                s, p = dp(i + 1, j + 1, (mod + 1) % 3)
-                options.append((s, "X" + p))
+        
+        possible = []
+        can_x = i + 1 < N and j + 1 < N
+        can_r = j + 1 < N
+        can_d = i + 1 < N
+        
+        next_mod = (mod + 1) % 3
+        
+        if mod == 2:
+            if can_x:
+                next_sum, next_path = dp(i + 1, j + 1, next_mod)
+                possible.append((grid[i][j] + next_sum, "X" + next_path))
             else:
-                if j + 1 < N:
-                    s, p = dp(i, j + 1, (mod + 1) % 3)
-                    options.append((s, "R" + p))
-                if i + 1 < N:
-                    s, p = dp(i + 1, j, (mod + 1) % 3)
-                    options.append((s, "D" + p))
+                if can_r:
+                    next_sum, next_path = dp(i, j + 1, next_mod)
+                    possible.append((grid[i][j] + next_sum, "R" + next_path))
+                if can_d:
+                    next_sum, next_path = dp(i + 1, j, next_mod)
+                    possible.append((grid[i][j] + next_sum, "D" + next_path))
         else:
-            if j + 1 < N:
-                s, p = dp(i, j + 1, (mod + 1) % 3)
-                options.append((s, "R" + p))
-            if i + 1 < N:
-                s, p = dp(i + 1, j, (mod + 1) % 3)
-                options.append((s, "D" + p))
-            if i + 1 < N and j + 1 < N:
-                s, p = dp(i + 1, j + 1, (mod + 1) % 3)
-                options.append((s, "X" + p))
-        if not options:
-            return float('-inf'), ""  # Should not happen
-        best = max(options, key=lambda x: x[0])
-        return grid[i][j] + best[0], best[1]
-
+            if can_x:
+                next_sum, next_path = dp(i + 1, j + 1, next_mod)
+                possible.append((grid[i][j] + next_sum, "X" + next_path))
+            if can_r:
+                next_sum, next_path = dp(i, j + 1, next_mod)
+                possible.append((grid[i][j] + next_sum, "R" + next_path))
+            if can_d:
+                next_sum, next_path = dp(i + 1, j, next_mod)
+                possible.append((grid[i][j] + next_sum, "D" + next_path))
+        
+        if not possible:
+            return float('-inf'), ""
+        
+        max_sum, max_path = max(possible, key=lambda x: x[0])
+        memo[(i, j, mod)] = (max_sum, max_path)
+        return max_sum, max_path
+    
     return dp(0, 0, 0)
+```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    from functools import lru_cache
-
-    @lru_cache(maxsize=None)
-    def dp(i: int, j: int, mod: int) -> tuple[int, str]:
+    memo = {}
+    
+    def dp(i, j, mod):
+        if (i, j, mod) in memo:
+            return memo[(i, j, mod)]
         if i == N - 1 and j == N - 1:
             return grid[i][j], ""
-        required_diagonal = (mod == 2)
-        options = []
-        if required_diagonal:
-            if i + 1 < N and j + 1 < N:
-                s, p = dp(i + 1, j + 1, (mod + 1) % 3)
-                options.append((s, "X" + p))
+        
+        possible = []
+        can_x = i + 1 < N and j + 1 < N
+        can_r = j + 1 < N
+        can_d = i + 1 < N
+        
+        next_mod = (mod + 1) % 3
+        
+        if mod == 2:
+            if can_x:
+                next_sum, next_path = dp(i + 1, j + 1, next_mod)
+                possible.append((grid[i][j] + next_sum, "X" + next_path))
             else:
-                if j + 1 < N:
-                    s, p = dp(i, j + 1, (mod + 1) % 3)
-                    options.append((s, "R" + p))
-                if i + 1 < N:
-                    s, p = dp(i + 1, j, (mod + 1) % 3)
-                    options.append((s, "D" + p))
+                if can_r:
+                    next_sum, next_path = dp(i, j + 1, next_mod)
+                    possible.append((grid[i][j] + next_sum, "R" + next_path))
+                if can_d:
+                    next_sum, next_path = dp(i + 1, j, next_mod)
+                    possible.append((grid[i][j] + next_sum, "D" + next_path))
         else:
-            if j + 1 < N:
-                s, p = dp(i, j + 1, (mod + 1) % 3)
-                options.append((s, "R" + p))
-            if i + 1 < N:
-                s, p = dp(i + 1, j, (mod + 1) % 3)
-                options.append((s, "D" + p))
-            if i + 1 < N and j + 1 < N:
-                s, p = dp(i + 1, j + 1, (mod + 1) % 3)
-                options.append((s, "X" + p))
-        if not options:
-            return float('-inf'), ""  # Should not happen
-        best = max(options, key=lambda x: x[0])
-        return grid[i][j] + best[0], best[1]
-
+            if can_x:
+                next_sum, next_path = dp(i + 1, j + 1, next_mod)
+                possible.append((grid[i][j] + next_sum, "X" + next_path))
+            if can_r:
+                next_sum, next_path = dp(i, j + 1, next_mod)
+                possible.append((grid[i][j] + next_sum, "R" + next_path))
+            if can_d:
+                next_sum, next_path = dp(i + 1, j, next_mod)
+                possible.append((grid[i][j] + next_sum, "D" + next_path))
+        
+        if not possible:
+            return float('-inf'), ""
+        
+        max_sum, max_path = max(possible, key=lambda x: x[0])
+        memo[(i, j, mod)] = (max_sum, max_path)
+        return max_sum, max_path
+    
     return dp(0, 0, 0)
