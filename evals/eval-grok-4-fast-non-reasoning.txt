@@ -1,196 +1,137 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-07T07:03:28.408823+00:00
+Evaluated: 2026-03-07T09:09:03.330244+00:00
 
 === TIMING ===
-Response time: 5.38s
+Response time: 6.34s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: extraction_failed
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Returned sum: None
+Calculated sum: None
+Sum matches: NO
+Path valid: NO
 
 === RAW RESPONSE ===
 ```python
-from typing import Tuple
-import sys
-
-def solve_grid(grid: list[list[int]]) -> Tuple[int, str]:
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
-    
     n = len(grid)
     INF = float('-inf')
-    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], "")
+    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = grid[0][0]
     
     for i in range(n):
         for j in range(n):
-            if dp[i][j][0] == INF:
+            if i == 0 and j == 0:
                 continue
-            current_sum, path = dp[i][j]
-            
-            # Determine if next move must be diagonal
-            move_count = len(path)
-            is_diag_required = (move_count + 1) % 3 == 0
-            
-            # Possible moves: R, D, X
-            moves = []
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            
-            for move_type, ni, nj in moves:
-                if is_diag_required and move_type != 'X':
-                    continue  # Skip non-diagonal if diagonal is required
-                
-                new_sum = current_sum + grid[ni][nj]
-                new_path = path + move_type
-                
-                if new_sum > dp[ni][nj][0]:
-                    dp[ni][nj] = (new_sum, new_path)
-                elif new_sum == dp[ni][nj][0]:
-                    if len(new_path) < len(dp[ni][nj][1]):
-                        dp[ni][nj] = (new_sum, new_path)
+            for moves % 3 in range(3):
+                if i == 0 and j == 0:
+                    continue
+                if moves % 3 != 0:
+                    # Can come from R or D
+                    if i > 0:
+                        for prev_moves_mod in range(3):
+                            if dp[i-1][j][prev_moves_mod] != INF:
+                                dp[i][j][moves % 3] = max(dp[i][j][moves % 3], 
+                                                        dp[i-1][j][prev_moves_mod] + grid[i][j])
+                    if j > 0:
+                        for prev_moves_mod in range(3):
+                            if dp[i][j-1][prev_moves_mod] != INF:
+                                dp[i][j][moves % 3] = max(dp[i][j][moves % 3], 
+                                                        dp[i][j-1][prev_moves_mod] + grid[i][j])
+                else:
+                    # Must prefer diagonal if possible, else R or D
+                    candidates = []
+                    # Check diagonal first
+                    if i > 0 and j > 0:
+                        for prev_moves_mod in range(3):
+                            if dp[i-1][j-1][prev_moves_mod] != INF:
+                                candidates.append(dp[i-1][j-1][prev_moves_mod] + grid[i][j])
+                    # Then R and D
+                    if i > 0:
+                        for prev_moves_mod in range(3):
+                            if dp[i-1][j][prev_moves_mod] != INF:
+                                candidates.append(dp[i-1][j][prev_moves_mod] + grid[i][j])
+                    if j > 0:
+                        for prev_moves_mod in range(3):
+                            if dp[i][j-1][prev_moves_mod] != INF:
+                                candidates.append(dp[i][j-1][prev_moves_mod] + grid[i][j])
+                    if candidates:
+                        dp[i][j][0] = max(candidates)
     
-    # If diagonal was required but not possible, we need to allow R/D moves
-    # This requires a second pass to handle cases where diagonal wasn't possible
-    for i in range(n):
-        for j in range(n):
-            if dp[i][j][0] == INF:
-                continue
-            current_sum, path = dp[i][j]
-            
-            move_count = len(path)
-            if (move_count + 1) % 3 == 0:
-                # Check if diagonal was possible but we didn't take it
-                if i + 1 < n and j + 1 < n and grid[i + 1][j + 1] is not None:
-                    # Diagonal was possible, but we might need to reconsider R/D
-                    # This is complex - for simplicity, we'll handle in the moves above
-                    pass
-            
-            moves = []
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            
-            for move_type, ni, nj in moves:
-                new_sum = current_sum + grid[ni][nj]
-                new_path = path + move_type
-                
-                # If diagonal was required but we take R/D because X wasn't possible
-                if (move_count + 1) % 3 == 0 and move_type != 'X':
-                    if i + 1 < n and j + 1 < n:
-                        continue  # Skip if diagonal was actually possible
-                    # Otherwise allow R or D
-                
-                if new_sum > dp[ni][nj][0]:
-                    dp[ni][nj] = (new_sum, new_path)
-                elif new_sum == dp[ni][nj][0] and len(new_path) < len(dp[ni][nj][1]):
-                    dp[ni][nj] = (new_sum, new_path)
-    
-    if dp[n-1][n-1][0] == INF:
+    # Backtrack to find path
+    if dp[n-1][n-1][0] == INF and dp[n-1][n-1][1] == INF and dp[n-1][n-1][2] == INF:
         return 0, ""
     
-    return dp[n-1][n-1]
+    max_sum = max(dp[n-1][n-1][0], dp[n-1][n-1][1], dp[n-1][n-1][2])
+    best_mod = max(range(3), key=lambda k: dp[n-1][n-1][k])
+    
+    path = []
+    i, j = n-1, n-1
+    moves = 2*n - 2  # Total moves needed
+    current_mod = best_mod
+    
+    while i > 0 or j > 0:
+        if current_mod == 0:  # Diagonal move required
+            # Prefer diagonal
+            if i > 0 and j > 0 and dp[i-1][j-1][(current_mod - 1) % 3] != INF:
+                if dp[i-1][j-1][(current_mod - 1) % 3] + grid[i][j] == dp[i][j][current_mod]:
+                    path.append('X')
+                    i -= 1
+                    j -= 1
+                    current_mod = (current_mod - 1) % 3
+                    moves -= 1
+                    continue
+            # Fall back to R or D
+            if i > 0 and dp[i-1][j][(current_mod - 1) % 3] != INF:
+                if dp[i-1][j][(current_mod - 1) % 3] + grid[i][j] == dp[i][j][current_mod]:
+                    path.append('D')
+                    i -= 1
+                    current_mod = (current_mod - 1) % 3
+                    moves -= 1
+                    continue
+            if j > 0 and dp[i][j-1][(current_mod - 1) % 3] != INF:
+                if dp[i][j-1][(current_mod - 1) % 3] + grid[i][j] == dp[i][j][current_mod]:
+                    path.append('R')
+                    j -= 1
+                    current_mod = (current_mod - 1) % 3
+                    moves -= 1
+                    continue
+        else:
+            # Regular move: R or D
+            if i > 0 and dp[i-1][j][(current_mod - 1) % 3] != INF:
+                if dp[i-1][j][(current_mod - 1) % 3] + grid[i][j] == dp[i][j][current_mod]:
+                    path.append('D')
+                    i -= 1
+                    current_mod = (current_mod - 1) % 3
+                    moves -= 1
+                    continue
+            if j > 0 and dp[i][j-1][(current_mod - 1) % 3] != INF:
+                if dp[i][j-1][(current_mod - 1) % 3] + grid[i][j] == dp[i][j][current_mod]:
+                    path.append('R')
+                    j -= 1
+                    current_mod = (current_mod - 1) % 3
+                    moves -= 1
+                    continue
+        
+        # If diagonal required but not taken, try diagonal anyway
+        if current_mod == 0 and i > 0 and j > 0 and dp[i-1][j-1][(current_mod - 1) % 3] != INF:
+            if dp[i-1][j-1][(current_mod - 1) % 3] + grid[i][j] == dp[i][j][current_mod]:
+                path.append('X')
+                i -= 1
+                j -= 1
+                current_mod = (current_mod - 1) % 3
+                moves -= 1
+                continue
+    
+    path.reverse()
+    return max_sum, ''.join(path)
 ```
 
 === EXTRACTED CODE ===
-from typing import Tuple
-import sys
-
-def solve_grid(grid: list[list[int]]) -> Tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    
-    n = len(grid)
-    INF = float('-inf')
-    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], "")
-    
-    for i in range(n):
-        for j in range(n):
-            if dp[i][j][0] == INF:
-                continue
-            current_sum, path = dp[i][j]
-            
-            # Determine if next move must be diagonal
-            move_count = len(path)
-            is_diag_required = (move_count + 1) % 3 == 0
-            
-            # Possible moves: R, D, X
-            moves = []
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            
-            for move_type, ni, nj in moves:
-                if is_diag_required and move_type != 'X':
-                    continue  # Skip non-diagonal if diagonal is required
-                
-                new_sum = current_sum + grid[ni][nj]
-                new_path = path + move_type
-                
-                if new_sum > dp[ni][nj][0]:
-                    dp[ni][nj] = (new_sum, new_path)
-                elif new_sum == dp[ni][nj][0]:
-                    if len(new_path) < len(dp[ni][nj][1]):
-                        dp[ni][nj] = (new_sum, new_path)
-    
-    # If diagonal was required but not possible, we need to allow R/D moves
-    # This requires a second pass to handle cases where diagonal wasn't possible
-    for i in range(n):
-        for j in range(n):
-            if dp[i][j][0] == INF:
-                continue
-            current_sum, path = dp[i][j]
-            
-            move_count = len(path)
-            if (move_count + 1) % 3 == 0:
-                # Check if diagonal was possible but we didn't take it
-                if i + 1 < n and j + 1 < n and grid[i + 1][j + 1] is not None:
-                    # Diagonal was possible, but we might need to reconsider R/D
-                    # This is complex - for simplicity, we'll handle in the moves above
-                    pass
-            
-            moves = []
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            
-            for move_type, ni, nj in moves:
-                new_sum = current_sum + grid[ni][nj]
-                new_path = path + move_type
-                
-                # If diagonal was required but we take R/D because X wasn't possible
-                if (move_count + 1) % 3 == 0 and move_type != 'X':
-                    if i + 1 < n and j + 1 < n:
-                        continue  # Skip if diagonal was actually possible
-                    # Otherwise allow R or D
-                
-                if new_sum > dp[ni][nj][0]:
-                    dp[ni][nj] = (new_sum, new_path)
-                elif new_sum == dp[ni][nj][0] and len(new_path) < len(dp[ni][nj][1]):
-                    dp[ni][nj] = (new_sum, new_path)
-    
-    if dp[n-1][n-1][0] == INF:
-        return 0, ""
-    
-    return dp[n-1][n-1]
+(no code extracted)
