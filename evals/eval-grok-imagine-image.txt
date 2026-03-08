@@ -1,9 +1,9 @@
 Model: grok-imagine-image
 Provider: grok
-Evaluated: 2026-03-08T21:29:05.325243+00:00
+Evaluated: 2026-03-08T21:39:07.446576+00:00
 
 === TIMING ===
-Response time: 0.17s
+Response time: 2.1s
 
 === CODE EXTRACTION ===
 Method: None
