@@ -1,121 +1,80 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-08T04:12:35.103011+00:00
+Evaluated: 2026-03-08T07:38:13.115457+00:00
 
 === TIMING ===
-Response time: 2.83s
+Response time: 3.32s
 
 === CODE EXTRACTION ===
-Method: markdown_python
+Method: function_extract
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 73
-Calculated sum: 15
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+Execution Error: integer division or modulo by zero
 
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
-    
-    n = len(grid)
+    N = len(grid)
     INF = float('-inf')
+    # dp[i][j][k % 3] = max sum to reach i,j with k moves, k % 3 == state
+    dp = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
     
-    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k % 3 moves made
-    dp = [[[(INF, "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    # Directions
+    directions = {
+        'R': (0, 1),
+        'D': (1, 0),
+        'X': (1, 1)
+    }
     
-    # Initialize starting position
-    dp[0][0][0] = (grid[0][0], "")
+    # Reconstruct path
+    parent = [[[(None, None) for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    # Directions: (di, dj, move_char)
-    directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
-    
-    for i in range(n):
-        for j in range(n):
-            for k_mod in range(3):
-                if dp[i][j][k_mod][0] == INF:
+    for i in range(N):
+        for j in range(N):
+            for state in range(3):
+                if dp[i][j][state] == INF:
                     continue
-                current_sum, current_path = dp[i][j][k_mod]
-                moves_made = k_mod  # since k % 3 == k_mod
-                
-                is_diag_required = (moves_made % 3 == 0) and (moves_made > 0)
-                
-                for di, dj, move_char in directions:
-                    ni, nj = i + di, j + dj
-                    if 0 <= ni < n and 0 <= nj < n:
-                        # Check if diagonal is required
-                        if is_diag_required and move_char != 'X':
-                            continue
-                        new_sum = current_sum + grid[ni][nj]
-                        new_path = current_path + move_char
-                        new_k_mod = (moves_made + 1) % 3
-                        
-                        if new_sum > dp[ni][nj][new_k_mod][0]:
-                            dp[ni][nj][new_k_mod] = (new_sum, new_path)
-    
-    # Find maximum sum to bottom-right
-    max_sum = INF
-    best_path = ""
-    target_pos = (n-1, n-1)
-    for k_mod in range(3):
-        if dp[target_pos[0]][target_pos[1]][k_mod][0] > max_sum:
-            max_sum = dp[target_pos[0]][target_pos[1]][k_mod][0]
-            best_path = dp[target_pos[0]][target_pos[1]][k_mod][1]
-    
-    return (int(max_sum), best_path)
-```
+                moves_made = 3 * (state // 0) + state  # Actually, we use state as moves % 3
+                is_diag_required = (state % 3 == 0) and (i + j > 0)  # After 3,6,... moves, but since state=0 after 3 moves
+                # Wait, let's correct: state = total_moves % 3
+                # Every 3rd move means when total_moves % 3 == 0, but since we check before making the move,
+                # actually when current total_moves % 3 == 2, next move is the 3rd,6th,etc.
+                # Let's redefine state as moves made so far % 3
+                # When making a move, if (moves_so_far + 1) %
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
-    
-    n = len(grid)
+    N = len(grid)
     INF = float('-inf')
+    # dp[i][j][k % 3] = max sum to reach i,j with k moves, k % 3 == state
+    dp = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
     
-    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k % 3 moves made
-    dp = [[[(INF, "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    # Directions
+    directions = {
+        'R': (0, 1),
+        'D': (1, 0),
+        'X': (1, 1)
+    }
     
-    # Initialize starting position
-    dp[0][0][0] = (grid[0][0], "")
+    # Reconstruct path
+    parent = [[[(None, None) for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    # Directions: (di, dj, move_char)
-    directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
-    
-    for i in range(n):
-        for j in range(n):
-            for k_mod in range(3):
-                if dp[i][j][k_mod][0] == INF:
+    for i in range(N):
+        for j in range(N):
+            for state in range(3):
+                if dp[i][j][state] == INF:
                     continue
-                current_sum, current_path = dp[i][j][k_mod]
-                moves_made = k_mod  # since k % 3 == k_mod
-                
-                is_diag_required = (moves_made % 3 == 0) and (moves_made > 0)
-                
-                for di, dj, move_char in directions:
-                    ni, nj = i + di, j + dj
-                    if 0 <= ni < n and 0 <= nj < n:
-                        # Check if diagonal is required
-                        if is_diag_required and move_char != 'X':
-                            continue
-                        new_sum = current_sum + grid[ni][nj]
-                        new_path = current_path + move_char
-                        new_k_mod = (moves_made + 1) % 3
-                        
-                        if new_sum > dp[ni][nj][new_k_mod][0]:
-                            dp[ni][nj][new_k_mod] = (new_sum, new_path)
-    
-    # Find maximum sum to bottom-right
-    max_sum = INF
-    best_path = ""
-    target_pos = (n-1, n-1)
-    for k_mod in range(3):
-        if dp[target_pos[0]][target_pos[1]][k_mod][0] > max_sum:
-            max_sum = dp[target_pos[0]][target_pos[1]][k_mod][0]
-            best_path = dp[target_pos[0]][target_pos[1]][k_mod][1]
-    
-    return (int(max_sum), best_path)
+                moves_made = 3 * (state // 0) + state  # Actually, we use state as moves % 3
+                is_diag_required = (state % 3 == 0) and (i + j > 0)  # After 3,6,... moves, but since state=0 after 3 moves
+                # Wait, let's correct: state = total_moves % 3
+                # Every 3rd move means when total_moves % 3 == 0, but since we check before making the move,
+                # actually when current total_moves % 3 == 2, next move is the 3rd,6th,etc.
+                # Let's redefine state as moves made so far % 3
+                # When making a move, if (moves_so_far + 1) %
