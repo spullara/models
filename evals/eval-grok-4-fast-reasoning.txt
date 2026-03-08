@@ -1,9 +1,9 @@
 Model: grok-4-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-07T18:27:43.971040+00:00
+Evaluated: 2026-03-08T04:12:37.965182+00:00
 
 === TIMING ===
-Response time: 29.17s
+Response time: 30.72s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -20,135 +20,127 @@ Path valid: YES
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
-        return 0, ""
-    INF = float('-inf')
-    dp = [[[INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+        return 0, ''
+    INF = float('inf')
+    dp = [[[-INF] * 3 for _ in range(N)] for _ in range(N)]
+    prev = [[[None] * 3 for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
-    parent = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    for i in range(N):
-        for j in range(N):
-            for m in range(3):
-                if dp[i][j][m] == INF:
+    for s in range(2 * N - 1):
+        for i in range(max(0, s - (N - 1)), min(s, N - 1) + 1):
+            j = s - i
+            if j < 0 or j >= N:
+                continue
+            for phase in range(3):
+                if dp[i][j][phase] == -INF:
                     continue
-                is_forced_X = ((m + 1) % 3 == 0)
+                curr_sum = dp[i][j][phase]
+                must_x = (phase == 2)
                 x_possible = (i + 1 < N and j + 1 < N)
-                # Try R
-                if j + 1 < N:
-                    allowed = True
-                    if is_forced_X and x_possible:
-                        allowed = False
-                    if allowed:
-                        ni, nj = i, j + 1
-                        nm = (m + 1) % 3
-                        ns = dp[i][j][m] + grid[ni][nj]
-                        if ns > dp[ni][nj][nm]:
-                            dp[ni][nj][nm] = ns
-                            parent[ni][nj][nm] = (i, j, m, 'R')
-                # Try D
-                if i + 1 < N:
-                    allowed = True
-                    if is_forced_X and x_possible:
-                        allowed = False
-                    if allowed:
-                        ni, nj = i + 1, j
-                        nm = (m + 1) % 3
-                        ns = dp[i][j][m] + grid[ni][nj]
-                        if ns > dp[ni][nj][nm]:
-                            dp[ni][nj][nm] = ns
-                            parent[ni][nj][nm] = (i, j, m, 'D')
-                # Try X
-                if i + 1 < N and j + 1 < N:
-                    ni, nj = i + 1, j + 1
-                    nm = (m + 1) % 3
-                    ns = dp[i][j][m] + grid[ni][nj]
-                    if ns > dp[ni][nj][nm]:
-                        dp[ni][nj][nm] = ns
-                        parent[ni][nj][nm] = (i, j, m, 'X')
-    # Find max at end
-    best_sum = INF
-    best_m = -1
-    for m in range(3):
-        if dp[N-1][N-1][m] > best_sum:
-            best_sum = dp[N-1][N-1][m]
-            best_m = m
-    if best_sum == INF:
-        return 0, ""
-    # Reconstruct path
+                moves = []
+                if must_x:
+                    if x_possible:
+                        moves = [('X', i + 1, j + 1)]
+                    else:
+                        if j + 1 < N:
+                            moves.append(('R', i, j + 1))
+                        if i + 1 < N:
+                            moves.append(('D', i + 1, j))
+                else:
+                    if j + 1 < N:
+                        moves.append(('R', i, j + 1))
+                    if i + 1 < N:
+                        moves.append(('D', i + 1, j))
+                    if x_possible:
+                        moves.append(('X', i + 1, j + 1))
+                for move_char, ni, nj in moves:
+                    add = grid[ni][nj]
+                    new_sum = curr_sum + add
+                    new_phase = (phase + 1) % 3
+                    if new_sum > dp[ni][nj][new_phase]:
+                        dp[ni][nj][new_phase] = new_sum
+                        prev[ni][nj][new_phase] = (i, j, phase, move_char)
+    max_sum = -INF
+    best_phase = -1
+    for phase in range(3):
+        if dp[N - 1][N - 1][phase] > max_sum:
+            max_sum = dp[N - 1][N - 1][phase]
+            best_phase = phase
+    if max_sum == -INF:
+        return 0, ''
     path = []
-    ci, cj, cm = N-1, N-1, best_m
+    ci, cj, cp = N - 1, N - 1, best_phase
     while ci > 0 or cj > 0:
-        pi, pj, pm, move = parent[ci][cj][cm]
+        pre = prev[ci][cj][cp]
+        if pre is None:
+            break
+        pi, pj, pp, move = pre
         path.append(move)
-        ci, cj, cm = pi, pj, pm
+        ci, cj, cp = pi, pj, pp
     path.reverse()
     path_str = ''.join(path)
-    return int(best_sum), path_str
+    return int(max_sum), path_str
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
-        return 0, ""
-    INF = float('-inf')
-    dp = [[[INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+        return 0, ''
+    INF = float('inf')
+    dp = [[[-INF] * 3 for _ in range(N)] for _ in range(N)]
+    prev = [[[None] * 3 for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
-    parent = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    for i in range(N):
-        for j in range(N):
-            for m in range(3):
-                if dp[i][j][m] == INF:
+    for s in range(2 * N - 1):
+        for i in range(max(0, s - (N - 1)), min(s, N - 1) + 1):
+            j = s - i
+            if j < 0 or j >= N:
+                continue
+            for phase in range(3):
+                if dp[i][j][phase] == -INF:
                     continue
-                is_forced_X = ((m + 1) % 3 == 0)
+                curr_sum = dp[i][j][phase]
+                must_x = (phase == 2)
                 x_possible = (i + 1 < N and j + 1 < N)
-                # Try R
-                if j + 1 < N:
-                    allowed = True
-                    if is_forced_X and x_possible:
-                        allowed = False
-                    if allowed:
-                        ni, nj = i, j + 1
-                        nm = (m + 1) % 3
-                        ns = dp[i][j][m] + grid[ni][nj]
-                        if ns > dp[ni][nj][nm]:
-                            dp[ni][nj][nm] = ns
-                            parent[ni][nj][nm] = (i, j, m, 'R')
-                # Try D
-                if i + 1 < N:
-                    allowed = True
-                    if is_forced_X and x_possible:
-                        allowed = False
-                    if allowed:
-                        ni, nj = i + 1, j
-                        nm = (m + 1) % 3
-                        ns = dp[i][j][m] + grid[ni][nj]
-                        if ns > dp[ni][nj][nm]:
-                            dp[ni][nj][nm] = ns
-                            parent[ni][nj][nm] = (i, j, m, 'D')
-                # Try X
-                if i + 1 < N and j + 1 < N:
-                    ni, nj = i + 1, j + 1
-                    nm = (m + 1) % 3
-                    ns = dp[i][j][m] + grid[ni][nj]
-                    if ns > dp[ni][nj][nm]:
-                        dp[ni][nj][nm] = ns
-                        parent[ni][nj][nm] = (i, j, m, 'X')
-    # Find max at end
-    best_sum = INF
-    best_m = -1
-    for m in range(3):
-        if dp[N-1][N-1][m] > best_sum:
-            best_sum = dp[N-1][N-1][m]
-            best_m = m
-    if best_sum == INF:
-        return 0, ""
-    # Reconstruct path
+                moves = []
+                if must_x:
+                    if x_possible:
+                        moves = [('X', i + 1, j + 1)]
+                    else:
+                        if j + 1 < N:
+                            moves.append(('R', i, j + 1))
+                        if i + 1 < N:
+                            moves.append(('D', i + 1, j))
+                else:
+                    if j + 1 < N:
+                        moves.append(('R', i, j + 1))
+                    if i + 1 < N:
+                        moves.append(('D', i + 1, j))
+                    if x_possible:
+                        moves.append(('X', i + 1, j + 1))
+                for move_char, ni, nj in moves:
+                    add = grid[ni][nj]
+                    new_sum = curr_sum + add
+                    new_phase = (phase + 1) % 3
+                    if new_sum > dp[ni][nj][new_phase]:
+                        dp[ni][nj][new_phase] = new_sum
+                        prev[ni][nj][new_phase] = (i, j, phase, move_char)
+    max_sum = -INF
+    best_phase = -1
+    for phase in range(3):
+        if dp[N - 1][N - 1][phase] > max_sum:
+            max_sum = dp[N - 1][N - 1][phase]
+            best_phase = phase
+    if max_sum == -INF:
+        return 0, ''
     path = []
-    ci, cj, cm = N-1, N-1, best_m
+    ci, cj, cp = N - 1, N - 1, best_phase
     while ci > 0 or cj > 0:
-        pi, pj, pm, move = parent[ci][cj][cm]
+        pre = prev[ci][cj][cp]
+        if pre is None:
+            break
+        pi, pj, pp, move = pre
         path.append(move)
-        ci, cj, cm = pi, pj, pm
+        ci, cj, cp = pi, pj, pp
     path.reverse()
     path_str = ''.join(path)
-    return int(best_sum), path_str
+    return int(max_sum), path_str

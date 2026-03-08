@@ -1,9 +1,9 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-03-07T18:28:13.176217+00:00
+Evaluated: 2026-03-08T04:13:08.714610+00:00
 
 === TIMING ===
-Response time: 18.46s
+Response time: 34.94s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,99 +18,117 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
     N = len(grid)
-    memo = {}
+    max_moves = 2 * N - 2
+    dp = [[[float('-inf')] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
+    prev = [[[None] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
     
-    def dp(i, j, mod):
-        if (i, j, mod) in memo:
-            return memo[(i, j, mod)]
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        
-        possible = []
-        can_x = i + 1 < N and j + 1 < N
-        can_r = j + 1 < N
-        can_d = i + 1 < N
-        
-        next_mod = (mod + 1) % 3
-        
-        if mod == 2:
-            if can_x:
-                next_sum, next_path = dp(i + 1, j + 1, next_mod)
-                possible.append((grid[i][j] + next_sum, "X" + next_path))
-            else:
-                if can_r:
-                    next_sum, next_path = dp(i, j + 1, next_mod)
-                    possible.append((grid[i][j] + next_sum, "R" + next_path))
-                if can_d:
-                    next_sum, next_path = dp(i + 1, j, next_mod)
-                    possible.append((grid[i][j] + next_sum, "D" + next_path))
-        else:
-            if can_x:
-                next_sum, next_path = dp(i + 1, j + 1, next_mod)
-                possible.append((grid[i][j] + next_sum, "X" + next_path))
-            if can_r:
-                next_sum, next_path = dp(i, j + 1, next_mod)
-                possible.append((grid[i][j] + next_sum, "R" + next_path))
-            if can_d:
-                next_sum, next_path = dp(i + 1, j, next_mod)
-                possible.append((grid[i][j] + next_sum, "D" + next_path))
-        
-        if not possible:
-            return float('-inf'), ""
-        
-        max_sum, max_path = max(possible, key=lambda x: x[0])
-        memo[(i, j, mod)] = (max_sum, max_path)
-        return max_sum, max_path
+    for m in range(1, max_moves + 1):
+        for i in range(N):
+            for j in range(N):
+                if dp[i][j][m-1] == float('-inf'):
+                    continue
+                # to right
+                if j + 1 < N:
+                    if m % 3 != 0:
+                        new_sum = dp[i][j][m-1] + grid[i][j+1]
+                        if new_sum > dp[i][j+1][m]:
+                            dp[i][j+1][m] = new_sum
+                            prev[i][j+1][m] = (i, j, m-1, 'R')
+                # to down
+                if i + 1 < N:
+                    if m % 3 != 0:
+                        new_sum = dp[i][j][m-1] + grid[i+1][j]
+                        if new_sum > dp[i+1][j][m]:
+                            dp[i+1][j][m] = new_sum
+                            prev[i+1][j][m] = (i, j, m-1, 'D')
+                # to diagonal
+                if i + 1 < N and j + 1 < N:
+                    new_sum = dp[i][j][m-1] + grid[i+1][j+1]
+                    if new_sum > dp[i+1][j+1][m]:
+                        dp[i+1][j+1][m] = new_sum
+                        prev[i+1][j+1][m] = (i, j, m-1, 'X')
     
-    return dp(0, 0, 0)
+    # Find the maximum sum at the bottom-right
+    max_sum = float('-inf')
+    best_m = -1
+    for m in range(max_moves + 1):
+        if dp[N-1][N-1][m] > max_sum:
+            max_sum = dp[N-1][N-1][m]
+            best_m = m
+    
+    if best_m == -1:
+        return 0, ""  # Though unlikely for valid grid
+    
+    # Reconstruct the path
+    path = []
+    i, j, current_m = N-1, N-1, best_m
+    while current_m > 0:
+        from_i, from_j, prev_m, move = prev[i][j][current_m]
+        path.append(move)
+        i, j, current_m = from_i, from_j, prev_m
+    path.reverse()
+    path_string = ''.join(path)
+    return max_sum, path_string
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
     N = len(grid)
-    memo = {}
+    max_moves = 2 * N - 2
+    dp = [[[float('-inf')] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
+    prev = [[[None] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
     
-    def dp(i, j, mod):
-        if (i, j, mod) in memo:
-            return memo[(i, j, mod)]
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        
-        possible = []
-        can_x = i + 1 < N and j + 1 < N
-        can_r = j + 1 < N
-        can_d = i + 1 < N
-        
-        next_mod = (mod + 1) % 3
-        
-        if mod == 2:
-            if can_x:
-                next_sum, next_path = dp(i + 1, j + 1, next_mod)
-                possible.append((grid[i][j] + next_sum, "X" + next_path))
-            else:
-                if can_r:
-                    next_sum, next_path = dp(i, j + 1, next_mod)
-                    possible.append((grid[i][j] + next_sum, "R" + next_path))
-                if can_d:
-                    next_sum, next_path = dp(i + 1, j, next_mod)
-                    possible.append((grid[i][j] + next_sum, "D" + next_path))
-        else:
-            if can_x:
-                next_sum, next_path = dp(i + 1, j + 1, next_mod)
-                possible.append((grid[i][j] + next_sum, "X" + next_path))
-            if can_r:
-                next_sum, next_path = dp(i, j + 1, next_mod)
-                possible.append((grid[i][j] + next_sum, "R" + next_path))
-            if can_d:
-                next_sum, next_path = dp(i + 1, j, next_mod)
-                possible.append((grid[i][j] + next_sum, "D" + next_path))
-        
-        if not possible:
-            return float('-inf'), ""
-        
-        max_sum, max_path = max(possible, key=lambda x: x[0])
-        memo[(i, j, mod)] = (max_sum, max_path)
-        return max_sum, max_path
+    for m in range(1, max_moves + 1):
+        for i in range(N):
+            for j in range(N):
+                if dp[i][j][m-1] == float('-inf'):
+                    continue
+                # to right
+                if j + 1 < N:
+                    if m % 3 != 0:
+                        new_sum = dp[i][j][m-1] + grid[i][j+1]
+                        if new_sum > dp[i][j+1][m]:
+                            dp[i][j+1][m] = new_sum
+                            prev[i][j+1][m] = (i, j, m-1, 'R')
+                # to down
+                if i + 1 < N:
+                    if m % 3 != 0:
+                        new_sum = dp[i][j][m-1] + grid[i+1][j]
+                        if new_sum > dp[i+1][j][m]:
+                            dp[i+1][j][m] = new_sum
+                            prev[i+1][j][m] = (i, j, m-1, 'D')
+                # to diagonal
+                if i + 1 < N and j + 1 < N:
+                    new_sum = dp[i][j][m-1] + grid[i+1][j+1]
+                    if new_sum > dp[i+1][j+1][m]:
+                        dp[i+1][j+1][m] = new_sum
+                        prev[i+1][j+1][m] = (i, j, m-1, 'X')
     
-    return dp(0, 0, 0)
+    # Find the maximum sum at the bottom-right
+    max_sum = float('-inf')
+    best_m = -1
+    for m in range(max_moves + 1):
+        if dp[N-1][N-1][m] > max_sum:
+            max_sum = dp[N-1][N-1][m]
+            best_m = m
+    
+    if best_m == -1:
+        return 0, ""  # Though unlikely for valid grid
+    
+    # Reconstruct the path
+    path = []
+    i, j, current_m = N-1, N-1, best_m
+    while current_m > 0:
+        from_i, from_j, prev_m, move = prev[i][j][current_m]
+        path.append(move)
+        i, j, current_m = from_i, from_j, prev_m
+    path.reverse()
+    path_string = ''.join(path)
+    return max_sum, path_string
