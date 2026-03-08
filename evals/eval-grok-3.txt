@@ -1,19 +1,20 @@
 Model: grok-3
 Provider: grok
-Evaluated: 2026-03-08T20:42:07.204847+00:00
+Evaluated: 2026-03-08T20:57:06.725918+00:00
 
 === TIMING ===
-Response time: 14.59s
+Response time: 6.74s
 
 === CODE EXTRACTION ===
 Method: direct
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Returned sum: 0
+Calculated sum: 1
+Sum matches: NO
+Path valid: NO
+Path error: Path ended at (0, 0) instead of (3, 3)
 
 === RAW RESPONSE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
@@ -22,72 +23,61 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         return (0, "")
     
     # dp[i][j][k] stores (max_sum, path) to reach (i,j) with k moves made
-    dp = {}
+    dp = [[[[-float('inf'), ""] for _ in range(2*n)] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
     
-    def solve(i: int, j: int, moves: int) -> tuple[int, str]:
-        if i >= n or j >= n:
-            return (-float('inf'), "")
-        if i == n-1 and j == n-1:
-            return (grid[i][j], "")
-        
-        state = (i, j, moves)
-        if state in dp:
-            return dp[state]
-        
-        max_sum = -float('inf')
-        best_path = ""
-        must_diagonal = (moves + 1) % 3 == 0
-        
-        # Try diagonal if must or possible
-        if must_diagonal or (i + 1 < n and j + 1 < n):
-            diag_sum, diag_path = solve(i + 1, j + 1, moves + 1)
-            if diag_sum != -float('inf'):
-                total = grid[i][j] + diag_sum
-                if total > max_sum:
-                    max_sum = total
-                    best_path = "X" + diag_path
-        
-        if not must_diagonal:
-            # Try right
-            if j + 1 < n:
-                right_sum, right_path = solve(i, j + 1, moves + 1)
-                if right_sum != -float('inf'):
-                    total = grid[i][j] + right_sum
-                    if total > max_sum:
-                        max_sum = total
-                        best_path = "R" + right_path
-                        
-            # Try down
-            if i + 1 < n:
-                down_sum, down_path = solve(i + 1, j, moves + 1)
-                if down_sum != -float('inf'):
-                    total = grid[i][j] + down_sum
-                    if total > max_sum:
-                        max_sum = total
-                        best_path = "D" + down_path
-        elif must_diagonal and max_sum == -float('inf'):
-            # If diagonal not possible, try R or D
-            if j + 1 < n:
-                right_sum, right_path = solve(i, j + 1, moves + 1)
-                if right_sum != -float('inf'):
-                    total = grid[i][j] + right_sum
-                    if total > max_sum:
-                        max_sum = total
-                        best_path = "R" + right_path
-                        
-            if i + 1 < n:
-                down_sum, down_path = solve(i + 1, j, moves + 1)
-                if down_sum != -float('inf'):
-                    total = grid[i][j] + down_sum
-                    if total > max_sum:
-                        max_sum = total
-                        best_path = "D" + down_path
-                        
-        dp[state] = (max_sum, best_path)
-        return dp[state]
+    for moves in range(2*n - 1):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][moves][0] == -float('inf'):
+                    continue
+                    
+                current_sum, current_path = dp[i][j][moves]
+                next_move = moves + 1
+                is_diagonal_required = (next_move % 3 == 0)
+                
+                # Try right move
+                if j + 1 < n:
+                    new_sum = current_sum + grid[i][j + 1]
+                    new_path = current_path + "R"
+                    if dp[i][j + 1][next_move][0] < new_sum:
+                        dp[i][j + 1][next_move] = (new_sum, new_path)
+                
+                # Try down move
+                if i + 1 < n:
+                    new_sum = current_sum + grid[i + 1][j]
+                    new_path = current_path + "D"
+                    if dp[i + 1][j][next_move][0] < new_sum:
+                        dp[i + 1][j][next_move] = (new_sum, new_path)
+                
+                # Try diagonal move
+                if i + 1 < n and j + 1 < n:
+                    new_sum = current_sum + grid[i + 1][j + 1]
+                    new_path = current_path + "X"
+                    if dp[i + 1][j + 1][next_move][0] < new_sum:
+                        dp[i + 1][j + 1][next_move] = (new_sum, new_path)
     
-    max_sum, path = solve(0, 0, 0)
-    return (max_sum, path)
+    # If diagonal is required, filter paths to ensure diagonal moves at required steps
+    max_sum = -float('inf')
+    best_path = ""
+    for moves in range(2*n - 1, 2*n):
+        if dp[n-1][n-1][moves][0] > max_sum:
+            path = dp[n-1][n-1][moves][1]
+            valid = True
+            for m in range(3, len(path) + 1, 3):
+                if m - 1 < len(path) and path[m - 1] != 'X':
+                    # Check if diagonal was possible at this move
+                    pos = m - 1
+                    row = sum(1 for c in path[:pos] if c in ['D', 'X'])
+                    col = sum(1 for c in path[:pos] if c in ['R', 'X'])
+                    if row + 1 < n and col + 1 < n:
+                        valid = False
+                        break
+            if valid:
+                max_sum = dp[n-1][n-1][moves][0]
+                best_path = path
+    
+    return (max_sum, best_path) if max_sum != -float('inf') else (0, "")
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
@@ -96,69 +86,58 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         return (0, "")
     
     # dp[i][j][k] stores (max_sum, path) to reach (i,j) with k moves made
-    dp = {}
+    dp = [[[[-float('inf'), ""] for _ in range(2*n)] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
     
-    def solve(i: int, j: int, moves: int) -> tuple[int, str]:
-        if i >= n or j >= n:
-            return (-float('inf'), "")
-        if i == n-1 and j == n-1:
-            return (grid[i][j], "")
-        
-        state = (i, j, moves)
-        if state in dp:
-            return dp[state]
-        
-        max_sum = -float('inf')
-        best_path = ""
-        must_diagonal = (moves + 1) % 3 == 0
-        
-        # Try diagonal if must or possible
-        if must_diagonal or (i + 1 < n and j + 1 < n):
-            diag_sum, diag_path = solve(i + 1, j + 1, moves + 1)
-            if diag_sum != -float('inf'):
-                total = grid[i][j] + diag_sum
-                if total > max_sum:
-                    max_sum = total
-                    best_path = "X" + diag_path
-        
-        if not must_diagonal:
-            # Try right
-            if j + 1 < n:
-                right_sum, right_path = solve(i, j + 1, moves + 1)
-                if right_sum != -float('inf'):
-                    total = grid[i][j] + right_sum
-                    if total > max_sum:
-                        max_sum = total
-                        best_path = "R" + right_path
-                        
-            # Try down
-            if i + 1 < n:
-                down_sum, down_path = solve(i + 1, j, moves + 1)
-                if down_sum != -float('inf'):
-                    total = grid[i][j] + down_sum
-                    if total > max_sum:
-                        max_sum = total
-                        best_path = "D" + down_path
-        elif must_diagonal and max_sum == -float('inf'):
-            # If diagonal not possible, try R or D
-            if j + 1 < n:
-                right_sum, right_path = solve(i, j + 1, moves + 1)
-                if right_sum != -float('inf'):
-                    total = grid[i][j] + right_sum
-                    if total > max_sum:
-                        max_sum = total
-                        best_path = "R" + right_path
-                        
-            if i + 1 < n:
-                down_sum, down_path = solve(i + 1, j, moves + 1)
-                if down_sum != -float('inf'):
-                    total = grid[i][j] + down_sum
-                    if total > max_sum:
-                        max_sum = total
-                        best_path = "D" + down_path
-                        
-        dp[state] = (max_sum, best_path)
-        return dp[state]
+    for moves in range(2*n - 1):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][moves][0] == -float('inf'):
+                    continue
+                    
+                current_sum, current_path = dp[i][j][moves]
+                next_move = moves + 1
+                is_diagonal_required = (next_move % 3 == 0)
+                
+                # Try right move
+                if j + 1 < n:
+                    new_sum = current_sum + grid[i][j + 1]
+                    new_path = current_path + "R"
+                    if dp[i][j + 1][next_move][0] < new_sum:
+                        dp[i][j + 1][next_move] = (new_sum, new_path)
+                
+                # Try down move
+                if i + 1 < n:
+                    new_sum = current_sum + grid[i + 1][j]
+                    new_path = current_path + "D"
+                    if dp[i + 1][j][next_move][0] < new_sum:
+                        dp[i + 1][j][next_move] = (new_sum, new_path)
+                
+                # Try diagonal move
+                if i + 1 < n and j + 1 < n:
+                    new_sum = current_sum + grid[i + 1][j + 1]
+                    new_path = current_path + "X"
+                    if dp[i + 1][j + 1][next_move][0] < new_sum:
+                        dp[i + 1][j + 1][next_move] = (new_sum, new_path)
     
-    max_sum, path = solve(0, 0, 0)
-    return (max_sum, path)
+    # If diagonal is required, filter paths to ensure diagonal moves at required steps
+    max_sum = -float('inf')
+    best_path = ""
+    for moves in range(2*n - 1, 2*n):
+        if dp[n-1][n-1][moves][0] > max_sum:
+            path = dp[n-1][n-1][moves][1]
+            valid = True
+            for m in range(3, len(path) + 1, 3):
+                if m - 1 < len(path) and path[m - 1] != 'X':
+                    # Check if diagonal was possible at this move
+                    pos = m - 1
+                    row = sum(1 for c in path[:pos] if c in ['D', 'X'])
+                    col = sum(1 for c in path[:pos] if c in ['R', 'X'])
+                    if row + 1 < n and col + 1 < n:
+                        valid = False
+                        break
+            if valid:
+                max_sum = dp[n-1][n-1][moves][0]
+                best_path = path
+    
+    return (max_sum, best_path) if max_sum != -float('inf') else (0, "")
