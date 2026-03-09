@@ -1,9 +1,9 @@
 Model: grok-4-1-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-09T08:15:21.997458+00:00
+Evaluated: 2026-03-09T13:02:49.818731+00:00
 
 === TIMING ===
-Response time: 45.43s
+Response time: 72.47s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,109 +18,83 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
     N = len(grid)
-    dp = [[[None] * 3 for _ in range(N)] for _ in range(N)]
-    path = [[[""] * 3 for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    path[0][0][0] = ""
-    for i in range(N):
-        for j in range(N):
-            for mod in range(3):
-                if dp[i][j][mod] is None:
-                    continue
-                is_forced = (mod == 2)
-                can_X = (i + 1 < N and j + 1 < N)
-                moves = []
-                if j + 1 < N:
-                    moves.append(('R', i, j + 1))
-                if i + 1 < N:
-                    moves.append(('D', i + 1, j))
-                if can_X:
-                    moves.append(('X', i + 1, j + 1))
-                next_mod = (mod + 1) % 3
-                if is_forced:
-                    if can_X:
-                        ni, nj = i + 1, j + 1
-                        new_sum = dp[i][j][mod] + grid[ni][nj]
-                        if dp[ni][nj][next_mod] is None or new_sum > dp[ni][nj][next_mod]:
-                            dp[ni][nj][next_mod] = new_sum
-                            path[ni][nj][next_mod] = path[i][j][mod] + 'X'
-                    else:
-                        for mchar, ni, nj in moves:
-                            new_sum = dp[i][j][mod] + grid[ni][nj]
-                            if dp[ni][nj][next_mod] is None or new_sum > dp[ni][nj][next_mod]:
-                                dp[ni][nj][next_mod] = new_sum
-                                path[ni][nj][next_mod] = path[i][j][mod] + mchar
-                else:
-                    for mchar, ni, nj in moves:
-                        new_sum = dp[i][j][mod] + grid[ni][nj]
-                        if dp[ni][nj][next_mod] is None or new_sum > dp[ni][nj][next_mod]:
-                            dp[ni][nj][next_mod] = new_sum
-                            path[ni][nj][next_mod] = path[i][j][mod] + mchar
-    max_sum = None
-    best_path = ""
-    for mod in range(3):
-        if dp[N-1][N-1][mod] is not None:
-            if max_sum is None or dp[N-1][N-1][mod] > max_sum:
-                max_sum = dp[N-1][N-1][mod]
-                best_path = path[N-1][N-1][mod]
-    if max_sum is None:
+    if N == 0:
         return 0, ""
-    return max_sum, best_path
+    SENTINEL = -(10 ** 18)
+    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+
+    def dfs(i: int, j: int, phase: int) -> tuple[int, str]:
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        if memo[i][j][phase] is not None:
+            return memo[i][j][phase]
+        must_x = (phase == 2)
+        x_possible = (i + 1 < N and j + 1 < N)
+        next_moves = []
+        if must_x and x_possible:
+            next_moves = [('X', i + 1, j + 1)]
+        else:
+            if j + 1 < N:
+                next_moves.append(('R', i, j + 1))
+            if i + 1 < N:
+                next_moves.append(('D', i + 1, j))
+            if x_possible:
+                next_moves.append(('X', i + 1, j + 1))
+        candidates = []
+        for move_char, ni, nj in next_moves:
+            next_phase = (phase + 1) % 3
+            next_sum, next_path = dfs(ni, nj, next_phase)
+            if next_sum != SENTINEL:
+                candidates.append((grid[i][j] + next_sum, move_char + next_path))
+        if not candidates:
+            res = (SENTINEL, "")
+        else:
+            res = max(candidates)
+        memo[i][j][phase] = res
+        return res
+
+    total_sum, path = dfs(0, 0, 0)
+    return total_sum, path
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
     N = len(grid)
-    dp = [[[None] * 3 for _ in range(N)] for _ in range(N)]
-    path = [[[""] * 3 for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    path[0][0][0] = ""
-    for i in range(N):
-        for j in range(N):
-            for mod in range(3):
-                if dp[i][j][mod] is None:
-                    continue
-                is_forced = (mod == 2)
-                can_X = (i + 1 < N and j + 1 < N)
-                moves = []
-                if j + 1 < N:
-                    moves.append(('R', i, j + 1))
-                if i + 1 < N:
-                    moves.append(('D', i + 1, j))
-                if can_X:
-                    moves.append(('X', i + 1, j + 1))
-                next_mod = (mod + 1) % 3
-                if is_forced:
-                    if can_X:
-                        ni, nj = i + 1, j + 1
-                        new_sum = dp[i][j][mod] + grid[ni][nj]
-                        if dp[ni][nj][next_mod] is None or new_sum > dp[ni][nj][next_mod]:
-                            dp[ni][nj][next_mod] = new_sum
-                            path[ni][nj][next_mod] = path[i][j][mod] + 'X'
-                    else:
-                        for mchar, ni, nj in moves:
-                            new_sum = dp[i][j][mod] + grid[ni][nj]
-                            if dp[ni][nj][next_mod] is None or new_sum > dp[ni][nj][next_mod]:
-                                dp[ni][nj][next_mod] = new_sum
-                                path[ni][nj][next_mod] = path[i][j][mod] + mchar
-                else:
-                    for mchar, ni, nj in moves:
-                        new_sum = dp[i][j][mod] + grid[ni][nj]
-                        if dp[ni][nj][next_mod] is None or new_sum > dp[ni][nj][next_mod]:
-                            dp[ni][nj][next_mod] = new_sum
-                            path[ni][nj][next_mod] = path[i][j][mod] + mchar
-    max_sum = None
-    best_path = ""
-    for mod in range(3):
-        if dp[N-1][N-1][mod] is not None:
-            if max_sum is None or dp[N-1][N-1][mod] > max_sum:
-                max_sum = dp[N-1][N-1][mod]
-                best_path = path[N-1][N-1][mod]
-    if max_sum is None:
+    if N == 0:
         return 0, ""
-    return max_sum, best_path
+    SENTINEL = -(10 ** 18)
+    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+
+    def dfs(i: int, j: int, phase: int) -> tuple[int, str]:
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        if memo[i][j][phase] is not None:
+            return memo[i][j][phase]
+        must_x = (phase == 2)
+        x_possible = (i + 1 < N and j + 1 < N)
+        next_moves = []
+        if must_x and x_possible:
+            next_moves = [('X', i + 1, j + 1)]
+        else:
+            if j + 1 < N:
+                next_moves.append(('R', i, j + 1))
+            if i + 1 < N:
+                next_moves.append(('D', i + 1, j))
+            if x_possible:
+                next_moves.append(('X', i + 1, j + 1))
+        candidates = []
+        for move_char, ni, nj in next_moves:
+            next_phase = (phase + 1) % 3
+            next_sum, next_path = dfs(ni, nj, next_phase)
+            if next_sum != SENTINEL:
+                candidates.append((grid[i][j] + next_sum, move_char + next_path))
+        if not candidates:
+            res = (SENTINEL, "")
+        else:
+            res = max(candidates)
+        memo[i][j][phase] = res
+        return res
+
+    total_sum, path = dfs(0, 0, 0)
+    return total_sum, path
