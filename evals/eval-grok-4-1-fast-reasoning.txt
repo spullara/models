@@ -1,9 +1,9 @@
 Model: grok-4-1-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-09T13:02:49.818731+00:00
+Evaluated: 2026-03-09T14:57:36.665135+00:00
 
 === TIMING ===
-Response time: 72.47s
+Response time: 66.59s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -21,41 +21,67 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
         return 0, ""
-    SENTINEL = -(10 ** 18)
-    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-
-    def dfs(i: int, j: int, phase: int) -> tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        if memo[i][j][phase] is not None:
-            return memo[i][j][phase]
-        must_x = (phase == 2)
-        x_possible = (i + 1 < N and j + 1 < N)
-        next_moves = []
-        if must_x and x_possible:
-            next_moves = [('X', i + 1, j + 1)]
-        else:
-            if j + 1 < N:
-                next_moves.append(('R', i, j + 1))
-            if i + 1 < N:
-                next_moves.append(('D', i + 1, j))
-            if x_possible:
-                next_moves.append(('X', i + 1, j + 1))
-        candidates = []
-        for move_char, ni, nj in next_moves:
-            next_phase = (phase + 1) % 3
-            next_sum, next_path = dfs(ni, nj, next_phase)
-            if next_sum != SENTINEL:
-                candidates.append((grid[i][j] + next_sum, move_char + next_path))
-        if not candidates:
-            res = (SENTINEL, "")
-        else:
-            res = max(candidates)
-        memo[i][j][phase] = res
-        return res
-
-    total_sum, path = dfs(0, 0, 0)
-    return total_sum, path
+    NEG = -(10**18)
+    dp = [[[NEG] * 3 for _ in range(N)] for _ in range(N)]
+    pathh = [[[""] * 3 for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    pathh[0][0][0] = ""
+    for i in range(N):
+        for j in range(N):
+            for tmod in range(3):
+                if i == 0 and j == 0 and tmod == 0:
+                    continue
+                candidates = []
+                # From left (R)
+                if j > 0:
+                    pi, pj = i, j - 1
+                    move = "R"
+                    pmod = (tmod - 1) % 3
+                    prev_sum = dp[pi][pj][pmod]
+                    if prev_sum != NEG:
+                        constrained = ((pmod + 1) % 3 == 0)
+                        x_possible = (pi + 1 < N and pj + 1 < N)
+                        if not constrained or move == "X" or not x_possible:
+                            cand_sum = prev_sum + grid[i][j]
+                            cand_path = pathh[pi][pj][pmod] + move
+                            candidates.append((cand_sum, cand_path))
+                # From up (D)
+                if i > 0:
+                    pi, pj = i - 1, j
+                    move = "D"
+                    pmod = (tmod - 1) % 3
+                    prev_sum = dp[pi][pj][pmod]
+                    if prev_sum != NEG:
+                        constrained = ((pmod + 1) % 3 == 0)
+                        x_possible = (pi + 1 < N and pj + 1 < N)
+                        if not constrained or move == "X" or not x_possible:
+                            cand_sum = prev_sum + grid[i][j]
+                            cand_path = pathh[pi][pj][pmod] + move
+                            candidates.append((cand_sum, cand_path))
+                # From diagonal (X)
+                if i > 0 and j > 0:
+                    pi, pj = i - 1, j - 1
+                    move = "X"
+                    pmod = (tmod - 1) % 3
+                    prev_sum = dp[pi][pj][pmod]
+                    if prev_sum != NEG:
+                        constrained = ((pmod + 1) % 3 == 0)
+                        x_possible = (pi + 1 < N and pj + 1 < N)
+                        if not constrained or move == "X" or not x_possible:
+                            cand_sum = prev_sum + grid[i][j]
+                            cand_path = pathh[pi][pj][pmod] + move
+                            candidates.append((cand_sum, cand_path))
+                if candidates:
+                    best = max(candidates, key=lambda x: x[0])
+                    dp[i][j][tmod] = best[0]
+                    pathh[i][j][tmod] = best[1]
+    max_sum = NEG
+    best_path = ""
+    for m in range(3):
+        if dp[N-1][N-1][m] > max_sum:
+            max_sum = dp[N-1][N-1][m]
+            best_path = pathh[N-1][N-1][m]
+    return (max_sum, best_path)
 ```
 
 === EXTRACTED CODE ===
@@ -63,38 +89,64 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
         return 0, ""
-    SENTINEL = -(10 ** 18)
-    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-
-    def dfs(i: int, j: int, phase: int) -> tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        if memo[i][j][phase] is not None:
-            return memo[i][j][phase]
-        must_x = (phase == 2)
-        x_possible = (i + 1 < N and j + 1 < N)
-        next_moves = []
-        if must_x and x_possible:
-            next_moves = [('X', i + 1, j + 1)]
-        else:
-            if j + 1 < N:
-                next_moves.append(('R', i, j + 1))
-            if i + 1 < N:
-                next_moves.append(('D', i + 1, j))
-            if x_possible:
-                next_moves.append(('X', i + 1, j + 1))
-        candidates = []
-        for move_char, ni, nj in next_moves:
-            next_phase = (phase + 1) % 3
-            next_sum, next_path = dfs(ni, nj, next_phase)
-            if next_sum != SENTINEL:
-                candidates.append((grid[i][j] + next_sum, move_char + next_path))
-        if not candidates:
-            res = (SENTINEL, "")
-        else:
-            res = max(candidates)
-        memo[i][j][phase] = res
-        return res
-
-    total_sum, path = dfs(0, 0, 0)
-    return total_sum, path
+    NEG = -(10**18)
+    dp = [[[NEG] * 3 for _ in range(N)] for _ in range(N)]
+    pathh = [[[""] * 3 for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    pathh[0][0][0] = ""
+    for i in range(N):
+        for j in range(N):
+            for tmod in range(3):
+                if i == 0 and j == 0 and tmod == 0:
+                    continue
+                candidates = []
+                # From left (R)
+                if j > 0:
+                    pi, pj = i, j - 1
+                    move = "R"
+                    pmod = (tmod - 1) % 3
+                    prev_sum = dp[pi][pj][pmod]
+                    if prev_sum != NEG:
+                        constrained = ((pmod + 1) % 3 == 0)
+                        x_possible = (pi + 1 < N and pj + 1 < N)
+                        if not constrained or move == "X" or not x_possible:
+                            cand_sum = prev_sum + grid[i][j]
+                            cand_path = pathh[pi][pj][pmod] + move
+                            candidates.append((cand_sum, cand_path))
+                # From up (D)
+                if i > 0:
+                    pi, pj = i - 1, j
+                    move = "D"
+                    pmod = (tmod - 1) % 3
+                    prev_sum = dp[pi][pj][pmod]
+                    if prev_sum != NEG:
+                        constrained = ((pmod + 1) % 3 == 0)
+                        x_possible = (pi + 1 < N and pj + 1 < N)
+                        if not constrained or move == "X" or not x_possible:
+                            cand_sum = prev_sum + grid[i][j]
+                            cand_path = pathh[pi][pj][pmod] + move
+                            candidates.append((cand_sum, cand_path))
+                # From diagonal (X)
+                if i > 0 and j > 0:
+                    pi, pj = i - 1, j - 1
+                    move = "X"
+                    pmod = (tmod - 1) % 3
+                    prev_sum = dp[pi][pj][pmod]
+                    if prev_sum != NEG:
+                        constrained = ((pmod + 1) % 3 == 0)
+                        x_possible = (pi + 1 < N and pj + 1 < N)
+                        if not constrained or move == "X" or not x_possible:
+                            cand_sum = prev_sum + grid[i][j]
+                            cand_path = pathh[pi][pj][pmod] + move
+                            candidates.append((cand_sum, cand_path))
+                if candidates:
+                    best = max(candidates, key=lambda x: x[0])
+                    dp[i][j][tmod] = best[0]
+                    pathh[i][j][tmod] = best[1]
+    max_sum = NEG
+    best_path = ""
+    for m in range(3):
+        if dp[N-1][N-1][m] > max_sum:
+            max_sum = dp[N-1][N-1][m]
+            best_path = pathh[N-1][N-1][m]
+    return (max_sum, best_path)
