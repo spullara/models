@@ -1,9 +1,9 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-09T02:46:59.819976+00:00
+Evaluated: 2026-03-09T03:00:02.510753+00:00
 
 === TIMING ===
-Response time: 117.38s
+Response time: 90.46s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,115 +18,103 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    N = len(grid)
-    MAX_K = 2 * N
-    INF = float('inf')
-    max_sum = [[[-INF for _ in range(MAX_K + 1)] for _ in range(N)] for _ in range(N)]
-    prev = [[[None for _ in range(MAX_K + 1)] for _ in range(N)] for _ in range(N)]
-    max_sum[0][0][0] = grid[0][0]
-    for kk in range(MAX_K):
-        for ii in range(N):
-            for jj in range(N):
-                if max_sum[ii][jj][kk] > -INF:
-                    m = kk + 1
-                    possible_moves = []
-                    r_ok = jj + 1 < N
-                    d_ok = ii + 1 < N
-                    x_ok = ii + 1 < N and jj + 1 < N
-                    if m % 3 == 0:
-                        if x_ok:
-                            possible_moves = [('X', ii + 1, jj + 1)]
-                        else:
-                            if r_ok:
-                                possible_moves.append(('R', ii, jj + 1))
-                            if d_ok:
-                                possible_moves.append(('D', ii + 1, jj))
-                    else:
-                        if r_ok:
-                            possible_moves.append(('R', ii, jj + 1))
-                        if d_ok:
-                            possible_moves.append(('D', ii + 1, jj))
-                        if x_ok:
-                            possible_moves.append(('X', ii + 1, jj + 1))
-                    for move_char, ni, nj in possible_moves:
-                        new_sum = max_sum[ii][jj][kk] + grid[ni][nj]
-                        nk = kk + 1
-                        if new_sum > max_sum[ni][nj][nk]:
-                            max_sum[ni][nj][nk] = new_sum
-                            prev[ni][nj][nk] = (ii, jj, kk, move_char)
-    max_val = -INF
-    best_k = -1
-    for kk in range(MAX_K + 1):
-        if max_sum[N - 1][N - 1][kk] > max_val:
-            max_val = max_sum[N - 1][N - 1][kk]
-            best_k = kk
-    if max_val == -INF:
-        return (0, "")
-    i, j, k = N - 1, N - 1, best_k
-    path = []
-    while k > 0:
-        pi, pj, pk, move = prev[i][j][k]
-        path.append(move)
-        i, j, k = pi, pj, pk
-    path.reverse()
-    return (int(max_val), ''.join(path))
+    n = len(grid)
+    memo = {}
+
+    def recurse(i, j, mod):
+        key = (i, j, mod)
+        if key in memo:
+            return memo[key]
+        if i == n - 1 and j == n - 1:
+            res = (grid[i][j], "")
+            memo[key] = res
+            return res
+        is_must_diag = ((mod + 1) % 3 == 0)
+        can_R = j + 1 < n
+        can_D = i + 1 < n
+        can_X = i + 1 < n and j + 1 < n
+        possible = []
+        if is_must_diag:
+            if can_X:
+                possible = [('X', i + 1, j + 1)]
+            else:
+                if can_R:
+                    possible.append(('R', i, j + 1))
+                if can_D:
+                    possible.append(('D', i + 1, j))
+        else:
+            if can_R:
+                possible.append(('R', i, j + 1))
+            if can_D:
+                possible.append(('D', i + 1, j))
+            if can_X:
+                possible.append(('X', i + 1, j + 1))
+        max_sum = float('-inf')
+        best_path = ""
+        for mov, ni, nj in possible:
+            sub_sum, sub_path = recurse(ni, nj, (mod + 1) % 3)
+            total = grid[i][j] + sub_sum
+            if total > max_sum:
+                max_sum = total
+                best_path = mov + sub_path
+        if max_sum == float('-inf'):
+            res = (float('-inf'), "")
+        else:
+            res = (max_sum, best_path)
+        memo[key] = res
+        return res
+
+    result_sum, result_path = recurse(0, 0, 0)
+    return result_sum, result_path
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    N = len(grid)
-    MAX_K = 2 * N
-    INF = float('inf')
-    max_sum = [[[-INF for _ in range(MAX_K + 1)] for _ in range(N)] for _ in range(N)]
-    prev = [[[None for _ in range(MAX_K + 1)] for _ in range(N)] for _ in range(N)]
-    max_sum[0][0][0] = grid[0][0]
-    for kk in range(MAX_K):
-        for ii in range(N):
-            for jj in range(N):
-                if max_sum[ii][jj][kk] > -INF:
-                    m = kk + 1
-                    possible_moves = []
-                    r_ok = jj + 1 < N
-                    d_ok = ii + 1 < N
-                    x_ok = ii + 1 < N and jj + 1 < N
-                    if m % 3 == 0:
-                        if x_ok:
-                            possible_moves = [('X', ii + 1, jj + 1)]
-                        else:
-                            if r_ok:
-                                possible_moves.append(('R', ii, jj + 1))
-                            if d_ok:
-                                possible_moves.append(('D', ii + 1, jj))
-                    else:
-                        if r_ok:
-                            possible_moves.append(('R', ii, jj + 1))
-                        if d_ok:
-                            possible_moves.append(('D', ii + 1, jj))
-                        if x_ok:
-                            possible_moves.append(('X', ii + 1, jj + 1))
-                    for move_char, ni, nj in possible_moves:
-                        new_sum = max_sum[ii][jj][kk] + grid[ni][nj]
-                        nk = kk + 1
-                        if new_sum > max_sum[ni][nj][nk]:
-                            max_sum[ni][nj][nk] = new_sum
-                            prev[ni][nj][nk] = (ii, jj, kk, move_char)
-    max_val = -INF
-    best_k = -1
-    for kk in range(MAX_K + 1):
-        if max_sum[N - 1][N - 1][kk] > max_val:
-            max_val = max_sum[N - 1][N - 1][kk]
-            best_k = kk
-    if max_val == -INF:
-        return (0, "")
-    i, j, k = N - 1, N - 1, best_k
-    path = []
-    while k > 0:
-        pi, pj, pk, move = prev[i][j][k]
-        path.append(move)
-        i, j, k = pi, pj, pk
-    path.reverse()
-    return (int(max_val), ''.join(path))
+    n = len(grid)
+    memo = {}
+
+    def recurse(i, j, mod):
+        key = (i, j, mod)
+        if key in memo:
+            return memo[key]
+        if i == n - 1 and j == n - 1:
+            res = (grid[i][j], "")
+            memo[key] = res
+            return res
+        is_must_diag = ((mod + 1) % 3 == 0)
+        can_R = j + 1 < n
+        can_D = i + 1 < n
+        can_X = i + 1 < n and j + 1 < n
+        possible = []
+        if is_must_diag:
+            if can_X:
+                possible = [('X', i + 1, j + 1)]
+            else:
+                if can_R:
+                    possible.append(('R', i, j + 1))
+                if can_D:
+                    possible.append(('D', i + 1, j))
+        else:
+            if can_R:
+                possible.append(('R', i, j + 1))
+            if can_D:
+                possible.append(('D', i + 1, j))
+            if can_X:
+                possible.append(('X', i + 1, j + 1))
+        max_sum = float('-inf')
+        best_path = ""
+        for mov, ni, nj in possible:
+            sub_sum, sub_path = recurse(ni, nj, (mod + 1) % 3)
+            total = grid[i][j] + sub_sum
+            if total > max_sum:
+                max_sum = total
+                best_path = mov + sub_path
+        if max_sum == float('-inf'):
+            res = (float('-inf'), "")
+        else:
+            res = (max_sum, best_path)
+        memo[key] = res
+        return res
+
+    result_sum, result_path = recurse(0, 0, 0)
+    return result_sum, result_path
