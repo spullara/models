@@ -1,9 +1,9 @@
 Model: grok-4-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-09T14:58:49.409409+00:00
+Evaluated: 2026-03-09T15:59:35.289782+00:00
 
 === TIMING ===
-Response time: 31.48s
+Response time: 44.72s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -21,54 +21,50 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
         return (0, "")
-    directions = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
-    dp = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    path = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    path[0][0][0] = ""
-    for r in range(N):
-        for c in range(N):
+    INF = float('-inf')
+    dp = [[[(INF, None) for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = (grid[0][0], "")
+    for i in range(N):
+        for j in range(N):
             for mod in range(3):
-                if dp[r][c][mod] is None:
+                curr_sum, path = dp[i][j][mod]
+                if curr_sum == INF:
                     continue
-                current_sum = dp[r][c][mod]
-                current_path = path[r][c][mod]
-                is_forced = (mod == 2)
                 possible_moves = []
+                is_forced = (mod == 2)
+                can_x = (i + 1 < N and j + 1 < N)
+                can_r = (j + 1 < N)
+                can_d = (i + 1 < N)
                 if is_forced:
-                    if r + 1 < N and c + 1 < N:
-                        possible_moves = ['X']
+                    if can_x:
+                        possible_moves.append(('X', i + 1, j + 1))
                     else:
-                        if r + 1 < N:
-                            possible_moves.append('D')
-                        if c + 1 < N:
-                            possible_moves.append('R')
+                        if can_r:
+                            possible_moves.append(('R', i, j + 1))
+                        if can_d:
+                            possible_moves.append(('D', i + 1, j))
                 else:
-                    if r + 1 < N:
-                        possible_moves.append('D')
-                    if c + 1 < N:
-                        possible_moves.append('R')
-                    if r + 1 < N and c + 1 < N:
-                        possible_moves.append('X')
-                for move in possible_moves:
-                    dr, dc = directions[move]
-                    nr = r + dr
-                    nc = c + dc
-                    new_sum = current_sum + grid[nr][nc]
+                    if can_x:
+                        possible_moves.append(('X', i + 1, j + 1))
+                    if can_r:
+                        possible_moves.append(('R', i, j + 1))
+                    if can_d:
+                        possible_moves.append(('D', i + 1, j))
+                for move, ni, nj in possible_moves:
                     new_mod = (mod + 1) % 3
-                    if dp[nr][nc][new_mod] is None or new_sum > dp[nr][nc][new_mod]:
-                        dp[nr][nc][new_mod] = new_sum
-                        path[nr][nc][new_mod] = current_path + move
-    max_sum = None
-    best_path = None
+                    new_sum = curr_sum + grid[ni][nj]
+                    new_path = path + move
+                    if new_sum > dp[ni][nj][new_mod][0]:
+                        dp[ni][nj][new_mod] = (new_sum, new_path)
+    max_sum = INF
+    best_path = ""
     for m in range(3):
-        if dp[N-1][N-1][m] is not None:
-            if max_sum is None or dp[N-1][N-1][m] > max_sum:
-                max_sum = dp[N-1][N-1][m]
-                best_path = path[N-1][N-1][m]
-    if max_sum is None:
+        if dp[N - 1][N - 1][m][0] > max_sum:
+            max_sum = dp[N - 1][N - 1][m][0]
+            best_path = dp[N - 1][N - 1][m][1]
+    if max_sum == INF:
         return (0, "")
-    return (max_sum, best_path)
+    return (int(max_sum), best_path)
 ```
 
 === EXTRACTED CODE ===
@@ -76,51 +72,47 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
         return (0, "")
-    directions = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
-    dp = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    path = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    path[0][0][0] = ""
-    for r in range(N):
-        for c in range(N):
+    INF = float('-inf')
+    dp = [[[(INF, None) for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = (grid[0][0], "")
+    for i in range(N):
+        for j in range(N):
             for mod in range(3):
-                if dp[r][c][mod] is None:
+                curr_sum, path = dp[i][j][mod]
+                if curr_sum == INF:
                     continue
-                current_sum = dp[r][c][mod]
-                current_path = path[r][c][mod]
-                is_forced = (mod == 2)
                 possible_moves = []
+                is_forced = (mod == 2)
+                can_x = (i + 1 < N and j + 1 < N)
+                can_r = (j + 1 < N)
+                can_d = (i + 1 < N)
                 if is_forced:
-                    if r + 1 < N and c + 1 < N:
-                        possible_moves = ['X']
+                    if can_x:
+                        possible_moves.append(('X', i + 1, j + 1))
                     else:
-                        if r + 1 < N:
-                            possible_moves.append('D')
-                        if c + 1 < N:
-                            possible_moves.append('R')
+                        if can_r:
+                            possible_moves.append(('R', i, j + 1))
+                        if can_d:
+                            possible_moves.append(('D', i + 1, j))
                 else:
-                    if r + 1 < N:
-                        possible_moves.append('D')
-                    if c + 1 < N:
-                        possible_moves.append('R')
-                    if r + 1 < N and c + 1 < N:
-                        possible_moves.append('X')
-                for move in possible_moves:
-                    dr, dc = directions[move]
-                    nr = r + dr
-                    nc = c + dc
-                    new_sum = current_sum + grid[nr][nc]
+                    if can_x:
+                        possible_moves.append(('X', i + 1, j + 1))
+                    if can_r:
+                        possible_moves.append(('R', i, j + 1))
+                    if can_d:
+                        possible_moves.append(('D', i + 1, j))
+                for move, ni, nj in possible_moves:
                     new_mod = (mod + 1) % 3
-                    if dp[nr][nc][new_mod] is None or new_sum > dp[nr][nc][new_mod]:
-                        dp[nr][nc][new_mod] = new_sum
-                        path[nr][nc][new_mod] = current_path + move
-    max_sum = None
-    best_path = None
+                    new_sum = curr_sum + grid[ni][nj]
+                    new_path = path + move
+                    if new_sum > dp[ni][nj][new_mod][0]:
+                        dp[ni][nj][new_mod] = (new_sum, new_path)
+    max_sum = INF
+    best_path = ""
     for m in range(3):
-        if dp[N-1][N-1][m] is not None:
-            if max_sum is None or dp[N-1][N-1][m] > max_sum:
-                max_sum = dp[N-1][N-1][m]
-                best_path = path[N-1][N-1][m]
-    if max_sum is None:
+        if dp[N - 1][N - 1][m][0] > max_sum:
+            max_sum = dp[N - 1][N - 1][m][0]
+            best_path = dp[N - 1][N - 1][m][1]
+    if max_sum == INF:
         return (0, "")
-    return (max_sum, best_path)
+    return (int(max_sum), best_path)
