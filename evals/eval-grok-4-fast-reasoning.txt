@@ -1,9 +1,9 @@
 Model: grok-4-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-10T05:57:32.035660+00:00
+Evaluated: 2026-03-10T10:54:28.241661+00:00
 
 === TIMING ===
-Response time: 37.54s
+Response time: 40.07s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,111 +18,123 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
     N = len(grid)
-    memo = {}
-
-    def dfs(i: int, j: int, k: int) -> tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        key = (i, j, k)
-        if key in memo:
-            return memo[key]
-        next_num = k + 1
-        must_x = (next_num % 3 == 0)
-        cands = []
-        if j + 1 < N:
-            cands.append('R')
-        if i + 1 < N:
-            cands.append('D')
-        if i + 1 < N and j + 1 < N:
-            cands.append('X')
-        if not must_x:
-            poss = cands
-        else:
-            if 'X' in cands:
-                poss = ['X']
-            else:
-                poss = [m for m in cands if m != 'X']
-        max_s = float('-inf')
-        best_p = ""
-        for move in poss:
-            if move == 'R':
-                ni = i
-                nj = j + 1
-            elif move == 'D':
-                ni = i + 1
-                nj = j
-            else:
-                ni = i + 1
-                nj = j + 1
-            sub_s, sub_p = dfs(ni, nj, k + 1)
-            this_s = float('-inf') if sub_s == float('-inf') else grid[i][j] + sub_s
-            this_p = move + sub_p
-            if this_s > max_s:
-                max_s = this_s
-                best_p = this_p
-        res_s = float('-inf') if max_s == float('-inf') else max_s
-        res_p = best_p
-        memo[key] = (res_s, res_p)
-        return res_s, res_p
-
-    total, path = dfs(0, 0, 0)
-    return (total, path) if total != float('-inf') else (0, "")
+    if N == 0:
+        return 0, ""
+    INF = float('-inf')
+    dp = [[[INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    max_s = 2 * (N - 1)
+    for s in range(max_s + 1):
+        for i in range(max(0, s - (N - 1)), min(s, N - 1) + 1):
+            j = s - i
+            if j < 0 or j >= N:
+                continue
+            for mod in range(3):
+                if dp[i][j][mod] == INF:
+                    continue
+                is_must_x = (mod == 2)
+                moves_to_try = []
+                if is_must_x:
+                    ni, nj = i + 1, j + 1
+                    if ni < N and nj < N:
+                        moves_to_try.append(('X', ni, nj))
+                    else:
+                        ni, nj = i, j + 1
+                        if nj < N:
+                            moves_to_try.append(('R', ni, nj))
+                        ni, nj = i + 1, j
+                        if ni < N:
+                            moves_to_try.append(('D', ni, nj))
+                else:
+                    for char, di, dj in [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]:
+                        ni = i + di
+                        nj = j + dj
+                        if ni < N and nj < N:
+                            moves_to_try.append((char, ni, nj))
+                for char, ni, nj in moves_to_try:
+                    new_mod = (mod + 1) % 3
+                    new_sum = dp[i][j][mod] + grid[ni][nj]
+                    if new_sum > dp[ni][nj][new_mod]:
+                        dp[ni][nj][new_mod] = new_sum
+                        prev[ni][nj][new_mod] = (i, j, mod, char)
+    max_sum = INF
+    best_mod = -1
+    for m in range(3):
+        if dp[N-1][N-1][m] > max_sum:
+            max_sum = dp[N-1][N-1][m]
+            best_mod = m
+    if max_sum == INF:
+        return 0, ""
+    path = []
+    i, j, mod = N-1, N-1, best_mod
+    while i > 0 or j > 0:
+        pi, pj, pmod, char = prev[i][j][mod]
+        path.append(char)
+        i, j, mod = pi, pj, pmod
+    path.reverse()
+    path_str = ''.join(path)
+    return int(max_sum), path_str
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
     N = len(grid)
-    memo = {}
-
-    def dfs(i: int, j: int, k: int) -> tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        key = (i, j, k)
-        if key in memo:
-            return memo[key]
-        next_num = k + 1
-        must_x = (next_num % 3 == 0)
-        cands = []
-        if j + 1 < N:
-            cands.append('R')
-        if i + 1 < N:
-            cands.append('D')
-        if i + 1 < N and j + 1 < N:
-            cands.append('X')
-        if not must_x:
-            poss = cands
-        else:
-            if 'X' in cands:
-                poss = ['X']
-            else:
-                poss = [m for m in cands if m != 'X']
-        max_s = float('-inf')
-        best_p = ""
-        for move in poss:
-            if move == 'R':
-                ni = i
-                nj = j + 1
-            elif move == 'D':
-                ni = i + 1
-                nj = j
-            else:
-                ni = i + 1
-                nj = j + 1
-            sub_s, sub_p = dfs(ni, nj, k + 1)
-            this_s = float('-inf') if sub_s == float('-inf') else grid[i][j] + sub_s
-            this_p = move + sub_p
-            if this_s > max_s:
-                max_s = this_s
-                best_p = this_p
-        res_s = float('-inf') if max_s == float('-inf') else max_s
-        res_p = best_p
-        memo[key] = (res_s, res_p)
-        return res_s, res_p
-
-    total, path = dfs(0, 0, 0)
-    return (total, path) if total != float('-inf') else (0, "")
+    if N == 0:
+        return 0, ""
+    INF = float('-inf')
+    dp = [[[INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    max_s = 2 * (N - 1)
+    for s in range(max_s + 1):
+        for i in range(max(0, s - (N - 1)), min(s, N - 1) + 1):
+            j = s - i
+            if j < 0 or j >= N:
+                continue
+            for mod in range(3):
+                if dp[i][j][mod] == INF:
+                    continue
+                is_must_x = (mod == 2)
+                moves_to_try = []
+                if is_must_x:
+                    ni, nj = i + 1, j + 1
+                    if ni < N and nj < N:
+                        moves_to_try.append(('X', ni, nj))
+                    else:
+                        ni, nj = i, j + 1
+                        if nj < N:
+                            moves_to_try.append(('R', ni, nj))
+                        ni, nj = i + 1, j
+                        if ni < N:
+                            moves_to_try.append(('D', ni, nj))
+                else:
+                    for char, di, dj in [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]:
+                        ni = i + di
+                        nj = j + dj
+                        if ni < N and nj < N:
+                            moves_to_try.append((char, ni, nj))
+                for char, ni, nj in moves_to_try:
+                    new_mod = (mod + 1) % 3
+                    new_sum = dp[i][j][mod] + grid[ni][nj]
+                    if new_sum > dp[ni][nj][new_mod]:
+                        dp[ni][nj][new_mod] = new_sum
+                        prev[ni][nj][new_mod] = (i, j, mod, char)
+    max_sum = INF
+    best_mod = -1
+    for m in range(3):
+        if dp[N-1][N-1][m] > max_sum:
+            max_sum = dp[N-1][N-1][m]
+            best_mod = m
+    if max_sum == INF:
+        return 0, ""
+    path = []
+    i, j, mod = N-1, N-1, best_mod
+    while i > 0 or j > 0:
+        pi, pj, pmod, char = prev[i][j][mod]
+        path.append(char)
+        i, j, mod = pi, pj, pmod
+    path.reverse()
+    path_str = ''.join(path)
+    return int(max_sum), path_str
