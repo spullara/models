@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-10T05:51:12.891910+00:00
+Evaluated: 2026-03-10T10:50:17.993473+00:00
 
 === TIMING ===
-Response time: 72.96s
+Response time: 53.6s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,183 +18,99 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
     N = len(grid)
     if N == 0:
         return 0, ""
+    memo = {}
     
-    memo = [[[float('-inf') for _ in range(2 * N + 1)] for _ in range(N)] for _ in range(N)]
-    
-    def dp(row, col, moves_made):
-        if row >= N or col >= N:
-            return float('-inf')
-        if moves_made == 0:
-            if row == 0 and col == 0:
-                memo[0][0][0] = grid[0][0]
-                return grid[0][0]
-            return float('-inf')
-        if memo[row][col][moves_made] != float('-inf'):
-            return memo[row][col][moves_made]
+    def helper(i, j, moves_mod_3):
+        if (i, j, moves_mod_3) in memo:
+            return memo[(i, j, moves_mod_3)]
         
-        possible_sum = float('-inf')
-        if moves_made % 3 == 0:
-            if row >= 1 and col >= 1:
-                prev_sum = dp(row - 1, col - 1, moves_made - 1)
-                if prev_sum != float('-inf'):
-                    possible_sum = max(possible_sum, prev_sum + grid[row][col])
+        if i == N-1 and j == N-1:
+            return grid[i][j], ""
+        
+        is_next_must_X = (moves_mod_3 == 2)  # Next move is (k+1), so if k % 3 == 2
+        
+        possible_moves = []
+        if j + 1 < N:  # R
+            possible_moves.append(('R', i, j + 1))
+        if i + 1 < N:  # D
+            possible_moves.append(('D', i + 1, j))
+        if i + 1 < N and j + 1 < N:  # X
+            possible_moves.append(('X', i + 1, j + 1))
+        
+        candidates = []
+        for move, next_i, next_j in possible_moves:
+            if is_next_must_X:
+                if move == 'X':
+                    sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
+                    candidates.append((grid[i][j] + sub_sum, move + sub_path))
             else:
-                if col >= 1:
-                    prev_sum = dp(row, col - 1, moves_made - 1)
-                    if prev_sum != float('-inf'):
-                        possible_sum = max(possible_sum, prev_sum + grid[row][col])
-                if row >= 1:
-                    prev_sum = dp(row - 1, col, moves_made - 1)
-                    if prev_sum != float('-inf'):
-                        possible_sum = max(possible_sum, prev_sum + grid[row][col])
+                sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
+                candidates.append((grid[i][j] + sub_sum, move + sub_path))
+        
+        if is_next_must_X and not any(m[0] == 'X' for m in possible_moves):
+            for move, next_i, next_j in possible_moves:
+                sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
+                candidates.append((grid[i][j] + sub_sum, move + sub_path))
+        
+        if candidates:
+            best = max(candidates, key=lambda x: x[0])
+            memo[(i, j, moves_mod_3)] = best
+            return best
         else:
-            if col >= 1:
-                prev_sum = dp(row, col - 1, moves_made - 1)
-                if prev_sum != float('-inf'):
-                    possible_sum = max(possible_sum, prev_sum + grid[row][col])
-            if row >= 1:
-                prev_sum = dp(row - 1, col, moves_made - 1)
-                if prev_sum != float('-inf'):
-                    possible_sum = max(possible_sum, prev_sum + grid[row][col])
-            if row >= 1 and col >= 1:
-                prev_sum = dp(row - 1, col - 1, moves_made - 1)
-                if prev_sum != float('-inf'):
-                    possible_sum = max(possible_sum, prev_sum + grid[row][col])
-        memo[row][col][moves_made] = possible_sum
-        return possible_sum
+            return float('-inf'), ""  # Unreachable, but handle
     
-    max_sum = float('-inf')
-    best_M = 0
-    for M in range(0, 2 * N):
-        current_sum = dp(N-1, N-1, M)
-        if current_sum > max_sum:
-            max_sum = current_sum
-            best_M = M
-    
-    if max_sum == float('-inf'):
-        return 0, ""  # Impossible, but handle
-    
-    path = []
-    current_row, current_col, current_moves = N-1, N-1, best_M
-    while current_moves > 0:
-        if current_moves % 3 == 0:
-            if current_row >= 1 and current_col >= 1 and memo[current_row][current_col][current_moves] == memo[current_row-1][current_col-1][current_moves-1] + grid[current_row][current_col]:
-                path.append('X')
-                current_row -= 1
-                current_col -= 1
-            elif current_col >= 1 and memo[current_row][current_col][current_moves] == memo[current_row][current_col-1][current_moves-1] + grid[current_row][current_col]:
-                path.append('R')
-                current_col -= 1
-            elif current_row >= 1 and memo[current_row][current_col][current_moves] == memo[current_row-1][current_col][current_moves-1] + grid[current_row][current_col]:
-                path.append('D')
-                current_row -= 1
-        else:
-            if current_col >= 1 and memo[current_row][current_col][current_moves] == memo[current_row][current_col-1][current_moves-1] + grid[current_row][current_col]:
-                path.append('R')
-                current_col -= 1
-            elif current_row >= 1 and memo[current_row][current_col][current_moves] == memo[current_row-1][current_col][current_moves-1] + grid[current_row][current_col]:
-                path.append('D')
-                current_row -= 1
-            elif current_row >= 1 and current_col >= 1 and memo[current_row][current_col][current_moves] == memo[current_row-1][current_col-1][current_moves-1] + grid[current_row][current_col]:
-                path.append('X')
-                current_row -= 1
-                current_col -= 1
-        current_moves -= 1
-    return max_sum, ''.join(reversed(path))
+    result_sum, result_path = helper(0, 0, 0)
+    return result_sum, result_path
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
     N = len(grid)
     if N == 0:
         return 0, ""
+    memo = {}
     
-    memo = [[[float('-inf') for _ in range(2 * N + 1)] for _ in range(N)] for _ in range(N)]
-    
-    def dp(row, col, moves_made):
-        if row >= N or col >= N:
-            return float('-inf')
-        if moves_made == 0:
-            if row == 0 and col == 0:
-                memo[0][0][0] = grid[0][0]
-                return grid[0][0]
-            return float('-inf')
-        if memo[row][col][moves_made] != float('-inf'):
-            return memo[row][col][moves_made]
+    def helper(i, j, moves_mod_3):
+        if (i, j, moves_mod_3) in memo:
+            return memo[(i, j, moves_mod_3)]
         
-        possible_sum = float('-inf')
-        if moves_made % 3 == 0:
-            if row >= 1 and col >= 1:
-                prev_sum = dp(row - 1, col - 1, moves_made - 1)
-                if prev_sum != float('-inf'):
-                    possible_sum = max(possible_sum, prev_sum + grid[row][col])
+        if i == N-1 and j == N-1:
+            return grid[i][j], ""
+        
+        is_next_must_X = (moves_mod_3 == 2)  # Next move is (k+1), so if k % 3 == 2
+        
+        possible_moves = []
+        if j + 1 < N:  # R
+            possible_moves.append(('R', i, j + 1))
+        if i + 1 < N:  # D
+            possible_moves.append(('D', i + 1, j))
+        if i + 1 < N and j + 1 < N:  # X
+            possible_moves.append(('X', i + 1, j + 1))
+        
+        candidates = []
+        for move, next_i, next_j in possible_moves:
+            if is_next_must_X:
+                if move == 'X':
+                    sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
+                    candidates.append((grid[i][j] + sub_sum, move + sub_path))
             else:
-                if col >= 1:
-                    prev_sum = dp(row, col - 1, moves_made - 1)
-                    if prev_sum != float('-inf'):
-                        possible_sum = max(possible_sum, prev_sum + grid[row][col])
-                if row >= 1:
-                    prev_sum = dp(row - 1, col, moves_made - 1)
-                    if prev_sum != float('-inf'):
-                        possible_sum = max(possible_sum, prev_sum + grid[row][col])
+                sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
+                candidates.append((grid[i][j] + sub_sum, move + sub_path))
+        
+        if is_next_must_X and not any(m[0] == 'X' for m in possible_moves):
+            for move, next_i, next_j in possible_moves:
+                sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
+                candidates.append((grid[i][j] + sub_sum, move + sub_path))
+        
+        if candidates:
+            best = max(candidates, key=lambda x: x[0])
+            memo[(i, j, moves_mod_3)] = best
+            return best
         else:
-            if col >= 1:
-                prev_sum = dp(row, col - 1, moves_made - 1)
-                if prev_sum != float('-inf'):
-                    possible_sum = max(possible_sum, prev_sum + grid[row][col])
-            if row >= 1:
-                prev_sum = dp(row - 1, col, moves_made - 1)
-                if prev_sum != float('-inf'):
-                    possible_sum = max(possible_sum, prev_sum + grid[row][col])
-            if row >= 1 and col >= 1:
-                prev_sum = dp(row - 1, col - 1, moves_made - 1)
-                if prev_sum != float('-inf'):
-                    possible_sum = max(possible_sum, prev_sum + grid[row][col])
-        memo[row][col][moves_made] = possible_sum
-        return possible_sum
+            return float('-inf'), ""  # Unreachable, but handle
     
-    max_sum = float('-inf')
-    best_M = 0
-    for M in range(0, 2 * N):
-        current_sum = dp(N-1, N-1, M)
-        if current_sum > max_sum:
-            max_sum = current_sum
-            best_M = M
-    
-    if max_sum == float('-inf'):
-        return 0, ""  # Impossible, but handle
-    
-    path = []
-    current_row, current_col, current_moves = N-1, N-1, best_M
-    while current_moves > 0:
-        if current_moves % 3 == 0:
-            if current_row >= 1 and current_col >= 1 and memo[current_row][current_col][current_moves] == memo[current_row-1][current_col-1][current_moves-1] + grid[current_row][current_col]:
-                path.append('X')
-                current_row -= 1
-                current_col -= 1
-            elif current_col >= 1 and memo[current_row][current_col][current_moves] == memo[current_row][current_col-1][current_moves-1] + grid[current_row][current_col]:
-                path.append('R')
-                current_col -= 1
-            elif current_row >= 1 and memo[current_row][current_col][current_moves] == memo[current_row-1][current_col][current_moves-1] + grid[current_row][current_col]:
-                path.append('D')
-                current_row -= 1
-        else:
-            if current_col >= 1 and memo[current_row][current_col][current_moves] == memo[current_row][current_col-1][current_moves-1] + grid[current_row][current_col]:
-                path.append('R')
-                current_col -= 1
-            elif current_row >= 1 and memo[current_row][current_col][current_moves] == memo[current_row-1][current_col][current_moves-1] + grid[current_row][current_col]:
-                path.append('D')
-                current_row -= 1
-            elif current_row >= 1 and current_col >= 1 and memo[current_row][current_col][current_moves] == memo[current_row-1][current_col-1][current_moves-1] + grid[current_row][current_col]:
-                path.append('X')
-                current_row -= 1
-                current_col -= 1
-        current_moves -= 1
-    return max_sum, ''.join(reversed(path))
+    result_sum, result_path = helper(0, 0, 0)
+    return result_sum, result_path
