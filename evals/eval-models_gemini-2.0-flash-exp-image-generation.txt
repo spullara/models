@@ -1,0 +1,19 @@
+Model: models/gemini-2.0-flash-exp-image-generation
+Provider: gemini
+Evaluated: 2026-03-10T20:59:06.093223+00:00
+
+=== TIMING ===
+Response time: 0.13s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: 
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
