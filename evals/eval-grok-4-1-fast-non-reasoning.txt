@@ -1,9 +1,9 @@
 Model: grok-4-1-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-10T10:53:15.610743+00:00
+Evaluated: 2026-03-10T14:11:18.641162+00:00
 
 === TIMING ===
-Response time: 5.08s
+Response time: 4.51s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -25,13 +25,11 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     INF = float('-inf')
     
-    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k % 3 moves made
+    # dp[i][j][k] = (max_sum, path) where k is moves % 3
     dp = [[[ (INF, "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
     
-    # Start position
     dp[0][0][0] = (grid[0][0], "")
     
-    # Fill DP table
     for i in range(n):
         for j in range(n):
             for k in range(3):
@@ -40,15 +38,13 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
                 
                 curr_sum, path = dp[i][j][k]
                 next_k = (k + 1) % 3
-                must_diag = (next_k == 0)
+                is_diag_required = (next_k == 0)
                 
                 # Try right
                 if j + 1 < n:
                     new_sum = curr_sum + grid[i][j + 1]
                     new_path = path + "R"
                     if new_sum > dp[i][j + 1][next_k][0]:
-                        dp[i][j + 1][next_k] = (new_sum, new_path)
-                    elif new_sum == dp[i][j + 1][next_k][0] and len(new_path) < len(dp[i][j + 1][next_k][1]):
                         dp[i][j + 1][next_k] = (new_sum, new_path)
                 
                 # Try down
@@ -57,38 +53,29 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
                     new_path = path + "D"
                     if new_sum > dp[i + 1][j][next_k][0]:
                         dp[i + 1][j][next_k] = (new_sum, new_path)
-                    elif new_sum == dp[i + 1][j][next_k][0] and len(new_path) < len(dp[i + 1][j][next_k][1]):
-                        dp[i + 1][j][next_k] = (new_sum, new_path)
                 
-                # Try diagonal (always allowed, but prioritized on must_diag)
+                # Try diagonal (always allowed, but prioritized when required)
                 if i + 1 < n and j + 1 < n:
                     new_sum = curr_sum + grid[i + 1][j + 1]
                     new_path = path + "X"
                     
-                    # For must_diag moves, diagonal takes priority
-                    if must_diag:
-                        if new_sum > dp[i + 1][j + 1][next_k][0]:
-                            dp[i + 1][j + 1][next_k] = (new_sum, new_path)
-                        elif new_sum == dp[i + 1][j + 1][next_k][0] and len(new_path) < len(dp[i + 1][j + 1][next_k][1]):
-                            dp[i + 1][j + 1][next_k] = (new_sum, new_path)
+                    if is_diag_required:
+                        # Must use diagonal if possible
+                        dp[i + 1][j + 1][next_k] = (new_sum, new_path)
                     else:
-                        # Normal case - compare normally
+                        # Use if better
                         if new_sum > dp[i + 1][j + 1][next_k][0]:
-                            dp[i + 1][j + 1][next_k] = (new_sum, new_path)
-                        elif new_sum == dp[i + 1][j + 1][next_k][0] and len(new_path) < len(dp[i + 1][j + 1][next_k][1]):
                             dp[i + 1][j + 1][next_k] = (new_sum, new_path)
     
-    # Find best path to bottom-right
+    # Find best path ending at bottom-right with any k
     best_sum = INF
     best_path = ""
     for k in range(3):
         if dp[n-1][n-1][k][0] > best_sum:
             best_sum = dp[n-1][n-1][k][0]
             best_path = dp[n-1][n-1][k][1]
-        elif dp[n-1][n-1][k][0] == best_sum and len(dp[n-1][n-1][k][1]) < len(best_path):
-            best_path = dp[n-1][n-1][k][1]
     
-    return int(best_sum), best_path
+    return (int(best_sum), best_path)
 ```
 
 === EXTRACTED CODE ===
@@ -99,13 +86,11 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     INF = float('-inf')
     
-    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k % 3 moves made
+    # dp[i][j][k] = (max_sum, path) where k is moves % 3
     dp = [[[ (INF, "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
     
-    # Start position
     dp[0][0][0] = (grid[0][0], "")
     
-    # Fill DP table
     for i in range(n):
         for j in range(n):
             for k in range(3):
@@ -114,15 +99,13 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
                 
                 curr_sum, path = dp[i][j][k]
                 next_k = (k + 1) % 3
-                must_diag = (next_k == 0)
+                is_diag_required = (next_k == 0)
                 
                 # Try right
                 if j + 1 < n:
                     new_sum = curr_sum + grid[i][j + 1]
                     new_path = path + "R"
                     if new_sum > dp[i][j + 1][next_k][0]:
-                        dp[i][j + 1][next_k] = (new_sum, new_path)
-                    elif new_sum == dp[i][j + 1][next_k][0] and len(new_path) < len(dp[i][j + 1][next_k][1]):
                         dp[i][j + 1][next_k] = (new_sum, new_path)
                 
                 # Try down
@@ -131,35 +114,26 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
                     new_path = path + "D"
                     if new_sum > dp[i + 1][j][next_k][0]:
                         dp[i + 1][j][next_k] = (new_sum, new_path)
-                    elif new_sum == dp[i + 1][j][next_k][0] and len(new_path) < len(dp[i + 1][j][next_k][1]):
-                        dp[i + 1][j][next_k] = (new_sum, new_path)
                 
-                # Try diagonal (always allowed, but prioritized on must_diag)
+                # Try diagonal (always allowed, but prioritized when required)
                 if i + 1 < n and j + 1 < n:
                     new_sum = curr_sum + grid[i + 1][j + 1]
                     new_path = path + "X"
                     
-                    # For must_diag moves, diagonal takes priority
-                    if must_diag:
-                        if new_sum > dp[i + 1][j + 1][next_k][0]:
-                            dp[i + 1][j + 1][next_k] = (new_sum, new_path)
-                        elif new_sum == dp[i + 1][j + 1][next_k][0] and len(new_path) < len(dp[i + 1][j + 1][next_k][1]):
-                            dp[i + 1][j + 1][next_k] = (new_sum, new_path)
+                    if is_diag_required:
+                        # Must use diagonal if possible
+                        dp[i + 1][j + 1][next_k] = (new_sum, new_path)
                     else:
-                        # Normal case - compare normally
+                        # Use if better
                         if new_sum > dp[i + 1][j + 1][next_k][0]:
-                            dp[i + 1][j + 1][next_k] = (new_sum, new_path)
-                        elif new_sum == dp[i + 1][j + 1][next_k][0] and len(new_path) < len(dp[i + 1][j + 1][next_k][1]):
                             dp[i + 1][j + 1][next_k] = (new_sum, new_path)
     
-    # Find best path to bottom-right
+    # Find best path ending at bottom-right with any k
     best_sum = INF
     best_path = ""
     for k in range(3):
         if dp[n-1][n-1][k][0] > best_sum:
             best_sum = dp[n-1][n-1][k][0]
             best_path = dp[n-1][n-1][k][1]
-        elif dp[n-1][n-1][k][0] == best_sum and len(dp[n-1][n-1][k][1]) < len(best_path):
-            best_path = dp[n-1][n-1][k][1]
     
-    return int(best_sum), best_path
+    return (int(best_sum), best_path)

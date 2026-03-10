@@ -1,9 +1,9 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-10T10:51:11.625584+00:00
+Evaluated: 2026-03-10T14:09:20.817262+00:00
 
 === TIMING ===
-Response time: 123.95s
+Response time: 117.79s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -22,60 +22,52 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         return (0, "")
     N = len(grid)
     INF = float('inf')
-    dp = [[[-INF] * 3 for _ in range(N)] for _ in range(N)]
-    prev = [[[None] * 3 for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    max_s = 2 * (N - 1)
-    for s in range(max_s + 1):
-        for i in range(max(0, s - (N - 1)), min(s, N - 1) + 1):
-            j = s - i
-            if j < 0 or j >= N:
-                continue
+    DP = [[[-INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    DP[0][0][0] = grid[0][0]
+    for i in range(N):
+        for j in range(N):
             for mod in range(3):
-                if dp[i][j][mod] == -INF:
+                curr_sum = DP[i][j][mod]
+                if curr_sum == -INF:
                     continue
-                must = (mod == 2)
-                can_x = (i + 1 < N and j + 1 < N)
-                possible = []
-                if must:
-                    if can_x:
-                        possible = [(i + 1, j + 1, 'X')]
-                    else:
-                        if j + 1 < N:
-                            possible.append((i, j + 1, 'R'))
-                        if i + 1 < N:
-                            possible.append((i + 1, j, 'D'))
-                else:
-                    if j + 1 < N:
-                        possible.append((i, j + 1, 'R'))
-                    if i + 1 < N:
-                        possible.append((i + 1, j, 'D'))
-                    if can_x:
-                        possible.append((i + 1, j + 1, 'X'))
-                for ni, nj, char in possible:
-                    new_sum = dp[i][j][mod] + grid[ni][nj]
-                    new_mod = (mod + 1) % 3
-                    if new_sum > dp[ni][nj][new_mod]:
-                        dp[ni][nj][new_mod] = new_sum
-                        prev[ni][nj][new_mod] = (i, j, mod, char)
+                required_diag = (mod == 2)
+                can_diag = (i + 1 < N and j + 1 < N)
+                moves = []
+                if j + 1 < N:
+                    moves.append((i, j + 1, 'R', False))
+                if i + 1 < N:
+                    moves.append((i + 1, j, 'D', False))
+                if can_diag:
+                    moves.append((i + 1, j + 1, 'X', True))
+                for ni, nj, char, is_diag in moves:
+                    allowed = True
+                    if required_diag:
+                        if not is_diag:
+                            if can_diag:
+                                allowed = False
+                    if allowed:
+                        new_sum = curr_sum + grid[ni][nj]
+                        nmod = (mod + 1) % 3
+                        if new_sum > DP[ni][nj][nmod]:
+                            DP[ni][nj][nmod] = new_sum
+                            prev[ni][nj][nmod] = (i, j, mod, char)
     max_sum = -INF
     best_mod = -1
-    for k in range(3):
-        if dp[N - 1][N - 1][k] > max_sum:
-            max_sum = dp[N - 1][N - 1][k]
-            best_mod = k
+    for m in range(3):
+        if DP[N - 1][N - 1][m] > max_sum:
+            max_sum = DP[N - 1][N - 1][m]
+            best_mod = m
     if max_sum == -INF:
         return (0, "")
     path = []
-    ci, cj, cm = N - 1, N - 1, best_mod
-    while ci != 0 or cj != 0:
-        p = prev[ci][cj][cm]
-        pi, pj, pm, char = p
+    i, j, mod = N - 1, N - 1, best_mod
+    while i != 0 or j != 0:
+        pi, pj, pmod, char = prev[i][j][mod]
         path.append(char)
-        ci, cj, cm = pi, pj, pm
+        i, j, mod = pi, pj, pmod
     path.reverse()
-    path_str = ''.join(path)
-    return (int(max_sum), path_str)
+    return (int(max_sum), ''.join(path))
 ```
 
 === EXTRACTED CODE ===
@@ -84,57 +76,49 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         return (0, "")
     N = len(grid)
     INF = float('inf')
-    dp = [[[-INF] * 3 for _ in range(N)] for _ in range(N)]
-    prev = [[[None] * 3 for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    max_s = 2 * (N - 1)
-    for s in range(max_s + 1):
-        for i in range(max(0, s - (N - 1)), min(s, N - 1) + 1):
-            j = s - i
-            if j < 0 or j >= N:
-                continue
+    DP = [[[-INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    DP[0][0][0] = grid[0][0]
+    for i in range(N):
+        for j in range(N):
             for mod in range(3):
-                if dp[i][j][mod] == -INF:
+                curr_sum = DP[i][j][mod]
+                if curr_sum == -INF:
                     continue
-                must = (mod == 2)
-                can_x = (i + 1 < N and j + 1 < N)
-                possible = []
-                if must:
-                    if can_x:
-                        possible = [(i + 1, j + 1, 'X')]
-                    else:
-                        if j + 1 < N:
-                            possible.append((i, j + 1, 'R'))
-                        if i + 1 < N:
-                            possible.append((i + 1, j, 'D'))
-                else:
-                    if j + 1 < N:
-                        possible.append((i, j + 1, 'R'))
-                    if i + 1 < N:
-                        possible.append((i + 1, j, 'D'))
-                    if can_x:
-                        possible.append((i + 1, j + 1, 'X'))
-                for ni, nj, char in possible:
-                    new_sum = dp[i][j][mod] + grid[ni][nj]
-                    new_mod = (mod + 1) % 3
-                    if new_sum > dp[ni][nj][new_mod]:
-                        dp[ni][nj][new_mod] = new_sum
-                        prev[ni][nj][new_mod] = (i, j, mod, char)
+                required_diag = (mod == 2)
+                can_diag = (i + 1 < N and j + 1 < N)
+                moves = []
+                if j + 1 < N:
+                    moves.append((i, j + 1, 'R', False))
+                if i + 1 < N:
+                    moves.append((i + 1, j, 'D', False))
+                if can_diag:
+                    moves.append((i + 1, j + 1, 'X', True))
+                for ni, nj, char, is_diag in moves:
+                    allowed = True
+                    if required_diag:
+                        if not is_diag:
+                            if can_diag:
+                                allowed = False
+                    if allowed:
+                        new_sum = curr_sum + grid[ni][nj]
+                        nmod = (mod + 1) % 3
+                        if new_sum > DP[ni][nj][nmod]:
+                            DP[ni][nj][nmod] = new_sum
+                            prev[ni][nj][nmod] = (i, j, mod, char)
     max_sum = -INF
     best_mod = -1
-    for k in range(3):
-        if dp[N - 1][N - 1][k] > max_sum:
-            max_sum = dp[N - 1][N - 1][k]
-            best_mod = k
+    for m in range(3):
+        if DP[N - 1][N - 1][m] > max_sum:
+            max_sum = DP[N - 1][N - 1][m]
+            best_mod = m
     if max_sum == -INF:
         return (0, "")
     path = []
-    ci, cj, cm = N - 1, N - 1, best_mod
-    while ci != 0 or cj != 0:
-        p = prev[ci][cj][cm]
-        pi, pj, pm, char = p
+    i, j, mod = N - 1, N - 1, best_mod
+    while i != 0 or j != 0:
+        pi, pj, pmod, char = prev[i][j][mod]
         path.append(char)
-        ci, cj, cm = pi, pj, pm
+        i, j, mod = pi, pj, pmod
     path.reverse()
-    path_str = ''.join(path)
-    return (int(max_sum), path_str)
+    return (int(max_sum), ''.join(path))
