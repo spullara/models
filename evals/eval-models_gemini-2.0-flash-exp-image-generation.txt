@@ -1,6 +1,6 @@
 Model: models/gemini-2.0-flash-exp-image-generation
 Provider: gemini
-Evaluated: 2026-03-10T20:59:06.093223+00:00
+Evaluated: 2026-03-10T21:10:06.371734+00:00
 
 === TIMING ===
 Response time: 0.13s
