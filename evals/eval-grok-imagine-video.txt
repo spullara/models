@@ -1,6 +1,6 @@
 Model: grok-imagine-video
 Provider: grok
-Evaluated: 2026-03-10T10:21:07.943419+00:00
+Evaluated: 2026-03-10T12:39:06.177282+00:00
 
 === TIMING ===
 Response time: 0.2s
