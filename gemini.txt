@@ -24,6 +24,7 @@ models/gemini-3.1-flash-lite-preview
 models/gemini-3.1-pro-preview
 models/gemini-3.1-pro-preview-customtools
 models/gemini-embedding-001
+models/gemini-embedding-2-preview
 models/gemini-flash-latest
 models/gemini-flash-lite-latest
 models/gemini-pro-latest
