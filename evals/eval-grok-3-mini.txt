@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-10T10:50:17.993473+00:00
+Evaluated: 2026-03-10T14:08:14.427054+00:00
 
 === TIMING ===
-Response time: 53.6s
+Response time: 66.36s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -19,98 +19,104 @@ Path valid: YES
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    if N == 0:
-        return 0, ""
     memo = {}
     
-    def helper(i, j, moves_mod_3):
-        if (i, j, moves_mod_3) in memo:
-            return memo[(i, j, moves_mod_3)]
+    def recurse(i, j, mod):
+        if (i, j, mod) in memo:
+            return memo[(i, j, mod)]
         
-        if i == N-1 and j == N-1:
-            return grid[i][j], ""
-        
-        is_next_must_X = (moves_mod_3 == 2)  # Next move is (k+1), so if k % 3 == 2
+        if i == N - 1 and j == N - 1:
+            memo[(i, j, mod)] = (grid[i][j], "")
+            return memo[(i, j, mod)]
         
         possible_moves = []
-        if j + 1 < N:  # R
-            possible_moves.append(('R', i, j + 1))
-        if i + 1 < N:  # D
-            possible_moves.append(('D', i + 1, j))
-        if i + 1 < N and j + 1 < N:  # X
-            possible_moves.append(('X', i + 1, j + 1))
         
-        candidates = []
-        for move, next_i, next_j in possible_moves:
-            if is_next_must_X:
-                if move == 'X':
-                    sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
-                    candidates.append((grid[i][j] + sub_sum, move + sub_path))
+        if mod == 2:  # Next move must be X if possible
+            if i + 1 < N and j + 1 < N:
+                possible_moves = [('X', i + 1, j + 1)]
             else:
-                sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
-                candidates.append((grid[i][j] + sub_sum, move + sub_path))
-        
-        if is_next_must_X and not any(m[0] == 'X' for m in possible_moves):
-            for move, next_i, next_j in possible_moves:
-                sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
-                candidates.append((grid[i][j] + sub_sum, move + sub_path))
-        
-        if candidates:
-            best = max(candidates, key=lambda x: x[0])
-            memo[(i, j, moves_mod_3)] = best
-            return best
+                if i + 1 < N:
+                    possible_moves.append(('D', i + 1, j))
+                if j + 1 < N:
+                    possible_moves.append(('R', i, j + 1))
         else:
-            return float('-inf'), ""  # Unreachable, but handle
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+            if i + 1 < N:
+                possible_moves.append(('D', i + 1, j))
+            if j + 1 < N:
+                possible_moves.append(('R', i, j + 1))
+        
+        if possible_moves:
+            best_sum = float('-inf')
+            best_path = None
+            for move in possible_moves:
+                move_str, next_i, next_j = move
+                next_mod = (mod + 1) % 3
+                sum_next, path_next = recurse(next_i, next_j, next_mod)
+                if sum_next != float('-inf'):
+                    current_sum = grid[i][j] + sum_next
+                    if current_sum > best_sum:
+                        best_sum = current_sum
+                        best_path = move_str + path_next
+            memo[(i, j, mod)] = (best_sum, best_path)
+            return memo[(i, j, mod)]
+        else:
+            memo[(i, j, mod)] = (float('-inf'), "")
+            return memo[(i, j, mod)]
     
-    result_sum, result_path = helper(0, 0, 0)
-    return result_sum, result_path
+    max_sum, path_string = recurse(0, 0, 0)
+    return (max_sum, path_string)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    if N == 0:
-        return 0, ""
     memo = {}
     
-    def helper(i, j, moves_mod_3):
-        if (i, j, moves_mod_3) in memo:
-            return memo[(i, j, moves_mod_3)]
+    def recurse(i, j, mod):
+        if (i, j, mod) in memo:
+            return memo[(i, j, mod)]
         
-        if i == N-1 and j == N-1:
-            return grid[i][j], ""
-        
-        is_next_must_X = (moves_mod_3 == 2)  # Next move is (k+1), so if k % 3 == 2
+        if i == N - 1 and j == N - 1:
+            memo[(i, j, mod)] = (grid[i][j], "")
+            return memo[(i, j, mod)]
         
         possible_moves = []
-        if j + 1 < N:  # R
-            possible_moves.append(('R', i, j + 1))
-        if i + 1 < N:  # D
-            possible_moves.append(('D', i + 1, j))
-        if i + 1 < N and j + 1 < N:  # X
-            possible_moves.append(('X', i + 1, j + 1))
         
-        candidates = []
-        for move, next_i, next_j in possible_moves:
-            if is_next_must_X:
-                if move == 'X':
-                    sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
-                    candidates.append((grid[i][j] + sub_sum, move + sub_path))
+        if mod == 2:  # Next move must be X if possible
+            if i + 1 < N and j + 1 < N:
+                possible_moves = [('X', i + 1, j + 1)]
             else:
-                sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
-                candidates.append((grid[i][j] + sub_sum, move + sub_path))
-        
-        if is_next_must_X and not any(m[0] == 'X' for m in possible_moves):
-            for move, next_i, next_j in possible_moves:
-                sub_sum, sub_path = helper(next_i, next_j, (moves_mod_3 + 1) % 3)
-                candidates.append((grid[i][j] + sub_sum, move + sub_path))
-        
-        if candidates:
-            best = max(candidates, key=lambda x: x[0])
-            memo[(i, j, moves_mod_3)] = best
-            return best
+                if i + 1 < N:
+                    possible_moves.append(('D', i + 1, j))
+                if j + 1 < N:
+                    possible_moves.append(('R', i, j + 1))
         else:
-            return float('-inf'), ""  # Unreachable, but handle
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+            if i + 1 < N:
+                possible_moves.append(('D', i + 1, j))
+            if j + 1 < N:
+                possible_moves.append(('R', i, j + 1))
+        
+        if possible_moves:
+            best_sum = float('-inf')
+            best_path = None
+            for move in possible_moves:
+                move_str, next_i, next_j = move
+                next_mod = (mod + 1) % 3
+                sum_next, path_next = recurse(next_i, next_j, next_mod)
+                if sum_next != float('-inf'):
+                    current_sum = grid[i][j] + sum_next
+                    if current_sum > best_sum:
+                        best_sum = current_sum
+                        best_path = move_str + path_next
+            memo[(i, j, mod)] = (best_sum, best_path)
+            return memo[(i, j, mod)]
+        else:
+            memo[(i, j, mod)] = (float('-inf'), "")
+            return memo[(i, j, mod)]
     
-    result_sum, result_path = helper(0, 0, 0)
-    return result_sum, result_path
+    max_sum, path_string = recurse(0, 0, 0)
+    return (max_sum, path_string)
