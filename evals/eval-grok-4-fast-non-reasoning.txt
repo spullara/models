@@ -1,9 +1,9 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-10T14:12:29.505644+00:00
+Evaluated: 2026-03-11T17:28:52.897245+00:00
 
 === TIMING ===
-Response time: 4.2s
+Response time: 2.56s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -20,103 +20,117 @@ Path valid: YES
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
-    N = len(grid)
-    INF = float('-inf')
-    dp = [[(INF, "") for _ in range(N)] for _ in range(N)]
-    dp[0][0] = (grid[0][0], "")
     
-    for i in range(N):
-        for j in range(N):
-            if dp[i][j][0] == INF:
-                continue
-            current_sum, path = dp[i][j]
-            moves_made = len(path)
-            is_diag_required = (moves_made + 1) % 3 == 0
-            
-            candidates = []
-            if j + 1 < N:
-                candidates.append(('R', i, j + 1))
-            if i + 1 < N:
-                candidates.append(('D', i + 1, j))
-            if i + 1 < N and j + 1 < N:
-                candidates.append(('X', i + 1, j + 1))
-            
-            if candidates:
-                if is_diag_required:
-                    diag_possible = any(c[0] == 'X' for c in candidates)
-                    if diag_possible:
-                        for move, ni, nj in candidates:
-                            if move == 'X':
-                                new_sum = current_sum + grid[ni][nj]
-                                new_path = path + move
-                                if new_sum > dp[ni][nj][0]:
-                                    dp[ni][nj] = (new_sum, new_path)
-                    else:
-                        for move, ni, nj in candidates:
-                            new_sum = current_sum + grid[ni][nj]
-                            new_path = path + move
-                            if new_sum > dp[ni][nj][0]:
-                                dp[ni][nj] = (new_sum, new_path)
-                else:
-                    for move, ni, nj in candidates:
-                        new_sum = current_sum + grid[ni][nj]
-                        new_path = path + move
-                        if new_sum > dp[ni][nj][0]:
-                            dp[ni][nj] = (new_sum, new_path)
+    n = len(grid)
+    if n != len(grid[0]):
+        raise ValueError("Grid must be square")
     
-    if dp[N-1][N-1][0] == INF:
-        return 0, ""
-    return dp[N-1][N-1]
+    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k % 3 moves made
+    dp = [[[(-float('inf'), "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    
+    # Initialize starting position
+    dp[0][0][0] = (grid[0][0], "")
+    
+    for i in range(n):
+        for j in range(n):
+            for k in range(3):
+                if dp[i][j][k][0] == -float('inf'):
+                    continue
+                
+                current_sum, path = dp[i][j][k]
+                next_moves = k + 1
+                
+                # Possible moves
+                moves = []
+                if j + 1 < n:
+                    moves.append(('R', i, j + 1, grid[i][j + 1]))
+                if i + 1 < n:
+                    moves.append(('D', i + 1, j, grid[i + 1][j]))
+                if i + 1 < n and j + 1 < n:
+                    moves.append(('X', i + 1, j + 1, grid[i + 1][j + 1]))
+                
+                for move_char, ni, nj, value in moves:
+                    next_k = next_moves % 3
+                    is_diag_required = (next_moves % 3 == 0)
+                    
+                    if is_diag_required and move_char != 'X':
+                        # Check if diagonal is possible
+                        has_diag = any(m[0] == 'X' for m in moves)
+                        if has_diag:
+                            continue  # Skip non-diagonal if diagonal is possible
+                    
+                    new_sum = current_sum + value
+                    new_path = path + move_char
+                    
+                    if new_sum > dp[ni][nj][next_k][0]:
+                        dp[ni][nj][next_k] = (new_sum, new_path)
+    
+    # Find maximum at bottom-right for any k
+    max_sum = -float('inf')
+    best_path = ""
+    for k in range(3):
+        if dp[n-1][n-1][k][0] > max_sum:
+            max_sum = dp[n-1][n-1][k][0]
+            best_path = dp[n-1][n-1][k][1]
+    
+    return (max_sum, best_path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
-    N = len(grid)
-    INF = float('-inf')
-    dp = [[(INF, "") for _ in range(N)] for _ in range(N)]
-    dp[0][0] = (grid[0][0], "")
     
-    for i in range(N):
-        for j in range(N):
-            if dp[i][j][0] == INF:
-                continue
-            current_sum, path = dp[i][j]
-            moves_made = len(path)
-            is_diag_required = (moves_made + 1) % 3 == 0
-            
-            candidates = []
-            if j + 1 < N:
-                candidates.append(('R', i, j + 1))
-            if i + 1 < N:
-                candidates.append(('D', i + 1, j))
-            if i + 1 < N and j + 1 < N:
-                candidates.append(('X', i + 1, j + 1))
-            
-            if candidates:
-                if is_diag_required:
-                    diag_possible = any(c[0] == 'X' for c in candidates)
-                    if diag_possible:
-                        for move, ni, nj in candidates:
-                            if move == 'X':
-                                new_sum = current_sum + grid[ni][nj]
-                                new_path = path + move
-                                if new_sum > dp[ni][nj][0]:
-                                    dp[ni][nj] = (new_sum, new_path)
-                    else:
-                        for move, ni, nj in candidates:
-                            new_sum = current_sum + grid[ni][nj]
-                            new_path = path + move
-                            if new_sum > dp[ni][nj][0]:
-                                dp[ni][nj] = (new_sum, new_path)
-                else:
-                    for move, ni, nj in candidates:
-                        new_sum = current_sum + grid[ni][nj]
-                        new_path = path + move
-                        if new_sum > dp[ni][nj][0]:
-                            dp[ni][nj] = (new_sum, new_path)
+    n = len(grid)
+    if n != len(grid[0]):
+        raise ValueError("Grid must be square")
     
-    if dp[N-1][N-1][0] == INF:
-        return 0, ""
-    return dp[N-1][N-1]
+    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k % 3 moves made
+    dp = [[[(-float('inf'), "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    
+    # Initialize starting position
+    dp[0][0][0] = (grid[0][0], "")
+    
+    for i in range(n):
+        for j in range(n):
+            for k in range(3):
+                if dp[i][j][k][0] == -float('inf'):
+                    continue
+                
+                current_sum, path = dp[i][j][k]
+                next_moves = k + 1
+                
+                # Possible moves
+                moves = []
+                if j + 1 < n:
+                    moves.append(('R', i, j + 1, grid[i][j + 1]))
+                if i + 1 < n:
+                    moves.append(('D', i + 1, j, grid[i + 1][j]))
+                if i + 1 < n and j + 1 < n:
+                    moves.append(('X', i + 1, j + 1, grid[i + 1][j + 1]))
+                
+                for move_char, ni, nj, value in moves:
+                    next_k = next_moves % 3
+                    is_diag_required = (next_moves % 3 == 0)
+                    
+                    if is_diag_required and move_char != 'X':
+                        # Check if diagonal is possible
+                        has_diag = any(m[0] == 'X' for m in moves)
+                        if has_diag:
+                            continue  # Skip non-diagonal if diagonal is possible
+                    
+                    new_sum = current_sum + value
+                    new_path = path + move_char
+                    
+                    if new_sum > dp[ni][nj][next_k][0]:
+                        dp[ni][nj][next_k] = (new_sum, new_path)
+    
+    # Find maximum at bottom-right for any k
+    max_sum = -float('inf')
+    best_path = ""
+    for k in range(3):
+        if dp[n-1][n-1][k][0] > max_sum:
+            max_sum = dp[n-1][n-1][k][0]
+            best_path = dp[n-1][n-1][k][1]
+    
+    return (max_sum, best_path)
