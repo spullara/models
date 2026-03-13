@@ -1,0 +1,19 @@
+Model: mistral-squarepoint-2602
+Provider: mistral
+Evaluated: 2026-03-13T15:36:06.205416+00:00
+
+=== TIMING ===
+Response time: 0.69s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 500: {"object":"error","message":"Service unavailable.","type":"internal_server_error","param":null,"code":"3000","raw_status_code":500}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
