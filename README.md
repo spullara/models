@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-03-13 11:48:17
+Last updated: 2026-03-13 15:36:19
 
 ## Summary
 
@@ -15,7 +15,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 14/6
 
-**Mistral**: 57/22
+**Mistral**: 58/22
 
 **DeepSeek**: 2/0
 
@@ -374,6 +374,7 @@ Model counts shown as: **Available/Deleted**
 - voxtral-mini-transcribe-realtime-2602 (added: 2026-03-13)
 - voxtral-mini-realtime-latest (added: 2026-03-13)
 - voxtral-mini-realtime-2602 (added: 2026-03-13)
+- mistral-squarepoint-2602 (added: 2026-03-13)
 - voxtral-mini-2602 (added: 2026-02-04)
 - mistral-vibe-cli-with-tools (added: 2026-02-04)
 - labs-mistral-small-creative (added: 2025-12-16)
