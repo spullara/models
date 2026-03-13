@@ -38,6 +38,7 @@ mistral-ocr-2512
 mistral-ocr-latest
 mistral-small-2506
 mistral-small-latest
+mistral-squarepoint-2602
 mistral-tiny-2407
 mistral-tiny-latest
 mistral-vibe-cli-latest
