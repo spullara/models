@@ -1,0 +1,129 @@
+Model: labs-leanstral-2603
+Provider: mistral
+Evaluated: 2026-03-16T19:08:07.436069+00:00
+
+=== TIMING ===
+Response time: 4.71s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 73
+Calculated sum: 15
+Sum matches: NO
+Path valid: NO
+Path error: Move 3 must be diagonal (X) but was D
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    dp = [[-1 for _ in range(n)] for _ in range(n)]
+    moves = [[None for _ in range(n)] for _ in range(n)]
+
+    def dfs(i: int, j: int, move_count: int) -> tuple[int, str]:
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+
+        if dp[i][j] != -1:
+            return (dp[i][j], moves[i][j])
+
+        max_sum = float('-inf')
+        best_path = ""
+
+        is_diagonal_move = move_count % 3 == 0
+
+        if is_diagonal_move:
+            if i + 1 < n and j + 1 < n:
+                sum_diag, path_diag = dfs(i + 1, j + 1, move_count + 1)
+                sum_diag += grid[i][j]
+                path_diag = "X" + path_diag
+                if sum_diag > max_sum or (sum_diag == max_sum and len(path_diag) < len(best_path)):
+                    max_sum = sum_diag
+                    best_path = path_diag
+            else:
+                pass
+
+        if j + 1 < n:
+            sum_right, path_right = dfs(i, j + 1, move_count + 1)
+            sum_right += grid[i][j]
+            path_right = "R" + path_right
+            if sum_right > max_sum or (sum_right == max_sum and len(path_right) < len(best_path)):
+                max_sum = sum_right
+                best_path = path_right
+
+        if i + 1 < n:
+            sum_down, path_down = dfs(i + 1, j, move_count + 1)
+            sum_down += grid[i][j]
+            path_down = "D" + path_down
+            if sum_down > max_sum or (sum_down == max_sum and len(path_down) < len(best_path)):
+                max_sum = sum_down
+                best_path = path_down
+
+        dp[i][j] = max_sum
+        moves[i][j] = best_path
+        return (max_sum, best_path)
+
+    total_max, best_path = dfs(0, 0, 1)
+    return (total_max, best_path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    dp = [[-1 for _ in range(n)] for _ in range(n)]
+    moves = [[None for _ in range(n)] for _ in range(n)]
+
+    def dfs(i: int, j: int, move_count: int) -> tuple[int, str]:
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+
+        if dp[i][j] != -1:
+            return (dp[i][j], moves[i][j])
+
+        max_sum = float('-inf')
+        best_path = ""
+
+        is_diagonal_move = move_count % 3 == 0
+
+        if is_diagonal_move:
+            if i + 1 < n and j + 1 < n:
+                sum_diag, path_diag = dfs(i + 1, j + 1, move_count + 1)
+                sum_diag += grid[i][j]
+                path_diag = "X" + path_diag
+                if sum_diag > max_sum or (sum_diag == max_sum and len(path_diag) < len(best_path)):
+                    max_sum = sum_diag
+                    best_path = path_diag
+            else:
+                pass
+
+        if j + 1 < n:
+            sum_right, path_right = dfs(i, j + 1, move_count + 1)
+            sum_right += grid[i][j]
+            path_right = "R" + path_right
+            if sum_right > max_sum or (sum_right == max_sum and len(path_right) < len(best_path)):
+                max_sum = sum_right
+                best_path = path_right
+
+        if i + 1 < n:
+            sum_down, path_down = dfs(i + 1, j, move_count + 1)
+            sum_down += grid[i][j]
+            path_down = "D" + path_down
+            if sum_down > max_sum or (sum_down == max_sum and len(path_down) < len(best_path)):
+                max_sum = sum_down
+                best_path = path_down
+
+        dp[i][j] = max_sum
+        moves[i][j] = best_path
+        return (max_sum, best_path)
+
+    total_max, best_path = dfs(0, 0, 1)
+    return (total_max, best_path)
