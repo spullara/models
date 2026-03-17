@@ -1,0 +1,149 @@
+Model: gpt-5.4-mini
+Provider: openai_responses
+Evaluated: 2026-03-17T17:03:05.905551+00:00
+
+=== TIMING ===
+Response time: 3.21s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: -1000000000000000000000000000000
+Calculated sum: 1
+Sum matches: NO
+Path valid: NO
+Path error: Path ended at (0, 0) instead of (3, 3)
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+
+    NEG = -10**30
+
+    # dp[k][i][j]: best sum reaching (i,j) with k moves made, where k mod 3
+    # only need previous layer by move count, but keep full for path reconstruction.
+    # Since exact path needed, use dynamic programming with parent pointers.
+    # State: (i, j, m) where m = moves made so far mod 3 (0..2) after arriving.
+    # For each move count, use dictionaries to store best sums and parents.
+    from collections import defaultdict
+
+    best = {(0, 0, 0): grid[0][0]}
+    parent = {}
+
+    max_moves = 2 * (n - 1)
+    for moves in range(max_moves):
+        nxt = {}
+        for (i, j, mod), val in best.items():
+            required_diag = (moves + 1) % 3 == 0
+            can_diag = i + 1 < n and j + 1 < n
+
+            candidates = []
+            if required_diag and can_diag:
+                candidates = [('X', i + 1, j + 1)]
+            else:
+                if j + 1 < n:
+                    candidates.append(('R', i, j + 1))
+                if i + 1 < n:
+                    candidates.append(('D', i + 1, j))
+
+            for ch, ni, nj in candidates:
+                nmod = (mod + 1) % 3
+                nval = val + grid[ni][nj]
+                state = (ni, nj, nmod)
+                if nval > nxt.get(state, NEG):
+                    nxt[state] = nval
+                    parent[(moves + 1, ni, nj, nmod)] = (i, j, mod, ch)
+        best = nxt
+
+    # Find best end state at (n-1, n-1)
+    end_states = [(state, val) for state, val in best.items() if state[0] == n - 1 and state[1] == n - 1]
+    if not end_states:
+        return (NEG, "")
+
+    end_state, max_sum = max(end_states, key=lambda x: x[1])
+    _, _, end_mod = end_state
+
+    # Reconstruct path
+    path = []
+    moves = max_moves
+    i, j, mod = n - 1, n - 1, end_mod
+    while moves > 0:
+        pi, pj, pmod, ch = parent[(moves, i, j, mod)]
+        path.append(ch)
+        i, j, mod = pi, pj, pmod
+        moves -= 1
+
+    path.reverse()
+    return (max_sum, "".join(path))
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+
+    NEG = -10**30
+
+    # dp[k][i][j]: best sum reaching (i,j) with k moves made, where k mod 3
+    # only need previous layer by move count, but keep full for path reconstruction.
+    # Since exact path needed, use dynamic programming with parent pointers.
+    # State: (i, j, m) where m = moves made so far mod 3 (0..2) after arriving.
+    # For each move count, use dictionaries to store best sums and parents.
+    from collections import defaultdict
+
+    best = {(0, 0, 0): grid[0][0]}
+    parent = {}
+
+    max_moves = 2 * (n - 1)
+    for moves in range(max_moves):
+        nxt = {}
+        for (i, j, mod), val in best.items():
+            required_diag = (moves + 1) % 3 == 0
+            can_diag = i + 1 < n and j + 1 < n
+
+            candidates = []
+            if required_diag and can_diag:
+                candidates = [('X', i + 1, j + 1)]
+            else:
+                if j + 1 < n:
+                    candidates.append(('R', i, j + 1))
+                if i + 1 < n:
+                    candidates.append(('D', i + 1, j))
+
+            for ch, ni, nj in candidates:
+                nmod = (mod + 1) % 3
+                nval = val + grid[ni][nj]
+                state = (ni, nj, nmod)
+                if nval > nxt.get(state, NEG):
+                    nxt[state] = nval
+                    parent[(moves + 1, ni, nj, nmod)] = (i, j, mod, ch)
+        best = nxt
+
+    # Find best end state at (n-1, n-1)
+    end_states = [(state, val) for state, val in best.items() if state[0] == n - 1 and state[1] == n - 1]
+    if not end_states:
+        return (NEG, "")
+
+    end_state, max_sum = max(end_states, key=lambda x: x[1])
+    _, _, end_mod = end_state
+
+    # Reconstruct path
+    path = []
+    moves = max_moves
+    i, j, mod = n - 1, n - 1, end_mod
+    while moves > 0:
+        pi, pj, pmod, ch = parent[(moves, i, j, mod)]
+        path.append(ch)
+        i, j, mod = pi, pj, pmod
+        moves -= 1
+
+    path.reverse()
+    return (max_sum, "".join(path))

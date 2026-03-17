@@ -1,0 +1,301 @@
+Model: gpt-5.4-nano-2026-03-17
+Provider: openai_responses
+Evaluated: 2026-03-17T17:03:19.310924+00:00
+
+=== TIMING ===
+Response time: 6.46s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 0
+Calculated sum: 1
+Sum matches: NO
+Path valid: NO
+Path error: Path ended at (0, 0) instead of (3, 3)
+
+=== RAW RESPONSE ===
+from typing import List, Tuple
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return 0, ""
+    if any(len(row) != n for row in grid):
+        raise ValueError("grid must be N×N")
+
+    total_steps = 2 * n - 2  # right n-1, down n-1
+    # required diagonal at steps with index 3,6,9... (1-indexed moves)
+    req_mod = 3
+    L = max(0, total_steps + 1)  # number of move indices 0..total_steps
+
+    # dp[k][i][j] = best sum reaching cell (i,j) with exactly k moves made
+    # with predecessor info to reconstruct path. We keep parent pointers.
+    neg_inf = -10**30
+
+    # Parent: store previous cell and move char; for each (k,i,j) store one parent.
+    # Use sparse arrays per k to reduce memory.
+    dp_prev = [[neg_inf] * n for _ in range(n)]
+    parent_prev = [[None] * n for _ in range(n)]  # tuple(prev_i, prev_j, move_char)
+
+    dp_prev[0][0] = grid[0][0]
+    parent_prev[0][0] = (None, None, "")
+
+    for k in range(1, total_steps + 1):
+        dp_cur = [[neg_inf] * n for _ in range(n)]
+        parent_cur = [[None] * n for _ in range(n)]
+
+        required_diagonal = (k % req_mod == 0)
+
+        for i in range(n):
+            # j is constrained by moves: from (0,0), after k moves, i+j == k
+            j = k - i
+            if j < 0 or j >= n:
+                continue
+
+            best_val = neg_inf
+            best_parent = None
+
+            candidates = []
+
+            # From previous: Right means previous col = j-1 at same row i
+            if j - 1 >= 0:
+                candidates.append((dp_prev[i][j - 1], i, j - 1, 'R'))
+            # Down: previous row = i-1 at same col j
+            if i - 1 >= 0:
+                candidates.append((dp_prev[i - 1][j], i - 1, j, 'D'))
+            # Diagonal: previous at (i-1, j-1)
+            if i - 1 >= 0 and j - 1 >= 0:
+                candidates.append((dp_prev[i - 1][j - 1], i - 1, j - 1, 'X'))
+
+            # Filter candidates if diagonal is required; if none, allow any.
+            if required_diagonal:
+                diag_candidates = [c for c in candidates if c[3] == 'X']
+                if diag_candidates:
+                    candidates = diag_candidates
+
+            for prev_val, pi, pj, ch in candidates:
+                if prev_val == neg_inf:
+                    continue
+                val = prev_val + grid[i][j]
+                if val > best_val:
+                    best_val = val
+                    best_parent = (pi, pj, ch)
+
+            if best_parent is not None:
+                dp_cur[i][j] = best_val
+                parent_cur[i][j] = best_parent
+
+        dp_prev = dp_cur
+        parent_prev = parent_cur
+
+    # dp_prev now holds best sums at k=total_steps, only cell (n-1, n-1) is feasible
+    max_sum = dp_prev[n - 1][n - 1]
+    if max_sum == neg_inf:
+        # Fallback (shouldn't happen for valid moves)
+        return 0, ""
+
+    # Reconstruct path
+    # Need parents for each k; re-run DP storing parents for reconstruction
+    dp_prev = [[neg_inf] * n for _ in range(n)]
+    dp_prev[0][0] = grid[0][0]
+    parents_by_k = []  # list of parent grids for each k
+
+    parents_by_k.append([[None] * n for _ in range(n)])
+    parents_by_k[0][0][0] = (None, None, "")
+
+    for k in range(1, total_steps + 1):
+        dp_cur = [[neg_inf] * n for _ in range(n)]
+        parent_cur = [[None] * n for _ in range(n)]
+        required_diagonal = (k % req_mod == 0)
+
+        for i in range(n):
+            j = k - i
+            if j < 0 or j >= n:
+                continue
+
+            best_val = neg_inf
+            best_parent = None
+
+            candidates = []
+            if j - 1 >= 0:
+                candidates.append((dp_prev[i][j - 1], i, j - 1, 'R'))
+            if i - 1 >= 0:
+                candidates.append((dp_prev[i - 1][j], i - 1, j, 'D'))
+            if i - 1 >= 0 and j - 1 >= 0:
+                candidates.append((dp_prev[i - 1][j - 1], i - 1, j - 1, 'X'))
+
+            if required_diagonal:
+                diag_candidates = [c for c in candidates if c[3] == 'X']
+                if diag_candidates:
+                    candidates = diag_candidates
+
+            for prev_val, pi, pj, ch in candidates:
+                if prev_val == neg_inf:
+                    continue
+                val = prev_val + grid[i][j]
+                if val > best_val:
+                    best_val = val
+                    best_parent = (pi, pj, ch)
+
+            if best_parent is not None:
+                dp_cur[i][j] = best_val
+                parent_cur[i][j] = best_parent
+
+        dp_prev = dp_cur
+        parents_by_k.append(parent_cur)
+
+    i, j = n - 1, n - 1
+    path_chars = []
+    for k in range(total_steps, 0, -1):
+        pi, pj, ch = parents_by_k[k][i][j]
+        path_chars.append(ch)
+        i, j = pi, pj
+
+    path_chars.reverse()
+    path_string = "".join(path_chars)
+    return int(max_sum), path_string
+
+=== EXTRACTED CODE ===
+from typing import List, Tuple
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return 0, ""
+    if any(len(row) != n for row in grid):
+        raise ValueError("grid must be N×N")
+
+    total_steps = 2 * n - 2  # right n-1, down n-1
+    # required diagonal at steps with index 3,6,9... (1-indexed moves)
+    req_mod = 3
+    L = max(0, total_steps + 1)  # number of move indices 0..total_steps
+
+    # dp[k][i][j] = best sum reaching cell (i,j) with exactly k moves made
+    # with predecessor info to reconstruct path. We keep parent pointers.
+    neg_inf = -10**30
+
+    # Parent: store previous cell and move char; for each (k,i,j) store one parent.
+    # Use sparse arrays per k to reduce memory.
+    dp_prev = [[neg_inf] * n for _ in range(n)]
+    parent_prev = [[None] * n for _ in range(n)]  # tuple(prev_i, prev_j, move_char)
+
+    dp_prev[0][0] = grid[0][0]
+    parent_prev[0][0] = (None, None, "")
+
+    for k in range(1, total_steps + 1):
+        dp_cur = [[neg_inf] * n for _ in range(n)]
+        parent_cur = [[None] * n for _ in range(n)]
+
+        required_diagonal = (k % req_mod == 0)
+
+        for i in range(n):
+            # j is constrained by moves: from (0,0), after k moves, i+j == k
+            j = k - i
+            if j < 0 or j >= n:
+                continue
+
+            best_val = neg_inf
+            best_parent = None
+
+            candidates = []
+
+            # From previous: Right means previous col = j-1 at same row i
+            if j - 1 >= 0:
+                candidates.append((dp_prev[i][j - 1], i, j - 1, 'R'))
+            # Down: previous row = i-1 at same col j
+            if i - 1 >= 0:
+                candidates.append((dp_prev[i - 1][j], i - 1, j, 'D'))
+            # Diagonal: previous at (i-1, j-1)
+            if i - 1 >= 0 and j - 1 >= 0:
+                candidates.append((dp_prev[i - 1][j - 1], i - 1, j - 1, 'X'))
+
+            # Filter candidates if diagonal is required; if none, allow any.
+            if required_diagonal:
+                diag_candidates = [c for c in candidates if c[3] == 'X']
+                if diag_candidates:
+                    candidates = diag_candidates
+
+            for prev_val, pi, pj, ch in candidates:
+                if prev_val == neg_inf:
+                    continue
+                val = prev_val + grid[i][j]
+                if val > best_val:
+                    best_val = val
+                    best_parent = (pi, pj, ch)
+
+            if best_parent is not None:
+                dp_cur[i][j] = best_val
+                parent_cur[i][j] = best_parent
+
+        dp_prev = dp_cur
+        parent_prev = parent_cur
+
+    # dp_prev now holds best sums at k=total_steps, only cell (n-1, n-1) is feasible
+    max_sum = dp_prev[n - 1][n - 1]
+    if max_sum == neg_inf:
+        # Fallback (shouldn't happen for valid moves)
+        return 0, ""
+
+    # Reconstruct path
+    # Need parents for each k; re-run DP storing parents for reconstruction
+    dp_prev = [[neg_inf] * n for _ in range(n)]
+    dp_prev[0][0] = grid[0][0]
+    parents_by_k = []  # list of parent grids for each k
+
+    parents_by_k.append([[None] * n for _ in range(n)])
+    parents_by_k[0][0][0] = (None, None, "")
+
+    for k in range(1, total_steps + 1):
+        dp_cur = [[neg_inf] * n for _ in range(n)]
+        parent_cur = [[None] * n for _ in range(n)]
+        required_diagonal = (k % req_mod == 0)
+
+        for i in range(n):
+            j = k - i
+            if j < 0 or j >= n:
+                continue
+
+            best_val = neg_inf
+            best_parent = None
+
+            candidates = []
+            if j - 1 >= 0:
+                candidates.append((dp_prev[i][j - 1], i, j - 1, 'R'))
+            if i - 1 >= 0:
+                candidates.append((dp_prev[i - 1][j], i - 1, j, 'D'))
+            if i - 1 >= 0 and j - 1 >= 0:
+                candidates.append((dp_prev[i - 1][j - 1], i - 1, j - 1, 'X'))
+
+            if required_diagonal:
+                diag_candidates = [c for c in candidates if c[3] == 'X']
+                if diag_candidates:
+                    candidates = diag_candidates
+
+            for prev_val, pi, pj, ch in candidates:
+                if prev_val == neg_inf:
+                    continue
+                val = prev_val + grid[i][j]
+                if val > best_val:
+                    best_val = val
+                    best_parent = (pi, pj, ch)
+
+            if best_parent is not None:
+                dp_cur[i][j] = best_val
+                parent_cur[i][j] = best_parent
+
+        dp_prev = dp_cur
+        parents_by_k.append(parent_cur)
+
+    i, j = n - 1, n - 1
+    path_chars = []
+    for k in range(total_steps, 0, -1):
+        pi, pj, ch = parents_by_k[k][i][j]
+        path_chars.append(ch)
+        i, j = pi, pj
+
+    path_chars.reverse()
+    path_string = "".join(path_chars)
+    return int(max_sum), path_string

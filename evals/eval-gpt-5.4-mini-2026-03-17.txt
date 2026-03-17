@@ -1,0 +1,134 @@
+Model: gpt-5.4-mini-2026-03-17
+Provider: openai_responses
+Evaluated: 2026-03-17T17:03:09.151685+00:00
+
+=== TIMING ===
+Response time: 3.52s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    
+    from math import inf
+
+    # dp[r][c][k] = best sum to reach (r,c) with move count mod 3 = k
+    # parent pointers: (pr, pc, pk, move_char)
+    dp = [[[-inf] * 3 for _ in range(n)] for _ in range(n)]
+    parent = [[ [None] * 3 for _ in range(n)] for _ in range(n)]
+
+    dp[0][0][0] = grid[0][0]
+
+    for r in range(n):
+        for c in range(n):
+            for k in range(3):
+                cur = dp[r][c][k]
+                if cur == -inf:
+                    continue
+
+                next_k = (k + 1) % 3
+                required_diag = (next_k == 0)
+
+                def relax(nr, nc, ch):
+                    if 0 <= nr < n and 0 <= nc < n:
+                        val = cur + grid[nr][nc]
+                        if val > dp[nr][nc][next_k]:
+                            dp[nr][nc][next_k] = val
+                            parent[nr][nc][next_k] = (r, c, k, ch)
+
+                # Right
+                if not required_diag or (r + 1 < n and c + 1 < n and False):
+                    relax(r, c + 1, "R")
+                # Down
+                if not required_diag or (r + 1 < n and c + 1 < n and False):
+                    relax(r + 1, c, "D")
+                # Diagonal
+                relax(r + 1, c + 1, "X")
+
+    # Best among all modulo states at destination
+    end_k = max(range(3), key=lambda k: dp[n - 1][n - 1][k])
+    best_sum = dp[n - 1][n - 1][end_k]
+
+    # Reconstruct path
+    path = []
+    r, c, k = n - 1, n - 1, end_k
+    while not (r == 0 and c == 0 and k == 0):
+        p = parent[r][c][k]
+        if p is None:
+            break
+        pr, pc, pk, ch = p
+        path.append(ch)
+        r, c, k = pr, pc, pk
+
+    path.reverse()
+    return (best_sum, "".join(path))
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    
+    from math import inf
+
+    # dp[r][c][k] = best sum to reach (r,c) with move count mod 3 = k
+    # parent pointers: (pr, pc, pk, move_char)
+    dp = [[[-inf] * 3 for _ in range(n)] for _ in range(n)]
+    parent = [[ [None] * 3 for _ in range(n)] for _ in range(n)]
+
+    dp[0][0][0] = grid[0][0]
+
+    for r in range(n):
+        for c in range(n):
+            for k in range(3):
+                cur = dp[r][c][k]
+                if cur == -inf:
+                    continue
+
+                next_k = (k + 1) % 3
+                required_diag = (next_k == 0)
+
+                def relax(nr, nc, ch):
+                    if 0 <= nr < n and 0 <= nc < n:
+                        val = cur + grid[nr][nc]
+                        if val > dp[nr][nc][next_k]:
+                            dp[nr][nc][next_k] = val
+                            parent[nr][nc][next_k] = (r, c, k, ch)
+
+                # Right
+                if not required_diag or (r + 1 < n and c + 1 < n and False):
+                    relax(r, c + 1, "R")
+                # Down
+                if not required_diag or (r + 1 < n and c + 1 < n and False):
+                    relax(r + 1, c, "D")
+                # Diagonal
+                relax(r + 1, c + 1, "X")
+
+    # Best among all modulo states at destination
+    end_k = max(range(3), key=lambda k: dp[n - 1][n - 1][k])
+    best_sum = dp[n - 1][n - 1][end_k]
+
+    # Reconstruct path
+    path = []
+    r, c, k = n - 1, n - 1, end_k
+    while not (r == 0 and c == 0 and k == 0):
+        p = parent[r][c][k]
+        if p is None:
+            break
+        pr, pc, pk, ch = p
+        path.append(ch)
+        r, c, k = pr, pc, pk
+
+    path.reverse()
+    return (best_sum, "".join(path))
