@@ -57,6 +57,5 @@ voxtral-mini-realtime-2602
 voxtral-mini-realtime-latest
 voxtral-mini-transcribe-2507
 voxtral-mini-transcribe-realtime-2602
-voxtral-mini-tts-260213
 voxtral-small-2507
 voxtral-small-latest
