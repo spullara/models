@@ -1,9 +1,9 @@
 Model: grok-4.20-beta-0309-reasoning
 Provider: grok
-Evaluated: 2026-03-11T07:17:07.633884+00:00
+Evaluated: 2026-03-19T03:21:07.196578+00:00
 
 === TIMING ===
-Response time: 21.5s
+Response time: 25.9s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -19,102 +19,92 @@ Path valid: YES
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return (0, "")
-    N = len(grid)
+        return 0, ""
+    n = len(grid)
     memo = {}
-    def dfs(r, c, moves):
-        if r == N - 1 and c == N - 1:
-            return 0, ""
-        key = (r, c, moves)
+    def dfs(i, j, mod):
+        if i == n - 1 and j == n - 1:
+            return grid[i][j], ""
+        key = (i, j, mod)
         if key in memo:
             return memo[key]
-        best_add = float('-inf')
-        best_suffix = ""
-        next_num = moves + 1
-        must_diag = (next_num % 3 == 0)
-        possibles = []
-        can_right = c + 1 < N
-        can_down = r + 1 < N
-        can_diag = can_right and can_down
-        if must_diag:
-            if can_diag:
-                possibles.append((r + 1, c + 1, 'X'))
+        required = (mod == 2)
+        moves = []
+        if i + 1 < n and j + 1 < n:
+            moves.append((i + 1, j + 1, 'X'))
+        if j + 1 < n:
+            moves.append((i, j + 1, 'R'))
+        if i + 1 < n:
+            moves.append((i + 1, j, 'D'))
+        allowed = []
+        if required:
+            x_moves = [m for m in moves if m[2] == 'X']
+            if x_moves:
+                allowed = x_moves
             else:
-                if can_right:
-                    possibles.append((r, c + 1, 'R'))
-                if can_down:
-                    possibles.append((r + 1, c, 'D'))
+                allowed = [m for m in moves if m[2] != 'X']
         else:
-            if can_right:
-                possibles.append((r, c + 1, 'R'))
-            if can_down:
-                possibles.append((r + 1, c, 'D'))
-            if can_diag:
-                possibles.append((r + 1, c + 1, 'X'))
-        for nr, nc, ch in possibles:
-            add_next, suf_next = dfs(nr, nc, moves + 1)
-            if add_next == float('-inf'):
-                continue
-            this_add = grid[nr][nc] + add_next
-            if this_add > best_add:
-                best_add = this_add
-                best_suffix = ch + suf_next
-        memo[key] = (best_add, best_suffix)
+            allowed = moves
+        best_sum = float('-inf')
+        best_path = ""
+        next_mod = (mod + 1) % 3
+        for ni, nj, char in allowed:
+            child_sum, child_path = dfs(ni, nj, next_mod)
+            this_sum = grid[i][j] + child_sum
+            if this_sum > best_sum:
+                best_sum = this_sum
+                best_path = char + child_path
+        if best_sum == float('-inf'):
+            memo[key] = (0, "")
+            return memo[key]
+        memo[key] = (best_sum, best_path)
         return memo[key]
-    add, path = dfs(0, 0, 0)
-    if add == float('-inf'):
-        return (grid[0][0], "")
-    total = grid[0][0] + add
-    return (total, path)
+    max_sum, path = dfs(0, 0, 0)
+    return max_sum, path
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return (0, "")
-    N = len(grid)
+        return 0, ""
+    n = len(grid)
     memo = {}
-    def dfs(r, c, moves):
-        if r == N - 1 and c == N - 1:
-            return 0, ""
-        key = (r, c, moves)
+    def dfs(i, j, mod):
+        if i == n - 1 and j == n - 1:
+            return grid[i][j], ""
+        key = (i, j, mod)
         if key in memo:
             return memo[key]
-        best_add = float('-inf')
-        best_suffix = ""
-        next_num = moves + 1
-        must_diag = (next_num % 3 == 0)
-        possibles = []
-        can_right = c + 1 < N
-        can_down = r + 1 < N
-        can_diag = can_right and can_down
-        if must_diag:
-            if can_diag:
-                possibles.append((r + 1, c + 1, 'X'))
+        required = (mod == 2)
+        moves = []
+        if i + 1 < n and j + 1 < n:
+            moves.append((i + 1, j + 1, 'X'))
+        if j + 1 < n:
+            moves.append((i, j + 1, 'R'))
+        if i + 1 < n:
+            moves.append((i + 1, j, 'D'))
+        allowed = []
+        if required:
+            x_moves = [m for m in moves if m[2] == 'X']
+            if x_moves:
+                allowed = x_moves
             else:
-                if can_right:
-                    possibles.append((r, c + 1, 'R'))
-                if can_down:
-                    possibles.append((r + 1, c, 'D'))
+                allowed = [m for m in moves if m[2] != 'X']
         else:
-            if can_right:
-                possibles.append((r, c + 1, 'R'))
-            if can_down:
-                possibles.append((r + 1, c, 'D'))
-            if can_diag:
-                possibles.append((r + 1, c + 1, 'X'))
-        for nr, nc, ch in possibles:
-            add_next, suf_next = dfs(nr, nc, moves + 1)
-            if add_next == float('-inf'):
-                continue
-            this_add = grid[nr][nc] + add_next
-            if this_add > best_add:
-                best_add = this_add
-                best_suffix = ch + suf_next
-        memo[key] = (best_add, best_suffix)
+            allowed = moves
+        best_sum = float('-inf')
+        best_path = ""
+        next_mod = (mod + 1) % 3
+        for ni, nj, char in allowed:
+            child_sum, child_path = dfs(ni, nj, next_mod)
+            this_sum = grid[i][j] + child_sum
+            if this_sum > best_sum:
+                best_sum = this_sum
+                best_path = char + child_path
+        if best_sum == float('-inf'):
+            memo[key] = (0, "")
+            return memo[key]
+        memo[key] = (best_sum, best_path)
         return memo[key]
-    add, path = dfs(0, 0, 0)
-    if add == float('-inf'):
-        return (grid[0][0], "")
-    total = grid[0][0] + add
-    return (total, path)
+    max_sum, path = dfs(0, 0, 0)
+    return max_sum, path
