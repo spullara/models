@@ -1,9 +1,9 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-03-10T14:13:09.075346+00:00
+Evaluated: 2026-03-20T11:26:12.313879+00:00
 
 === TIMING ===
-Response time: 27.9s
+Response time: 36.49s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,96 +17,126 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-import sys
 from functools import lru_cache
+import math
 
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0:
+    if not grid or not grid[0]:
         return 0, ""
+    N = len(grid)
     
     @lru_cache(None)
-    def dp(i: int, j: int, moves_mod: int) -> tuple[int, str]:
+    def dp(i: int, j: int, mod: int) -> tuple[int, str]:
         if i == N - 1 and j == N - 1:
             return grid[i][j], ""
         
-        next_forced = ((moves_mod + 1) % 3 == 0)
-        candidates = []
+        next_mod = (mod + 1) % 3
+        options = []
         
-        if next_forced:
+        if mod == 2:
+            # Must do diagonal if possible
             if i + 1 < N and j + 1 < N:
-                s, p = dp(i + 1, j + 1, (moves_mod + 1) % 3)
-                candidates.append((s + grid[i][j], "X" + p))
+                sum_x, path_x = dp(i + 1, j + 1, next_mod)
+                sum_x += grid[i][j]
+                path_x = 'X' + path_x
+                return sum_x, path_x
             else:
+                # Do R or D
                 if j + 1 < N:
-                    s, p = dp(i, j + 1, (moves_mod + 1) % 3)
-                    candidates.append((s + grid[i][j], "R" + p))
+                    sum_r, path_r = dp(i, j + 1, next_mod)
+                    sum_r += grid[i][j]
+                    path_r = 'R' + path_r
+                    options.append((sum_r, path_r))
                 if i + 1 < N:
-                    s, p = dp(i + 1, j, (moves_mod + 1) % 3)
-                    candidates.append((s + grid[i][j], "D" + p))
+                    sum_d, path_d = dp(i + 1, j, next_mod)
+                    sum_d += grid[i][j]
+                    path_d = 'D' + path_d
+                    options.append((sum_d, path_d))
         else:
+            # Can do R, D, or X
             if j + 1 < N:
-                s, p = dp(i, j + 1, (moves_mod + 1) % 3)
-                candidates.append((s + grid[i][j], "R" + p))
+                sum_r, path_r = dp(i, j + 1, next_mod)
+                sum_r += grid[i][j]
+                path_r = 'R' + path_r
+                options.append((sum_r, path_r))
             if i + 1 < N:
-                s, p = dp(i + 1, j, (moves_mod + 1) % 3)
-                candidates.append((s + grid[i][j], "D" + p))
+                sum_d, path_d = dp(i + 1, j, next_mod)
+                sum_d += grid[i][j]
+                path_d = 'D' + path_d
+                options.append((sum_d, path_d))
             if i + 1 < N and j + 1 < N:
-                s, p = dp(i + 1, j + 1, (moves_mod + 1) % 3)
-                candidates.append((s + grid[i][j], "X" + p))
+                sum_x, path_x = dp(i + 1, j + 1, next_mod)
+                sum_x += grid[i][j]
+                path_x = 'X' + path_x
+                options.append((sum_x, path_x))
         
-        if not candidates:
-            return -sys.maxsize, ""
-        
-        max_s, max_p = max(candidates, key=lambda x: x[0])
-        return max_s, max_p
+        if options:
+            return max(options, key=lambda x: x[0])
+        else:
+            return -math.inf, ""
     
-    return dp(0, 0, 0)
+    max_sum, path_str = dp(0, 0, 0)
+    return max_sum, path_str
 ```
 
 === EXTRACTED CODE ===
-import sys
 from functools import lru_cache
+import math
 
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0:
+    if not grid or not grid[0]:
         return 0, ""
+    N = len(grid)
     
     @lru_cache(None)
-    def dp(i: int, j: int, moves_mod: int) -> tuple[int, str]:
+    def dp(i: int, j: int, mod: int) -> tuple[int, str]:
         if i == N - 1 and j == N - 1:
             return grid[i][j], ""
         
-        next_forced = ((moves_mod + 1) % 3 == 0)
-        candidates = []
+        next_mod = (mod + 1) % 3
+        options = []
         
-        if next_forced:
+        if mod == 2:
+            # Must do diagonal if possible
             if i + 1 < N and j + 1 < N:
-                s, p = dp(i + 1, j + 1, (moves_mod + 1) % 3)
-                candidates.append((s + grid[i][j], "X" + p))
+                sum_x, path_x = dp(i + 1, j + 1, next_mod)
+                sum_x += grid[i][j]
+                path_x = 'X' + path_x
+                return sum_x, path_x
             else:
+                # Do R or D
                 if j + 1 < N:
-                    s, p = dp(i, j + 1, (moves_mod + 1) % 3)
-                    candidates.append((s + grid[i][j], "R" + p))
+                    sum_r, path_r = dp(i, j + 1, next_mod)
+                    sum_r += grid[i][j]
+                    path_r = 'R' + path_r
+                    options.append((sum_r, path_r))
                 if i + 1 < N:
-                    s, p = dp(i + 1, j, (moves_mod + 1) % 3)
-                    candidates.append((s + grid[i][j], "D" + p))
+                    sum_d, path_d = dp(i + 1, j, next_mod)
+                    sum_d += grid[i][j]
+                    path_d = 'D' + path_d
+                    options.append((sum_d, path_d))
         else:
+            # Can do R, D, or X
             if j + 1 < N:
-                s, p = dp(i, j + 1, (moves_mod + 1) % 3)
-                candidates.append((s + grid[i][j], "R" + p))
+                sum_r, path_r = dp(i, j + 1, next_mod)
+                sum_r += grid[i][j]
+                path_r = 'R' + path_r
+                options.append((sum_r, path_r))
             if i + 1 < N:
-                s, p = dp(i + 1, j, (moves_mod + 1) % 3)
-                candidates.append((s + grid[i][j], "D" + p))
+                sum_d, path_d = dp(i + 1, j, next_mod)
+                sum_d += grid[i][j]
+                path_d = 'D' + path_d
+                options.append((sum_d, path_d))
             if i + 1 < N and j + 1 < N:
-                s, p = dp(i + 1, j + 1, (moves_mod + 1) % 3)
-                candidates.append((s + grid[i][j], "X" + p))
+                sum_x, path_x = dp(i + 1, j + 1, next_mod)
+                sum_x += grid[i][j]
+                path_x = 'X' + path_x
+                options.append((sum_x, path_x))
         
-        if not candidates:
-            return -sys.maxsize, ""
-        
-        max_s, max_p = max(candidates, key=lambda x: x[0])
-        return max_s, max_p
+        if options:
+            return max(options, key=lambda x: x[0])
+        else:
+            return -math.inf, ""
     
-    return dp(0, 0, 0)
+    max_sum, path_str = dp(0, 0, 0)
+    return max_sum, path_str
