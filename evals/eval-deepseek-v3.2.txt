@@ -1,0 +1,19 @@
+Model: deepseek-v3.2
+Provider: qwen
+Evaluated: 2026-03-20T13:46:05.401084+00:00
+
+=== TIMING ===
+Response time: 0.84s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-095ebfe7-6755-94ff-9d7b-b6b29e17c48b","request_id":"095ebfe7-6755-94ff-9d7b-b6b29e17c48b"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
