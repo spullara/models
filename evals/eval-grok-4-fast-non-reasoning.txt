@@ -1,20 +1,20 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-20T11:33:59.229380+00:00
+Evaluated: 2026-03-20T11:40:30.537436+00:00
 
 === TIMING ===
-Response time: 3.68s
+Response time: 3.16s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 15
-Calculated sum: 14
+Returned sum: 60
+Calculated sum: 1
 Sum matches: NO
 Path valid: NO
-Path error: Move 3 must be diagonal (X) but was R
+Path error: Path ended at (0, 0) instead of (3, 3)
 
 === RAW RESPONSE ===
 ```python
@@ -25,63 +25,67 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     INF = float('-inf')
     
-    # dp[i][j][k] = max sum to reach (i,j) with k % 3 moves made
-    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
+    # dp[i][j][k] = max sum to reach (i,j) with k moves made
+    dp = [[[INF for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    
+    # Initialize starting position
     dp[0][0][0] = grid[0][0]
     
-    # directions: (di, dj, move_char)
+    # Directions: (di, dj, move_type)
     directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
     
+    # Fill DP table
     for i in range(n):
         for j in range(n):
             for k in range(3):
                 if dp[i][j][k] == INF:
                     continue
-                moves_made = k + 3 * ((i + j) // 1)  # approximate moves made
-                is_diag_required = (moves_made + 1) % 3 == 0
-                current_move_num = moves_made + 1
+                current_moves = k + 1
+                
+                # Check if next move should be diagonal
+                is_diag_required = (current_moves % 3 == 0)
                 
                 for di, dj, move in directions:
                     ni, nj = i + di, j + dj
                     if 0 <= ni < n and 0 <= nj < n:
-                        nk = (k + 1) % 3
+                        # Check if diagonal is required
                         if is_diag_required and move != 'X':
-                            continue  # cannot use R or D when diagonal is required
+                            continue  # Skip if diagonal is required but not using X
+                        
                         new_sum = dp[i][j][k] + grid[ni][nj]
-                        if new_sum > dp[ni][nj][nk]:
-                            dp[ni][nj][nk] = new_sum
+                        new_k = (k + 1) % 3
+                        
+                        if new_sum > dp[ni][nj][new_k]:
+                            dp[ni][nj][new_k] = new_sum
     
-    # find max sum at bottom-right
+    # Find maximum sum at bottom-right
     max_sum = max(dp[n-1][n-1])
     if max_sum == INF:
         return 0, ""
     
-    # backtrack to find path
+    # Backtrack to find the path
     path = []
     i, j, k = n-1, n-1, dp[n-1][n-1].index(max_sum)
-    moves_made = 0
     
     while i > 0 or j > 0:
-        is_diag_required = (moves_made) % 3 == 0 and moves_made > 0
-        current_move_num = moves_made
+        current_moves = (k + 1) % 3  # moves made to reach current position
+        is_diag_required = (current_moves % 3 == 0)
         
         found = False
-        for di, dj, move in reversed(directions):
+        for di, dj, move in directions:
             pi, pj = i - di, j - dj
-            if pi < 0 or pj < 0:
-                continue
-            pk = (k - 1) % 3
-            if pk < 0:
-                pk += 3
-            expected_sum = max_sum - grid[i][j]
-            if (dp[pi][pj][pk] == expected_sum and 
-                (not is_diag_required or move == 'X')):
-                path.append(move)
-                i, j, k = pi, pj, pk
-                max_sum = expected_sum
-                moves_made += 1
-                found = True
-                break
+            if pi >= 0 and pj >= 0:
+                prev_k = (k - 1) % 3
+                if dp[pi][pj][prev_k] != INF:
+                    # Check if this move was valid
+                    if is_diag_required and move != 'X':
+                        continue
+                    
+                    if dp[i][j][k] == dp[pi][pj][prev_k] + grid[i][j]:
+                        path.append(move)
+                        i, j, k = pi, pj, prev_k
+                        found = True
+                        break
         
         if not found:
             break
@@ -98,63 +102,67 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     INF = float('-inf')
     
-    # dp[i][j][k] = max sum to reach (i,j) with k % 3 moves made
-    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
+    # dp[i][j][k] = max sum to reach (i,j) with k moves made
+    dp = [[[INF for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    
+    # Initialize starting position
     dp[0][0][0] = grid[0][0]
     
-    # directions: (di, dj, move_char)
+    # Directions: (di, dj, move_type)
     directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
     
+    # Fill DP table
     for i in range(n):
         for j in range(n):
             for k in range(3):
                 if dp[i][j][k] == INF:
                     continue
-                moves_made = k + 3 * ((i + j) // 1)  # approximate moves made
-                is_diag_required = (moves_made + 1) % 3 == 0
-                current_move_num = moves_made + 1
+                current_moves = k + 1
+                
+                # Check if next move should be diagonal
+                is_diag_required = (current_moves % 3 == 0)
                 
                 for di, dj, move in directions:
                     ni, nj = i + di, j + dj
                     if 0 <= ni < n and 0 <= nj < n:
-                        nk = (k + 1) % 3
+                        # Check if diagonal is required
                         if is_diag_required and move != 'X':
-                            continue  # cannot use R or D when diagonal is required
+                            continue  # Skip if diagonal is required but not using X
+                        
                         new_sum = dp[i][j][k] + grid[ni][nj]
-                        if new_sum > dp[ni][nj][nk]:
-                            dp[ni][nj][nk] = new_sum
+                        new_k = (k + 1) % 3
+                        
+                        if new_sum > dp[ni][nj][new_k]:
+                            dp[ni][nj][new_k] = new_sum
     
-    # find max sum at bottom-right
+    # Find maximum sum at bottom-right
     max_sum = max(dp[n-1][n-1])
     if max_sum == INF:
         return 0, ""
     
-    # backtrack to find path
+    # Backtrack to find the path
     path = []
     i, j, k = n-1, n-1, dp[n-1][n-1].index(max_sum)
-    moves_made = 0
     
     while i > 0 or j > 0:
-        is_diag_required = (moves_made) % 3 == 0 and moves_made > 0
-        current_move_num = moves_made
+        current_moves = (k + 1) % 3  # moves made to reach current position
+        is_diag_required = (current_moves % 3 == 0)
         
         found = False
-        for di, dj, move in reversed(directions):
+        for di, dj, move in directions:
             pi, pj = i - di, j - dj
-            if pi < 0 or pj < 0:
-                continue
-            pk = (k - 1) % 3
-            if pk < 0:
-                pk += 3
-            expected_sum = max_sum - grid[i][j]
-            if (dp[pi][pj][pk] == expected_sum and 
-                (not is_diag_required or move == 'X')):
-                path.append(move)
-                i, j, k = pi, pj, pk
-                max_sum = expected_sum
-                moves_made += 1
-                found = True
-                break
+            if pi >= 0 and pj >= 0:
+                prev_k = (k - 1) % 3
+                if dp[pi][pj][prev_k] != INF:
+                    # Check if this move was valid
+                    if is_diag_required and move != 'X':
+                        continue
+                    
+                    if dp[i][j][k] == dp[pi][pj][prev_k] + grid[i][j]:
+                        path.append(move)
+                        i, j, k = pi, pj, prev_k
+                        found = True
+                        break
         
         if not found:
             break
