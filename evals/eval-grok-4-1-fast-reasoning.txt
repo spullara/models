@@ -1,9 +1,9 @@
 Model: grok-4-1-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-10T14:11:23.176733+00:00
+Evaluated: 2026-03-20T11:24:07.594994+00:00
 
 === TIMING ===
-Response time: 66.3s
+Response time: 40.25s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -19,148 +19,110 @@ Path valid: YES
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return 0, ""
+        return (0, "")
     N = len(grid)
-    INF = float('inf')
-    dp = [[[-INF] * 3 for _ in range(N)] for _ in range(N)]
-    pred = [[[None] * 3 for _ in range(N)] for _ in range(N)]
+    MIN = -10**18
+    dp = [[[MIN for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
-    for r in range(N):
-        for c in range(N):
-            for modd in range(3):
-                if r == 0 and c == 0 and modd == 0:
+    for dist in range(2 * N - 1):
+        for i in range(max(0, dist - N + 1), min(dist, N - 1) + 1):
+            j = dist - i
+            if j < 0 or j >= N:
+                continue
+            for mod in range(3):
+                if dp[i][j][mod] == MIN:
                     continue
-                candidates = []
-                # From R
-                if c > 0:
-                    pr, pc = r, c - 1
-                    move = 'R'
-                    pm = (modd - 1) % 3
-                    if dp[pr][pc][pm] != -INF:
-                        is_forced = ((pm + 1) % 3 == 0)
-                        x_pos = (pr + 1 < N and pc + 1 < N)
-                        valid = not is_forced or move == 'X' or not x_pos
-                        if valid:
-                            newsum = dp[pr][pc][pm] + grid[r][c]
-                            candidates.append((newsum, pr, pc, pm, move))
-                # From D
-                if r > 0:
-                    pr, pc = r - 1, c
-                    move = 'D'
-                    pm = (modd - 1) % 3
-                    if dp[pr][pc][pm] != -INF:
-                        is_forced = ((pm + 1) % 3 == 0)
-                        x_pos = (pr + 1 < N and pc + 1 < N)
-                        valid = not is_forced or move == 'X' or not x_pos
-                        if valid:
-                            newsum = dp[pr][pc][pm] + grid[r][c]
-                            candidates.append((newsum, pr, pc, pm, move))
-                # From X
-                if r > 0 and c > 0:
-                    pr, pc = r - 1, c - 1
-                    move = 'X'
-                    pm = (modd - 1) % 3
-                    if dp[pr][pc][pm] != -INF:
-                        is_forced = ((pm + 1) % 3 == 0)
-                        x_pos = (pr + 1 < N and pc + 1 < N)
-                        valid = not is_forced or move == 'X' or not x_pos
-                        if valid:
-                            newsum = dp[pr][pc][pm] + grid[r][c]
-                            candidates.append((newsum, pr, pc, pm, move))
-                if candidates:
-                    best = max(candidates)
-                    dp[r][c][modd] = best[0]
-                    pred[r][c][modd] = (best[1], best[2], best[3], best[4])
-    max_sum = -INF
+                for move, di, dj in [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]:
+                    ni = i + di
+                    nj = j + dj
+                    if ni >= N or nj >= N:
+                        continue
+                    constraint = (mod + 1) % 3 == 0
+                    allowed = True
+                    if constraint:
+                        if move == 'X':
+                            allowed = True
+                        else:
+                            x_possible = (i + 1 < N and j + 1 < N)
+                            allowed = not x_possible
+                    if allowed:
+                        new_sum = dp[i][j][mod] + grid[ni][nj]
+                        new_mod = (mod + 1) % 3
+                        if new_sum > dp[ni][nj][new_mod]:
+                            dp[ni][nj][new_mod] = new_sum
+                            prev[ni][nj][new_mod] = (i, j, mod, move)
+    max_sum = MIN
     best_mod = -1
-    for modd in range(3):
-        if dp[N-1][N-1][modd] > max_sum:
-            max_sum = dp[N-1][N-1][modd]
-            best_mod = modd
-    if max_sum == -INF:
-        return 0, ""
-    # Reconstruct path
+    for mod in range(3):
+        if dp[N-1][N-1][mod] > max_sum:
+            max_sum = dp[N-1][N-1][mod]
+            best_mod = mod
+    if best_mod == -1:
+        return (0, "")
     path = []
-    cr, cc, cm = N-1, N-1, best_mod
-    while (cr, cc, cm) != (0, 0, 0):
-        pr, pc, pm, move = pred[cr][cc][cm]
+    ci, cj, cmod = N-1, N-1, best_mod
+    while ci != 0 or cj != 0:
+        pre = prev[ci][cj][cmod]
+        pi, pj, pmod, move = pre
         path.append(move)
-        cr, cc, cm = pr, pc, pm
+        ci, cj, cmod = pi, pj, pmod
     path.reverse()
     path_str = ''.join(path)
-    return int(max_sum), path_str
+    return (max_sum, path_str)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return 0, ""
+        return (0, "")
     N = len(grid)
-    INF = float('inf')
-    dp = [[[-INF] * 3 for _ in range(N)] for _ in range(N)]
-    pred = [[[None] * 3 for _ in range(N)] for _ in range(N)]
+    MIN = -10**18
+    dp = [[[MIN for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
-    for r in range(N):
-        for c in range(N):
-            for modd in range(3):
-                if r == 0 and c == 0 and modd == 0:
+    for dist in range(2 * N - 1):
+        for i in range(max(0, dist - N + 1), min(dist, N - 1) + 1):
+            j = dist - i
+            if j < 0 or j >= N:
+                continue
+            for mod in range(3):
+                if dp[i][j][mod] == MIN:
                     continue
-                candidates = []
-                # From R
-                if c > 0:
-                    pr, pc = r, c - 1
-                    move = 'R'
-                    pm = (modd - 1) % 3
-                    if dp[pr][pc][pm] != -INF:
-                        is_forced = ((pm + 1) % 3 == 0)
-                        x_pos = (pr + 1 < N and pc + 1 < N)
-                        valid = not is_forced or move == 'X' or not x_pos
-                        if valid:
-                            newsum = dp[pr][pc][pm] + grid[r][c]
-                            candidates.append((newsum, pr, pc, pm, move))
-                # From D
-                if r > 0:
-                    pr, pc = r - 1, c
-                    move = 'D'
-                    pm = (modd - 1) % 3
-                    if dp[pr][pc][pm] != -INF:
-                        is_forced = ((pm + 1) % 3 == 0)
-                        x_pos = (pr + 1 < N and pc + 1 < N)
-                        valid = not is_forced or move == 'X' or not x_pos
-                        if valid:
-                            newsum = dp[pr][pc][pm] + grid[r][c]
-                            candidates.append((newsum, pr, pc, pm, move))
-                # From X
-                if r > 0 and c > 0:
-                    pr, pc = r - 1, c - 1
-                    move = 'X'
-                    pm = (modd - 1) % 3
-                    if dp[pr][pc][pm] != -INF:
-                        is_forced = ((pm + 1) % 3 == 0)
-                        x_pos = (pr + 1 < N and pc + 1 < N)
-                        valid = not is_forced or move == 'X' or not x_pos
-                        if valid:
-                            newsum = dp[pr][pc][pm] + grid[r][c]
-                            candidates.append((newsum, pr, pc, pm, move))
-                if candidates:
-                    best = max(candidates)
-                    dp[r][c][modd] = best[0]
-                    pred[r][c][modd] = (best[1], best[2], best[3], best[4])
-    max_sum = -INF
+                for move, di, dj in [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]:
+                    ni = i + di
+                    nj = j + dj
+                    if ni >= N or nj >= N:
+                        continue
+                    constraint = (mod + 1) % 3 == 0
+                    allowed = True
+                    if constraint:
+                        if move == 'X':
+                            allowed = True
+                        else:
+                            x_possible = (i + 1 < N and j + 1 < N)
+                            allowed = not x_possible
+                    if allowed:
+                        new_sum = dp[i][j][mod] + grid[ni][nj]
+                        new_mod = (mod + 1) % 3
+                        if new_sum > dp[ni][nj][new_mod]:
+                            dp[ni][nj][new_mod] = new_sum
+                            prev[ni][nj][new_mod] = (i, j, mod, move)
+    max_sum = MIN
     best_mod = -1
-    for modd in range(3):
-        if dp[N-1][N-1][modd] > max_sum:
-            max_sum = dp[N-1][N-1][modd]
-            best_mod = modd
-    if max_sum == -INF:
-        return 0, ""
-    # Reconstruct path
+    for mod in range(3):
+        if dp[N-1][N-1][mod] > max_sum:
+            max_sum = dp[N-1][N-1][mod]
+            best_mod = mod
+    if best_mod == -1:
+        return (0, "")
     path = []
-    cr, cc, cm = N-1, N-1, best_mod
-    while (cr, cc, cm) != (0, 0, 0):
-        pr, pc, pm, move = pred[cr][cc][cm]
+    ci, cj, cmod = N-1, N-1, best_mod
+    while ci != 0 or cj != 0:
+        pre = prev[ci][cj][cmod]
+        pi, pj, pmod, move = pre
         path.append(move)
-        cr, cc, cm = pr, pc, pm
+        ci, cj, cmod = pi, pj, pmod
     path.reverse()
     path_str = ''.join(path)
-    return int(max_sum), path_str
+    return (max_sum, path_str)
