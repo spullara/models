@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-03-20T11:34:03.152529+00:00
+Evaluated: 2026-03-20T11:41:14.610762+00:00
 
 === TIMING ===
-Response time: 1.71s
+Response time: 1.7s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -24,30 +24,31 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
     
-    dp = [[(float('-inf'), "") for _ in range(n)] for _ in range(n)]
+    INF = float('-inf')
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
     dp[0][0] = (grid[0][0], "")
     
     dirs = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
     
     for i in range(n):
         for j in range(n):
-            if dp[i][j][0] == float('-inf'):
+            if dp[i][j][0] == INF:
                 continue
             moves_made = len(dp[i][j][1])
-            must_diag = (moves_made + 1) % 3 == 0
-            curr_sum, path = dp[i][j]
+            must_diag = (moves_made % 3 == 2)
             
             for di, dj, let in dirs:
                 ni, nj = i + di, j + dj
                 if 0 <= ni < n and 0 <= nj < n:
                     if must_diag and let != 'X' and (i + 1 < n and j + 1 < n):
                         continue
-                    new_sum = curr_sum + grid[ni][nj]
-                    new_path = path + let
+                    new_sum = dp[i][j][0] + grid[ni][nj]
+                    new_path = dp[i][j][1] + let
                     if new_sum > dp[ni][nj][0]:
                         dp[ni][nj] = (new_sum, new_path)
     
-    return dp[n-1][n-1]
+    best = dp[n-1][n-1]
+    return (best[0], best[1]) if best[0] != INF else (0, "")
 ```
 
 === EXTRACTED CODE ===
@@ -58,27 +59,28 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
     
-    dp = [[(float('-inf'), "") for _ in range(n)] for _ in range(n)]
+    INF = float('-inf')
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
     dp[0][0] = (grid[0][0], "")
     
     dirs = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
     
     for i in range(n):
         for j in range(n):
-            if dp[i][j][0] == float('-inf'):
+            if dp[i][j][0] == INF:
                 continue
             moves_made = len(dp[i][j][1])
-            must_diag = (moves_made + 1) % 3 == 0
-            curr_sum, path = dp[i][j]
+            must_diag = (moves_made % 3 == 2)
             
             for di, dj, let in dirs:
                 ni, nj = i + di, j + dj
                 if 0 <= ni < n and 0 <= nj < n:
                     if must_diag and let != 'X' and (i + 1 < n and j + 1 < n):
                         continue
-                    new_sum = curr_sum + grid[ni][nj]
-                    new_path = path + let
+                    new_sum = dp[i][j][0] + grid[ni][nj]
+                    new_path = dp[i][j][1] + let
                     if new_sum > dp[ni][nj][0]:
                         dp[ni][nj] = (new_sum, new_path)
     
-    return dp[n-1][n-1]
+    best = dp[n-1][n-1]
+    return (best[0], best[1]) if best[0] != INF else (0, "")
