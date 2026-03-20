@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-20T11:30:10.583250+00:00
+Evaluated: 2026-03-20T11:36:15.191949+00:00
 
 === TIMING ===
-Response time: 39.93s
+Response time: 75.5s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,95 +18,133 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    import sys
+    
     N = len(grid)
-    if N == 0:
-        return (0, "")
+    dp = [[[float('-inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    from functools import lru_cache
-    
-    @lru_cache(None)
-    def dp(row: int, col: int, moves_made: int) -> tuple[int, str]:
-        if row == N - 1 and col == N - 1:
-            return (grid[row][col], "")
+    def dp_func(i, j, mod):
+        if i < 0 or j < 0 or i >= N or j >= N:
+            return float('-inf')
+        if dp[i][j][mod] != float('-inf'):
+            return dp[i][j][mod]
+        if i == 0 and j == 0:
+            if mod == 0:
+                dp[i][j][mod] = grid[0][0]
+            return dp[i][j][mod]
         
-        next_move = moves_made + 1
-        possible_moves = []
+        candidates = []
+        if j > 0:
+            prev_mod = (mod - 1) % 3
+            prev_value = dp_func(i, j-1, prev_mod)
+            if prev_value != float('-inf'):
+                if prev_mod != 2 or not (i+1 < N and j < N):
+                    candidates.append((prev_value + grid[i][j], (i, j-1, 'R')))
+        if i > 0:
+            prev_mod = (mod - 1) % 3
+            prev_value = dp_func(i-1, j, prev_mod)
+            if prev_value != float('-inf'):
+                if prev_mod != 2 or not (i < N and j+1 < N):
+                    candidates.append((prev_value + grid[i][j], (i-1, j, 'D')))
+        if i > 0 and j > 0:
+            prev_mod = (mod - 1) % 3
+            prev_value = dp_func(i-1, j-1, prev_mod)
+            if prev_value != float('-inf'):
+                candidates.append((prev_value + grid[i][j], (i-1, j-1, 'X')))
         
-        if next_move % 3 == 0:
-            if row < N - 1 and col < N - 1:
-                possible_moves = [('X', row + 1, col + 1)]
-            else:
-                if row < N - 1:
-                    possible_moves.append(('D', row + 1, col))
-                if col < N - 1:
-                    possible_moves.append(('R', row, col + 1))
+        if candidates:
+            dp[i][j][mod], prev[i][j][mod] = max(candidates)
+            return dp[i][j][mod]
         else:
-            if row < N - 1 and col < N - 1:
-                possible_moves.append(('X', row + 1, col + 1))
-            if row < N - 1:
-                possible_moves.append(('D', row + 1, col))
-            if col < N - 1:
-                possible_moves.append(('R', row, col + 1))
-        
-        best_sum = float('-inf')
-        best_path = None
-        
-        for move_type, next_row, next_col in possible_moves:
-            sub_sum, sub_path = dp(next_row, next_col, moves_made + 1)
-            candidate_sum = grid[row][col] + sub_sum
-            if candidate_sum > best_sum:
-                best_sum = candidate_sum
-                best_path = move_type + sub_path
-        
-        return (best_sum, best_path)
+            dp[i][j][mod] = float('-inf')
+            return float('-inf')
     
-    result_sum, result_path = dp(0, 0, 0)
-    return (result_sum, result_path)
+    dp_func(N-1, N-1, 0)  # Compute all necessary values
+    dp_func(N-1, N-1, 1)
+    dp_func(N-1, N-1, 2)
+    
+    max_values = [dp[N-1][N-1][0], dp[N-1][N-1][1], dp[N-1][N-1][2]]
+    max_sum = max(max_values)
+    best_mod = max_values.index(max_sum)
+    
+    i, j, mod = N-1, N-1, best_mod
+    path = []
+    while i > 0 or j > 0:
+        prev_state = prev[i][j][mod]
+        if prev_state:
+            i_prev, j_prev, move = prev_state
+            path.append(move)
+            i, j = i_prev, j_prev
+            mod = (mod - 1) % 3
+    path.reverse()
+    path_string = ''.join(path) if path else ''
+    
+    return (max_sum, path_string)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    import sys
+    
     N = len(grid)
-    if N == 0:
-        return (0, "")
+    dp = [[[float('-inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    from functools import lru_cache
-    
-    @lru_cache(None)
-    def dp(row: int, col: int, moves_made: int) -> tuple[int, str]:
-        if row == N - 1 and col == N - 1:
-            return (grid[row][col], "")
+    def dp_func(i, j, mod):
+        if i < 0 or j < 0 or i >= N or j >= N:
+            return float('-inf')
+        if dp[i][j][mod] != float('-inf'):
+            return dp[i][j][mod]
+        if i == 0 and j == 0:
+            if mod == 0:
+                dp[i][j][mod] = grid[0][0]
+            return dp[i][j][mod]
         
-        next_move = moves_made + 1
-        possible_moves = []
+        candidates = []
+        if j > 0:
+            prev_mod = (mod - 1) % 3
+            prev_value = dp_func(i, j-1, prev_mod)
+            if prev_value != float('-inf'):
+                if prev_mod != 2 or not (i+1 < N and j < N):
+                    candidates.append((prev_value + grid[i][j], (i, j-1, 'R')))
+        if i > 0:
+            prev_mod = (mod - 1) % 3
+            prev_value = dp_func(i-1, j, prev_mod)
+            if prev_value != float('-inf'):
+                if prev_mod != 2 or not (i < N and j+1 < N):
+                    candidates.append((prev_value + grid[i][j], (i-1, j, 'D')))
+        if i > 0 and j > 0:
+            prev_mod = (mod - 1) % 3
+            prev_value = dp_func(i-1, j-1, prev_mod)
+            if prev_value != float('-inf'):
+                candidates.append((prev_value + grid[i][j], (i-1, j-1, 'X')))
         
-        if next_move % 3 == 0:
-            if row < N - 1 and col < N - 1:
-                possible_moves = [('X', row + 1, col + 1)]
-            else:
-                if row < N - 1:
-                    possible_moves.append(('D', row + 1, col))
-                if col < N - 1:
-                    possible_moves.append(('R', row, col + 1))
+        if candidates:
+            dp[i][j][mod], prev[i][j][mod] = max(candidates)
+            return dp[i][j][mod]
         else:
-            if row < N - 1 and col < N - 1:
-                possible_moves.append(('X', row + 1, col + 1))
-            if row < N - 1:
-                possible_moves.append(('D', row + 1, col))
-            if col < N - 1:
-                possible_moves.append(('R', row, col + 1))
-        
-        best_sum = float('-inf')
-        best_path = None
-        
-        for move_type, next_row, next_col in possible_moves:
-            sub_sum, sub_path = dp(next_row, next_col, moves_made + 1)
-            candidate_sum = grid[row][col] + sub_sum
-            if candidate_sum > best_sum:
-                best_sum = candidate_sum
-                best_path = move_type + sub_path
-        
-        return (best_sum, best_path)
+            dp[i][j][mod] = float('-inf')
+            return float('-inf')
     
-    result_sum, result_path = dp(0, 0, 0)
-    return (result_sum, result_path)
+    dp_func(N-1, N-1, 0)  # Compute all necessary values
+    dp_func(N-1, N-1, 1)
+    dp_func(N-1, N-1, 2)
+    
+    max_values = [dp[N-1][N-1][0], dp[N-1][N-1][1], dp[N-1][N-1][2]]
+    max_sum = max(max_values)
+    best_mod = max_values.index(max_sum)
+    
+    i, j, mod = N-1, N-1, best_mod
+    path = []
+    while i > 0 or j > 0:
+        prev_state = prev[i][j][mod]
+        if prev_state:
+            i_prev, j_prev, move = prev_state
+            path.append(move)
+            i, j = i_prev, j_prev
+            mod = (mod - 1) % 3
+    path.reverse()
+    path_string = ''.join(path) if path else ''
+    
+    return (max_sum, path_string)
