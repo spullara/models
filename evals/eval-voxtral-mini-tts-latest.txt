@@ -1,0 +1,19 @@
+Model: voxtral-mini-tts-latest
+Provider: mistral
+Evaluated: 2026-03-23T09:30:06.139738+00:00
+
+=== TIMING ===
+Response time: 0.28s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"object":"error","message":"Invalid model: voxtral-mini-tts-latest","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
