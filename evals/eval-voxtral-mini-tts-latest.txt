@@ -1,9 +1,9 @@
 Model: voxtral-mini-tts-latest
 Provider: mistral
-Evaluated: 2026-03-23T09:30:06.139738+00:00
+Evaluated: 2026-03-23T09:33:11.105633+00:00
 
 === TIMING ===
-Response time: 0.28s
+Response time: 0.3s
 
 === CODE EXTRACTION ===
 Method: None
