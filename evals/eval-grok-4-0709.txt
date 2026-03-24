@@ -1,9 +1,9 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-20T11:37:30.722277+00:00
+Evaluated: 2026-03-24T07:53:33.145828+00:00
 
 === TIMING ===
-Response time: 117.86s
+Response time: 89.59s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,98 +17,98 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-import functools
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return (0, "")
+        return 0, ""
     N = len(grid)
-    @functools.lru_cache(maxsize=None)
-    def dfs(r, c, moves):
-        if r == N - 1 and c == N - 1:
-            return (0, "")
-        next_move_num = moves + 1
-        is_forced = (next_move_num % 3 == 0)
-        possible = []
-        can_diag = (r + 1 < N and c + 1 < N)
-        if is_forced:
-            if can_diag:
-                possible = [('X', r + 1, c + 1)]
+    from functools import cache
+    @cache
+    def dp(i, j, moves):
+        if i == N - 1 and j == N - 1:
+            return 0, ""
+        next_num = moves + 1
+        is_diag_req = (next_num % 3 == 0)
+        poss = []
+        can_R = j + 1 < N
+        can_D = i + 1 < N
+        can_X = i + 1 < N and j + 1 < N
+        if is_diag_req:
+            if can_X:
+                poss = [('X', i + 1, j + 1)]
             else:
-                if c + 1 < N:
-                    possible.append(('R', r, c + 1))
-                if r + 1 < N:
-                    possible.append(('D', r + 1, c))
+                if can_R:
+                    poss.append(('R', i, j + 1))
+                if can_D:
+                    poss.append(('D', i + 1, j))
         else:
-            if c + 1 < N:
-                possible.append(('R', r, c + 1))
-            if r + 1 < N:
-                possible.append(('D', r + 1, c))
-            if can_diag:
-                possible.append(('X', r + 1, c + 1))
-        if not possible:
-            return (-float('inf'), "")
-        max_add = -float('inf')
-        best_suffix = ""
-        for char, nr, nc in possible:
-            add, suffix = dfs(nr, nc, moves + 1)
-            this_add = grid[nr][nc] + add
-            if this_add > max_add:
-                max_add = this_add
-                best_suffix = char + suffix
-        return (max_add, best_suffix)
-    initial = grid[0][0]
-    add, path = dfs(0, 0, 0)
-    if add == -float('inf'):
-        return (0, "")
-    total = initial + add
-    return (total, path)
+            if can_R:
+                poss.append(('R', i, j + 1))
+            if can_D:
+                poss.append(('D', i + 1, j))
+            if can_X:
+                poss.append(('X', i + 1, j + 1))
+        if not poss:
+            return float('-inf'), ""
+        max_sum = float('-inf')
+        best_path = ""
+        for c, ni, nj in poss:
+            sub_sum, sub_path = dp(ni, nj, moves + 1)
+            if sub_sum == float('-inf'):
+                continue
+            this_sum = grid[ni][nj] + sub_sum
+            if this_sum > max_sum:
+                max_sum = this_sum
+                best_path = c + sub_path
+        return max_sum, best_path
+    sum_from_start, path = dp(0, 0, 0)
+    total_sum = grid[0][0] + sum_from_start
+    return int(total_sum), path
 ```
 
 === EXTRACTED CODE ===
-import functools
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return (0, "")
+        return 0, ""
     N = len(grid)
-    @functools.lru_cache(maxsize=None)
-    def dfs(r, c, moves):
-        if r == N - 1 and c == N - 1:
-            return (0, "")
-        next_move_num = moves + 1
-        is_forced = (next_move_num % 3 == 0)
-        possible = []
-        can_diag = (r + 1 < N and c + 1 < N)
-        if is_forced:
-            if can_diag:
-                possible = [('X', r + 1, c + 1)]
+    from functools import cache
+    @cache
+    def dp(i, j, moves):
+        if i == N - 1 and j == N - 1:
+            return 0, ""
+        next_num = moves + 1
+        is_diag_req = (next_num % 3 == 0)
+        poss = []
+        can_R = j + 1 < N
+        can_D = i + 1 < N
+        can_X = i + 1 < N and j + 1 < N
+        if is_diag_req:
+            if can_X:
+                poss = [('X', i + 1, j + 1)]
             else:
-                if c + 1 < N:
-                    possible.append(('R', r, c + 1))
-                if r + 1 < N:
-                    possible.append(('D', r + 1, c))
+                if can_R:
+                    poss.append(('R', i, j + 1))
+                if can_D:
+                    poss.append(('D', i + 1, j))
         else:
-            if c + 1 < N:
-                possible.append(('R', r, c + 1))
-            if r + 1 < N:
-                possible.append(('D', r + 1, c))
-            if can_diag:
-                possible.append(('X', r + 1, c + 1))
-        if not possible:
-            return (-float('inf'), "")
-        max_add = -float('inf')
-        best_suffix = ""
-        for char, nr, nc in possible:
-            add, suffix = dfs(nr, nc, moves + 1)
-            this_add = grid[nr][nc] + add
-            if this_add > max_add:
-                max_add = this_add
-                best_suffix = char + suffix
-        return (max_add, best_suffix)
-    initial = grid[0][0]
-    add, path = dfs(0, 0, 0)
-    if add == -float('inf'):
-        return (0, "")
-    total = initial + add
-    return (total, path)
+            if can_R:
+                poss.append(('R', i, j + 1))
+            if can_D:
+                poss.append(('D', i + 1, j))
+            if can_X:
+                poss.append(('X', i + 1, j + 1))
+        if not poss:
+            return float('-inf'), ""
+        max_sum = float('-inf')
+        best_path = ""
+        for c, ni, nj in poss:
+            sub_sum, sub_path = dp(ni, nj, moves + 1)
+            if sub_sum == float('-inf'):
+                continue
+            this_sum = grid[ni][nj] + sub_sum
+            if this_sum > max_sum:
+                max_sum = this_sum
+                best_path = c + sub_path
+        return max_sum, best_path
+    sum_from_start, path = dp(0, 0, 0)
+    total_sum = grid[0][0] + sum_from_start
+    return int(total_sum), path
