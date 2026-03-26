@@ -1,82 +1,19 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-26T23:41:52.783599+00:00
+Evaluated: 2026-03-26T23:48:51.766998+00:00
 
 === TIMING ===
-Response time: 2.42s
+Response time: 0.22s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. retried and the latest reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-from typing import Tuple
-
-def solve_grid(grid: list[list[int]]) -> Tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    n = len(grid)
-    dp = [[(0, "") for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], "")
-    
-    for i in range(n):
-        for j in range(n):
-            if i == 0 and j == 0:
-                continue
-            max_val = float('-inf')
-            best_path = ""
-            for di, dj, move in [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]:
-                ni, nj = i - di, j - dj
-                if 0 <= ni < n and 0 <= nj < n:
-                    prev_sum, prev_path = dp[ni][nj]
-                    new_sum = prev_sum + grid[i][j]
-                    moves_count = len(prev_path)
-                    is_diag_required = moves_count % 3 == 2
-                    if not is_diag_required or move == 'X':
-                        if new_sum > max_val:
-                            max_val = new_sum
-                            best_path = prev_path + move
-            if max_val != float('-inf'):
-                dp[i][j] = (max_val, best_path)
-    
-    return dp[n-1][n-1]
-```
+(no response)
 
 === EXTRACTED CODE ===
-from typing import Tuple
-
-def solve_grid(grid: list[list[int]]) -> Tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    n = len(grid)
-    dp = [[(0, "") for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], "")
-    
-    for i in range(n):
-        for j in range(n):
-            if i == 0 and j == 0:
-                continue
-            max_val = float('-inf')
-            best_path = ""
-            for di, dj, move in [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]:
-                ni, nj = i - di, j - dj
-                if 0 <= ni < n and 0 <= nj < n:
-                    prev_sum, prev_path = dp[ni][nj]
-                    new_sum = prev_sum + grid[i][j]
-                    moves_count = len(prev_path)
-                    is_diag_required = moves_count % 3 == 2
-                    if not is_diag_required or move == 'X':
-                        if new_sum > max_val:
-                            max_val = new_sum
-                            best_path = prev_path + move
-            if max_val != float('-inf'):
-                dp[i][j] = (max_val, best_path)
-    
-    return dp[n-1][n-1]
+(no code extracted)
