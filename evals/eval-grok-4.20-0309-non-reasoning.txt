@@ -1,19 +1,105 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-03-26T18:36:54.393434+00:00
+Evaluated: 2026-03-26T18:39:48.893686+00:00
 
 === TIMING ===
-Response time: 0.39s
+Response time: 1.98s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection timeout
+Execution Error: '>' not supported between instances of 'int' and 'str'
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+    
+    INF = float('-inf')
+    dp = [[[INF, INF, ""] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = grid[0][0]
+    dp[0][0][1] = grid[0][0]
+    
+    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
+    
+    for i in range(n):
+        for j in range(n):
+            for moves in range(2):
+                if dp[i][j][moves] == INF:
+                    continue
+                cur_sum = dp[i][j][moves]
+                step = moves + 1
+                must_diag = (step % 3 == 0)
+                
+                for di, dj, let in dirs:
+                    ni, nj = i + di, j + dj
+                    if ni >= n or nj >= n:
+                        continue
+                    if must_diag and let != 'X':
+                        continue
+                    new_sum = cur_sum + grid[ni][nj]
+                    new_moves = (step % 3)
+                    if new_sum > dp[ni][nj][new_moves]:
+                        dp[ni][nj][new_moves] = new_sum
+                        dp[ni][nj][2] = dp[i][j][2] + let if dp[i][j][2] else let
+    
+    max_sum = INF
+    best_path = ""
+    for m in range(2):
+        if dp[n-1][n-1][m] > max_sum:
+            max_sum = dp[n-1][n-1][m]
+            best_path = dp[n-1][n-1][2]
+    
+    return (int(max_sum), best_path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+    
+    INF = float('-inf')
+    dp = [[[INF, INF, ""] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = grid[0][0]
+    dp[0][0][1] = grid[0][0]
+    
+    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
+    
+    for i in range(n):
+        for j in range(n):
+            for moves in range(2):
+                if dp[i][j][moves] == INF:
+                    continue
+                cur_sum = dp[i][j][moves]
+                step = moves + 1
+                must_diag = (step % 3 == 0)
+                
+                for di, dj, let in dirs:
+                    ni, nj = i + di, j + dj
+                    if ni >= n or nj >= n:
+                        continue
+                    if must_diag and let != 'X':
+                        continue
+                    new_sum = cur_sum + grid[ni][nj]
+                    new_moves = (step % 3)
+                    if new_sum > dp[ni][nj][new_moves]:
+                        dp[ni][nj][new_moves] = new_sum
+                        dp[ni][nj][2] = dp[i][j][2] + let if dp[i][j][2] else let
+    
+    max_sum = INF
+    best_path = ""
+    for m in range(2):
+        if dp[n-1][n-1][m] > max_sum:
+            max_sum = dp[n-1][n-1][m]
+            best_path = dp[n-1][n-1][2]
+    
+    return (int(max_sum), best_path)
