@@ -1,149 +1,164 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-03-26T18:36:55.464223+00:00
+Evaluated: 2026-03-26T18:40:21.952021+00:00
 
 === TIMING ===
-Response time: 25.58s
+Response time: 34.01s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 62
-Calculated sum: 17
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+from typing import List, Tuple
+
+def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
     N = len(grid)
-    memo = {}
+    dp = [[[-float('inf')] * 3 for _ in range(N)] for _ in range(N)]
+    prev = {}
+    dp[0][0][0] = grid[0][0]
     
-    def dfs(r, c, mod, path):
-        if (r, c, mod) in memo:
-            return memo[(r, c, mod)]
-        if r == N - 1 and c == N - 1:
-            return grid[r][c], path
-        max_sum = float('-inf')
-        best_path = ''
-        must_X = (mod % 3 == 0)
-        if must_X:
-            # Try X first
-            nr, nc = r + 1, c + 1
-            if nr < N and nc < N:
-                new_mod = (mod + 1) % 3
-                sub_sum, sub_path = dfs(nr, nc, new_mod, path + 'X')
-                if sub_sum + grid[r][c] > max_sum:
-                    max_sum = sub_sum + grid[r][c]
-                    best_path = sub_path
-            else:
-                # Cannot X, so R or D
-                moves = ['R', 'D']
-                for move in moves:
-                    nr, nc = r, c
-                    if move == 'R':
-                        nc += 1
-                    elif move == 'D':
-                        nr += 1
-                    if nr < N and nc < N:
-                        new_mod = (mod + 1) % 3
-                        sub_sum, sub_path = dfs(nr, nc, new_mod, path + move)
-                        if sub_sum + grid[r][c] > max_sum:
-                            max_sum = sub_sum + grid[r][c]
-                            best_path = sub_path
-        else:
-            # Can do R, D, X
-            moves = ['R', 'D', 'X']
-            for move in moves:
-                nr, nc = r, c
-                if move == 'R':
-                    nc += 1
-                elif move == 'D':
-                    nr += 1
-                elif move == 'X':
-                    nr += 1
-                    nc += 1
-                if nr < N and nc < N:
-                    new_mod = (mod + 1) % 3
-                    sub_sum, sub_path = dfs(nr, nc, new_mod, path + move)
-                    if sub_sum + grid[r][c] > max_sum:
-                        max_sum = sub_sum + grid[r][c]
-                        best_path = sub_path
-        if max_sum == float('-inf'):
-            return float('-inf'), ''
-        memo[(r, c, mod)] = (max_sum, best_path)
-        return max_sum, best_path
+    for i in range(N):
+        for j in range(N):
+            if i == 0 and j == 0:
+                continue
+            for mod in range(3):
+                # Try from left: R
+                if j > 0:
+                    prev_i, prev_j, move = i, j - 1, 'R'
+                    for prev_mod in range(3):
+                        required_mod = (prev_mod + 1) % 3
+                        if required_mod == 0 and move != 'X':
+                            continue
+                        if required_mod == mod and dp[prev_i][prev_j][prev_mod] != -float('inf'):
+                            new_sum = dp[prev_i][prev_j][prev_mod] + grid[i][j]
+                            if new_sum > dp[i][j][mod]:
+                                dp[i][j][mod] = new_sum
+                                prev[(i, j, mod)] = (prev_i, prev_j, prev_mod, move)
+                # Try from up: D
+                if i > 0:
+                    prev_i, prev_j, move = i - 1, j, 'D'
+                    for prev_mod in range(3):
+                        required_mod = (prev_mod + 1) % 3
+                        if required_mod == 0 and move != 'X':
+                            continue
+                        if required_mod == mod and dp[prev_i][prev_j][prev_mod] != -float('inf'):
+                            new_sum = dp[prev_i][prev_j][prev_mod] + grid[i][j]
+                            if new_sum > dp[i][j][mod]:
+                                dp[i][j][mod] = new_sum
+                                prev[(i, j, mod)] = (prev_i, prev_j, prev_mod, move)
+                # Try from up-left: X
+                if i > 0 and j > 0:
+                    prev_i, prev_j, move = i - 1, j - 1, 'X'
+                    for prev_mod in range(3):
+                        required_mod = (prev_mod + 1) % 3
+                        if required_mod == 0 and move != 'X':
+                            continue
+                        if required_mod == mod and dp[prev_i][prev_j][prev_mod] != -float('inf'):
+                            new_sum = dp[prev_i][prev_j][prev_mod] + grid[i][j]
+                            if new_sum > dp[i][j][mod]:
+                                dp[i][j][mod] = new_sum
+                                prev[(i, j, mod)] = (prev_i, prev_j, prev_mod, move)
     
-    total_sum, p = dfs(0, 0, 0, '')
-    return total_sum, p
+    # Find the max at (N-1, N-1)
+    max_sum = -float('inf')
+    best_mod = -1
+    for mod in range(3):
+        if dp[N-1][N-1][mod] > max_sum:
+            max_sum = dp[N-1][N-1][mod]
+            best_mod = mod
+    
+    # Backtrack to build path
+    path = []
+    current = (N-1, N-1, best_mod)
+    while current != (0, 0, 0):
+        if current not in prev:
+            return 0, ""  # No path, though shouldn't happen
+        prev_i, prev_j, prev_mod, move = prev[current]
+        path.append(move)
+        current = (prev_i, prev_j, prev_mod)
+    path.reverse()
+    return max_sum, ''.join(path)
 ```
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+from typing import List, Tuple
+
+def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
     N = len(grid)
-    memo = {}
+    dp = [[[-float('inf')] * 3 for _ in range(N)] for _ in range(N)]
+    prev = {}
+    dp[0][0][0] = grid[0][0]
     
-    def dfs(r, c, mod, path):
-        if (r, c, mod) in memo:
-            return memo[(r, c, mod)]
-        if r == N - 1 and c == N - 1:
-            return grid[r][c], path
-        max_sum = float('-inf')
-        best_path = ''
-        must_X = (mod % 3 == 0)
-        if must_X:
-            # Try X first
-            nr, nc = r + 1, c + 1
-            if nr < N and nc < N:
-                new_mod = (mod + 1) % 3
-                sub_sum, sub_path = dfs(nr, nc, new_mod, path + 'X')
-                if sub_sum + grid[r][c] > max_sum:
-                    max_sum = sub_sum + grid[r][c]
-                    best_path = sub_path
-            else:
-                # Cannot X, so R or D
-                moves = ['R', 'D']
-                for move in moves:
-                    nr, nc = r, c
-                    if move == 'R':
-                        nc += 1
-                    elif move == 'D':
-                        nr += 1
-                    if nr < N and nc < N:
-                        new_mod = (mod + 1) % 3
-                        sub_sum, sub_path = dfs(nr, nc, new_mod, path + move)
-                        if sub_sum + grid[r][c] > max_sum:
-                            max_sum = sub_sum + grid[r][c]
-                            best_path = sub_path
-        else:
-            # Can do R, D, X
-            moves = ['R', 'D', 'X']
-            for move in moves:
-                nr, nc = r, c
-                if move == 'R':
-                    nc += 1
-                elif move == 'D':
-                    nr += 1
-                elif move == 'X':
-                    nr += 1
-                    nc += 1
-                if nr < N and nc < N:
-                    new_mod = (mod + 1) % 3
-                    sub_sum, sub_path = dfs(nr, nc, new_mod, path + move)
-                    if sub_sum + grid[r][c] > max_sum:
-                        max_sum = sub_sum + grid[r][c]
-                        best_path = sub_path
-        if max_sum == float('-inf'):
-            return float('-inf'), ''
-        memo[(r, c, mod)] = (max_sum, best_path)
-        return max_sum, best_path
+    for i in range(N):
+        for j in range(N):
+            if i == 0 and j == 0:
+                continue
+            for mod in range(3):
+                # Try from left: R
+                if j > 0:
+                    prev_i, prev_j, move = i, j - 1, 'R'
+                    for prev_mod in range(3):
+                        required_mod = (prev_mod + 1) % 3
+                        if required_mod == 0 and move != 'X':
+                            continue
+                        if required_mod == mod and dp[prev_i][prev_j][prev_mod] != -float('inf'):
+                            new_sum = dp[prev_i][prev_j][prev_mod] + grid[i][j]
+                            if new_sum > dp[i][j][mod]:
+                                dp[i][j][mod] = new_sum
+                                prev[(i, j, mod)] = (prev_i, prev_j, prev_mod, move)
+                # Try from up: D
+                if i > 0:
+                    prev_i, prev_j, move = i - 1, j, 'D'
+                    for prev_mod in range(3):
+                        required_mod = (prev_mod + 1) % 3
+                        if required_mod == 0 and move != 'X':
+                            continue
+                        if required_mod == mod and dp[prev_i][prev_j][prev_mod] != -float('inf'):
+                            new_sum = dp[prev_i][prev_j][prev_mod] + grid[i][j]
+                            if new_sum > dp[i][j][mod]:
+                                dp[i][j][mod] = new_sum
+                                prev[(i, j, mod)] = (prev_i, prev_j, prev_mod, move)
+                # Try from up-left: X
+                if i > 0 and j > 0:
+                    prev_i, prev_j, move = i - 1, j - 1, 'X'
+                    for prev_mod in range(3):
+                        required_mod = (prev_mod + 1) % 3
+                        if required_mod == 0 and move != 'X':
+                            continue
+                        if required_mod == mod and dp[prev_i][prev_j][prev_mod] != -float('inf'):
+                            new_sum = dp[prev_i][prev_j][prev_mod] + grid[i][j]
+                            if new_sum > dp[i][j][mod]:
+                                dp[i][j][mod] = new_sum
+                                prev[(i, j, mod)] = (prev_i, prev_j, prev_mod, move)
     
-    total_sum, p = dfs(0, 0, 0, '')
-    return total_sum, p
+    # Find the max at (N-1, N-1)
+    max_sum = -float('inf')
+    best_mod = -1
+    for mod in range(3):
+        if dp[N-1][N-1][mod] > max_sum:
+            max_sum = dp[N-1][N-1][mod]
+            best_mod = mod
+    
+    # Backtrack to build path
+    path = []
+    current = (N-1, N-1, best_mod)
+    while current != (0, 0, 0):
+        if current not in prev:
+            return 0, ""  # No path, though shouldn't happen
+        prev_i, prev_j, prev_mod, move = prev[current]
+        path.append(move)
+        current = (prev_i, prev_j, prev_mod)
+    path.reverse()
+    return max_sum, ''.join(path)
