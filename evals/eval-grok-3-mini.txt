@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-26T23:45:05.541208+00:00
+Evaluated: 2026-03-26T23:48:14.949722+00:00
 
 === TIMING ===
-Response time: 75.81s
+Response time: 53.03s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,117 +18,99 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0:
+    if not grid:
         return (0, "")
-    
+    N = len(grid)
     memo = {}
     
-    def dp(i: int, j: int, mod_next: int) -> tuple[int, str]:
-        if (i, j, mod_next) in memo:
-            return memo[(i, j, mod_next)]
+    def dfs(row, col, mod3):
+        if (row, col, mod3) in memo:
+            return memo[(row, col, mod3)]
         
-        if i == N-1 and j == N-1:
-            memo[(i, j, mod_next)] = (grid[i][j], "")
-            return memo[(i, j, mod_next)]
+        if row == N-1 and col == N-1:
+            return (grid[row][col], "")
         
-        possible = []
-        if mod_next == 0:
-            if i+1 < N and j+1 < N:
-                possible.append((i+1, j+1))
+        is_mandatory_X = (mod3 == 2)
+        candidates = []
+        
+        if is_mandatory_X:
+            if row + 1 < N and col + 1 < N:
+                candidates = [('X', row + 1, col + 1)]
             else:
-                if i+1 < N:
-                    possible.append((i+1, j))
-                if j+1 < N:
-                    possible.append((i, j+1))
+                if row + 1 < N:
+                    candidates.append(('D', row + 1, col))
+                if col + 1 < N:
+                    candidates.append(('R', row, col + 1))
         else:
-            if i+1 < N:
-                possible.append((i+1, j))
-            if j+1 < N:
-                possible.append((i, j+1))
-            if i+1 < N and j+1 < N:
-                possible.append((i+1, j+1))
+            if row + 1 < N and col + 1 < N:
+                candidates.append(('X', row + 1, col + 1))
+            if row + 1 < N:
+                candidates.append(('D', row + 1, col))
+            if col + 1 < N:
+                candidates.append(('R', row, col + 1))
         
-        max_sum = float('-inf')
+        best_sum = float('-inf')
         best_path = ""
         
-        for next_i, next_j in possible:
-            new_mod = (mod_next + 1) % 3
-            sub_sum, sub_path = dp(next_i, next_j, new_mod)
-            total_sum_for_this = grid[i][j] + sub_sum
-            
-            if total_sum_for_this > max_sum:
-                max_sum = total_sum_for_this
-                if next_i == i and next_j == j+1:
-                    move = "R"
-                elif next_i == i+1 and next_j == j:
-                    move = "D"
-                elif next_i == i+1 and next_j == j+1:
-                    move = "X"
-                best_path = move + sub_path
+        for move_char, next_row, next_col in candidates:
+            sub_sum, sub_path = dfs(next_row, next_col, (mod3 + 1) % 3)
+            current_total_sum = grid[row][col] + sub_sum
+            if current_total_sum > best_sum:
+                best_sum = current_total_sum
+                best_path = move_char + sub_path
         
-        memo[(i, j, mod_next)] = (max_sum, best_path)
-        return memo[(i, j, mod_next)]
+        memo[(row, col, mod3)] = (best_sum, best_path)
+        return (best_sum, best_path)
     
-    initial_mod = 1  # For the first move
-    total_sum, path = dp(0, 0, initial_mod)
-    return (total_sum, path)
+    max_sum, path = dfs(0, 0, 0)
+    return (max_sum, path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0:
+    if not grid:
         return (0, "")
-    
+    N = len(grid)
     memo = {}
     
-    def dp(i: int, j: int, mod_next: int) -> tuple[int, str]:
-        if (i, j, mod_next) in memo:
-            return memo[(i, j, mod_next)]
+    def dfs(row, col, mod3):
+        if (row, col, mod3) in memo:
+            return memo[(row, col, mod3)]
         
-        if i == N-1 and j == N-1:
-            memo[(i, j, mod_next)] = (grid[i][j], "")
-            return memo[(i, j, mod_next)]
+        if row == N-1 and col == N-1:
+            return (grid[row][col], "")
         
-        possible = []
-        if mod_next == 0:
-            if i+1 < N and j+1 < N:
-                possible.append((i+1, j+1))
+        is_mandatory_X = (mod3 == 2)
+        candidates = []
+        
+        if is_mandatory_X:
+            if row + 1 < N and col + 1 < N:
+                candidates = [('X', row + 1, col + 1)]
             else:
-                if i+1 < N:
-                    possible.append((i+1, j))
-                if j+1 < N:
-                    possible.append((i, j+1))
+                if row + 1 < N:
+                    candidates.append(('D', row + 1, col))
+                if col + 1 < N:
+                    candidates.append(('R', row, col + 1))
         else:
-            if i+1 < N:
-                possible.append((i+1, j))
-            if j+1 < N:
-                possible.append((i, j+1))
-            if i+1 < N and j+1 < N:
-                possible.append((i+1, j+1))
+            if row + 1 < N and col + 1 < N:
+                candidates.append(('X', row + 1, col + 1))
+            if row + 1 < N:
+                candidates.append(('D', row + 1, col))
+            if col + 1 < N:
+                candidates.append(('R', row, col + 1))
         
-        max_sum = float('-inf')
+        best_sum = float('-inf')
         best_path = ""
         
-        for next_i, next_j in possible:
-            new_mod = (mod_next + 1) % 3
-            sub_sum, sub_path = dp(next_i, next_j, new_mod)
-            total_sum_for_this = grid[i][j] + sub_sum
-            
-            if total_sum_for_this > max_sum:
-                max_sum = total_sum_for_this
-                if next_i == i and next_j == j+1:
-                    move = "R"
-                elif next_i == i+1 and next_j == j:
-                    move = "D"
-                elif next_i == i+1 and next_j == j+1:
-                    move = "X"
-                best_path = move + sub_path
+        for move_char, next_row, next_col in candidates:
+            sub_sum, sub_path = dfs(next_row, next_col, (mod3 + 1) % 3)
+            current_total_sum = grid[row][col] + sub_sum
+            if current_total_sum > best_sum:
+                best_sum = current_total_sum
+                best_path = move_char + sub_path
         
-        memo[(i, j, mod_next)] = (max_sum, best_path)
-        return memo[(i, j, mod_next)]
+        memo[(row, col, mod3)] = (best_sum, best_path)
+        return (best_sum, best_path)
     
-    initial_mod = 1  # For the first move
-    total_sum, path = dp(0, 0, initial_mod)
-    return (total_sum, path)
+    max_sum, path = dfs(0, 0, 0)
+    return (max_sum, path)
