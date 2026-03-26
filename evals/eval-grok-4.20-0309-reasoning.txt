@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-03-26T17:55:48.578369+00:00
+Evaluated: 2026-03-26T18:26:25.705926+00:00
 
 === TIMING ===
-Response time: 45.84s
+Response time: 26.76s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,121 +18,103 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0 or len(grid[0]) == 0:
-        return 0, ""
-    NEG_INF = - (10 ** 18)
-    dp = [[[NEG_INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    def get_max(i, j, k):
-        if dp[i][j][k] != NEG_INF:
-            return dp[i][j][k]
-        if i == 0 and j == 0:
-            return grid[0][0] if k == 0 else NEG_INF
-        prev_mod = (k - 1) % 3
-        max_s = NEG_INF
-        possibilities = []
-        if j > 0:
-            possibilities.append((i, j - 1, 'R'))
-        if i > 0:
-            possibilities.append((i - 1, j, 'D'))
-        if i > 0 and j > 0:
-            possibilities.append((i - 1, j - 1, 'X'))
-        for pi, pj, move in possibilities:
-            pmax = get_max(pi, pj, prev_mod)
-            if pmax == NEG_INF:
-                continue
-            must_d = (prev_mod == 2)
-            can_d = (pi < N - 1 and pj < N - 1)
-            allowed = True
-            if must_d and can_d and move != 'X':
-                allowed = False
-            if allowed:
-                new_s = pmax + grid[i][j]
-                if new_s > max_s:
-                    max_s = new_s
-                    prev[i][j][k] = (pi, pj, prev_mod, move)
-        dp[i][j][k] = max_s
-        return max_s
-    max_sum = NEG_INF
-    best_k = -1
-    for k in range(3):
-        cand = get_max(N - 1, N - 1, k)
-        if cand > max_sum:
-            max_sum = cand
-            best_k = k
-    if max_sum == NEG_INF:
-        return 0, ""
-    path = []
-    ci, cj, ck = N - 1, N - 1, best_k
-    while ci != 0 or cj != 0:
-        p = prev[ci][cj][ck]
-        if p is None:
-            break
-        pi, pj, pk, move = p
-        path.append(move)
-        ci, cj, ck = pi, pj, pk
-    path.reverse()
-    return max_sum, ''.join(path)
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    from collections import deque
+    INF = float('-inf')
+    best_sum = [[[INF for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    best_path = [[["" for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    best_sum[0][0][0] = grid[0][0]
+    best_path[0][0][0] = ""
+    q = deque([(0, 0, 0)])
+    while q:
+        i, j, mod = q.popleft()
+        curr_sum = best_sum[i][j][mod]
+        curr_path = best_path[i][j][mod]
+        must_diag = (mod == 2)
+        allowed = []
+        next_mod = (mod + 1) % 3
+        if must_diag:
+            if i + 1 < n and j + 1 < n:
+                allowed.append(('X', i + 1, j + 1, next_mod))
+            else:
+                if j + 1 < n:
+                    allowed.append(('R', i, j + 1, next_mod))
+                if i + 1 < n:
+                    allowed.append(('D', i + 1, j, next_mod))
+        else:
+            if j + 1 < n:
+                allowed.append(('R', i, j + 1, next_mod))
+            if i + 1 < n:
+                allowed.append(('D', i + 1, j, next_mod))
+            if i + 1 < n and j + 1 < n:
+                allowed.append(('X', i + 1, j + 1, next_mod))
+        for mchar, ni, nj, nmod in allowed:
+            new_sum = curr_sum + grid[ni][nj]
+            new_path = curr_path + mchar
+            if new_sum > best_sum[ni][nj][nmod]:
+                best_sum[ni][nj][nmod] = new_sum
+                best_path[ni][nj][nmod] = new_path
+                q.append((ni, nj, nmod))
+    max_sum = INF
+    best_p = ""
+    for m in range(3):
+        if best_sum[n-1][n-1][m] > max_sum:
+            max_sum = best_sum[n-1][n-1][m]
+            best_p = best_path[n-1][n-1][m]
+    if max_sum == INF:
+        return (0, "")
+    return (int(max_sum), best_p)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0 or len(grid[0]) == 0:
-        return 0, ""
-    NEG_INF = - (10 ** 18)
-    dp = [[[NEG_INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    def get_max(i, j, k):
-        if dp[i][j][k] != NEG_INF:
-            return dp[i][j][k]
-        if i == 0 and j == 0:
-            return grid[0][0] if k == 0 else NEG_INF
-        prev_mod = (k - 1) % 3
-        max_s = NEG_INF
-        possibilities = []
-        if j > 0:
-            possibilities.append((i, j - 1, 'R'))
-        if i > 0:
-            possibilities.append((i - 1, j, 'D'))
-        if i > 0 and j > 0:
-            possibilities.append((i - 1, j - 1, 'X'))
-        for pi, pj, move in possibilities:
-            pmax = get_max(pi, pj, prev_mod)
-            if pmax == NEG_INF:
-                continue
-            must_d = (prev_mod == 2)
-            can_d = (pi < N - 1 and pj < N - 1)
-            allowed = True
-            if must_d and can_d and move != 'X':
-                allowed = False
-            if allowed:
-                new_s = pmax + grid[i][j]
-                if new_s > max_s:
-                    max_s = new_s
-                    prev[i][j][k] = (pi, pj, prev_mod, move)
-        dp[i][j][k] = max_s
-        return max_s
-    max_sum = NEG_INF
-    best_k = -1
-    for k in range(3):
-        cand = get_max(N - 1, N - 1, k)
-        if cand > max_sum:
-            max_sum = cand
-            best_k = k
-    if max_sum == NEG_INF:
-        return 0, ""
-    path = []
-    ci, cj, ck = N - 1, N - 1, best_k
-    while ci != 0 or cj != 0:
-        p = prev[ci][cj][ck]
-        if p is None:
-            break
-        pi, pj, pk, move = p
-        path.append(move)
-        ci, cj, ck = pi, pj, pk
-    path.reverse()
-    return max_sum, ''.join(path)
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    from collections import deque
+    INF = float('-inf')
+    best_sum = [[[INF for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    best_path = [[["" for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    best_sum[0][0][0] = grid[0][0]
+    best_path[0][0][0] = ""
+    q = deque([(0, 0, 0)])
+    while q:
+        i, j, mod = q.popleft()
+        curr_sum = best_sum[i][j][mod]
+        curr_path = best_path[i][j][mod]
+        must_diag = (mod == 2)
+        allowed = []
+        next_mod = (mod + 1) % 3
+        if must_diag:
+            if i + 1 < n and j + 1 < n:
+                allowed.append(('X', i + 1, j + 1, next_mod))
+            else:
+                if j + 1 < n:
+                    allowed.append(('R', i, j + 1, next_mod))
+                if i + 1 < n:
+                    allowed.append(('D', i + 1, j, next_mod))
+        else:
+            if j + 1 < n:
+                allowed.append(('R', i, j + 1, next_mod))
+            if i + 1 < n:
+                allowed.append(('D', i + 1, j, next_mod))
+            if i + 1 < n and j + 1 < n:
+                allowed.append(('X', i + 1, j + 1, next_mod))
+        for mchar, ni, nj, nmod in allowed:
+            new_sum = curr_sum + grid[ni][nj]
+            new_path = curr_path + mchar
+            if new_sum > best_sum[ni][nj][nmod]:
+                best_sum[ni][nj][nmod] = new_sum
+                best_path[ni][nj][nmod] = new_path
+                q.append((ni, nj, nmod))
+    max_sum = INF
+    best_p = ""
+    for m in range(3):
+        if best_sum[n-1][n-1][m] > max_sum:
+            max_sum = best_sum[n-1][n-1][m]
+            best_p = best_path[n-1][n-1][m]
+    if max_sum == INF:
+        return (0, "")
+    return (int(max_sum), best_p)
