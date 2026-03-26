@@ -1,19 +1,108 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-03-26T23:49:34.059829+00:00
+Evaluated: 2026-03-26T23:51:11.919689+00:00
 
 === TIMING ===
-Response time: 0.16s
+Response time: 40.16s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or len(grid[0]) == 0:
+        return 0, ""
+    max_moves = 2 * (n - 1)
+    dp = [[[None for _ in range(n)] for _ in range(n)] for _ in range(max_moves + 1)]
+    dp[0][0][0] = (grid[0][0], "")
+    for m in range(max_moves):
+        for i in range(n):
+            for j in range(n):
+                if dp[m][i][j] is not None:
+                    curr_sum, curr_path = dp[m][i][j]
+                    next_m_num = m + 1
+                    force_diag = (next_m_num % 3 == 0)
+                    possible = []
+                    if force_diag:
+                        if i + 1 < n and j + 1 < n:
+                            possible.append(('X', i + 1, j + 1))
+                        else:
+                            if j + 1 < n:
+                                possible.append(('R', i, j + 1))
+                            if i + 1 < n:
+                                possible.append(('D', i + 1, j))
+                    else:
+                        if j + 1 < n:
+                            possible.append(('R', i, j + 1))
+                        if i + 1 < n:
+                            possible.append(('D', i + 1, j))
+                        if i + 1 < n and j + 1 < n:
+                            possible.append(('X', i + 1, j + 1))
+                    for let, ni, nj in possible:
+                        new_sum = curr_sum + grid[ni][nj]
+                        new_path = curr_path + let
+                        if dp[next_m_num][ni][nj] is None or new_sum > dp[next_m_num][ni][nj][0]:
+                            dp[next_m_num][ni][nj] = (new_sum, new_path)
+    best_sum = None
+    best_path = ""
+    for m in range(max_moves + 1):
+        if dp[m][n - 1][n - 1] is not None:
+            if best_sum is None or dp[m][n - 1][n - 1][0] > best_sum:
+                best_sum = dp[m][n - 1][n - 1][0]
+                best_path = dp[m][n - 1][n - 1][1]
+    return best_sum, best_path
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or len(grid[0]) == 0:
+        return 0, ""
+    max_moves = 2 * (n - 1)
+    dp = [[[None for _ in range(n)] for _ in range(n)] for _ in range(max_moves + 1)]
+    dp[0][0][0] = (grid[0][0], "")
+    for m in range(max_moves):
+        for i in range(n):
+            for j in range(n):
+                if dp[m][i][j] is not None:
+                    curr_sum, curr_path = dp[m][i][j]
+                    next_m_num = m + 1
+                    force_diag = (next_m_num % 3 == 0)
+                    possible = []
+                    if force_diag:
+                        if i + 1 < n and j + 1 < n:
+                            possible.append(('X', i + 1, j + 1))
+                        else:
+                            if j + 1 < n:
+                                possible.append(('R', i, j + 1))
+                            if i + 1 < n:
+                                possible.append(('D', i + 1, j))
+                    else:
+                        if j + 1 < n:
+                            possible.append(('R', i, j + 1))
+                        if i + 1 < n:
+                            possible.append(('D', i + 1, j))
+                        if i + 1 < n and j + 1 < n:
+                            possible.append(('X', i + 1, j + 1))
+                    for let, ni, nj in possible:
+                        new_sum = curr_sum + grid[ni][nj]
+                        new_path = curr_path + let
+                        if dp[next_m_num][ni][nj] is None or new_sum > dp[next_m_num][ni][nj][0]:
+                            dp[next_m_num][ni][nj] = (new_sum, new_path)
+    best_sum = None
+    best_path = ""
+    for m in range(max_moves + 1):
+        if dp[m][n - 1][n - 1] is not None:
+            if best_sum is None or dp[m][n - 1][n - 1][0] > best_sum:
+                best_sum = dp[m][n - 1][n - 1][0]
+                best_path = dp[m][n - 1][n - 1][1]
+    return best_sum, best_path
