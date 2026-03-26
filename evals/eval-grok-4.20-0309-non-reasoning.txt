@@ -1,20 +1,19 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-03-26T18:52:24.415716+00:00
+Evaluated: 2026-03-26T18:57:41.612421+00:00
 
 === TIMING ===
-Response time: 2.75s
+Response time: 2.08s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 73
-Calculated sum: 15
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
 ```python
@@ -29,40 +28,25 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
     dp[0][0] = (grid[0][0], "")
     
+    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
+    
     for i in range(n):
         for j in range(n):
-            if i == 0 and j == 0:
+            if dp[i][j][0] == INF:
                 continue
-            moves = []
-            if j > 0:
-                moves.append((i, j-1, 'R'))
-            if i > 0:
-                moves.append((i-1, j, 'D'))
-            if i > 0 and j > 0:
-                moves.append((i-1, j-1, 'X'))
+            moves_made = len(dp[i][j][1])
+            must_diag = (moves_made % 3 == 2)
             
-            for pi, pj, dir_char in moves:
-                if dp[pi][pj][0] == INF:
+            for di, dj, let in dirs:
+                ni, nj = i + di, j + dj
+                if ni >= n or nj >= n:
                     continue
-                steps = 0
-                if pi + pj > 0:
-                    steps = len(dp[pi][pj][1])
-                must_diag = (steps % 3 == 2)
-                new_sum = dp[pi][pj][0] + grid[i][j]
-                new_path = dp[pi][pj][1] + dir_char
-                
-                update = False
-                if must_diag and dir_char == 'X':
-                    update = True
-                elif must_diag and dir_char != 'X':
-                    diag_possible = (i > 0 and j > 0 and (i-1, j-1) == (pi, pj) or False)
-                    if not diag_possible:
-                        update = True
-                elif not must_diag:
-                    update = True
-                
-                if update and new_sum > dp[i][j][0]:
-                    dp[i][j] = (new_sum, new_path)
+                if must_diag and let != 'X' and (i+1 < n and j+1 < n):
+                    continue
+                new_sum = dp[i][j][0] + grid[ni][nj]
+                new_path = dp[i][j][1] + let
+                if new_sum > dp[ni][nj][0]:
+                    dp[ni][nj] = (new_sum, new_path)
     
     if dp[n-1][n-1][0] == INF:
         return (0, "")
@@ -81,40 +65,25 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
     dp[0][0] = (grid[0][0], "")
     
+    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
+    
     for i in range(n):
         for j in range(n):
-            if i == 0 and j == 0:
+            if dp[i][j][0] == INF:
                 continue
-            moves = []
-            if j > 0:
-                moves.append((i, j-1, 'R'))
-            if i > 0:
-                moves.append((i-1, j, 'D'))
-            if i > 0 and j > 0:
-                moves.append((i-1, j-1, 'X'))
+            moves_made = len(dp[i][j][1])
+            must_diag = (moves_made % 3 == 2)
             
-            for pi, pj, dir_char in moves:
-                if dp[pi][pj][0] == INF:
+            for di, dj, let in dirs:
+                ni, nj = i + di, j + dj
+                if ni >= n or nj >= n:
                     continue
-                steps = 0
-                if pi + pj > 0:
-                    steps = len(dp[pi][pj][1])
-                must_diag = (steps % 3 == 2)
-                new_sum = dp[pi][pj][0] + grid[i][j]
-                new_path = dp[pi][pj][1] + dir_char
-                
-                update = False
-                if must_diag and dir_char == 'X':
-                    update = True
-                elif must_diag and dir_char != 'X':
-                    diag_possible = (i > 0 and j > 0 and (i-1, j-1) == (pi, pj) or False)
-                    if not diag_possible:
-                        update = True
-                elif not must_diag:
-                    update = True
-                
-                if update and new_sum > dp[i][j][0]:
-                    dp[i][j] = (new_sum, new_path)
+                if must_diag and let != 'X' and (i+1 < n and j+1 < n):
+                    continue
+                new_sum = dp[i][j][0] + grid[ni][nj]
+                new_path = dp[i][j][1] + let
+                if new_sum > dp[ni][nj][0]:
+                    dp[ni][nj] = (new_sum, new_path)
     
     if dp[n-1][n-1][0] == INF:
         return (0, "")
