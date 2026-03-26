@@ -1,9 +1,9 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-03-26T23:49:34.407809+00:00
+Evaluated: 2026-03-26T23:51:52.337189+00:00
 
 === TIMING ===
-Response time: 16.16s
+Response time: 32.78s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -20,107 +20,171 @@ Path valid: YES
 import functools
 
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
     N = len(grid)
+    memo = {}
     
-    @functools.lru_cache(None)
-    def recurse(i: int, j: int, moves_mod_3: int) -> tuple[int, str]:
+    def get_sum(i, j, mod):
+        if (i, j, mod) in memo:
+            return memo[(i, j, mod)]
         if i == N - 1 and j == N - 1:
-            return grid[i][j], ''
-        
-        next_move_num = moves_mod_3 + 1
-        must_X = (next_move_num % 3 == 0)
-        
-        possible_moves = []
-        if must_X:
-            if i + 1 < N and j + 1 < N:
-                possible_moves = ['X']
+            memo[(i, j, mod)] = grid[i][j]
+            return grid[i][j]
+        max_s = float('-inf')
+        next_mod = (mod + 1) % 3
+        if mod == 2:
+            if i < N - 1 and j < N - 1:
+                s = get_sum(i + 1, j + 1, next_mod)
+                max_s = max(max_s, s)
             else:
-                if j + 1 < N:
-                    possible_moves.append('R')
-                if i + 1 < N:
-                    possible_moves.append('D')
+                if j < N - 1:
+                    s = get_sum(i, j + 1, next_mod)
+                    max_s = max(max_s, s)
+                if i < N - 1:
+                    s = get_sum(i + 1, j, next_mod)
+                    max_s = max(max_s, s)
         else:
-            if j + 1 < N:
-                possible_moves.append('R')
-            if i + 1 < N:
-                possible_moves.append('D')
-            if i + 1 < N and j + 1 < N:
-                possible_moves.append('X')
-        
-        max_sum = float('-inf')
-        best_path = ''
-        
-        for move in possible_moves:
-            ni, nj = i, j
-            if move == 'R':
-                nj += 1
-            elif move == 'D':
-                ni += 1
-            elif move == 'X':
-                ni += 1
-                nj += 1
-            
-            sub_sum, sub_path = recurse(ni, nj, (moves_mod_3 + 1) % 3)
-            total_sum = grid[i][j] + sub_sum
-            if total_sum > max_sum:
-                max_sum = total_sum
-                best_path = move + sub_path
-        
-        return max_sum, best_path
+            if j < N - 1:
+                s = get_sum(i, j + 1, next_mod)
+                max_s = max(max_s, s)
+            if i < N - 1:
+                s = get_sum(i + 1, j, next_mod)
+                max_s = max(max_s, s)
+            if i < N - 1 and j < N - 1:
+                s = get_sum(i + 1, j + 1, next_mod)
+                max_s = max(max_s, s)
+        if max_s == float('-inf'):
+            memo[(i, j, mod)] = float('-inf')
+            return float('-inf')
+        memo[(i, j, mod)] = max_s + grid[i][j]
+        return max_s + grid[i][j]
     
-    return recurse(0, 0, 0)
+    def get_path(i, j, mod, path):
+        if i == N - 1 and j == N - 1:
+            return path
+        next_mod = (mod + 1) % 3
+        best_s = get_sum(i, j, mod) - grid[i][j]
+        if mod == 2:
+            if i < N - 1 and j < N - 1:
+                s = get_sum(i + 1, j + 1, next_mod)
+                if s == best_s:
+                    return get_path(i + 1, j + 1, next_mod, path + 'X')
+            else:
+                if j < N - 1:
+                    s = get_sum(i, j + 1, next_mod)
+                    if s == best_s:
+                        return get_path(i, j + 1, next_mod, path + 'R')
+                if i < N - 1:
+                    s = get_sum(i + 1, j, next_mod)
+                    if s == best_s:
+                        return get_path(i + 1, j, next_mod, path + 'D')
+        else:
+            candidates = []
+            if j < N - 1:
+                s = get_sum(i, j + 1, next_mod)
+                if s == best_s:
+                    candidates.append(('R', i, j + 1, next_mod))
+            if i < N - 1:
+                s = get_sum(i + 1, j, next_mod)
+                if s == best_s:
+                    candidates.append(('D', i + 1, j, next_mod))
+            if i < N - 1 and j < N - 1:
+                s = get_sum(i + 1, j + 1, next_mod)
+                if s == best_s:
+                    candidates.append(('X', i + 1, j + 1, next_mod))
+            if candidates:
+                move, ni, nj, nmod = candidates[0]
+                return get_path(ni, nj, nmod, path + move)
+        return ""
+    
+    max_sum = get_sum(0, 0, 0)
+    path = get_path(0, 0, 0, "")
+    return max_sum, path
 ```
 
 === EXTRACTED CODE ===
 import functools
 
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
     N = len(grid)
+    memo = {}
     
-    @functools.lru_cache(None)
-    def recurse(i: int, j: int, moves_mod_3: int) -> tuple[int, str]:
+    def get_sum(i, j, mod):
+        if (i, j, mod) in memo:
+            return memo[(i, j, mod)]
         if i == N - 1 and j == N - 1:
-            return grid[i][j], ''
-        
-        next_move_num = moves_mod_3 + 1
-        must_X = (next_move_num % 3 == 0)
-        
-        possible_moves = []
-        if must_X:
-            if i + 1 < N and j + 1 < N:
-                possible_moves = ['X']
+            memo[(i, j, mod)] = grid[i][j]
+            return grid[i][j]
+        max_s = float('-inf')
+        next_mod = (mod + 1) % 3
+        if mod == 2:
+            if i < N - 1 and j < N - 1:
+                s = get_sum(i + 1, j + 1, next_mod)
+                max_s = max(max_s, s)
             else:
-                if j + 1 < N:
-                    possible_moves.append('R')
-                if i + 1 < N:
-                    possible_moves.append('D')
+                if j < N - 1:
+                    s = get_sum(i, j + 1, next_mod)
+                    max_s = max(max_s, s)
+                if i < N - 1:
+                    s = get_sum(i + 1, j, next_mod)
+                    max_s = max(max_s, s)
         else:
-            if j + 1 < N:
-                possible_moves.append('R')
-            if i + 1 < N:
-                possible_moves.append('D')
-            if i + 1 < N and j + 1 < N:
-                possible_moves.append('X')
-        
-        max_sum = float('-inf')
-        best_path = ''
-        
-        for move in possible_moves:
-            ni, nj = i, j
-            if move == 'R':
-                nj += 1
-            elif move == 'D':
-                ni += 1
-            elif move == 'X':
-                ni += 1
-                nj += 1
-            
-            sub_sum, sub_path = recurse(ni, nj, (moves_mod_3 + 1) % 3)
-            total_sum = grid[i][j] + sub_sum
-            if total_sum > max_sum:
-                max_sum = total_sum
-                best_path = move + sub_path
-        
-        return max_sum, best_path
+            if j < N - 1:
+                s = get_sum(i, j + 1, next_mod)
+                max_s = max(max_s, s)
+            if i < N - 1:
+                s = get_sum(i + 1, j, next_mod)
+                max_s = max(max_s, s)
+            if i < N - 1 and j < N - 1:
+                s = get_sum(i + 1, j + 1, next_mod)
+                max_s = max(max_s, s)
+        if max_s == float('-inf'):
+            memo[(i, j, mod)] = float('-inf')
+            return float('-inf')
+        memo[(i, j, mod)] = max_s + grid[i][j]
+        return max_s + grid[i][j]
     
-    return recurse(0, 0, 0)
+    def get_path(i, j, mod, path):
+        if i == N - 1 and j == N - 1:
+            return path
+        next_mod = (mod + 1) % 3
+        best_s = get_sum(i, j, mod) - grid[i][j]
+        if mod == 2:
+            if i < N - 1 and j < N - 1:
+                s = get_sum(i + 1, j + 1, next_mod)
+                if s == best_s:
+                    return get_path(i + 1, j + 1, next_mod, path + 'X')
+            else:
+                if j < N - 1:
+                    s = get_sum(i, j + 1, next_mod)
+                    if s == best_s:
+                        return get_path(i, j + 1, next_mod, path + 'R')
+                if i < N - 1:
+                    s = get_sum(i + 1, j, next_mod)
+                    if s == best_s:
+                        return get_path(i + 1, j, next_mod, path + 'D')
+        else:
+            candidates = []
+            if j < N - 1:
+                s = get_sum(i, j + 1, next_mod)
+                if s == best_s:
+                    candidates.append(('R', i, j + 1, next_mod))
+            if i < N - 1:
+                s = get_sum(i + 1, j, next_mod)
+                if s == best_s:
+                    candidates.append(('D', i + 1, j, next_mod))
+            if i < N - 1 and j < N - 1:
+                s = get_sum(i + 1, j + 1, next_mod)
+                if s == best_s:
+                    candidates.append(('X', i + 1, j + 1, next_mod))
+            if candidates:
+                move, ni, nj, nmod = candidates[0]
+                return get_path(ni, nj, nmod, path + move)
+        return ""
+    
+    max_sum = get_sum(0, 0, 0)
+    path = get_path(0, 0, 0, "")
+    return max_sum, path
