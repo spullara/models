@@ -1,144 +1,170 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-03-26T16:16:18.420638+00:00
+Evaluated: 2026-03-26T16:50:41.340893+00:00
 
 === TIMING ===
-Response time: 47.46s
+Response time: 29.14s
 
 === CODE EXTRACTION ===
-Method: direct
+Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
+Returned sum: 34
+Calculated sum: 34
 Sum matches: YES
 Path valid: YES
 
 === RAW RESPONSE ===
+```python
+import sys
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
         return 0, ""
-    INF = float('-inf')
+    INF = -sys.maxsize
     dp = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
     prev = [[[None] * 3 for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
-    for i in range(N):
-        for j in range(N):
-            for k in range(3):
-                if dp[i][j][k] == INF:
+    for mod in range(3):
+        for i in range(N):
+            for j in range(N):
+                if dp[i][j][mod] == INF:
                     continue
-                must_X = ((k + 1) % 3 == 0)
-                if must_X:
+                next_move_num = mod + 1
+                must_diagonal = (next_move_num % 3 == 0)
+                if must_diagonal:
                     if i + 1 < N and j + 1 < N:
-                        ni, nj = i + 1, j + 1
-                        nk = (k + 1) % 3
-                        new_sum = dp[i][j][k] + grid[ni][nj]
-                        if new_sum > dp[ni][nj][nk]:
-                            dp[ni][nj][nk] = new_sum
-                            prev[ni][nj][nk] = (i, j, k, 'X')
+                        new_sum = dp[i][j][mod] + grid[i + 1][j + 1]
+                        new_mod = next_move_num % 3
+                        if new_sum > dp[i + 1][j + 1][new_mod]:
+                            dp[i + 1][j + 1][new_mod] = new_sum
+                            prev[i + 1][j + 1][new_mod] = (i, j, mod, 'X')
+                    else:
+                        if j + 1 < N:
+                            new_sum = dp[i][j][mod] + grid[i][j + 1]
+                            new_mod = next_move_num % 3
+                            if new_sum > dp[i][j + 1][new_mod]:
+                                dp[i][j + 1][new_mod] = new_sum
+                                prev[i][j + 1][new_mod] = (i, j, mod, 'R')
+                        if i + 1 < N:
+                            new_sum = dp[i][j][mod] + grid[i + 1][j]
+                            new_mod = next_move_num % 3
+                            if new_sum > dp[i + 1][j][new_mod]:
+                                dp[i + 1][j][new_mod] = new_sum
+                                prev[i + 1][j][new_mod] = (i, j, mod, 'D')
                 else:
-                    # R
                     if j + 1 < N:
-                        ni, nj = i, j + 1
-                        nk = (k + 1) % 3
-                        new_sum = dp[i][j][k] + grid[ni][nj]
-                        if new_sum > dp[ni][nj][nk]:
-                            dp[ni][nj][nk] = new_sum
-                            prev[ni][nj][nk] = (i, j, k, 'R')
-                    # D
+                        new_sum = dp[i][j][mod] + grid[i][j + 1]
+                        new_mod = next_move_num % 3
+                        if new_sum > dp[i][j + 1][new_mod]:
+                            dp[i][j + 1][new_mod] = new_sum
+                            prev[i][j + 1][new_mod] = (i, j, mod, 'R')
                     if i + 1 < N:
-                        ni, nj = i + 1, j
-                        nk = (k + 1) % 3
-                        new_sum = dp[i][j][k] + grid[ni][nj]
-                        if new_sum > dp[ni][nj][nk]:
-                            dp[ni][nj][nk] = new_sum
-                            prev[ni][nj][nk] = (i, j, k, 'D')
-                    # X
+                        new_sum = dp[i][j][mod] + grid[i + 1][j]
+                        new_mod = next_move_num % 3
+                        if new_sum > dp[i + 1][j][new_mod]:
+                            dp[i + 1][j][new_mod] = new_sum
+                            prev[i + 1][j][new_mod] = (i, j, mod, 'D')
                     if i + 1 < N and j + 1 < N:
-                        ni, nj = i + 1, j + 1
-                        nk = (k + 1) % 3
-                        new_sum = dp[i][j][k] + grid[ni][nj]
-                        if new_sum > dp[ni][nj][nk]:
-                            dp[ni][nj][nk] = new_sum
-                            prev[ni][nj][nk] = (i, j, k, 'X')
-    max_sum = max(dp[N - 1][N - 1])
+                        new_sum = dp[i][j][mod] + grid[i + 1][j + 1]
+                        new_mod = next_move_num % 3
+                        if new_sum > dp[i + 1][j + 1][new_mod]:
+                            dp[i + 1][j + 1][new_mod] = new_sum
+                            prev[i + 1][j + 1][new_mod] = (i, j, mod, 'X')
+    max_sum = INF
+    best_mod = -1
+    for mod in range(3):
+        if dp[N - 1][N - 1][mod] > max_sum:
+            max_sum = dp[N - 1][N - 1][mod]
+            best_mod = mod
     if max_sum == INF:
         return 0, ""
-    for k in range(3):
-        if dp[N - 1][N - 1][k] == max_sum:
-            best_k = k
-            break
     path = []
-    ci, cj, ck = N - 1, N - 1, best_k
-    while ci != 0 or cj != 0:
-        pi, pj, pk, move = prev[ci][cj][ck]
+    current_i, current_j, current_mod = N - 1, N - 1, best_mod
+    while (current_i, current_j, current_mod) != (0, 0, 0):
+        if prev[current_i][current_j][current_mod] is None:
+            break
+        prev_i, prev_j, prev_mod, move = prev[current_i][current_j][current_mod]
         path.append(move)
-        ci, cj, ck = pi, pj, pk
+        current_i, current_j, current_mod = prev_i, prev_j, prev_mod
     path.reverse()
     return max_sum, ''.join(path)
+```
 
 === EXTRACTED CODE ===
+import sys
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
     if N == 0:
         return 0, ""
-    INF = float('-inf')
+    INF = -sys.maxsize
     dp = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
     prev = [[[None] * 3 for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
-    for i in range(N):
-        for j in range(N):
-            for k in range(3):
-                if dp[i][j][k] == INF:
+    for mod in range(3):
+        for i in range(N):
+            for j in range(N):
+                if dp[i][j][mod] == INF:
                     continue
-                must_X = ((k + 1) % 3 == 0)
-                if must_X:
+                next_move_num = mod + 1
+                must_diagonal = (next_move_num % 3 == 0)
+                if must_diagonal:
                     if i + 1 < N and j + 1 < N:
-                        ni, nj = i + 1, j + 1
-                        nk = (k + 1) % 3
-                        new_sum = dp[i][j][k] + grid[ni][nj]
-                        if new_sum > dp[ni][nj][nk]:
-                            dp[ni][nj][nk] = new_sum
-                            prev[ni][nj][nk] = (i, j, k, 'X')
+                        new_sum = dp[i][j][mod] + grid[i + 1][j + 1]
+                        new_mod = next_move_num % 3
+                        if new_sum > dp[i + 1][j + 1][new_mod]:
+                            dp[i + 1][j + 1][new_mod] = new_sum
+                            prev[i + 1][j + 1][new_mod] = (i, j, mod, 'X')
+                    else:
+                        if j + 1 < N:
+                            new_sum = dp[i][j][mod] + grid[i][j + 1]
+                            new_mod = next_move_num % 3
+                            if new_sum > dp[i][j + 1][new_mod]:
+                                dp[i][j + 1][new_mod] = new_sum
+                                prev[i][j + 1][new_mod] = (i, j, mod, 'R')
+                        if i + 1 < N:
+                            new_sum = dp[i][j][mod] + grid[i + 1][j]
+                            new_mod = next_move_num % 3
+                            if new_sum > dp[i + 1][j][new_mod]:
+                                dp[i + 1][j][new_mod] = new_sum
+                                prev[i + 1][j][new_mod] = (i, j, mod, 'D')
                 else:
-                    # R
                     if j + 1 < N:
-                        ni, nj = i, j + 1
-                        nk = (k + 1) % 3
-                        new_sum = dp[i][j][k] + grid[ni][nj]
-                        if new_sum > dp[ni][nj][nk]:
-                            dp[ni][nj][nk] = new_sum
-                            prev[ni][nj][nk] = (i, j, k, 'R')
-                    # D
+                        new_sum = dp[i][j][mod] + grid[i][j + 1]
+                        new_mod = next_move_num % 3
+                        if new_sum > dp[i][j + 1][new_mod]:
+                            dp[i][j + 1][new_mod] = new_sum
+                            prev[i][j + 1][new_mod] = (i, j, mod, 'R')
                     if i + 1 < N:
-                        ni, nj = i + 1, j
-                        nk = (k + 1) % 3
-                        new_sum = dp[i][j][k] + grid[ni][nj]
-                        if new_sum > dp[ni][nj][nk]:
-                            dp[ni][nj][nk] = new_sum
-                            prev[ni][nj][nk] = (i, j, k, 'D')
-                    # X
+                        new_sum = dp[i][j][mod] + grid[i + 1][j]
+                        new_mod = next_move_num % 3
+                        if new_sum > dp[i + 1][j][new_mod]:
+                            dp[i + 1][j][new_mod] = new_sum
+                            prev[i + 1][j][new_mod] = (i, j, mod, 'D')
                     if i + 1 < N and j + 1 < N:
-                        ni, nj = i + 1, j + 1
-                        nk = (k + 1) % 3
-                        new_sum = dp[i][j][k] + grid[ni][nj]
-                        if new_sum > dp[ni][nj][nk]:
-                            dp[ni][nj][nk] = new_sum
-                            prev[ni][nj][nk] = (i, j, k, 'X')
-    max_sum = max(dp[N - 1][N - 1])
+                        new_sum = dp[i][j][mod] + grid[i + 1][j + 1]
+                        new_mod = next_move_num % 3
+                        if new_sum > dp[i + 1][j + 1][new_mod]:
+                            dp[i + 1][j + 1][new_mod] = new_sum
+                            prev[i + 1][j + 1][new_mod] = (i, j, mod, 'X')
+    max_sum = INF
+    best_mod = -1
+    for mod in range(3):
+        if dp[N - 1][N - 1][mod] > max_sum:
+            max_sum = dp[N - 1][N - 1][mod]
+            best_mod = mod
     if max_sum == INF:
         return 0, ""
-    for k in range(3):
-        if dp[N - 1][N - 1][k] == max_sum:
-            best_k = k
-            break
     path = []
-    ci, cj, ck = N - 1, N - 1, best_k
-    while ci != 0 or cj != 0:
-        pi, pj, pk, move = prev[ci][cj][ck]
+    current_i, current_j, current_mod = N - 1, N - 1, best_mod
+    while (current_i, current_j, current_mod) != (0, 0, 0):
+        if prev[current_i][current_j][current_mod] is None:
+            break
+        prev_i, prev_j, prev_mod, move = prev[current_i][current_j][current_mod]
         path.append(move)
-        ci, cj, ck = pi, pj, pk
+        current_i, current_j, current_mod = prev_i, prev_j, prev_mod
     path.reverse()
     return max_sum, ''.join(path)
