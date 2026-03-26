@@ -1,114 +1,121 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-24T07:58:12.776368+00:00
+Evaluated: 2026-03-26T15:55:15.285778+00:00
 
 === TIMING ===
-Response time: 40.96s
+Response time: 50.94s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Returned sum: 61
+Calculated sum: 16
+Sum matches: NO
+Path valid: NO
+Path error: Move 3 must be diagonal (X) but was D
 
 === RAW RESPONSE ===
 ```python
-from functools import lru_cache
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid:
         return 0, ""
     N = len(grid)
+    memo = [[None for _ in range(N)] for _ in range(N)]
     
-    @lru_cache(None)
-    def dp(row: int, col: int, moves_made: int) -> tuple[int, str]:
-        if row == N-1 and col == N-1:
-            return grid[row][col], ""
+    def dp(i, j):
+        if memo[i][j] is not None:
+            return memo[i][j]
         
-        next_move = moves_made + 1
+        if i == N-1 and j == N-1:
+            memo[i][j] = (grid[i][j], "")
+            return memo[i][j]
+        
+        k = i + j + 1  # Next move number
         
         possible_moves = []
         
-        if next_move % 3 == 0:
-            if row + 1 < N and col + 1 < N:
-                possible_moves = [('X', row+1, col+1)]
+        if k % 3 == 0:
+            if i+1 < N and j+1 < N:
+                possible_moves = [('X', i+1, j+1)]
             else:
-                if row + 1 < N:
-                    possible_moves.append(('D', row+1, col))
-                if col + 1 < N:
-                    possible_moves.append(('R', row, col+1))
+                if j+1 < N:
+                    possible_moves.append(('R', i, j+1))
+                if i+1 < N:
+                    possible_moves.append(('D', i+1, j))
         else:
-            if row + 1 < N and col + 1 < N:
-                possible_moves.append(('X', row+1, col+1))
-            if row + 1 < N:
-                possible_moves.append(('D', row+1, col))
-            if col + 1 < N:
-                possible_moves.append(('R', row, col+1))
+            if j+1 < N:
+                possible_moves.append(('R', i, j+1))
+            if i+1 < N:
+                possible_moves.append(('D', i+1, j))
+            if i+1 < N and j+1 < N:
+                possible_moves.append(('X', i+1, j+1))
         
-        max_sum_so_far = float('-inf')
-        best_path = ""
+        max_sum = float('-inf')
+        best_path = None
         
-        for move_type, next_row, next_col in possible_moves:
-            sub_sum, sub_path = dp(next_row, next_col, moves_made + 1)
-            total_sum = grid[row][col] + sub_sum
-            if total_sum > max_sum_so_far:
-                max_sum_so_far = total_sum
+        for move_type, next_i, next_j in possible_moves:
+            sub_sum, sub_path = dp(next_i, next_j)
+            total_sum = grid[i][j] + sub_sum
+            if total_sum > max_sum:
+                max_sum = total_sum
                 best_path = move_type + sub_path
         
-        return max_sum_so_far, best_path
+        memo[i][j] = (max_sum, best_path)
+        return memo[i][j]
     
-    result_sum, result_path = dp(0, 0, 0)
-    return result_sum, result_path
+    result_sum, path_string = dp(0, 0)
+    return result_sum, path_string
 ```
 
 === EXTRACTED CODE ===
-from functools import lru_cache
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid:
         return 0, ""
     N = len(grid)
+    memo = [[None for _ in range(N)] for _ in range(N)]
     
-    @lru_cache(None)
-    def dp(row: int, col: int, moves_made: int) -> tuple[int, str]:
-        if row == N-1 and col == N-1:
-            return grid[row][col], ""
+    def dp(i, j):
+        if memo[i][j] is not None:
+            return memo[i][j]
         
-        next_move = moves_made + 1
+        if i == N-1 and j == N-1:
+            memo[i][j] = (grid[i][j], "")
+            return memo[i][j]
+        
+        k = i + j + 1  # Next move number
         
         possible_moves = []
         
-        if next_move % 3 == 0:
-            if row + 1 < N and col + 1 < N:
-                possible_moves = [('X', row+1, col+1)]
+        if k % 3 == 0:
+            if i+1 < N and j+1 < N:
+                possible_moves = [('X', i+1, j+1)]
             else:
-                if row + 1 < N:
-                    possible_moves.append(('D', row+1, col))
-                if col + 1 < N:
-                    possible_moves.append(('R', row, col+1))
+                if j+1 < N:
+                    possible_moves.append(('R', i, j+1))
+                if i+1 < N:
+                    possible_moves.append(('D', i+1, j))
         else:
-            if row + 1 < N and col + 1 < N:
-                possible_moves.append(('X', row+1, col+1))
-            if row + 1 < N:
-                possible_moves.append(('D', row+1, col))
-            if col + 1 < N:
-                possible_moves.append(('R', row, col+1))
+            if j+1 < N:
+                possible_moves.append(('R', i, j+1))
+            if i+1 < N:
+                possible_moves.append(('D', i+1, j))
+            if i+1 < N and j+1 < N:
+                possible_moves.append(('X', i+1, j+1))
         
-        max_sum_so_far = float('-inf')
-        best_path = ""
+        max_sum = float('-inf')
+        best_path = None
         
-        for move_type, next_row, next_col in possible_moves:
-            sub_sum, sub_path = dp(next_row, next_col, moves_made + 1)
-            total_sum = grid[row][col] + sub_sum
-            if total_sum > max_sum_so_far:
-                max_sum_so_far = total_sum
+        for move_type, next_i, next_j in possible_moves:
+            sub_sum, sub_path = dp(next_i, next_j)
+            total_sum = grid[i][j] + sub_sum
+            if total_sum > max_sum:
+                max_sum = total_sum
                 best_path = move_type + sub_path
         
-        return max_sum_so_far, best_path
+        memo[i][j] = (max_sum, best_path)
+        return memo[i][j]
     
-    result_sum, result_path = dp(0, 0, 0)
-    return result_sum, result_path
+    result_sum, path_string = dp(0, 0)
+    return result_sum, path_string
