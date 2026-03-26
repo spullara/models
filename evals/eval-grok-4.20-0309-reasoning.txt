@@ -1,120 +1,19 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-03-26T18:26:25.705926+00:00
+Evaluated: 2026-03-26T18:36:54.787056+00:00
 
 === TIMING ===
-Response time: 26.76s
+Response time: 0.52s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection timeout
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    n = len(grid)
-    from collections import deque
-    INF = float('-inf')
-    best_sum = [[[INF for _ in range(3)] for _ in range(n)] for _ in range(n)]
-    best_path = [[["" for _ in range(3)] for _ in range(n)] for _ in range(n)]
-    best_sum[0][0][0] = grid[0][0]
-    best_path[0][0][0] = ""
-    q = deque([(0, 0, 0)])
-    while q:
-        i, j, mod = q.popleft()
-        curr_sum = best_sum[i][j][mod]
-        curr_path = best_path[i][j][mod]
-        must_diag = (mod == 2)
-        allowed = []
-        next_mod = (mod + 1) % 3
-        if must_diag:
-            if i + 1 < n and j + 1 < n:
-                allowed.append(('X', i + 1, j + 1, next_mod))
-            else:
-                if j + 1 < n:
-                    allowed.append(('R', i, j + 1, next_mod))
-                if i + 1 < n:
-                    allowed.append(('D', i + 1, j, next_mod))
-        else:
-            if j + 1 < n:
-                allowed.append(('R', i, j + 1, next_mod))
-            if i + 1 < n:
-                allowed.append(('D', i + 1, j, next_mod))
-            if i + 1 < n and j + 1 < n:
-                allowed.append(('X', i + 1, j + 1, next_mod))
-        for mchar, ni, nj, nmod in allowed:
-            new_sum = curr_sum + grid[ni][nj]
-            new_path = curr_path + mchar
-            if new_sum > best_sum[ni][nj][nmod]:
-                best_sum[ni][nj][nmod] = new_sum
-                best_path[ni][nj][nmod] = new_path
-                q.append((ni, nj, nmod))
-    max_sum = INF
-    best_p = ""
-    for m in range(3):
-        if best_sum[n-1][n-1][m] > max_sum:
-            max_sum = best_sum[n-1][n-1][m]
-            best_p = best_path[n-1][n-1][m]
-    if max_sum == INF:
-        return (0, "")
-    return (int(max_sum), best_p)
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    n = len(grid)
-    from collections import deque
-    INF = float('-inf')
-    best_sum = [[[INF for _ in range(3)] for _ in range(n)] for _ in range(n)]
-    best_path = [[["" for _ in range(3)] for _ in range(n)] for _ in range(n)]
-    best_sum[0][0][0] = grid[0][0]
-    best_path[0][0][0] = ""
-    q = deque([(0, 0, 0)])
-    while q:
-        i, j, mod = q.popleft()
-        curr_sum = best_sum[i][j][mod]
-        curr_path = best_path[i][j][mod]
-        must_diag = (mod == 2)
-        allowed = []
-        next_mod = (mod + 1) % 3
-        if must_diag:
-            if i + 1 < n and j + 1 < n:
-                allowed.append(('X', i + 1, j + 1, next_mod))
-            else:
-                if j + 1 < n:
-                    allowed.append(('R', i, j + 1, next_mod))
-                if i + 1 < n:
-                    allowed.append(('D', i + 1, j, next_mod))
-        else:
-            if j + 1 < n:
-                allowed.append(('R', i, j + 1, next_mod))
-            if i + 1 < n:
-                allowed.append(('D', i + 1, j, next_mod))
-            if i + 1 < n and j + 1 < n:
-                allowed.append(('X', i + 1, j + 1, next_mod))
-        for mchar, ni, nj, nmod in allowed:
-            new_sum = curr_sum + grid[ni][nj]
-            new_path = curr_path + mchar
-            if new_sum > best_sum[ni][nj][nmod]:
-                best_sum[ni][nj][nmod] = new_sum
-                best_path[ni][nj][nmod] = new_path
-                q.append((ni, nj, nmod))
-    max_sum = INF
-    best_p = ""
-    for m in range(3):
-        if best_sum[n-1][n-1][m] > max_sum:
-            max_sum = best_sum[n-1][n-1][m]
-            best_p = best_path[n-1][n-1][m]
-    if max_sum == INF:
-        return (0, "")
-    return (int(max_sum), best_p)
+(no code extracted)
