@@ -1,121 +1,114 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-26T15:55:15.285778+00:00
+Evaluated: 2026-03-26T16:11:13.501404+00:00
 
 === TIMING ===
-Response time: 50.94s
+Response time: 72.91s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 61
-Calculated sum: 16
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
 ```python
+import functools
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
     N = len(grid)
-    memo = [[None for _ in range(N)] for _ in range(N)]
     
-    def dp(i, j):
-        if memo[i][j] is not None:
-            return memo[i][j]
-        
+    @functools.lru_cache(None)
+    def helper(i: int, j: int, moves_mod: int) -> tuple[int, str]:
+        current_sum = grid[i][j]
         if i == N-1 and j == N-1:
-            memo[i][j] = (grid[i][j], "")
-            return memo[i][j]
+            return (current_sum, "")
         
-        k = i + j + 1  # Next move number
-        
-        possible_moves = []
-        
-        if k % 3 == 0:
+        next_move_number = (moves_mod + 1) % 3
+        if next_move_number == 0:
             if i+1 < N and j+1 < N:
-                possible_moves = [('X', i+1, j+1)]
+                sub_sum, sub_path = helper(i+1, j+1, next_move_number)
+                return (current_sum + sub_sum, 'X' + sub_path)
             else:
+                candidates = []
                 if j+1 < N:
-                    possible_moves.append(('R', i, j+1))
+                    sub_sum, sub_path = helper(i, j+1, next_move_number)
+                    candidates.append((current_sum + sub_sum, 'R' + sub_path))
                 if i+1 < N:
-                    possible_moves.append(('D', i+1, j))
+                    sub_sum, sub_path = helper(i+1, j, next_move_number)
+                    candidates.append((current_sum + sub_sum, 'D' + sub_path))
+                if candidates:
+                    return max(candidates, key=lambda x: x[0])
+                else:
+                    return (-float('inf'), "")
         else:
+            candidates = []
             if j+1 < N:
-                possible_moves.append(('R', i, j+1))
+                sub_sum, sub_path = helper(i, j+1, next_move_number)
+                candidates.append((current_sum + sub_sum, 'R' + sub_path))
             if i+1 < N:
-                possible_moves.append(('D', i+1, j))
+                sub_sum, sub_path = helper(i+1, j, next_move_number)
+                candidates.append((current_sum + sub_sum, 'D' + sub_path))
             if i+1 < N and j+1 < N:
-                possible_moves.append(('X', i+1, j+1))
-        
-        max_sum = float('-inf')
-        best_path = None
-        
-        for move_type, next_i, next_j in possible_moves:
-            sub_sum, sub_path = dp(next_i, next_j)
-            total_sum = grid[i][j] + sub_sum
-            if total_sum > max_sum:
-                max_sum = total_sum
-                best_path = move_type + sub_path
-        
-        memo[i][j] = (max_sum, best_path)
-        return memo[i][j]
+                sub_sum, sub_path = helper(i+1, j+1, next_move_number)
+                candidates.append((current_sum + sub_sum, 'X' + sub_path))
+            if candidates:
+                return max(candidates, key=lambda x: x[0])
+            else:
+                return (-float('inf'), "")
     
-    result_sum, path_string = dp(0, 0)
-    return result_sum, path_string
+    max_sum, path = helper(0, 0, 0)
+    return max_sum, path
 ```
 
 === EXTRACTED CODE ===
+import functools
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
     N = len(grid)
-    memo = [[None for _ in range(N)] for _ in range(N)]
     
-    def dp(i, j):
-        if memo[i][j] is not None:
-            return memo[i][j]
-        
+    @functools.lru_cache(None)
+    def helper(i: int, j: int, moves_mod: int) -> tuple[int, str]:
+        current_sum = grid[i][j]
         if i == N-1 and j == N-1:
-            memo[i][j] = (grid[i][j], "")
-            return memo[i][j]
+            return (current_sum, "")
         
-        k = i + j + 1  # Next move number
-        
-        possible_moves = []
-        
-        if k % 3 == 0:
+        next_move_number = (moves_mod + 1) % 3
+        if next_move_number == 0:
             if i+1 < N and j+1 < N:
-                possible_moves = [('X', i+1, j+1)]
+                sub_sum, sub_path = helper(i+1, j+1, next_move_number)
+                return (current_sum + sub_sum, 'X' + sub_path)
             else:
+                candidates = []
                 if j+1 < N:
-                    possible_moves.append(('R', i, j+1))
+                    sub_sum, sub_path = helper(i, j+1, next_move_number)
+                    candidates.append((current_sum + sub_sum, 'R' + sub_path))
                 if i+1 < N:
-                    possible_moves.append(('D', i+1, j))
+                    sub_sum, sub_path = helper(i+1, j, next_move_number)
+                    candidates.append((current_sum + sub_sum, 'D' + sub_path))
+                if candidates:
+                    return max(candidates, key=lambda x: x[0])
+                else:
+                    return (-float('inf'), "")
         else:
+            candidates = []
             if j+1 < N:
-                possible_moves.append(('R', i, j+1))
+                sub_sum, sub_path = helper(i, j+1, next_move_number)
+                candidates.append((current_sum + sub_sum, 'R' + sub_path))
             if i+1 < N:
-                possible_moves.append(('D', i+1, j))
+                sub_sum, sub_path = helper(i+1, j, next_move_number)
+                candidates.append((current_sum + sub_sum, 'D' + sub_path))
             if i+1 < N and j+1 < N:
-                possible_moves.append(('X', i+1, j+1))
-        
-        max_sum = float('-inf')
-        best_path = None
-        
-        for move_type, next_i, next_j in possible_moves:
-            sub_sum, sub_path = dp(next_i, next_j)
-            total_sum = grid[i][j] + sub_sum
-            if total_sum > max_sum:
-                max_sum = total_sum
-                best_path = move_type + sub_path
-        
-        memo[i][j] = (max_sum, best_path)
-        return memo[i][j]
+                sub_sum, sub_path = helper(i+1, j+1, next_move_number)
+                candidates.append((current_sum + sub_sum, 'X' + sub_path))
+            if candidates:
+                return max(candidates, key=lambda x: x[0])
+            else:
+                return (-float('inf'), "")
     
-    result_sum, path_string = dp(0, 0)
-    return result_sum, path_string
+    max_sum, path = helper(0, 0, 0)
+    return max_sum, path
