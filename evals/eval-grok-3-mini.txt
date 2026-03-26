@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-26T18:32:19.782673+00:00
+Evaluated: 2026-03-26T18:35:09.152986+00:00
 
 === TIMING ===
-Response time: 75.64s
+Response time: 46.91s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,140 +17,98 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-from typing import List, Tuple
-
-def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    memo = {}  # Dictionary to memoize: key (i, j, moves_mod3) -> (max_sum, best_path)
+    memo = {}
     
-    def helper(i: int, j: int, moves_mod3: int) -> Tuple[int, str]:
-        if (i, j, moves_mod3) in memo:
-            return memo[(i, j, moves_mod3)]
-        
-        if i >= N or j >= N:
-            return (float('-inf'), "")  # Invalid state
-        
-        current_sum = grid[i][j]
+    def dp(i, j, mod):
+        if (i, j, mod) in memo:
+            return memo[(i, j, mod)]
         
         if i == N-1 and j == N-1:
-            return (current_sum, "")
+            memo[(i, j, mod)] = (grid[i][j], "")
+            return memo[(i, j, mod)]
         
-        next_mod3 = (moves_mod3 + 1) % 3
+        candidates = []
+        if j + 1 < N:
+            candidates.append(('R', i, j + 1))
+        if i + 1 < N:
+            candidates.append(('D', i + 1, j))
+        if i + 1 < N and j + 1 < N:
+            candidates.append(('X', i + 1, j + 1))
         
-        if (moves_mod3 + 1) % 3 == 0:  # Next move must be X if possible
-            if i+1 < N and j+1 < N:  # X possible
-                sum_X, path_X = helper(i+1, j+1, next_mod3)
-                total_sum_X = current_sum + sum_X
-                full_path_X = "X" + path_X
-                best_sum = total_sum_X
-                best_path = full_path_X
-            else:  # X not possible, try R and D
-                candidates = []
-                if j+1 < N:  # R
-                    sum_R, path_R = helper(i, j+1, next_mod3)
-                    if sum_R != float('-inf'):
-                        candidates.append((current_sum + sum_R, "R" + path_R))
-                if i+1 < N:  # D
-                    sum_D, path_D = helper(i+1, j, next_mod3)
-                    if sum_D != float('-inf'):
-                        candidates.append((current_sum + sum_D, "D" + path_D))
-                if candidates:
-                    best_sum, best_path = max(candidates, key=lambda x: x[0])
-                else:
-                    best_sum = float('-inf')
-                    best_path = ""
-        else:  # No constraint, try all
-            candidates = []
-            if i+1 < N and j+1 < N:  # X
-                sum_X, path_X = helper(i+1, j+1, next_mod3)
-                if sum_X != float('-inf'):
-                    candidates.append((current_sum + sum_X, "X" + path_X))
-            if j+1 < N:  # R
-                sum_R, path_R = helper(i, j+1, next_mod3)
-                if sum_R != float('-inf'):
-                    candidates.append((current_sum + sum_R, "R" + path_R))
-            if i+1 < N:  # D
-                sum_D, path_D = helper(i+1, j, next_mod3)
-                if sum_D != float('-inf'):
-                    candidates.append((current_sum + sum_D, "D" + path_D))
-            if candidates:
-                best_sum, best_path = max(candidates, key=lambda x: x[0])
-            else:
-                best_sum = float('-inf')
-                best_path = ""
+        required_X = (mod == 2)
         
-        memo[(i, j, moves_mod3)] = (best_sum, best_path)
-        return best_sum, best_path
+        if required_X:
+            filtered = [cand for cand in candidates if cand[0] == 'X']
+            if not filtered:
+                filtered = candidates
+        else:
+            filtered = candidates
+        
+        max_sum_here = float('-inf')
+        best_path_here = None
+        
+        for move_str, next_i, next_j in filtered:
+            sub_sum, sub_path = dp(next_i, next_j, (mod + 1) % 3)
+            current_sum = grid[i][j] + sub_sum
+            if current_sum > max_sum_here:
+                max_sum_here = current_sum
+                best_path_here = move_str + sub_path
+        
+        memo[(i, j, mod)] = (max_sum_here, best_path_here)
+        return memo[(i, j, mod)]
     
-    total_sum, path_string = helper(0, 0, 0)
-    return total_sum, path_string
+    if N == 0:
+        return 0, ""
+    
+    return dp(0, 0, 0)
 ```
 
 === EXTRACTED CODE ===
-from typing import List, Tuple
-
-def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    memo = {}  # Dictionary to memoize: key (i, j, moves_mod3) -> (max_sum, best_path)
+    memo = {}
     
-    def helper(i: int, j: int, moves_mod3: int) -> Tuple[int, str]:
-        if (i, j, moves_mod3) in memo:
-            return memo[(i, j, moves_mod3)]
-        
-        if i >= N or j >= N:
-            return (float('-inf'), "")  # Invalid state
-        
-        current_sum = grid[i][j]
+    def dp(i, j, mod):
+        if (i, j, mod) in memo:
+            return memo[(i, j, mod)]
         
         if i == N-1 and j == N-1:
-            return (current_sum, "")
+            memo[(i, j, mod)] = (grid[i][j], "")
+            return memo[(i, j, mod)]
         
-        next_mod3 = (moves_mod3 + 1) % 3
+        candidates = []
+        if j + 1 < N:
+            candidates.append(('R', i, j + 1))
+        if i + 1 < N:
+            candidates.append(('D', i + 1, j))
+        if i + 1 < N and j + 1 < N:
+            candidates.append(('X', i + 1, j + 1))
         
-        if (moves_mod3 + 1) % 3 == 0:  # Next move must be X if possible
-            if i+1 < N and j+1 < N:  # X possible
-                sum_X, path_X = helper(i+1, j+1, next_mod3)
-                total_sum_X = current_sum + sum_X
-                full_path_X = "X" + path_X
-                best_sum = total_sum_X
-                best_path = full_path_X
-            else:  # X not possible, try R and D
-                candidates = []
-                if j+1 < N:  # R
-                    sum_R, path_R = helper(i, j+1, next_mod3)
-                    if sum_R != float('-inf'):
-                        candidates.append((current_sum + sum_R, "R" + path_R))
-                if i+1 < N:  # D
-                    sum_D, path_D = helper(i+1, j, next_mod3)
-                    if sum_D != float('-inf'):
-                        candidates.append((current_sum + sum_D, "D" + path_D))
-                if candidates:
-                    best_sum, best_path = max(candidates, key=lambda x: x[0])
-                else:
-                    best_sum = float('-inf')
-                    best_path = ""
-        else:  # No constraint, try all
-            candidates = []
-            if i+1 < N and j+1 < N:  # X
-                sum_X, path_X = helper(i+1, j+1, next_mod3)
-                if sum_X != float('-inf'):
-                    candidates.append((current_sum + sum_X, "X" + path_X))
-            if j+1 < N:  # R
-                sum_R, path_R = helper(i, j+1, next_mod3)
-                if sum_R != float('-inf'):
-                    candidates.append((current_sum + sum_R, "R" + path_R))
-            if i+1 < N:  # D
-                sum_D, path_D = helper(i+1, j, next_mod3)
-                if sum_D != float('-inf'):
-                    candidates.append((current_sum + sum_D, "D" + path_D))
-            if candidates:
-                best_sum, best_path = max(candidates, key=lambda x: x[0])
-            else:
-                best_sum = float('-inf')
-                best_path = ""
+        required_X = (mod == 2)
         
-        memo[(i, j, moves_mod3)] = (best_sum, best_path)
-        return best_sum, best_path
+        if required_X:
+            filtered = [cand for cand in candidates if cand[0] == 'X']
+            if not filtered:
+                filtered = candidates
+        else:
+            filtered = candidates
+        
+        max_sum_here = float('-inf')
+        best_path_here = None
+        
+        for move_str, next_i, next_j in filtered:
+            sub_sum, sub_path = dp(next_i, next_j, (mod + 1) % 3)
+            current_sum = grid[i][j] + sub_sum
+            if current_sum > max_sum_here:
+                max_sum_here = current_sum
+                best_path_here = move_str + sub_path
+        
+        memo[(i, j, mod)] = (max_sum_here, best_path_here)
+        return memo[(i, j, mod)]
     
-    total_sum, path_string = helper(0, 0, 0)
-    return total_sum, path_string
+    if N == 0:
+        return 0, ""
+    
+    return dp(0, 0, 0)
