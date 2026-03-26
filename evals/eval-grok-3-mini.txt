@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-26T16:11:13.501404+00:00
+Evaluated: 2026-03-26T16:45:12.714045+00:00
 
 === TIMING ===
-Response time: 72.91s
+Response time: 55.9s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,98 +17,98 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-import functools
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return 0, ""
     N = len(grid)
+    memo = {}
     
-    @functools.lru_cache(None)
-    def helper(i: int, j: int, moves_mod: int) -> tuple[int, str]:
-        current_sum = grid[i][j]
+    def dfs(i, j, mod3):
+        if (i, j, mod3) in memo:
+            return memo[(i, j, mod3)]
         if i == N-1 and j == N-1:
-            return (current_sum, "")
+            return grid[i][j], ""
         
-        next_move_number = (moves_mod + 1) % 3
-        if next_move_number == 0:
+        next_mod3 = (mod3 + 1) % 3
+        candidates = []
+        
+        if next_mod3 == 0:
             if i+1 < N and j+1 < N:
-                sub_sum, sub_path = helper(i+1, j+1, next_move_number)
-                return (current_sum + sub_sum, 'X' + sub_path)
+                sum_X, path_X = dfs(i+1, j+1, next_mod3)
+                candidates.append((grid[i][j] + sum_X, "X" + path_X))
             else:
-                candidates = []
-                if j+1 < N:
-                    sub_sum, sub_path = helper(i, j+1, next_move_number)
-                    candidates.append((current_sum + sub_sum, 'R' + sub_path))
                 if i+1 < N:
-                    sub_sum, sub_path = helper(i+1, j, next_move_number)
-                    candidates.append((current_sum + sub_sum, 'D' + sub_path))
-                if candidates:
-                    return max(candidates, key=lambda x: x[0])
-                else:
-                    return (-float('inf'), "")
+                    sum_D, path_D = dfs(i+1, j, next_mod3)
+                    candidates.append((grid[i][j] + sum_D, "D" + path_D))
+                if j+1 < N:
+                    sum_R, path_R = dfs(i, j+1, next_mod3)
+                    candidates.append((grid[i][j] + sum_R, "R" + path_R))
         else:
-            candidates = []
-            if j+1 < N:
-                sub_sum, sub_path = helper(i, j+1, next_move_number)
-                candidates.append((current_sum + sub_sum, 'R' + sub_path))
             if i+1 < N:
-                sub_sum, sub_path = helper(i+1, j, next_move_number)
-                candidates.append((current_sum + sub_sum, 'D' + sub_path))
+                sum_D, path_D = dfs(i+1, j, next_mod3)
+                candidates.append((grid[i][j] + sum_D, "D" + path_D))
+            if j+1 < N:
+                sum_R, path_R = dfs(i, j+1, next_mod3)
+                candidates.append((grid[i][j] + sum_R, "R" + path_R))
             if i+1 < N and j+1 < N:
-                sub_sum, sub_path = helper(i+1, j+1, next_move_number)
-                candidates.append((current_sum + sub_sum, 'X' + sub_path))
-            if candidates:
-                return max(candidates, key=lambda x: x[0])
-            else:
-                return (-float('inf'), "")
+                sum_X, path_X = dfs(i+1, j+1, next_mod3)
+                candidates.append((grid[i][j] + sum_X, "X" + path_X))
+        
+        if candidates:
+            best = max(candidates, key=lambda x: x[0])
+            memo[(i, j, mod3)] = best
+            return best
+        else:
+            return float('-inf'), ""
     
-    max_sum, path = helper(0, 0, 0)
-    return max_sum, path
+    result_sum, path = dfs(0, 0, 0)
+    return result_sum, path
 ```
 
 === EXTRACTED CODE ===
-import functools
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return 0, ""
     N = len(grid)
+    memo = {}
     
-    @functools.lru_cache(None)
-    def helper(i: int, j: int, moves_mod: int) -> tuple[int, str]:
-        current_sum = grid[i][j]
+    def dfs(i, j, mod3):
+        if (i, j, mod3) in memo:
+            return memo[(i, j, mod3)]
         if i == N-1 and j == N-1:
-            return (current_sum, "")
+            return grid[i][j], ""
         
-        next_move_number = (moves_mod + 1) % 3
-        if next_move_number == 0:
+        next_mod3 = (mod3 + 1) % 3
+        candidates = []
+        
+        if next_mod3 == 0:
             if i+1 < N and j+1 < N:
-                sub_sum, sub_path = helper(i+1, j+1, next_move_number)
-                return (current_sum + sub_sum, 'X' + sub_path)
+                sum_X, path_X = dfs(i+1, j+1, next_mod3)
+                candidates.append((grid[i][j] + sum_X, "X" + path_X))
             else:
-                candidates = []
-                if j+1 < N:
-                    sub_sum, sub_path = helper(i, j+1, next_move_number)
-                    candidates.append((current_sum + sub_sum, 'R' + sub_path))
                 if i+1 < N:
-                    sub_sum, sub_path = helper(i+1, j, next_move_number)
-                    candidates.append((current_sum + sub_sum, 'D' + sub_path))
-                if candidates:
-                    return max(candidates, key=lambda x: x[0])
-                else:
-                    return (-float('inf'), "")
+                    sum_D, path_D = dfs(i+1, j, next_mod3)
+                    candidates.append((grid[i][j] + sum_D, "D" + path_D))
+                if j+1 < N:
+                    sum_R, path_R = dfs(i, j+1, next_mod3)
+                    candidates.append((grid[i][j] + sum_R, "R" + path_R))
         else:
-            candidates = []
-            if j+1 < N:
-                sub_sum, sub_path = helper(i, j+1, next_move_number)
-                candidates.append((current_sum + sub_sum, 'R' + sub_path))
             if i+1 < N:
-                sub_sum, sub_path = helper(i+1, j, next_move_number)
-                candidates.append((current_sum + sub_sum, 'D' + sub_path))
+                sum_D, path_D = dfs(i+1, j, next_mod3)
+                candidates.append((grid[i][j] + sum_D, "D" + path_D))
+            if j+1 < N:
+                sum_R, path_R = dfs(i, j+1, next_mod3)
+                candidates.append((grid[i][j] + sum_R, "R" + path_R))
             if i+1 < N and j+1 < N:
-                sub_sum, sub_path = helper(i+1, j+1, next_move_number)
-                candidates.append((current_sum + sub_sum, 'X' + sub_path))
-            if candidates:
-                return max(candidates, key=lambda x: x[0])
-            else:
-                return (-float('inf'), "")
+                sum_X, path_X = dfs(i+1, j+1, next_mod3)
+                candidates.append((grid[i][j] + sum_X, "X" + path_X))
+        
+        if candidates:
+            best = max(candidates, key=lambda x: x[0])
+            memo[(i, j, mod3)] = best
+            return best
+        else:
+            return float('-inf'), ""
     
-    max_sum, path = helper(0, 0, 0)
-    return max_sum, path
+    result_sum, path = dfs(0, 0, 0)
+    return result_sum, path
