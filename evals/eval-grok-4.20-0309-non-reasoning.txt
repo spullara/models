@@ -1,19 +1,16 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-03-26T18:57:41.612421+00:00
+Evaluated: 2026-03-26T19:20:13.896911+00:00
 
 === TIMING ===
-Response time: 2.08s
+Response time: 1.83s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Execution Error: 'float' object is not subscriptable
 
 === RAW RESPONSE ===
 ```python
@@ -25,32 +22,43 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         return (grid[0][0], "")
     
     INF = float('-inf')
-    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], "")
+    dp = [[[INF, INF, ""] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
+    dp[0][0][1] = (grid[0][0], "")
+    dp[0][0][2] = (grid[0][0], "")
     
     dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
     
     for i in range(n):
         for j in range(n):
-            if dp[i][j][0] == INF:
-                continue
-            moves_made = len(dp[i][j][1])
-            must_diag = (moves_made % 3 == 2)
-            
-            for di, dj, let in dirs:
-                ni, nj = i + di, j + dj
-                if ni >= n or nj >= n:
+            for moves in range(3):
+                if dp[i][j][moves][0] == INF:
                     continue
-                if must_diag and let != 'X' and (i+1 < n and j+1 < n):
-                    continue
-                new_sum = dp[i][j][0] + grid[ni][nj]
-                new_path = dp[i][j][1] + let
-                if new_sum > dp[ni][nj][0]:
-                    dp[ni][nj] = (new_sum, new_path)
+                curr_sum, path = dp[i][j][moves]
+                next_move_idx = (len(path) + 1) % 3
+                
+                for di, dj, ch in dirs:
+                    ni, nj = i + di, j + dj
+                    if 0 <= ni < n and 0 <= nj < n:
+                        new_sum = curr_sum + grid[ni][nj]
+                        force_diag = (next_move_idx == 0)
+                        if force_diag and ch != 'X' and (i+1 < n and j+1 < n):
+                            continue
+                        new_path = path + ch
+                        tgt = dp[ni][nj][next_move_idx]
+                        if new_sum > tgt[0]:
+                            tgt[0] = new_sum
+                            tgt[1] = new_path
+                            tgt[2] = new_path
     
-    if dp[n-1][n-1][0] == INF:
-        return (0, "")
-    return dp[n-1][n-1]
+    max_sum = INF
+    best_path = ""
+    for k in range(3):
+        if dp[n-1][n-1][k][0] > max_sum:
+            max_sum = dp[n-1][n-1][k][0]
+            best_path = dp[n-1][n-1][k][1]
+    
+    return (int(max_sum), best_path)
 ```
 
 === EXTRACTED CODE ===
@@ -62,29 +70,40 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         return (grid[0][0], "")
     
     INF = float('-inf')
-    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], "")
+    dp = [[[INF, INF, ""] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
+    dp[0][0][1] = (grid[0][0], "")
+    dp[0][0][2] = (grid[0][0], "")
     
     dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
     
     for i in range(n):
         for j in range(n):
-            if dp[i][j][0] == INF:
-                continue
-            moves_made = len(dp[i][j][1])
-            must_diag = (moves_made % 3 == 2)
-            
-            for di, dj, let in dirs:
-                ni, nj = i + di, j + dj
-                if ni >= n or nj >= n:
+            for moves in range(3):
+                if dp[i][j][moves][0] == INF:
                     continue
-                if must_diag and let != 'X' and (i+1 < n and j+1 < n):
-                    continue
-                new_sum = dp[i][j][0] + grid[ni][nj]
-                new_path = dp[i][j][1] + let
-                if new_sum > dp[ni][nj][0]:
-                    dp[ni][nj] = (new_sum, new_path)
+                curr_sum, path = dp[i][j][moves]
+                next_move_idx = (len(path) + 1) % 3
+                
+                for di, dj, ch in dirs:
+                    ni, nj = i + di, j + dj
+                    if 0 <= ni < n and 0 <= nj < n:
+                        new_sum = curr_sum + grid[ni][nj]
+                        force_diag = (next_move_idx == 0)
+                        if force_diag and ch != 'X' and (i+1 < n and j+1 < n):
+                            continue
+                        new_path = path + ch
+                        tgt = dp[ni][nj][next_move_idx]
+                        if new_sum > tgt[0]:
+                            tgt[0] = new_sum
+                            tgt[1] = new_path
+                            tgt[2] = new_path
     
-    if dp[n-1][n-1][0] == INF:
-        return (0, "")
-    return dp[n-1][n-1]
+    max_sum = INF
+    best_path = ""
+    for k in range(3):
+        if dp[n-1][n-1][k][0] > max_sum:
+            max_sum = dp[n-1][n-1][k][0]
+            best_path = dp[n-1][n-1][k][1]
+    
+    return (int(max_sum), best_path)
