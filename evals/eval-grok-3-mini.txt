@@ -1,114 +1,117 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-26T16:45:12.714045+00:00
+Evaluated: 2026-03-26T17:07:11.334980+00:00
 
 === TIMING ===
-Response time: 55.9s
+Response time: 95.11s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Execution Error: 'int' object is not subscriptable
 
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
     N = len(grid)
-    memo = {}
+    if N == 0:
+        return 0, ""
+    dp = [[[(-float('inf'), "") for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0] = (grid[0][0], "")
     
-    def dfs(i, j, mod3):
-        if (i, j, mod3) in memo:
-            return memo[(i, j, mod3)]
-        if i == N-1 and j == N-1:
-            return grid[i][j], ""
-        
-        next_mod3 = (mod3 + 1) % 3
-        candidates = []
-        
-        if next_mod3 == 0:
-            if i+1 < N and j+1 < N:
-                sum_X, path_X = dfs(i+1, j+1, next_mod3)
-                candidates.append((grid[i][j] + sum_X, "X" + path_X))
-            else:
-                if i+1 < N:
-                    sum_D, path_D = dfs(i+1, j, next_mod3)
-                    candidates.append((grid[i][j] + sum_D, "D" + path_D))
-                if j+1 < N:
-                    sum_R, path_R = dfs(i, j+1, next_mod3)
-                    candidates.append((grid[i][j] + sum_R, "R" + path_R))
-        else:
-            if i+1 < N:
-                sum_D, path_D = dfs(i+1, j, next_mod3)
-                candidates.append((grid[i][j] + sum_D, "D" + path_D))
-            if j+1 < N:
-                sum_R, path_R = dfs(i, j+1, next_mod3)
-                candidates.append((grid[i][j] + sum_R, "R" + path_R))
-            if i+1 < N and j+1 < N:
-                sum_X, path_X = dfs(i+1, j+1, next_mod3)
-                candidates.append((grid[i][j] + sum_X, "X" + path_X))
-        
-        if candidates:
-            best = max(candidates, key=lambda x: x[0])
-            memo[(i, j, mod3)] = best
-            return best
-        else:
-            return float('-inf'), ""
+    for total in range(0, 2 * N - 1):
+        for i in range(N):
+            j = total - i
+            if j < 0 or j >= N:
+                continue
+            
+            # From (i, j-1) via R
+            if j - 1 >= 0:
+                for prev_mod in range(3):
+                    if dp[i][j-1][prev_mod][0] > -float('inf'):
+                        new_mod = (prev_mod + 1) % 3
+                        X_possible = (i + 1 < N and j - 1 + 1 < N)
+                        if new_mod != 0 or not X_possible:
+                            new_sum = dp[i][j-1][prev_mod][0] + grid[i][j]
+                            if new_sum > dp[i][j][new_mod][0]:
+                                dp[i][j][new_mod] = (new_sum, dp[i][j-1][prev_mod][1] + 'R')
+            
+            # From (i-1, j) via D
+            if i - 1 >= 0:
+                for prev_mod in range(3):
+                    if dp[i-1][j][prev_mod][0] > -float('inf'):
+                        new_mod = (prev_mod + 1) % 3
+                        X_possible_from_prev = (i - 1 + 1 < N and j + 1 < N)
+                        if new_mod != 0 or not X_possible_from_prev:
+                            new_sum = dp[i-1][j][prev_mod][0] + grid[i][j]
+                            if new_sum > dp[i][j][new_mod][0]:
+                                dp[i][j][new_mod] = (new_sum, dp[i-1][j][prev_mod][1] + 'D')
+            
+            # From (i-1, j-1) via X
+            if i - 1 >= 0 and j - 1 >= 0:
+                for prev_mod in range(3):
+                    if dp[i-1][j-1][prev_mod][0] > -float('inf'):
+                        new_mod = (prev_mod + 1) % 3
+                        new_sum = dp[i-1][j-1][prev_mod][0] + grid[i][j]
+                        if new_sum > dp[i][j][new_mod][0]:
+                            dp[i][j][new_mod] = (new_sum, dp[i-1][j-1][prev_mod][1] + 'X')
     
-    result_sum, path = dfs(0, 0, 0)
-    return result_sum, path
+    max_sum = max(dp[N-1][N-1][0][0], dp[N-1][N-1][1][0], dp[N-1][N-1][2][0])
+    for k in range(3):
+        if dp[N-1][N-1][k][0] == max_sum:
+            return max_sum, dp[N-1][N-1][k][1]
+    return max_sum, ""  # Fallback, though should not happen
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
     N = len(grid)
-    memo = {}
+    if N == 0:
+        return 0, ""
+    dp = [[[(-float('inf'), "") for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0] = (grid[0][0], "")
     
-    def dfs(i, j, mod3):
-        if (i, j, mod3) in memo:
-            return memo[(i, j, mod3)]
-        if i == N-1 and j == N-1:
-            return grid[i][j], ""
-        
-        next_mod3 = (mod3 + 1) % 3
-        candidates = []
-        
-        if next_mod3 == 0:
-            if i+1 < N and j+1 < N:
-                sum_X, path_X = dfs(i+1, j+1, next_mod3)
-                candidates.append((grid[i][j] + sum_X, "X" + path_X))
-            else:
-                if i+1 < N:
-                    sum_D, path_D = dfs(i+1, j, next_mod3)
-                    candidates.append((grid[i][j] + sum_D, "D" + path_D))
-                if j+1 < N:
-                    sum_R, path_R = dfs(i, j+1, next_mod3)
-                    candidates.append((grid[i][j] + sum_R, "R" + path_R))
-        else:
-            if i+1 < N:
-                sum_D, path_D = dfs(i+1, j, next_mod3)
-                candidates.append((grid[i][j] + sum_D, "D" + path_D))
-            if j+1 < N:
-                sum_R, path_R = dfs(i, j+1, next_mod3)
-                candidates.append((grid[i][j] + sum_R, "R" + path_R))
-            if i+1 < N and j+1 < N:
-                sum_X, path_X = dfs(i+1, j+1, next_mod3)
-                candidates.append((grid[i][j] + sum_X, "X" + path_X))
-        
-        if candidates:
-            best = max(candidates, key=lambda x: x[0])
-            memo[(i, j, mod3)] = best
-            return best
-        else:
-            return float('-inf'), ""
+    for total in range(0, 2 * N - 1):
+        for i in range(N):
+            j = total - i
+            if j < 0 or j >= N:
+                continue
+            
+            # From (i, j-1) via R
+            if j - 1 >= 0:
+                for prev_mod in range(3):
+                    if dp[i][j-1][prev_mod][0] > -float('inf'):
+                        new_mod = (prev_mod + 1) % 3
+                        X_possible = (i + 1 < N and j - 1 + 1 < N)
+                        if new_mod != 0 or not X_possible:
+                            new_sum = dp[i][j-1][prev_mod][0] + grid[i][j]
+                            if new_sum > dp[i][j][new_mod][0]:
+                                dp[i][j][new_mod] = (new_sum, dp[i][j-1][prev_mod][1] + 'R')
+            
+            # From (i-1, j) via D
+            if i - 1 >= 0:
+                for prev_mod in range(3):
+                    if dp[i-1][j][prev_mod][0] > -float('inf'):
+                        new_mod = (prev_mod + 1) % 3
+                        X_possible_from_prev = (i - 1 + 1 < N and j + 1 < N)
+                        if new_mod != 0 or not X_possible_from_prev:
+                            new_sum = dp[i-1][j][prev_mod][0] + grid[i][j]
+                            if new_sum > dp[i][j][new_mod][0]:
+                                dp[i][j][new_mod] = (new_sum, dp[i-1][j][prev_mod][1] + 'D')
+            
+            # From (i-1, j-1) via X
+            if i - 1 >= 0 and j - 1 >= 0:
+                for prev_mod in range(3):
+                    if dp[i-1][j-1][prev_mod][0] > -float('inf'):
+                        new_mod = (prev_mod + 1) % 3
+                        new_sum = dp[i-1][j-1][prev_mod][0] + grid[i][j]
+                        if new_sum > dp[i][j][new_mod][0]:
+                            dp[i][j][new_mod] = (new_sum, dp[i-1][j-1][prev_mod][1] + 'X')
     
-    result_sum, path = dfs(0, 0, 0)
-    return result_sum, path
+    max_sum = max(dp[N-1][N-1][0][0], dp[N-1][N-1][1][0], dp[N-1][N-1][2][0])
+    for k in range(3):
+        if dp[N-1][N-1][k][0] == max_sum:
+            return max_sum, dp[N-1][N-1][k][1]
+    return max_sum, ""  # Fallback, though should not happen
