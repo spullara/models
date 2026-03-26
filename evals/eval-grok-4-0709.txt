@@ -1,9 +1,9 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-26T16:12:26.441223+00:00
+Evaluated: 2026-03-26T16:46:08.642811+00:00
 
 === TIMING ===
-Response time: 90.09s
+Response time: 115.97s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -21,53 +21,59 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
     N = len(grid)
-    max_k = 2 * (N - 1)
-    dp = [{} for _ in range(max_k + 1)]
-    prev = [{} for _ in range(max_k + 1)]
-    start = (0, 0)
-    dp[0][start] = grid[0][0]
-    prev[0][start] = None
-    for k in range(max_k):
-        for pos, s in list(dp[k].items()):
-            i, j = pos
-            is_special = ((k + 1) % 3 == 0)
-            can_R = j + 1 < N
-            can_D = i + 1 < N
-            can_X = i + 1 < N and j + 1 < N
-            possible_moves = []
-            if is_special:
-                if can_X:
-                    possible_moves = [('X', i+1, j+1)]
+    max_moves = 2 * (N - 1)
+    dp = [[[None] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
+    prev = [[[None] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    for m in range(max_moves + 1):
+        for i in range(N):
+            for j in range(N):
+                if dp[i][j][m] is None:
+                    continue
+                new_m = m + 1
+                if new_m > max_moves:
+                    continue
+                k = new_m
+                moves_possible = []
+                if j + 1 < N:
+                    moves_possible.append((i, j + 1, 'R'))
+                if i + 1 < N:
+                    moves_possible.append((i + 1, j, 'D'))
+                x_possible = (i + 1 < N and j + 1 < N)
+                if x_possible:
+                    moves_possible.append((i + 1, j + 1, 'X'))
+                if k % 3 == 0:
+                    if x_possible:
+                        allowed = [(i + 1, j + 1, 'X')]
+                    else:
+                        allowed = [(ni, nj, c) for ni, nj, c in moves_possible if c != 'X']
                 else:
-                    if can_R: possible_moves.append(('R', i, j+1))
-                    if can_D: possible_moves.append(('D', i+1, j))
-            else:
-                if can_R: possible_moves.append(('R', i, j+1))
-                if can_D: possible_moves.append(('D', i+1, j))
-                if can_X: possible_moves.append(('X', i+1, j+1))
-            for move_char, ni, nj in possible_moves:
-                new_s = s + grid[ni][nj]
-                npos = (ni, nj)
-                if npos not in dp[k+1] or new_s > dp[k+1][npos]:
-                    dp[k+1][npos] = new_s
-                    prev[k+1][npos] = (i, j, k, move_char)
-    max_sum = -float('inf')
-    best_k = -1
-    end = (N-1, N-1)
-    for kk in range(max_k + 1):
-        if end in dp[kk] and dp[kk][end] > max_sum:
-            max_sum = dp[kk][end]
-            best_k = kk
-    if max_sum == -float('inf'):
+                    allowed = moves_possible
+                for ni, nj, char in allowed:
+                    new_sum = dp[i][j][m] + grid[ni][nj]
+                    if dp[ni][nj][new_m] is None or new_sum > dp[ni][nj][new_m]:
+                        dp[ni][nj][new_m] = new_sum
+                        prev[ni][nj][new_m] = (i, j, m, char)
+    max_sum = None
+    best_m = -1
+    for m in range(max_moves + 1):
+        if dp[N-1][N-1][m] is not None and (max_sum is None or dp[N-1][N-1][m] > max_sum):
+            max_sum = dp[N-1][N-1][m]
+            best_m = m
+    if max_sum is None:
         return (0, "")
     path = []
-    ci, cj, ck = N-1, N-1, best_k
-    while ck > 0:
-        pi, pj, pk, move = prev[ck][(ci, cj)]
-        path.append(move)
-        ci, cj, ck = pi, pj, pk
+    current_i = N - 1
+    current_j = N - 1
+    current_m = best_m
+    while current_m > 0:
+        p_i, p_j, p_m, char = prev[current_i][current_j][current_m]
+        path.append(char)
+        current_i = p_i
+        current_j = p_j
+        current_m = p_m
     path.reverse()
-    path_str = "".join(path)
+    path_str = ''.join(path)
     return (max_sum, path_str)
 ```
 
@@ -76,51 +82,57 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
     N = len(grid)
-    max_k = 2 * (N - 1)
-    dp = [{} for _ in range(max_k + 1)]
-    prev = [{} for _ in range(max_k + 1)]
-    start = (0, 0)
-    dp[0][start] = grid[0][0]
-    prev[0][start] = None
-    for k in range(max_k):
-        for pos, s in list(dp[k].items()):
-            i, j = pos
-            is_special = ((k + 1) % 3 == 0)
-            can_R = j + 1 < N
-            can_D = i + 1 < N
-            can_X = i + 1 < N and j + 1 < N
-            possible_moves = []
-            if is_special:
-                if can_X:
-                    possible_moves = [('X', i+1, j+1)]
+    max_moves = 2 * (N - 1)
+    dp = [[[None] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
+    prev = [[[None] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    for m in range(max_moves + 1):
+        for i in range(N):
+            for j in range(N):
+                if dp[i][j][m] is None:
+                    continue
+                new_m = m + 1
+                if new_m > max_moves:
+                    continue
+                k = new_m
+                moves_possible = []
+                if j + 1 < N:
+                    moves_possible.append((i, j + 1, 'R'))
+                if i + 1 < N:
+                    moves_possible.append((i + 1, j, 'D'))
+                x_possible = (i + 1 < N and j + 1 < N)
+                if x_possible:
+                    moves_possible.append((i + 1, j + 1, 'X'))
+                if k % 3 == 0:
+                    if x_possible:
+                        allowed = [(i + 1, j + 1, 'X')]
+                    else:
+                        allowed = [(ni, nj, c) for ni, nj, c in moves_possible if c != 'X']
                 else:
-                    if can_R: possible_moves.append(('R', i, j+1))
-                    if can_D: possible_moves.append(('D', i+1, j))
-            else:
-                if can_R: possible_moves.append(('R', i, j+1))
-                if can_D: possible_moves.append(('D', i+1, j))
-                if can_X: possible_moves.append(('X', i+1, j+1))
-            for move_char, ni, nj in possible_moves:
-                new_s = s + grid[ni][nj]
-                npos = (ni, nj)
-                if npos not in dp[k+1] or new_s > dp[k+1][npos]:
-                    dp[k+1][npos] = new_s
-                    prev[k+1][npos] = (i, j, k, move_char)
-    max_sum = -float('inf')
-    best_k = -1
-    end = (N-1, N-1)
-    for kk in range(max_k + 1):
-        if end in dp[kk] and dp[kk][end] > max_sum:
-            max_sum = dp[kk][end]
-            best_k = kk
-    if max_sum == -float('inf'):
+                    allowed = moves_possible
+                for ni, nj, char in allowed:
+                    new_sum = dp[i][j][m] + grid[ni][nj]
+                    if dp[ni][nj][new_m] is None or new_sum > dp[ni][nj][new_m]:
+                        dp[ni][nj][new_m] = new_sum
+                        prev[ni][nj][new_m] = (i, j, m, char)
+    max_sum = None
+    best_m = -1
+    for m in range(max_moves + 1):
+        if dp[N-1][N-1][m] is not None and (max_sum is None or dp[N-1][N-1][m] > max_sum):
+            max_sum = dp[N-1][N-1][m]
+            best_m = m
+    if max_sum is None:
         return (0, "")
     path = []
-    ci, cj, ck = N-1, N-1, best_k
-    while ck > 0:
-        pi, pj, pk, move = prev[ck][(ci, cj)]
-        path.append(move)
-        ci, cj, ck = pi, pj, pk
+    current_i = N - 1
+    current_j = N - 1
+    current_m = best_m
+    while current_m > 0:
+        p_i, p_j, p_m, char = prev[current_i][current_j][current_m]
+        path.append(char)
+        current_i = p_i
+        current_j = p_j
+        current_m = p_m
     path.reverse()
-    path_str = "".join(path)
+    path_str = ''.join(path)
     return (max_sum, path_str)
