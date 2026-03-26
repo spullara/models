@@ -1,9 +1,9 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-24T07:58:53.770271+00:00
+Evaluated: 2026-03-26T15:56:06.254223+00:00
 
 === TIMING ===
-Response time: 172.94s
+Response time: 94.49s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,123 +18,123 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
     n = len(grid)
-    MAX_M = 2 * (n - 1) + 1
-    INF = float('inf')
-    dp = [[[-INF for _ in range(MAX_M)] for _ in range(n)] for _ in range(n)]
-    pred = [[[None for _ in range(MAX_M)] for _ in range(n)] for _ in range(n)]
+    if n == 0:
+        return (0, "")
+    max_moves = 2 * (n - 1)
+    INVALID = - (10 ** 18)
+    dp = [[[INVALID for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
     dp[0][0][0] = grid[0][0]
-    for m in range(MAX_M - 1):
-        for r in range(n):
-            for c in range(n):
-                if dp[r][c][m] == -INF:
+    prev = {}
+    for k in range(max_moves):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][k] == INVALID:
                     continue
-                if r == n - 1 and c == n - 1:
+                m = k + 1
+                if m > max_moves:
                     continue
-                next_move_num = m + 1
-                is_forced = (next_move_num % 3 == 0)
-                can_R = (c + 1 < n)
-                can_D = (r + 1 < n)
-                can_X = (r + 1 < n and c + 1 < n)
+                is_required = (m % 3 == 0)
+                can_R = j + 1 < n
+                can_D = i + 1 < n
+                can_X = i + 1 < n and j + 1 < n
                 possible_moves = []
-                if is_forced:
+                if is_required:
                     if can_X:
-                        possible_moves = [('X', r + 1, c + 1)]
+                        possible_moves = [('X', i + 1, j + 1)]
                     else:
                         if can_R:
-                            possible_moves.append(('R', r, c + 1))
+                            possible_moves.append(('R', i, j + 1))
                         if can_D:
-                            possible_moves.append(('D', r + 1, c))
+                            possible_moves.append(('D', i + 1, j))
                 else:
                     if can_R:
-                        possible_moves.append(('R', r, c + 1))
+                        possible_moves.append(('R', i, j + 1))
                     if can_D:
-                        possible_moves.append(('D', r + 1, c))
+                        possible_moves.append(('D', i + 1, j))
                     if can_X:
-                        possible_moves.append(('X', r + 1, c + 1))
-                for move_char, nr, nc in possible_moves:
-                    new_sum = dp[r][c][m] + grid[nr][nc]
-                    nm = m + 1
-                    if new_sum > dp[nr][nc][nm]:
-                        dp[nr][nc][nm] = new_sum
-                        pred[nr][nc][nm] = (r, c, m, move_char)
-    max_sum = -INF
-    best_m = -1
-    for mm in range(MAX_M):
-        if dp[n - 1][n - 1][mm] > max_sum:
-            max_sum = dp[n - 1][n - 1][mm]
-            best_m = mm
-    if best_m == -1:
+                        possible_moves.append(('X', i + 1, j + 1))
+                for move_char, ni, nj in possible_moves:
+                    new_sum = dp[i][j][k] + grid[ni][nj]
+                    if new_sum > dp[ni][nj][m]:
+                        dp[ni][nj][m] = new_sum
+                        prev[(ni, nj, m)] = (i, j, k, move_char)
+    max_sum = INVALID
+    best_k = -1
+    for kk in range(max_moves + 1):
+        if dp[n - 1][n - 1][kk] > max_sum:
+            max_sum = dp[n - 1][n - 1][kk]
+            best_k = kk
+    if max_sum == INVALID:
         return (0, "")
-    path_list = []
-    cr, cc, cm = n - 1, n - 1, best_m
-    while cm > 0:
-        pr, pc, pm, mc = pred[cr][cc][cm]
-        path_list.append(mc)
-        cr, cc, cm = pr, pc, pm
-    path_str = ''.join(reversed(path_list))
-    return (int(max_sum), path_str)
+    path = []
+    ci, cj, ck = n - 1, n - 1, best_k
+    while ck > 0:
+        pi, pj, pk, move = prev[(ci, cj, ck)]
+        path.append(move)
+        ci, cj, ck = pi, pj, pk
+    path.reverse()
+    path_str = ''.join(path)
+    return (max_sum, path_str)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
     n = len(grid)
-    MAX_M = 2 * (n - 1) + 1
-    INF = float('inf')
-    dp = [[[-INF for _ in range(MAX_M)] for _ in range(n)] for _ in range(n)]
-    pred = [[[None for _ in range(MAX_M)] for _ in range(n)] for _ in range(n)]
+    if n == 0:
+        return (0, "")
+    max_moves = 2 * (n - 1)
+    INVALID = - (10 ** 18)
+    dp = [[[INVALID for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
     dp[0][0][0] = grid[0][0]
-    for m in range(MAX_M - 1):
-        for r in range(n):
-            for c in range(n):
-                if dp[r][c][m] == -INF:
+    prev = {}
+    for k in range(max_moves):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][k] == INVALID:
                     continue
-                if r == n - 1 and c == n - 1:
+                m = k + 1
+                if m > max_moves:
                     continue
-                next_move_num = m + 1
-                is_forced = (next_move_num % 3 == 0)
-                can_R = (c + 1 < n)
-                can_D = (r + 1 < n)
-                can_X = (r + 1 < n and c + 1 < n)
+                is_required = (m % 3 == 0)
+                can_R = j + 1 < n
+                can_D = i + 1 < n
+                can_X = i + 1 < n and j + 1 < n
                 possible_moves = []
-                if is_forced:
+                if is_required:
                     if can_X:
-                        possible_moves = [('X', r + 1, c + 1)]
+                        possible_moves = [('X', i + 1, j + 1)]
                     else:
                         if can_R:
-                            possible_moves.append(('R', r, c + 1))
+                            possible_moves.append(('R', i, j + 1))
                         if can_D:
-                            possible_moves.append(('D', r + 1, c))
+                            possible_moves.append(('D', i + 1, j))
                 else:
                     if can_R:
-                        possible_moves.append(('R', r, c + 1))
+                        possible_moves.append(('R', i, j + 1))
                     if can_D:
-                        possible_moves.append(('D', r + 1, c))
+                        possible_moves.append(('D', i + 1, j))
                     if can_X:
-                        possible_moves.append(('X', r + 1, c + 1))
-                for move_char, nr, nc in possible_moves:
-                    new_sum = dp[r][c][m] + grid[nr][nc]
-                    nm = m + 1
-                    if new_sum > dp[nr][nc][nm]:
-                        dp[nr][nc][nm] = new_sum
-                        pred[nr][nc][nm] = (r, c, m, move_char)
-    max_sum = -INF
-    best_m = -1
-    for mm in range(MAX_M):
-        if dp[n - 1][n - 1][mm] > max_sum:
-            max_sum = dp[n - 1][n - 1][mm]
-            best_m = mm
-    if best_m == -1:
+                        possible_moves.append(('X', i + 1, j + 1))
+                for move_char, ni, nj in possible_moves:
+                    new_sum = dp[i][j][k] + grid[ni][nj]
+                    if new_sum > dp[ni][nj][m]:
+                        dp[ni][nj][m] = new_sum
+                        prev[(ni, nj, m)] = (i, j, k, move_char)
+    max_sum = INVALID
+    best_k = -1
+    for kk in range(max_moves + 1):
+        if dp[n - 1][n - 1][kk] > max_sum:
+            max_sum = dp[n - 1][n - 1][kk]
+            best_k = kk
+    if max_sum == INVALID:
         return (0, "")
-    path_list = []
-    cr, cc, cm = n - 1, n - 1, best_m
-    while cm > 0:
-        pr, pc, pm, mc = pred[cr][cc][cm]
-        path_list.append(mc)
-        cr, cc, cm = pr, pc, pm
-    path_str = ''.join(reversed(path_list))
-    return (int(max_sum), path_str)
+    path = []
+    ci, cj, ck = n - 1, n - 1, best_k
+    while ck > 0:
+        pi, pj, pk, move = prev[(ci, cj, ck)]
+        path.append(move)
+        ci, cj, ck = pi, pj, pk
+    path.reverse()
+    path_str = ''.join(path)
+    return (max_sum, path_str)
