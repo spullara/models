@@ -1,9 +1,9 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-03-24T08:04:20.718169+00:00
+Evaluated: 2026-03-26T16:00:39.356012+00:00
 
 === TIMING ===
-Response time: 22.85s
+Response time: 28.62s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,134 +17,132 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-import sys
+import math
+from collections import deque
 
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
     N = len(grid)
-    if N == 0:
-        return (0, "")
-    
-    INF = -sys.maxsize - 1
-    dp = [[[INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    INF = math.inf
+    DP = [[[-INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
     prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    
-    dp[0][0][0] = grid[0][0]
-    
-    for i in range(N):
-        for j in range(N):
-            for mod in range(3):
-                if dp[i][j][mod] == INF:
-                    continue
-                possible_moves = []
-                if mod == 2:
-                    if i + 1 < N and j + 1 < N:
-                        possible_moves.append(('X', i + 1, j + 1))
-                    else:
-                        if j + 1 < N:
-                            possible_moves.append(('R', i, j + 1))
-                        if i + 1 < N:
-                            possible_moves.append(('D', i + 1, j))
-                else:
-                    if j + 1 < N:
-                        possible_moves.append(('R', i, j + 1))
-                    if i + 1 < N:
-                        possible_moves.append(('D', i + 1, j))
-                    if i + 1 < N and j + 1 < N:
-                        possible_moves.append(('X', i + 1, j + 1))
-                
-                for move, ni, nj in possible_moves:
-                    new_mod = (mod + 1) % 3
-                    new_sum = dp[i][j][mod] + grid[ni][nj]
-                    if new_sum > dp[ni][nj][new_mod]:
-                        dp[ni][nj][new_mod] = new_sum
-                        prev[ni][nj][new_mod] = (i, j, mod, move)
-    
-    # Find the max at bottom-right
-    max_sum = INF
-    best_mod = -1
-    for mod in range(3):
-        if dp[N-1][N-1][mod] > max_sum:
-            max_sum = dp[N-1][N-1][mod]
-            best_mod = mod
-    
-    if max_sum == INF:
-        return (0, "")  # No path, though shouldn't happen
-    
-    # Reconstruct path
+    DP[0][0][0] = grid[0][0]
+    q = deque([(0, 0, 0)])
+    visited = set()
+    visited.add((0, 0, 0))
+    while q:
+        i, j, k = q.popleft()
+        must_X = (k == 2)
+        possible_moves = []
+        if must_X:
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+            else:
+                if j + 1 < N:
+                    possible_moves.append(('R', i, j + 1))
+                if i + 1 < N:
+                    possible_moves.append(('D', i + 1, j))
+        else:
+            if j + 1 < N:
+                possible_moves.append(('R', i, j + 1))
+            if i + 1 < N:
+                possible_moves.append(('D', i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+        next_k = (k + 1) % 3
+        for move, ni, nj in possible_moves:
+            new_sum = DP[i][j][k] + grid[ni][nj]
+            if new_sum > DP[ni][nj][next_k]:
+                DP[ni][nj][next_k] = new_sum
+                prev[ni][nj][next_k] = (i, j, k, move)
+                if (ni, nj, next_k) not in visited:
+                    visited.add((ni, nj, next_k))
+                    q.append((ni, nj, next_k))
+    max_sum = -INF
+    best_k = -1
+    for kk in range(3):
+        if DP[N-1][N-1][kk] > max_sum:
+            max_sum = DP[N-1][N-1][kk]
+            best_k = kk
+    if max_sum == -INF:
+        return 0, ""  # though unlikely
+    # backtrack
     path = []
-    ci, cj, cmod = N-1, N-1, best_mod
-    while (ci, cj, cmod) != (0, 0, 0):
-        pi, pj, pmod, move = prev[ci][cj][cmod]
+    current = (N-1, N-1, best_k)
+    while current is not None:
+        i, j, k = current
+        p = prev[i][j][k]
+        if p is None:
+            break
+        pi, pj, pk, move = p
         path.append(move)
-        ci, cj, cmod = pi, pj, pmod
+        current = (pi, pj, pk)
     path.reverse()
-    path_str = ''.join(path)
-    
-    return (max_sum, path_str)
+    return max_sum, "".join(path)
 ```
 
 === EXTRACTED CODE ===
-import sys
+import math
+from collections import deque
 
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
     N = len(grid)
-    if N == 0:
-        return (0, "")
-    
-    INF = -sys.maxsize - 1
-    dp = [[[INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    INF = math.inf
+    DP = [[[-INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
     prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    
-    dp[0][0][0] = grid[0][0]
-    
-    for i in range(N):
-        for j in range(N):
-            for mod in range(3):
-                if dp[i][j][mod] == INF:
-                    continue
-                possible_moves = []
-                if mod == 2:
-                    if i + 1 < N and j + 1 < N:
-                        possible_moves.append(('X', i + 1, j + 1))
-                    else:
-                        if j + 1 < N:
-                            possible_moves.append(('R', i, j + 1))
-                        if i + 1 < N:
-                            possible_moves.append(('D', i + 1, j))
-                else:
-                    if j + 1 < N:
-                        possible_moves.append(('R', i, j + 1))
-                    if i + 1 < N:
-                        possible_moves.append(('D', i + 1, j))
-                    if i + 1 < N and j + 1 < N:
-                        possible_moves.append(('X', i + 1, j + 1))
-                
-                for move, ni, nj in possible_moves:
-                    new_mod = (mod + 1) % 3
-                    new_sum = dp[i][j][mod] + grid[ni][nj]
-                    if new_sum > dp[ni][nj][new_mod]:
-                        dp[ni][nj][new_mod] = new_sum
-                        prev[ni][nj][new_mod] = (i, j, mod, move)
-    
-    # Find the max at bottom-right
-    max_sum = INF
-    best_mod = -1
-    for mod in range(3):
-        if dp[N-1][N-1][mod] > max_sum:
-            max_sum = dp[N-1][N-1][mod]
-            best_mod = mod
-    
-    if max_sum == INF:
-        return (0, "")  # No path, though shouldn't happen
-    
-    # Reconstruct path
+    DP[0][0][0] = grid[0][0]
+    q = deque([(0, 0, 0)])
+    visited = set()
+    visited.add((0, 0, 0))
+    while q:
+        i, j, k = q.popleft()
+        must_X = (k == 2)
+        possible_moves = []
+        if must_X:
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+            else:
+                if j + 1 < N:
+                    possible_moves.append(('R', i, j + 1))
+                if i + 1 < N:
+                    possible_moves.append(('D', i + 1, j))
+        else:
+            if j + 1 < N:
+                possible_moves.append(('R', i, j + 1))
+            if i + 1 < N:
+                possible_moves.append(('D', i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+        next_k = (k + 1) % 3
+        for move, ni, nj in possible_moves:
+            new_sum = DP[i][j][k] + grid[ni][nj]
+            if new_sum > DP[ni][nj][next_k]:
+                DP[ni][nj][next_k] = new_sum
+                prev[ni][nj][next_k] = (i, j, k, move)
+                if (ni, nj, next_k) not in visited:
+                    visited.add((ni, nj, next_k))
+                    q.append((ni, nj, next_k))
+    max_sum = -INF
+    best_k = -1
+    for kk in range(3):
+        if DP[N-1][N-1][kk] > max_sum:
+            max_sum = DP[N-1][N-1][kk]
+            best_k = kk
+    if max_sum == -INF:
+        return 0, ""  # though unlikely
+    # backtrack
     path = []
-    ci, cj, cmod = N-1, N-1, best_mod
-    while (ci, cj, cmod) != (0, 0, 0):
-        pi, pj, pmod, move = prev[ci][cj][cmod]
+    current = (N-1, N-1, best_k)
+    while current is not None:
+        i, j, k = current
+        p = prev[i][j][k]
+        if p is None:
+            break
+        pi, pj, pk, move = p
         path.append(move)
-        ci, cj, cmod = pi, pj, pmod
+        current = (pi, pj, pk)
     path.reverse()
-    path_str = ''.join(path)
-    
-    return (max_sum, path_str)
+    return max_sum, "".join(path)
