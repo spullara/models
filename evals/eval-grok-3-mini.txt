@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-26T18:37:05.967724+00:00
+Evaluated: 2026-03-26T18:48:12.078023+00:00
 
 === TIMING ===
-Response time: 59.35s
+Response time: 53.25s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,102 +17,100 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-from collections import deque
-from math import inf
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
     N = len(grid)
-    if N == 0:
-        return 0, ""
+    memo = {}
     
-    DP = [[[(float('-inf'), "") for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    DP[0][0][0] = (grid[0][0], "")
-    
-    queue = deque([(0, 0, 0)])  # i, j, rem
-    
-    while queue:
-        i, j, rem = queue.popleft()
-        current_sum, current_path = DP[i][j][rem]
+    def dp(i, j, m):
+        if (i, j, m) in memo:
+            return memo[(i, j, m)]
         
-        next_move_num = rem + 1
-        must_X = (next_move_num % 3 == 0)
+        if i == N-1 and j == N-1:
+            memo[(i, j, m)] = (grid[i][j], "")
+            return memo[(i, j, m)]
         
-        possible_moves = []
-        if i+1 < N and j+1 < N:
-            possible_moves.append(('X', i+1, j+1))
-        if j+1 < N:
-            possible_moves.append(('R', i, j+1))
-        if i+1 < N:
-            possible_moves.append(('D', i+1, j))
+        next_move = m + 1
+        candidates = []
         
-        if must_X and any(move[0] == 'X' for move in possible_moves):
-            possible_moves = [move for move in possible_moves if move[0] == 'X']
+        if next_move % 3 == 0:
+            if i+1 < N and j+1 < N:
+                sum_X, path_X = dp(i+1, j+1, m+1)
+                candidates.append((grid[i][j] + sum_X, "X" + path_X))
+            else:
+                if i+1 < N:
+                    sum_D, path_D = dp(i+1, j, m+1)
+                    candidates.append((grid[i][j] + sum_D, "D" + path_D))
+                if j+1 < N:
+                    sum_R, path_R = dp(i, j+1, m+1)
+                    candidates.append((grid[i][j] + sum_R, "R" + path_R))
+        else:
+            if i+1 < N and j+1 < N:
+                sum_X, path_X = dp(i+1, j+1, m+1)
+                candidates.append((grid[i][j] + sum_X, "X" + path_X))
+            if i+1 < N:
+                sum_D, path_D = dp(i+1, j, m+1)
+                candidates.append((grid[i][j] + sum_D, "D" + path_D))
+            if j+1 < N:
+                sum_R, path_R = dp(i, j+1, m+1)
+                candidates.append((grid[i][j] + sum_R, "R" + path_R))
         
-        for move_type, next_i, next_j in possible_moves:
-            new_sum = current_sum + grid[next_i][next_j]
-            new_rem = (rem + 1) % 3
-            if new_sum > DP[next_i][next_j][new_rem][0]:
-                DP[next_i][next_j][new_rem] = (new_sum, current_path + move_type)
-                queue.append((next_i, next_j, new_rem))
+        if candidates:
+            best = max(candidates, key=lambda x: x[0])
+            memo[(i, j, m)] = best
+            return best
+        else:
+            memo[(i, j, m)] = (grid[i][j], "")
+            return memo[(i, j, m)]
     
-    max_sum = float('-inf')
-    best_path = ""
-    for rem in range(3):
-        if DP[N-1][N-1][rem][0] > max_sum:
-            max_sum = DP[N-1][N-1][rem][0]
-            best_path = DP[N-1][N-1][rem][1]
-    
-    return max_sum, best_path
+    total_sum, path_string = dp(0, 0, 0)
+    return total_sum, path_string
 ```
 
 === EXTRACTED CODE ===
-from collections import deque
-from math import inf
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
     N = len(grid)
-    if N == 0:
-        return 0, ""
+    memo = {}
     
-    DP = [[[(float('-inf'), "") for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    DP[0][0][0] = (grid[0][0], "")
-    
-    queue = deque([(0, 0, 0)])  # i, j, rem
-    
-    while queue:
-        i, j, rem = queue.popleft()
-        current_sum, current_path = DP[i][j][rem]
+    def dp(i, j, m):
+        if (i, j, m) in memo:
+            return memo[(i, j, m)]
         
-        next_move_num = rem + 1
-        must_X = (next_move_num % 3 == 0)
+        if i == N-1 and j == N-1:
+            memo[(i, j, m)] = (grid[i][j], "")
+            return memo[(i, j, m)]
         
-        possible_moves = []
-        if i+1 < N and j+1 < N:
-            possible_moves.append(('X', i+1, j+1))
-        if j+1 < N:
-            possible_moves.append(('R', i, j+1))
-        if i+1 < N:
-            possible_moves.append(('D', i+1, j))
+        next_move = m + 1
+        candidates = []
         
-        if must_X and any(move[0] == 'X' for move in possible_moves):
-            possible_moves = [move for move in possible_moves if move[0] == 'X']
+        if next_move % 3 == 0:
+            if i+1 < N and j+1 < N:
+                sum_X, path_X = dp(i+1, j+1, m+1)
+                candidates.append((grid[i][j] + sum_X, "X" + path_X))
+            else:
+                if i+1 < N:
+                    sum_D, path_D = dp(i+1, j, m+1)
+                    candidates.append((grid[i][j] + sum_D, "D" + path_D))
+                if j+1 < N:
+                    sum_R, path_R = dp(i, j+1, m+1)
+                    candidates.append((grid[i][j] + sum_R, "R" + path_R))
+        else:
+            if i+1 < N and j+1 < N:
+                sum_X, path_X = dp(i+1, j+1, m+1)
+                candidates.append((grid[i][j] + sum_X, "X" + path_X))
+            if i+1 < N:
+                sum_D, path_D = dp(i+1, j, m+1)
+                candidates.append((grid[i][j] + sum_D, "D" + path_D))
+            if j+1 < N:
+                sum_R, path_R = dp(i, j+1, m+1)
+                candidates.append((grid[i][j] + sum_R, "R" + path_R))
         
-        for move_type, next_i, next_j in possible_moves:
-            new_sum = current_sum + grid[next_i][next_j]
-            new_rem = (rem + 1) % 3
-            if new_sum > DP[next_i][next_j][new_rem][0]:
-                DP[next_i][next_j][new_rem] = (new_sum, current_path + move_type)
-                queue.append((next_i, next_j, new_rem))
+        if candidates:
+            best = max(candidates, key=lambda x: x[0])
+            memo[(i, j, m)] = best
+            return best
+        else:
+            memo[(i, j, m)] = (grid[i][j], "")
+            return memo[(i, j, m)]
     
-    max_sum = float('-inf')
-    best_path = ""
-    for rem in range(3):
-        if DP[N-1][N-1][rem][0] > max_sum:
-            max_sum = DP[N-1][N-1][rem][0]
-            best_path = DP[N-1][N-1][rem][1]
-    
-    return max_sum, best_path
+    total_sum, path_string = dp(0, 0, 0)
+    return total_sum, path_string
