@@ -1,16 +1,26 @@
 Model: grok-3
 Provider: grok
-Evaluated: 2026-03-26T19:16:07.309601+00:00
+Evaluated: 2026-03-26T23:39:05.758328+00:00
 
 === TIMING ===
-Response time: 5.68s
+Response time: 0.17s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. retried and the latest reset reason: connection timeout
+API Error: HTTP 502: <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en-US"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]-->
+<head>
+
+<title>x.ai | 502: Bad gateway</title>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content=
 
 === RAW RESPONSE ===
 (no response)
