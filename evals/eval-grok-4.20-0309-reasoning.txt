@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-03-26T18:41:57.668432+00:00
+Evaluated: 2026-03-26T18:52:27.194100+00:00
 
 === TIMING ===
-Response time: 16.82s
+Response time: 41.16s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,73 +18,87 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
     N = len(grid)
-    best_sum = float('-inf')
-    best_path = ""
-    def dfs(r, c, cur_sum, path, moves):
-        nonlocal best_sum, best_path
+    if not N or not grid[0]:
+        return (0, "")
+    memo = {}
+    def dfs(r, c, mod):
         if r == N - 1 and c == N - 1:
-            if cur_sum > best_sum:
-                best_sum = cur_sum
-                best_path = path
-            return
-        force_diag = (moves + 1) % 3 == 0
-        diag_possible = r + 1 < N and c + 1 < N
-        if force_diag and diag_possible:
-            possible_moves = ['X']
-        else:
-            possible_moves = ['R', 'D', 'X']
-        for move in possible_moves:
-            if move == 'R':
-                dr, dc = 0, 1
-            elif move == 'D':
-                dr, dc = 1, 0
+            return (0, "")
+        key = (r, c, mod)
+        if key in memo:
+            return memo[key]
+        is_must_diag = (mod == 2)
+        can_diag = r + 1 < N and c + 1 < N
+        cands = []
+        if is_must_diag:
+            if can_diag:
+                cands.append(('X', r + 1, c + 1))
             else:
-                dr, dc = 1, 1
-            nr, nc = r + dr, c + dc
-            if 0 <= nr < N and 0 <= nc < N:
-                new_sum = cur_sum + grid[nr][nc]
-                dfs(nr, nc, new_sum, path + move, moves + 1)
-    dfs(0, 0, grid[0][0], "", 0)
-    if best_sum == float('-inf'):
-        return 0, ""
-    return int(best_sum), best_path
+                if c + 1 < N:
+                    cands.append(('R', r, c + 1))
+                if r + 1 < N:
+                    cands.append(('D', r + 1, c))
+        else:
+            if c + 1 < N:
+                cands.append(('R', r, c + 1))
+            if r + 1 < N:
+                cands.append(('D', r + 1, c))
+            if can_diag:
+                cands.append(('X', r + 1, c + 1))
+        max_add = float('-inf')
+        best_path = ""
+        for char, nr, nc in cands:
+            add, p = dfs(nr, nc, (mod + 1) % 3)
+            total_add = grid[nr][nc] + add
+            if total_add > max_add:
+                max_add = total_add
+                best_path = char + p
+        memo[key] = (max_add, best_path)
+        return memo[key]
+    add, path = dfs(0, 0, 0)
+    return (grid[0][0] + add, path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
     N = len(grid)
-    best_sum = float('-inf')
-    best_path = ""
-    def dfs(r, c, cur_sum, path, moves):
-        nonlocal best_sum, best_path
+    if not N or not grid[0]:
+        return (0, "")
+    memo = {}
+    def dfs(r, c, mod):
         if r == N - 1 and c == N - 1:
-            if cur_sum > best_sum:
-                best_sum = cur_sum
-                best_path = path
-            return
-        force_diag = (moves + 1) % 3 == 0
-        diag_possible = r + 1 < N and c + 1 < N
-        if force_diag and diag_possible:
-            possible_moves = ['X']
-        else:
-            possible_moves = ['R', 'D', 'X']
-        for move in possible_moves:
-            if move == 'R':
-                dr, dc = 0, 1
-            elif move == 'D':
-                dr, dc = 1, 0
+            return (0, "")
+        key = (r, c, mod)
+        if key in memo:
+            return memo[key]
+        is_must_diag = (mod == 2)
+        can_diag = r + 1 < N and c + 1 < N
+        cands = []
+        if is_must_diag:
+            if can_diag:
+                cands.append(('X', r + 1, c + 1))
             else:
-                dr, dc = 1, 1
-            nr, nc = r + dr, c + dc
-            if 0 <= nr < N and 0 <= nc < N:
-                new_sum = cur_sum + grid[nr][nc]
-                dfs(nr, nc, new_sum, path + move, moves + 1)
-    dfs(0, 0, grid[0][0], "", 0)
-    if best_sum == float('-inf'):
-        return 0, ""
-    return int(best_sum), best_path
+                if c + 1 < N:
+                    cands.append(('R', r, c + 1))
+                if r + 1 < N:
+                    cands.append(('D', r + 1, c))
+        else:
+            if c + 1 < N:
+                cands.append(('R', r, c + 1))
+            if r + 1 < N:
+                cands.append(('D', r + 1, c))
+            if can_diag:
+                cands.append(('X', r + 1, c + 1))
+        max_add = float('-inf')
+        best_path = ""
+        for char, nr, nc in cands:
+            add, p = dfs(nr, nc, (mod + 1) % 3)
+            total_add = grid[nr][nc] + add
+            if total_add > max_add:
+                max_add = total_add
+                best_path = char + p
+        memo[key] = (max_add, best_path)
+        return memo[key]
+    add, path = dfs(0, 0, 0)
+    return (grid[0][0] + add, path)
