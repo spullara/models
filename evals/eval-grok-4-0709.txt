@@ -1,9 +1,9 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-26T18:55:05.451597+00:00
+Evaluated: 2026-03-26T19:17:26.471810+00:00
 
 === TIMING ===
-Response time: 79.94s
+Response time: 119.73s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,78 +17,80 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-import functools
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    @functools.lru_cache(maxsize=None)
-    def rec(i, j, mod):
+    from functools import cache
+    @cache
+    def rec(i: int, j: int, moves: int) -> tuple[int, str]:
         if i == N - 1 and j == N - 1:
             return grid[i][j], ""
-        next_is_forced = (mod == 2)
-        possible = []
-        if next_is_forced:
-            if i + 1 < N and j + 1 < N:
-                possible.append(('X', i + 1, j + 1))
+        next_num = moves + 1
+        force_diag = (next_num % 3 == 0)
+        candidates = []
+        def add_cand(ni, nj, char):
+            if 0 <= ni < N and 0 <= nj < N:
+                sub_sum, sub_path = rec(ni, nj, moves + 1)
+                total = grid[i][j] + sub_sum
+                path = char + sub_path
+                candidates.append((total, path))
+        can_X = (i + 1 < N and j + 1 < N)
+        if force_diag:
+            if can_X:
+                add_cand(i + 1, j + 1, 'X')
             else:
                 if j + 1 < N:
-                    possible.append(('R', i, j + 1))
+                    add_cand(i, j + 1, 'R')
                 if i + 1 < N:
-                    possible.append(('D', i + 1, j))
+                    add_cand(i + 1, j, 'D')
         else:
             if j + 1 < N:
-                possible.append(('R', i, j + 1))
+                add_cand(i, j + 1, 'R')
             if i + 1 < N:
-                possible.append(('D', i + 1, j))
-            if i + 1 < N and j + 1 < N:
-                possible.append(('X', i + 1, j + 1))
-        best = float('-inf')
-        best_path = ""
-        for move, ni, nj in possible:
-            sub_sum, sub_p = rec(ni, nj, (mod + 1) % 3)
-            total = grid[i][j] + sub_sum
-            if total > best:
-                best = total
-                best_path = move + sub_p
-        return best, best_path
-    max_sum, path = rec(0, 0, 0)
-    return (max_sum, path)
+                add_cand(i + 1, j, 'D')
+            if can_X:
+                add_cand(i + 1, j + 1, 'X')
+        if not candidates:
+            return -float('inf'), ""
+        candidates.sort(key=lambda x: -x[0])
+        return candidates[0]
+    return rec(0, 0, 0)
 ```
 
 === EXTRACTED CODE ===
-import functools
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    @functools.lru_cache(maxsize=None)
-    def rec(i, j, mod):
+    from functools import cache
+    @cache
+    def rec(i: int, j: int, moves: int) -> tuple[int, str]:
         if i == N - 1 and j == N - 1:
             return grid[i][j], ""
-        next_is_forced = (mod == 2)
-        possible = []
-        if next_is_forced:
-            if i + 1 < N and j + 1 < N:
-                possible.append(('X', i + 1, j + 1))
+        next_num = moves + 1
+        force_diag = (next_num % 3 == 0)
+        candidates = []
+        def add_cand(ni, nj, char):
+            if 0 <= ni < N and 0 <= nj < N:
+                sub_sum, sub_path = rec(ni, nj, moves + 1)
+                total = grid[i][j] + sub_sum
+                path = char + sub_path
+                candidates.append((total, path))
+        can_X = (i + 1 < N and j + 1 < N)
+        if force_diag:
+            if can_X:
+                add_cand(i + 1, j + 1, 'X')
             else:
                 if j + 1 < N:
-                    possible.append(('R', i, j + 1))
+                    add_cand(i, j + 1, 'R')
                 if i + 1 < N:
-                    possible.append(('D', i + 1, j))
+                    add_cand(i + 1, j, 'D')
         else:
             if j + 1 < N:
-                possible.append(('R', i, j + 1))
+                add_cand(i, j + 1, 'R')
             if i + 1 < N:
-                possible.append(('D', i + 1, j))
-            if i + 1 < N and j + 1 < N:
-                possible.append(('X', i + 1, j + 1))
-        best = float('-inf')
-        best_path = ""
-        for move, ni, nj in possible:
-            sub_sum, sub_p = rec(ni, nj, (mod + 1) % 3)
-            total = grid[i][j] + sub_sum
-            if total > best:
-                best = total
-                best_path = move + sub_p
-        return best, best_path
-    max_sum, path = rec(0, 0, 0)
-    return (max_sum, path)
+                add_cand(i + 1, j, 'D')
+            if can_X:
+                add_cand(i + 1, j + 1, 'X')
+        if not candidates:
+            return -float('inf'), ""
+        candidates.sort(key=lambda x: -x[0])
+        return candidates[0]
+    return rec(0, 0, 0)
