@@ -1,16 +1,16 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-27T00:00:11.143838+00:00
+Evaluated: 2026-03-27T00:33:10.184672+00:00
 
 === TIMING ===
-Response time: 2.04s
+Response time: 5.87s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection timeout
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: No route to host
 
 === RAW RESPONSE ===
 (no response)
