@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-03-27T00:03:10.434670+00:00
+Evaluated: 2026-03-27T00:36:05.508331+00:00
 
 === TIMING ===
-Response time: 41.76s
+Response time: 25.02s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,106 +17,98 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-from typing import Tuple
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
-    N = len(grid)
-    if len(grid[0]) != N:
-        return 0, ""
-    if N == 1:
-        return grid[0][0], ""
-    queue = []
-    init_sum = grid[0][0]
-    queue.append((0, 0, 0, init_sum, ""))
-    best_to_state = {}
-    best_to_state[(0, 0, 0)] = (init_sum, "")
-    max_sum = float('-inf')
-    best_path = ""
-    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
-    while queue:
-        i, j, k, cur_sum, path = queue.pop(0)
-        if (i, j, k) in best_to_state and cur_sum < best_to_state[(i, j, k)][0]:
-            continue
-        if i == N - 1 and j == N - 1:
-            if cur_sum > max_sum:
-                max_sum = cur_sum
-                best_path = path
-            continue
-        next_move_num = k + 1
-        is_special = (next_move_num % 3 == 0)
-        possible = []
-        for mchar, di, dj in directions:
-            ni = i + di
-            nj = j + dj
-            if 0 <= ni < N and 0 <= nj < N:
-                possible.append((mchar, ni, nj))
-        for mchar, ni, nj in possible:
-            if is_special:
-                diag_possible = (i + 1 < N and j + 1 < N)
-                if diag_possible and mchar != 'X':
+    n = len(grid)
+    max_moves = 2 * (n - 1)
+    dp = [[[ (float('-inf'), "") for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
+    for k in range(max_moves):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][k][0] == float('-inf'):
                     continue
-            new_sum = cur_sum + grid[ni][nj]
-            new_path = path + mchar
-            new_k = k + 1
-            state = (ni, nj, new_k)
-            if state not in best_to_state or new_sum > best_to_state[state][0]:
-                best_to_state[state] = (new_sum, new_path)
-                queue.append((ni, nj, new_k, new_sum, new_path))
-    if max_sum == float('-inf'):
+                curr_sum, curr_path = dp[i][j][k]
+                next_move = k + 1
+                must_diag = (next_move % 3 == 0)
+                diag_possible = (i + 1 < n and j + 1 < n)
+                possibles = []
+                if must_diag:
+                    if diag_possible:
+                        possibles.append(('X', i+1, j+1))
+                    else:
+                        if j + 1 < n:
+                            possibles.append(('R', i, j+1))
+                        if i + 1 < n:
+                            possibles.append(('D', i+1, j))
+                else:
+                    if j + 1 < n:
+                        possibles.append(('R', i, j+1))
+                    if i + 1 < n:
+                        possibles.append(('D', i+1, j))
+                    if diag_possible:
+                        possibles.append(('X', i+1, j+1))
+                for mchar, ni, nj in possibles:
+                    new_s = curr_sum + grid[ni][nj]
+                    new_p = curr_path + mchar
+                    if new_s > dp[ni][nj][k+1][0]:
+                        dp[ni][nj][k+1] = (new_s, new_p)
+    best_sum = float('-inf')
+    best_path = ""
+    for k in range(max_moves + 1):
+        if dp[n-1][n-1][k][0] > best_sum:
+            best_sum = dp[n-1][n-1][k][0]
+            best_path = dp[n-1][n-1][k][1]
+    if best_sum == float('-inf'):
         return 0, ""
-    return int(max_sum), best_path
+    return int(best_sum), best_path
 ```
 
 === EXTRACTED CODE ===
-from typing import Tuple
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
-    N = len(grid)
-    if len(grid[0]) != N:
-        return 0, ""
-    if N == 1:
-        return grid[0][0], ""
-    queue = []
-    init_sum = grid[0][0]
-    queue.append((0, 0, 0, init_sum, ""))
-    best_to_state = {}
-    best_to_state[(0, 0, 0)] = (init_sum, "")
-    max_sum = float('-inf')
-    best_path = ""
-    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
-    while queue:
-        i, j, k, cur_sum, path = queue.pop(0)
-        if (i, j, k) in best_to_state and cur_sum < best_to_state[(i, j, k)][0]:
-            continue
-        if i == N - 1 and j == N - 1:
-            if cur_sum > max_sum:
-                max_sum = cur_sum
-                best_path = path
-            continue
-        next_move_num = k + 1
-        is_special = (next_move_num % 3 == 0)
-        possible = []
-        for mchar, di, dj in directions:
-            ni = i + di
-            nj = j + dj
-            if 0 <= ni < N and 0 <= nj < N:
-                possible.append((mchar, ni, nj))
-        for mchar, ni, nj in possible:
-            if is_special:
-                diag_possible = (i + 1 < N and j + 1 < N)
-                if diag_possible and mchar != 'X':
+    n = len(grid)
+    max_moves = 2 * (n - 1)
+    dp = [[[ (float('-inf'), "") for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
+    for k in range(max_moves):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][k][0] == float('-inf'):
                     continue
-            new_sum = cur_sum + grid[ni][nj]
-            new_path = path + mchar
-            new_k = k + 1
-            state = (ni, nj, new_k)
-            if state not in best_to_state or new_sum > best_to_state[state][0]:
-                best_to_state[state] = (new_sum, new_path)
-                queue.append((ni, nj, new_k, new_sum, new_path))
-    if max_sum == float('-inf'):
+                curr_sum, curr_path = dp[i][j][k]
+                next_move = k + 1
+                must_diag = (next_move % 3 == 0)
+                diag_possible = (i + 1 < n and j + 1 < n)
+                possibles = []
+                if must_diag:
+                    if diag_possible:
+                        possibles.append(('X', i+1, j+1))
+                    else:
+                        if j + 1 < n:
+                            possibles.append(('R', i, j+1))
+                        if i + 1 < n:
+                            possibles.append(('D', i+1, j))
+                else:
+                    if j + 1 < n:
+                        possibles.append(('R', i, j+1))
+                    if i + 1 < n:
+                        possibles.append(('D', i+1, j))
+                    if diag_possible:
+                        possibles.append(('X', i+1, j+1))
+                for mchar, ni, nj in possibles:
+                    new_s = curr_sum + grid[ni][nj]
+                    new_p = curr_path + mchar
+                    if new_s > dp[ni][nj][k+1][0]:
+                        dp[ni][nj][k+1] = (new_s, new_p)
+    best_sum = float('-inf')
+    best_path = ""
+    for k in range(max_moves + 1):
+        if dp[n-1][n-1][k][0] > best_sum:
+            best_sum = dp[n-1][n-1][k][0]
+            best_path = dp[n-1][n-1][k][1]
+    if best_sum == float('-inf'):
         return 0, ""
-    return int(max_sum), best_path
+    return int(best_sum), best_path

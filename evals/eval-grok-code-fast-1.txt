@@ -1,19 +1,102 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-03-27T00:03:57.235965+00:00
+Evaluated: 2026-03-27T00:36:30.734662+00:00
 
 === TIMING ===
-Response time: 0.26s
+Response time: 21.78s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection timeout
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    memo = {}
+    
+    def dp(i, j, moves_so_far):
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        key = (i, j, moves_so_far)
+        if key in memo:
+            return memo[key]
+        next_move_num = moves_so_far + 1
+        must_diagonal = (next_move_num % 3 == 0)
+        possible_moves = []
+        if must_diagonal:
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+            else:
+                if j + 1 < N:
+                    possible_moves.append(('R', i, j + 1))
+                if i + 1 < N:
+                    possible_moves.append(('D', i + 1, j))
+        else:
+            if j + 1 < N:
+                possible_moves.append(('R', i, j + 1))
+            if i + 1 < N:
+                possible_moves.append(('D', i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+        best_sum = float('-inf')
+        best_path = ""
+        for move, ni, nj in possible_moves:
+            sub_sum, sub_path = dp(ni, nj, moves_so_far + 1)
+            total_sum = grid[i][j] + sub_sum
+            if total_sum > best_sum:
+                best_sum = total_sum
+                best_path = move + sub_path
+        memo[key] = (best_sum, best_path)
+        return best_sum, best_path
+    
+    return dp(0, 0, 0)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    memo = {}
+    
+    def dp(i, j, moves_so_far):
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        key = (i, j, moves_so_far)
+        if key in memo:
+            return memo[key]
+        next_move_num = moves_so_far + 1
+        must_diagonal = (next_move_num % 3 == 0)
+        possible_moves = []
+        if must_diagonal:
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+            else:
+                if j + 1 < N:
+                    possible_moves.append(('R', i, j + 1))
+                if i + 1 < N:
+                    possible_moves.append(('D', i + 1, j))
+        else:
+            if j + 1 < N:
+                possible_moves.append(('R', i, j + 1))
+            if i + 1 < N:
+                possible_moves.append(('D', i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                possible_moves.append(('X', i + 1, j + 1))
+        best_sum = float('-inf')
+        best_path = ""
+        for move, ni, nj in possible_moves:
+            sub_sum, sub_path = dp(ni, nj, moves_so_far + 1)
+            total_sum = grid[i][j] + sub_sum
+            if total_sum > best_sum:
+                best_sum = total_sum
+                best_path = move + sub_path
+        memo[key] = (best_sum, best_path)
+        return best_sum, best_path
+    
+    return dp(0, 0, 0)

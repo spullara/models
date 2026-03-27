@@ -1,16 +1,16 @@
 Model: grok-4.20-multi-agent-0309
 Provider: grok
-Evaluated: 2026-03-27T00:03:52.232027+00:00
+Evaluated: 2026-03-27T00:36:30.561502+00:00
 
 === TIMING ===
-Response time: 5.0s
+Response time: 0.17s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection timeout
+API Error: HTTP 400: "Multi Agent requests are not allowed on chat completions"
 
 === RAW RESPONSE ===
 (no response)
