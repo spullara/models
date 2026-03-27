@@ -1,12 +1,12 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-27T01:03:14.197128+00:00
+Evaluated: 2026-03-27T01:05:13.752149+00:00
 
 === TIMING ===
-Response time: 63.67s
+Response time: 74.5s
 
 === CODE EXTRACTION ===
-Method: markdown_python
+Method: markdown_generic
 Syntax valid: YES
 
 === EXECUTION ===
@@ -16,123 +16,153 @@ Sum matches: YES
 Path valid: YES
 
 === RAW RESPONSE ===
-```python
+```
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
-    
     N = len(grid)
-    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
     
-    def helper(i, j, mod3):
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        
-        if memo[i][j][mod3] is not None:
-            return memo[i][j][mod3]
-        
-        current_sum = grid[i][j]
-        next_mod3 = (mod3 + 1) % 3
-        
-        if (mod3 + 1) % 3 == 0:  # Next move must be X if possible
-            if i + 1 < N and j + 1 < N:
-                sub_sum, sub_path = helper(i + 1, j + 1, next_mod3)
-                total_sum = current_sum + sub_sum
-                path = "X" + sub_path
-                memo[i][j][mod3] = (total_sum, path)
-                return total_sum, path
-            else:
-                candidates = []
-                if j + 1 < N:
-                    sub_sum, sub_path = helper(i, j + 1, next_mod3)
-                    candidates.append((current_sum + sub_sum, "R" + sub_path))
-                if i + 1 < N:
-                    sub_sum, sub_path = helper(i + 1, j, next_mod3)
-                    candidates.append((current_sum + sub_sum, "D" + sub_path))
-                if candidates:
-                    best = max(candidates, key=lambda x: x[0])
-                    memo[i][j][mod3] = best
-                    return best
-                memo[i][j][mod3] = (current_sum, "")
-                return current_sum, ""
-        else:  # Next move can be anything
-            candidates = []
-            if j + 1 < N:
-                sub_sum, sub_path = helper(i, j + 1, next_mod3)
-                candidates.append((current_sum + sub_sum, "R" + sub_path))
-            if i + 1 < N:
-                sub_sum, sub_path = helper(i + 1, j, next_mod3)
-                candidates.append((current_sum + sub_sum, "D" + sub_path))
-            if i + 1 < N and j + 1 < N:
-                sub_sum, sub_path = helper(i + 1, j + 1, next_mod3)
-                candidates.append((current_sum + sub_sum, "X" + sub_path))
-            if candidates:
-                best = max(candidates, key=lambda x: x[0])
-                memo[i][j][mod3] = best
-                return best
-            memo[i][j][mod3] = (current_sum, "")
-            return current_sum, ""
+    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
+    pred = [[[None] * 3 for _ in range(N)] for _ in range(N)]
     
-    total_sum, path = helper(0, 0, 0)
-    return total_sum, path
+    dp[0][0][0] = grid[0][0]
+    
+    for sum_ij in range(2 * (N - 1) + 1):
+        for i in range(max(0, sum_ij - (N - 1)), min(sum_ij, N - 1) + 1):
+            j = sum_ij - i
+            if j < 0 or j >= N:
+                continue
+            for mod in range(3):
+                if dp[i][j][mod] != float('-inf'):
+                    next_mod = (mod + 1) % 3
+                    if next_mod == 0:  # Next move must be X if possible
+                        if i + 1 < N and j + 1 < N:
+                            new_i, new_j = i + 1, j + 1
+                            new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                            if new_sum > dp[new_i][new_j][next_mod]:
+                                dp[new_i][new_j][next_mod] = new_sum
+                                pred[new_i][new_j][next_mod] = (i, j, mod, 'X')
+                        else:
+                            if j + 1 < N:
+                                new_i, new_j = i, j + 1
+                                new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                                if new_sum > dp[new_i][new_j][next_mod]:
+                                    dp[new_i][new_j][next_mod] = new_sum
+                                    pred[new_i][new_j][next_mod] = (i, j, mod, 'R')
+                            if i + 1 < N:
+                                new_i, new_j = i + 1, j
+                                new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                                if new_sum > dp[new_i][new_j][next_mod]:
+                                    dp[new_i][new_j][next_mod] = new_sum
+                                    pred[new_i][new_j][next_mod] = (i, j, mod, 'D')
+                    else:
+                        if j + 1 < N:
+                            new_i, new_j = i, j + 1
+                            new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                            if new_sum > dp[new_i][new_j][next_mod]:
+                                dp[new_i][new_j][next_mod] = new_sum
+                                pred[new_i][new_j][next_mod] = (i, j, mod, 'R')
+                        if i + 1 < N:
+                            new_i, new_j = i + 1, j
+                            new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                            if new_sum > dp[new_i][new_j][next_mod]:
+                                dp[new_i][new_j][next_mod] = new_sum
+                                pred[new_i][new_j][next_mod] = (i, j, mod, 'D')
+                        if i + 1 < N and j + 1 < N:
+                            new_i, new_j = i + 1, j + 1
+                            new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                            if new_sum > dp[new_i][new_j][next_mod]:
+                                dp[new_i][new_j][next_mod] = new_sum
+                                pred[new_i][new_j][next_mod] = (i, j, mod, 'X')
+    
+    max_sum = max(dp[N-1][N-1])
+    best_mod = dp[N-1][N-1].index(max_sum)
+    
+    path = []
+    current_i, current_j, current_mod = N-1, N-1, best_mod
+    while current_i != 0 or current_j != 0:
+        prev_i, prev_j, prev_mod, move = pred[current_i][current_j][current_mod]
+        path.append(move)
+        current_i, current_j, current_mod = prev_i, prev_j, prev_mod
+    path.reverse()
+    path_str = ''.join(path)
+    
+    return (max_sum, path_str)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid:
-        return 0, ""
-    
     N = len(grid)
-    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
     
-    def helper(i, j, mod3):
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        
-        if memo[i][j][mod3] is not None:
-            return memo[i][j][mod3]
-        
-        current_sum = grid[i][j]
-        next_mod3 = (mod3 + 1) % 3
-        
-        if (mod3 + 1) % 3 == 0:  # Next move must be X if possible
-            if i + 1 < N and j + 1 < N:
-                sub_sum, sub_path = helper(i + 1, j + 1, next_mod3)
-                total_sum = current_sum + sub_sum
-                path = "X" + sub_path
-                memo[i][j][mod3] = (total_sum, path)
-                return total_sum, path
-            else:
-                candidates = []
-                if j + 1 < N:
-                    sub_sum, sub_path = helper(i, j + 1, next_mod3)
-                    candidates.append((current_sum + sub_sum, "R" + sub_path))
-                if i + 1 < N:
-                    sub_sum, sub_path = helper(i + 1, j, next_mod3)
-                    candidates.append((current_sum + sub_sum, "D" + sub_path))
-                if candidates:
-                    best = max(candidates, key=lambda x: x[0])
-                    memo[i][j][mod3] = best
-                    return best
-                memo[i][j][mod3] = (current_sum, "")
-                return current_sum, ""
-        else:  # Next move can be anything
-            candidates = []
-            if j + 1 < N:
-                sub_sum, sub_path = helper(i, j + 1, next_mod3)
-                candidates.append((current_sum + sub_sum, "R" + sub_path))
-            if i + 1 < N:
-                sub_sum, sub_path = helper(i + 1, j, next_mod3)
-                candidates.append((current_sum + sub_sum, "D" + sub_path))
-            if i + 1 < N and j + 1 < N:
-                sub_sum, sub_path = helper(i + 1, j + 1, next_mod3)
-                candidates.append((current_sum + sub_sum, "X" + sub_path))
-            if candidates:
-                best = max(candidates, key=lambda x: x[0])
-                memo[i][j][mod3] = best
-                return best
-            memo[i][j][mod3] = (current_sum, "")
-            return current_sum, ""
+    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
+    pred = [[[None] * 3 for _ in range(N)] for _ in range(N)]
     
-    total_sum, path = helper(0, 0, 0)
-    return total_sum, path
+    dp[0][0][0] = grid[0][0]
+    
+    for sum_ij in range(2 * (N - 1) + 1):
+        for i in range(max(0, sum_ij - (N - 1)), min(sum_ij, N - 1) + 1):
+            j = sum_ij - i
+            if j < 0 or j >= N:
+                continue
+            for mod in range(3):
+                if dp[i][j][mod] != float('-inf'):
+                    next_mod = (mod + 1) % 3
+                    if next_mod == 0:  # Next move must be X if possible
+                        if i + 1 < N and j + 1 < N:
+                            new_i, new_j = i + 1, j + 1
+                            new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                            if new_sum > dp[new_i][new_j][next_mod]:
+                                dp[new_i][new_j][next_mod] = new_sum
+                                pred[new_i][new_j][next_mod] = (i, j, mod, 'X')
+                        else:
+                            if j + 1 < N:
+                                new_i, new_j = i, j + 1
+                                new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                                if new_sum > dp[new_i][new_j][next_mod]:
+                                    dp[new_i][new_j][next_mod] = new_sum
+                                    pred[new_i][new_j][next_mod] = (i, j, mod, 'R')
+                            if i + 1 < N:
+                                new_i, new_j = i + 1, j
+                                new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                                if new_sum > dp[new_i][new_j][next_mod]:
+                                    dp[new_i][new_j][next_mod] = new_sum
+                                    pred[new_i][new_j][next_mod] = (i, j, mod, 'D')
+                    else:
+                        if j + 1 < N:
+                            new_i, new_j = i, j + 1
+                            new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                            if new_sum > dp[new_i][new_j][next_mod]:
+                                dp[new_i][new_j][next_mod] = new_sum
+                                pred[new_i][new_j][next_mod] = (i, j, mod, 'R')
+                        if i + 1 < N:
+                            new_i, new_j = i + 1, j
+                            new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                            if new_sum > dp[new_i][new_j][next_mod]:
+                                dp[new_i][new_j][next_mod] = new_sum
+                                pred[new_i][new_j][next_mod] = (i, j, mod, 'D')
+                        if i + 1 < N and j + 1 < N:
+                            new_i, new_j = i + 1, j + 1
+                            new_sum = dp[i][j][mod] + grid[new_i][new_j]
+                            if new_sum > dp[new_i][new_j][next_mod]:
+                                dp[new_i][new_j][next_mod] = new_sum
+                                pred[new_i][new_j][next_mod] = (i, j, mod, 'X')
+    
+    max_sum = max(dp[N-1][N-1])
+    best_mod = dp[N-1][N-1].index(max_sum)
+    
+    path = []
+    current_i, current_j, current_mod = N-1, N-1, best_mod
+    while current_i != 0 or current_j != 0:
+        prev_i, prev_j, prev_mod, move = pred[current_i][current_j][current_mod]
+        path.append(move)
+        current_i, current_j, current_mod = prev_i, prev_j, prev_mod
+    path.reverse()
+    path_str = ''.join(path)
+    
+    return (max_sum, path_str)
