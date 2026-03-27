@@ -1,9 +1,9 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-26T23:50:34.593190+00:00
+Evaluated: 2026-03-27T00:02:40.010309+00:00
 
 === TIMING ===
-Response time: 3.72s
+Response time: 4.75s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,150 +18,172 @@ Path error: Move 3 must be diagonal (X) but was D
 
 === RAW RESPONSE ===
 ```python
-from typing import Tuple, List
+from typing import List, Tuple
 
 def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
     
     n = len(grid)
-    if n == 0:
-        return 0, ""
+    INF = float('-inf')
     
-    # DP table: dp[i][j][k] = (max_sum, path) where k is moves % 3
-    dp = [[[(-float('inf'), "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k % 3 moves made
+    dp = [[[ (INF, "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
     
-    # Base case
+    # Start position
     dp[0][0][0] = (grid[0][0], "")
     
-    # Fill first row
-    for j in range(1, n):
-        for k in range(3):
-            prev_sum, prev_path = dp[0][j-1][(k - 1) % 3]
-            new_sum = prev_sum + grid[0][j]
-            new_path = prev_path + 'R'
-            if new_sum > dp[0][j][k][0]:
-                dp[0][j][k] = (new_sum, new_path)
-    
-    # Fill first column
-    for i in range(1, n):
-        for k in range(3):
-            prev_sum, prev_path = dp[i-1][0][(k - 1) % 3]
-            new_sum = prev_sum + grid[i][0]
-            new_path = prev_path + 'D'
-            if new_sum > dp[i][0][k][0]:
-                dp[i][0][k] = (new_sum, new_path)
-    
-    # Fill the rest of the grid
-    for i in range(1, n):
-        for j in range(1, n):
+    # Fill DP table
+    for i in range(n):
+        for j in range(n):
             for k in range(3):
-                # Try right move from (i, j-1)
-                if j > 0:
-                    prev_sum, prev_path = dp[i][j-1][(k - 1) % 3]
-                    new_sum = prev_sum + grid[i][j]
-                    new_path = prev_path + 'R'
-                    if new_sum > dp[i][j][k][0]:
-                        dp[i][j][k] = (new_sum, new_path)
+                if dp[i][j][k][0] == INF:
+                    continue
                 
-                # Try down move from (i-1, j)
-                if i > 0:
-                    prev_sum, prev_path = dp[i-1][j][(k - 1) % 3]
-                    new_sum = prev_sum + grid[i][j]
-                    new_path = prev_path + 'D'
-                    if new_sum > dp[i][j][k][0]:
-                        dp[i][j][k] = (new_sum, new_path)
+                current_sum, path = dp[i][j][k]
+                moves_made = len(path)
+                next_moves = moves_made + 1
+                must_diagonal = (next_moves % 3 == 0)
                 
-                # Try diagonal move from (i-1, j-1) - only if it's a required diagonal move
-                is_required_diagonal = (k == 0)  # k==0 means next move count % 3 == 0
-                if i > 0 and j > 0 and (is_required_diagonal or True):  # Always allow diagonal
-                    prev_sum, prev_path = dp[i-1][j-1][(k - 1) % 3]
-                    new_sum = prev_sum + grid[i][j]
-                    new_path = prev_path + 'X'
-                    if new_sum > dp[i][j][k][0]:
-                        dp[i][j][k] = (new_sum, new_path)
+                # Try right move
+                if j + 1 < n:
+                    new_path = path + "R"
+                    new_sum = current_sum + grid[i][j + 1]
+                    new_k = next_moves % 3
+                    if new_sum > dp[i][j + 1][new_k][0]:
+                        dp[i][j + 1][new_k] = (new_sum, new_path)
+                    elif new_sum == dp[i][j + 1][new_k][0]:
+                        # Prefer lexicographically smaller path
+                        if new_path < dp[i][j + 1][new_k][1]:
+                            dp[i][j + 1][new_k] = (new_sum, new_path)
+                
+                # Try down move
+                if i + 1 < n:
+                    new_path = path + "D"
+                    new_sum = current_sum + grid[i + 1][j]
+                    new_k = next_moves % 3
+                    if new_sum > dp[i + 1][j][new_k][0]:
+                        dp[i + 1][j][new_k] = (new_sum, new_path)
+                    elif new_sum == dp[i + 1][j][new_k][0]:
+                        if new_path < dp[i + 1][j][new_k][1]:
+                            dp[i + 1][j][new_k] = (new_sum, new_path)
+                
+                # Try diagonal move
+                if i + 1 < n and j + 1 < n:
+                    new_path = path + "X"
+                    new_sum = current_sum + grid[i + 1][j + 1]
+                    new_k = next_moves % 3
+                    
+                    # If must_diagonal, diagonal is always preferred
+                    if must_diagonal:
+                        if new_sum > dp[i + 1][j + 1][new_k][0]:
+                            dp[i + 1][j + 1][new_k] = (new_sum, new_path)
+                        elif new_sum == dp[i + 1][j + 1][new_k][0]:
+                            if new_path < dp[i + 1][j + 1][new_k][1]:
+                                dp[i + 1][j + 1][new_k] = (new_sum, new_path)
+                    else:
+                        # Normal case - just update if better
+                        if new_sum > dp[i + 1][j + 1][new_k][0]:
+                            dp[i + 1][j + 1][new_k] = (new_sum, new_path)
+                        elif new_sum == dp[i + 1][j + 1][new_k][0]:
+                            if new_path < dp[i + 1][j + 1][new_k][1]:
+                                dp[i + 1][j + 1][new_k] = (new_sum, new_path)
     
-    # Find the maximum among all possible ending states
-    max_sum = -float('inf')
+    # Find best path to bottom-right
+    best_sum = INF
     best_path = ""
     for k in range(3):
-        if dp[n-1][n-1][k][0] > max_sum:
-            max_sum = dp[n-1][n-1][k][0]
+        if dp[n-1][n-1][k][0] > best_sum:
+            best_sum = dp[n-1][n-1][k][0]
             best_path = dp[n-1][n-1][k][1]
+        elif dp[n-1][n-1][k][0] == best_sum:
+            if dp[n-1][n-1][k][1] < best_path:
+                best_path = dp[n-1][n-1][k][1]
     
-    return (int(max_sum), best_path)
+    return (int(best_sum), best_path)
 ```
 
 === EXTRACTED CODE ===
-from typing import Tuple, List
+from typing import List, Tuple
 
 def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
     
     n = len(grid)
-    if n == 0:
-        return 0, ""
+    INF = float('-inf')
     
-    # DP table: dp[i][j][k] = (max_sum, path) where k is moves % 3
-    dp = [[[(-float('inf'), "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k % 3 moves made
+    dp = [[[ (INF, "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
     
-    # Base case
+    # Start position
     dp[0][0][0] = (grid[0][0], "")
     
-    # Fill first row
-    for j in range(1, n):
-        for k in range(3):
-            prev_sum, prev_path = dp[0][j-1][(k - 1) % 3]
-            new_sum = prev_sum + grid[0][j]
-            new_path = prev_path + 'R'
-            if new_sum > dp[0][j][k][0]:
-                dp[0][j][k] = (new_sum, new_path)
-    
-    # Fill first column
-    for i in range(1, n):
-        for k in range(3):
-            prev_sum, prev_path = dp[i-1][0][(k - 1) % 3]
-            new_sum = prev_sum + grid[i][0]
-            new_path = prev_path + 'D'
-            if new_sum > dp[i][0][k][0]:
-                dp[i][0][k] = (new_sum, new_path)
-    
-    # Fill the rest of the grid
-    for i in range(1, n):
-        for j in range(1, n):
+    # Fill DP table
+    for i in range(n):
+        for j in range(n):
             for k in range(3):
-                # Try right move from (i, j-1)
-                if j > 0:
-                    prev_sum, prev_path = dp[i][j-1][(k - 1) % 3]
-                    new_sum = prev_sum + grid[i][j]
-                    new_path = prev_path + 'R'
-                    if new_sum > dp[i][j][k][0]:
-                        dp[i][j][k] = (new_sum, new_path)
+                if dp[i][j][k][0] == INF:
+                    continue
                 
-                # Try down move from (i-1, j)
-                if i > 0:
-                    prev_sum, prev_path = dp[i-1][j][(k - 1) % 3]
-                    new_sum = prev_sum + grid[i][j]
-                    new_path = prev_path + 'D'
-                    if new_sum > dp[i][j][k][0]:
-                        dp[i][j][k] = (new_sum, new_path)
+                current_sum, path = dp[i][j][k]
+                moves_made = len(path)
+                next_moves = moves_made + 1
+                must_diagonal = (next_moves % 3 == 0)
                 
-                # Try diagonal move from (i-1, j-1) - only if it's a required diagonal move
-                is_required_diagonal = (k == 0)  # k==0 means next move count % 3 == 0
-                if i > 0 and j > 0 and (is_required_diagonal or True):  # Always allow diagonal
-                    prev_sum, prev_path = dp[i-1][j-1][(k - 1) % 3]
-                    new_sum = prev_sum + grid[i][j]
-                    new_path = prev_path + 'X'
-                    if new_sum > dp[i][j][k][0]:
-                        dp[i][j][k] = (new_sum, new_path)
+                # Try right move
+                if j + 1 < n:
+                    new_path = path + "R"
+                    new_sum = current_sum + grid[i][j + 1]
+                    new_k = next_moves % 3
+                    if new_sum > dp[i][j + 1][new_k][0]:
+                        dp[i][j + 1][new_k] = (new_sum, new_path)
+                    elif new_sum == dp[i][j + 1][new_k][0]:
+                        # Prefer lexicographically smaller path
+                        if new_path < dp[i][j + 1][new_k][1]:
+                            dp[i][j + 1][new_k] = (new_sum, new_path)
+                
+                # Try down move
+                if i + 1 < n:
+                    new_path = path + "D"
+                    new_sum = current_sum + grid[i + 1][j]
+                    new_k = next_moves % 3
+                    if new_sum > dp[i + 1][j][new_k][0]:
+                        dp[i + 1][j][new_k] = (new_sum, new_path)
+                    elif new_sum == dp[i + 1][j][new_k][0]:
+                        if new_path < dp[i + 1][j][new_k][1]:
+                            dp[i + 1][j][new_k] = (new_sum, new_path)
+                
+                # Try diagonal move
+                if i + 1 < n and j + 1 < n:
+                    new_path = path + "X"
+                    new_sum = current_sum + grid[i + 1][j + 1]
+                    new_k = next_moves % 3
+                    
+                    # If must_diagonal, diagonal is always preferred
+                    if must_diagonal:
+                        if new_sum > dp[i + 1][j + 1][new_k][0]:
+                            dp[i + 1][j + 1][new_k] = (new_sum, new_path)
+                        elif new_sum == dp[i + 1][j + 1][new_k][0]:
+                            if new_path < dp[i + 1][j + 1][new_k][1]:
+                                dp[i + 1][j + 1][new_k] = (new_sum, new_path)
+                    else:
+                        # Normal case - just update if better
+                        if new_sum > dp[i + 1][j + 1][new_k][0]:
+                            dp[i + 1][j + 1][new_k] = (new_sum, new_path)
+                        elif new_sum == dp[i + 1][j + 1][new_k][0]:
+                            if new_path < dp[i + 1][j + 1][new_k][1]:
+                                dp[i + 1][j + 1][new_k] = (new_sum, new_path)
     
-    # Find the maximum among all possible ending states
-    max_sum = -float('inf')
+    # Find best path to bottom-right
+    best_sum = INF
     best_path = ""
     for k in range(3):
-        if dp[n-1][n-1][k][0] > max_sum:
-            max_sum = dp[n-1][n-1][k][0]
+        if dp[n-1][n-1][k][0] > best_sum:
+            best_sum = dp[n-1][n-1][k][0]
             best_path = dp[n-1][n-1][k][1]
+        elif dp[n-1][n-1][k][0] == best_sum:
+            if dp[n-1][n-1][k][1] < best_path:
+                best_path = dp[n-1][n-1][k][1]
     
-    return (int(max_sum), best_path)
+    return (int(best_sum), best_path)
