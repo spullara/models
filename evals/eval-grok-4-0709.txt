@@ -1,9 +1,9 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-26T23:49:08.016665+00:00
+Evaluated: 2026-03-27T00:00:13.184527+00:00
 
 === TIMING ===
-Response time: 57.07s
+Response time: 95.03s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -11,88 +11,153 @@ Syntax valid: YES
 
 === EXECUTION ===
 Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Calculated sum: 3
+Sum matches: NO
+Path valid: NO
+Path error: Path ended at (0, 1) instead of (3, 3)
 
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    from functools import lru_cache
-    @lru_cache(None)
-    def recurse(r, c, m):
-        if r == N - 1 and c == N - 1:
-            return grid[r][c], ""
-        next_num = m + 1
-        is_forced = (next_num % 3 == 0)
-        poss = []
-        can_x = (r + 1 < N and c + 1 < N)
-        can_r = (c + 1 < N)
-        can_d = (r + 1 < N)
-        if is_forced:
-            if can_x:
-                poss.append(('X', r + 1, c + 1))
-            else:
-                if can_r:
-                    poss.append(('R', r, c + 1))
-                if can_d:
-                    poss.append(('D', r + 1, c))
-        else:
-            if can_r:
-                poss.append(('R', r, c + 1))
-            if can_d:
-                poss.append(('D', r + 1, c))
-            if can_x:
-                poss.append(('X', r + 1, c + 1))
-        best_sum = float('-inf')
-        best_path = ""
-        for char, nr, nc in poss:
-            rec_sum, rec_path = recurse(nr, nc, m + 1)
-            tot = grid[r][c] + rec_sum
-            if tot > best_sum:
-                best_sum = tot
-                best_path = char + rec_path
-        return best_sum, best_path
-    return recurse(0, 0, 0)
+    if N == 0:
+        return (0, "")
+    max_m = 2 * (N - 1)
+    dp = [[[None for _ in range(max_m + 1)] for _ in range(N)] for _ in range(N)]
+    prev_i = [[[-1 for _ in range(max_m + 1)] for _ in range(N)] for _ in range(N)]
+    prev_j = [[[-1 for _ in range(max_m + 1)] for _ in range(N)] for _ in range(N)]
+    prev_k = [[[-1 for _ in range(max_m + 1)] for _ in range(N)] for _ in range(N)]
+    move_from = [[["" for _ in range(max_m + 1)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    for k in range(max_m):
+        for i in range(N):
+            for j in range(N):
+                if dp[i][j][k] is not None:
+                    move_num = k + 1
+                    is_special = (move_num % 3 == 0)
+                    possible_X = (i + 1 < N and j + 1 < N)
+                    possible_R = (j + 1 < N)
+                    possible_D = (i + 1 < N)
+                    allowed = []
+                    if is_special:
+                        if possible_X:
+                            allowed = ["X"]
+                        else:
+                            if possible_R:
+                                allowed.append("R")
+                            if possible_D:
+                                allowed.append("D")
+                    else:
+                        if possible_R:
+                            allowed.append("R")
+                        if possible_D:
+                            allowed.append("D")
+                        if possible_X:
+                            allowed.append("X")
+                    for mov in allowed:
+                        if mov == "R":
+                            ni, nj = i, j + 1
+                        elif mov == "D":
+                            ni, nj = i + 1, j
+                        else:
+                            ni, nj = i + 1, j + 1
+                        nk = k + 1
+                        new_sum = dp[i][j][k] + grid[ni][nj]
+                        if dp[ni][nj][nk] is None or new_sum > dp[ni][nj][nk]:
+                            dp[ni][nj][nk] = new_sum
+                            prev_i[ni][nj][nk] = i
+                            prev_j[ni][nj][nk] = j
+                            prev_k[ni][nj][nk] = k
+                            move_from[ni][nj][nk] = mov
+    max_sum = float("-inf")
+    best_k = -1
+    for kk in range(max_m + 1):
+        if dp[N - 1][N - 1][kk] is not None and dp[N - 1][N - 1][kk] > max_sum:
+            max_sum = dp[N - 1][N - 1][kk]
+            best_k = kk
+    if best_k == -1:
+        return (0, "")
+    path = []
+    i, j, k = N - 1, N - 1, best_k
+    while k > 0:
+        mov = move_from[i][j][k]
+        path.append(mov)
+        i = prev_i[i][j][k]
+        j = prev_j[i][j][k]
+        k = prev_k[i][j][k]
+    path.reverse()
+    path_str = "".join(path)
+    return (max_sum, path_str)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    from functools import lru_cache
-    @lru_cache(None)
-    def recurse(r, c, m):
-        if r == N - 1 and c == N - 1:
-            return grid[r][c], ""
-        next_num = m + 1
-        is_forced = (next_num % 3 == 0)
-        poss = []
-        can_x = (r + 1 < N and c + 1 < N)
-        can_r = (c + 1 < N)
-        can_d = (r + 1 < N)
-        if is_forced:
-            if can_x:
-                poss.append(('X', r + 1, c + 1))
-            else:
-                if can_r:
-                    poss.append(('R', r, c + 1))
-                if can_d:
-                    poss.append(('D', r + 1, c))
-        else:
-            if can_r:
-                poss.append(('R', r, c + 1))
-            if can_d:
-                poss.append(('D', r + 1, c))
-            if can_x:
-                poss.append(('X', r + 1, c + 1))
-        best_sum = float('-inf')
-        best_path = ""
-        for char, nr, nc in poss:
-            rec_sum, rec_path = recurse(nr, nc, m + 1)
-            tot = grid[r][c] + rec_sum
-            if tot > best_sum:
-                best_sum = tot
-                best_path = char + rec_path
-        return best_sum, best_path
-    return recurse(0, 0, 0)
+    if N == 0:
+        return (0, "")
+    max_m = 2 * (N - 1)
+    dp = [[[None for _ in range(max_m + 1)] for _ in range(N)] for _ in range(N)]
+    prev_i = [[[-1 for _ in range(max_m + 1)] for _ in range(N)] for _ in range(N)]
+    prev_j = [[[-1 for _ in range(max_m + 1)] for _ in range(N)] for _ in range(N)]
+    prev_k = [[[-1 for _ in range(max_m + 1)] for _ in range(N)] for _ in range(N)]
+    move_from = [[["" for _ in range(max_m + 1)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = grid[0][0]
+    for k in range(max_m):
+        for i in range(N):
+            for j in range(N):
+                if dp[i][j][k] is not None:
+                    move_num = k + 1
+                    is_special = (move_num % 3 == 0)
+                    possible_X = (i + 1 < N and j + 1 < N)
+                    possible_R = (j + 1 < N)
+                    possible_D = (i + 1 < N)
+                    allowed = []
+                    if is_special:
+                        if possible_X:
+                            allowed = ["X"]
+                        else:
+                            if possible_R:
+                                allowed.append("R")
+                            if possible_D:
+                                allowed.append("D")
+                    else:
+                        if possible_R:
+                            allowed.append("R")
+                        if possible_D:
+                            allowed.append("D")
+                        if possible_X:
+                            allowed.append("X")
+                    for mov in allowed:
+                        if mov == "R":
+                            ni, nj = i, j + 1
+                        elif mov == "D":
+                            ni, nj = i + 1, j
+                        else:
+                            ni, nj = i + 1, j + 1
+                        nk = k + 1
+                        new_sum = dp[i][j][k] + grid[ni][nj]
+                        if dp[ni][nj][nk] is None or new_sum > dp[ni][nj][nk]:
+                            dp[ni][nj][nk] = new_sum
+                            prev_i[ni][nj][nk] = i
+                            prev_j[ni][nj][nk] = j
+                            prev_k[ni][nj][nk] = k
+                            move_from[ni][nj][nk] = mov
+    max_sum = float("-inf")
+    best_k = -1
+    for kk in range(max_m + 1):
+        if dp[N - 1][N - 1][kk] is not None and dp[N - 1][N - 1][kk] > max_sum:
+            max_sum = dp[N - 1][N - 1][kk]
+            best_k = kk
+    if best_k == -1:
+        return (0, "")
+    path = []
+    i, j, k = N - 1, N - 1, best_k
+    while k > 0:
+        mov = move_from[i][j][k]
+        path.append(mov)
+        i = prev_i[i][j][k]
+        j = prev_j[i][j][k]
+        k = prev_k[i][j][k]
+    path.reverse()
+    path_str = "".join(path)
+    return (max_sum, path_str)
