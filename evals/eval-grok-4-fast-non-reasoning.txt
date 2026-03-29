@@ -1,19 +1,121 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-29T22:02:21.811308+00:00
+Evaluated: 2026-03-29T22:23:31.532310+00:00
 
 === TIMING ===
-Response time: 0.18s
+Response time: 2.63s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. retried and the latest reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+Execution Error: cannot convert float infinity to integer
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    n = len(grid)
+    INF = float('-inf')
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+    
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            current_sum = dp[i][j][0]
+            if current_sum == INF:
+                continue
+            
+            move_count = len(dp[i][j][1])
+            is_diag_required = (move_count + 1) % 3 == 0
+            
+            # Try right
+            if j + 1 < n:
+                new_path = dp[i][j][1] + "R"
+                new_sum = current_sum + grid[i][j + 1]
+                if new_sum > dp[i][j + 1][0]:
+                    dp[i][j + 1] = (new_sum, new_path)
+                elif new_sum == dp[i][j + 1][0]:
+                    if len(new_path) < len(dp[i][j + 1][1]):
+                        dp[i][j + 1] = (new_sum, new_path)
+            
+            # Try down
+            if i + 1 < n:
+                new_path = dp[i][j][1] + "D"
+                new_sum = current_sum + grid[i + 1][j]
+                if new_sum > dp[i + 1][j][0]:
+                    dp[i + 1][j] = (new_sum, new_path)
+                elif new_sum == dp[i + 1][j][0]:
+                    if len(new_path) < len(dp[i + 1][j][1]):
+                        dp[i + 1][j] = (new_sum, new_path)
+            
+            # Try diagonal
+            if i + 1 < n and j + 1 < n:
+                new_path = dp[i][j][1] + "X"
+                new_sum = current_sum + grid[i + 1][j + 1]
+                if new_sum > dp[i + 1][j + 1][0]:
+                    dp[i + 1][j + 1] = (new_sum, new_path)
+                elif new_sum == dp[i + 1][j + 1][0]:
+                    if len(new_path) < len(dp[i + 1][j + 1][1]):
+                        dp[i + 1][j + 1] = (new_sum, new_path)
+    
+    max_sum, path = dp[n-1][n-1]
+    return (int(max_sum), path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    n = len(grid)
+    INF = float('-inf')
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+    
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            current_sum = dp[i][j][0]
+            if current_sum == INF:
+                continue
+            
+            move_count = len(dp[i][j][1])
+            is_diag_required = (move_count + 1) % 3 == 0
+            
+            # Try right
+            if j + 1 < n:
+                new_path = dp[i][j][1] + "R"
+                new_sum = current_sum + grid[i][j + 1]
+                if new_sum > dp[i][j + 1][0]:
+                    dp[i][j + 1] = (new_sum, new_path)
+                elif new_sum == dp[i][j + 1][0]:
+                    if len(new_path) < len(dp[i][j + 1][1]):
+                        dp[i][j + 1] = (new_sum, new_path)
+            
+            # Try down
+            if i + 1 < n:
+                new_path = dp[i][j][1] + "D"
+                new_sum = current_sum + grid[i + 1][j]
+                if new_sum > dp[i + 1][j][0]:
+                    dp[i + 1][j] = (new_sum, new_path)
+                elif new_sum == dp[i + 1][j][0]:
+                    if len(new_path) < len(dp[i + 1][j][1]):
+                        dp[i + 1][j] = (new_sum, new_path)
+            
+            # Try diagonal
+            if i + 1 < n and j + 1 < n:
+                new_path = dp[i][j][1] + "X"
+                new_sum = current_sum + grid[i + 1][j + 1]
+                if new_sum > dp[i + 1][j + 1][0]:
+                    dp[i + 1][j + 1] = (new_sum, new_path)
+                elif new_sum == dp[i + 1][j + 1][0]:
+                    if len(new_path) < len(dp[i + 1][j + 1][1]):
+                        dp[i + 1][j + 1] = (new_sum, new_path)
+    
+    max_sum, path = dp[n-1][n-1]
+    return (int(max_sum), path)
