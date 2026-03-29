@@ -1,16 +1,16 @@
 Model: grok-imagine-image
 Provider: grok
-Evaluated: 2026-03-29T22:11:11.349006+00:00
+Evaluated: 2026-03-29T22:25:01.622854+00:00
 
 === TIMING ===
-Response time: 5.88s
+Response time: 0.16s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection timeout
+API Error: HTTP 400: {"code":"Client specified an invalid argument","error":"Model not found: grok-imagine-image"}
 
 === RAW RESPONSE ===
 (no response)
