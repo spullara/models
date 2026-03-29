@@ -1,19 +1,128 @@
 Model: grok-4-1-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-29T22:02:21.411847+00:00
+Evaluated: 2026-03-29T22:22:50.101153+00:00
 
 === TIMING ===
-Response time: 0.19s
+Response time: 2.77s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. retried and the latest reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    n = len(grid)
+    INF = float('-inf')
+    
+    # dp[i][j][k] = max sum to reach (i,j) with k moves made
+    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = grid[0][0]
+    
+    # parent[i][j][k] = (prev_i, prev_j, prev_k, move)
+    parent = [[[[None] * 3 for _ in range(n)] for _ in range(n)] for _ in range(n)]
+    
+    for i in range(n):
+        for j in range(n):
+            for k in range(3):
+                if dp[i][j][k] == INF:
+                    continue
+                moves_made = k + 1
+                is_diag_required = (moves_made % 3 == 0)
+                
+                for di, dj, move in [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]:
+                    ni, nj = i + di, j + dj
+                    if 0 <= ni < n and 0 <= nj < n:
+                        nk = k + 1
+                        if nk >= 3:
+                            nk = 0
+                        
+                        if is_diag_required and move != 'X':
+                            continue
+                        
+                        new_sum = dp[i][j][k] + grid[ni][nj]
+                        if new_sum > dp[ni][nj][nk]:
+                            dp[ni][nj][nk] = new_sum
+                            parent[ni][nj][nk] = (i, j, k, move)
+    
+    # Find max sum at bottom-right
+    max_sum = max(dp[n-1][n-1][k] for k in range(3))
+    if max_sum == INF:
+        return 0, ""
+    
+    # Reconstruct path
+    best_k = max(range(3), key=lambda k: dp[n-1][n-1][k])
+    path = []
+    i, j, k = n-1, n-1, best_k
+    
+    while i > 0 or j > 0:
+        prev_i, prev_j, prev_k, move = parent[i][j][k]
+        path.append(move)
+        i, j, k = prev_i, prev_j, prev_k
+    
+    path.reverse()
+    return max_sum, ''.join(path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    n = len(grid)
+    INF = float('-inf')
+    
+    # dp[i][j][k] = max sum to reach (i,j) with k moves made
+    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = grid[0][0]
+    
+    # parent[i][j][k] = (prev_i, prev_j, prev_k, move)
+    parent = [[[[None] * 3 for _ in range(n)] for _ in range(n)] for _ in range(n)]
+    
+    for i in range(n):
+        for j in range(n):
+            for k in range(3):
+                if dp[i][j][k] == INF:
+                    continue
+                moves_made = k + 1
+                is_diag_required = (moves_made % 3 == 0)
+                
+                for di, dj, move in [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]:
+                    ni, nj = i + di, j + dj
+                    if 0 <= ni < n and 0 <= nj < n:
+                        nk = k + 1
+                        if nk >= 3:
+                            nk = 0
+                        
+                        if is_diag_required and move != 'X':
+                            continue
+                        
+                        new_sum = dp[i][j][k] + grid[ni][nj]
+                        if new_sum > dp[ni][nj][nk]:
+                            dp[ni][nj][nk] = new_sum
+                            parent[ni][nj][nk] = (i, j, k, move)
+    
+    # Find max sum at bottom-right
+    max_sum = max(dp[n-1][n-1][k] for k in range(3))
+    if max_sum == INF:
+        return 0, ""
+    
+    # Reconstruct path
+    best_k = max(range(3), key=lambda k: dp[n-1][n-1][k])
+    path = []
+    i, j, k = n-1, n-1, best_k
+    
+    while i > 0 or j > 0:
+        prev_i, prev_j, prev_k, move = parent[i][j][k]
+        path.append(move)
+        i, j, k = prev_i, prev_j, prev_k
+    
+    path.reverse()
+    return max_sum, ''.join(path)
