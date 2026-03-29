@@ -1,92 +1,19 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-03-27T01:10:49.307575+00:00
+Evaluated: 2026-03-29T22:02:22.386259+00:00
 
 === TIMING ===
-Response time: 34.4s
+Response time: 0.21s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. retried and the latest reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    N = len(grid)
-    memo = {}
-    def dfs(r, c, mod):
-        if r == N - 1 and c == N - 1:
-            return grid[r][c], ""
-        key = (r, c, mod)
-        if key in memo:
-            return memo[key]
-        forced = (mod == 2)
-        diag_possible = (r + 1 < N and c + 1 < N)
-        best_sum = float('-inf')
-        best_path = ""
-        for char, dr, dc in [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]:
-            nr = r + dr
-            nc = c + dc
-            if nr >= N or nc >= N:
-                continue
-            if forced:
-                if diag_possible and char != 'X':
-                    continue
-                if not diag_possible and char == 'X':
-                    continue
-            next_mod = (mod + 1) % 3
-            sub_sum, sub_path = dfs(nr, nc, next_mod)
-            total_sum = grid[r][c] + sub_sum
-            if total_sum > best_sum:
-                best_sum = total_sum
-                best_path = char + sub_path
-        memo[key] = (best_sum, best_path)
-        return memo[key]
-    max_s, path = dfs(0, 0, 0)
-    return int(max_s), path
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    N = len(grid)
-    memo = {}
-    def dfs(r, c, mod):
-        if r == N - 1 and c == N - 1:
-            return grid[r][c], ""
-        key = (r, c, mod)
-        if key in memo:
-            return memo[key]
-        forced = (mod == 2)
-        diag_possible = (r + 1 < N and c + 1 < N)
-        best_sum = float('-inf')
-        best_path = ""
-        for char, dr, dc in [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]:
-            nr = r + dr
-            nc = c + dc
-            if nr >= N or nc >= N:
-                continue
-            if forced:
-                if diag_possible and char != 'X':
-                    continue
-                if not diag_possible and char == 'X':
-                    continue
-            next_mod = (mod + 1) % 3
-            sub_sum, sub_path = dfs(nr, nc, next_mod)
-            total_sum = grid[r][c] + sub_sum
-            if total_sum > best_sum:
-                best_sum = total_sum
-                best_path = char + sub_path
-        memo[key] = (best_sum, best_path)
-        return memo[key]
-    max_s, path = dfs(0, 0, 0)
-    return int(max_s), path
+(no code extracted)

@@ -1,169 +1,19 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-03-27T01:10:00.498239+00:00
+Evaluated: 2026-03-29T22:02:21.811308+00:00
 
 === TIMING ===
-Response time: 4.0s
+Response time: 0.18s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 0
-Calculated sum: 1
-Sum matches: NO
-Path valid: NO
-Path error: Path ended at (0, 0) instead of (3, 3)
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. retried and the latest reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    n = len(grid)
-    INF = float('-inf')
-    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = grid[0][0]
-    
-    for i in range(n):
-        for j in range(n):
-            if i == 0 and j == 0:
-                continue
-            moves = []
-            if i > 0 and j > 0:
-                moves.append(('X', i-1, j-1))
-            if i > 0:
-                moves.append(('D', i-1, j))
-            if j > 0:
-                moves.append(('R', i, j-1))
-            
-            for move_type, pi, pj in moves:
-                if dp[pi][pj][0] == INF:
-                    continue
-                for prev_mod in range(3):
-                    if dp[pi][pj][prev_mod] == INF:
-                        continue
-                    move_num = 3 * prev_mod + 1
-                    is_required_diag = (move_num % 3 == 0)
-                    if is_required_diag and move_type != 'X':
-                        continue
-                    new_mod = move_num % 3
-                    new_sum = dp[pi][pj][prev_mod] + grid[i][j]
-                    if new_sum > dp[i][j][new_mod]:
-                        dp[i][j][new_mod] = new_sum
-    
-    max_sum = max(dp[n-1][n-1])
-    if max_sum == INF:
-        return 0, ""
-    
-    # Backtrack to find path
-    i, j = n-1, n-1
-    mod = dp[i][j].index(max_sum)
-    path = []
-    while i > 0 or j > 0:
-        move_num = 3 * mod
-        is_required_diag = (move_num % 3 == 0)
-        
-        found = False
-        moves = []
-        if i > 0 and j > 0:
-            moves.append(('X', i-1, j-1))
-        if i > 0:
-            moves.append(('D', i-1, j))
-        if j > 0:
-            moves.append(('R', i, j-1))
-        
-        for move_type, pi, pj in moves:
-            if is_required_diag and move_type != 'X':
-                continue
-            prev_mod = (move_num - 1) % 3
-            if dp[pi][pj][prev_mod] + grid[i][j] == dp[i][j][mod]:
-                path.append(move_type)
-                i, j = pi, pj
-                mod = prev_mod
-                found = True
-                break
-        
-        if not found:
-            # This shouldn't happen with the DP logic
-            break
-    
-    path.reverse()
-    return max_sum, ''.join(path)
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    n = len(grid)
-    INF = float('-inf')
-    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = grid[0][0]
-    
-    for i in range(n):
-        for j in range(n):
-            if i == 0 and j == 0:
-                continue
-            moves = []
-            if i > 0 and j > 0:
-                moves.append(('X', i-1, j-1))
-            if i > 0:
-                moves.append(('D', i-1, j))
-            if j > 0:
-                moves.append(('R', i, j-1))
-            
-            for move_type, pi, pj in moves:
-                if dp[pi][pj][0] == INF:
-                    continue
-                for prev_mod in range(3):
-                    if dp[pi][pj][prev_mod] == INF:
-                        continue
-                    move_num = 3 * prev_mod + 1
-                    is_required_diag = (move_num % 3 == 0)
-                    if is_required_diag and move_type != 'X':
-                        continue
-                    new_mod = move_num % 3
-                    new_sum = dp[pi][pj][prev_mod] + grid[i][j]
-                    if new_sum > dp[i][j][new_mod]:
-                        dp[i][j][new_mod] = new_sum
-    
-    max_sum = max(dp[n-1][n-1])
-    if max_sum == INF:
-        return 0, ""
-    
-    # Backtrack to find path
-    i, j = n-1, n-1
-    mod = dp[i][j].index(max_sum)
-    path = []
-    while i > 0 or j > 0:
-        move_num = 3 * mod
-        is_required_diag = (move_num % 3 == 0)
-        
-        found = False
-        moves = []
-        if i > 0 and j > 0:
-            moves.append(('X', i-1, j-1))
-        if i > 0:
-            moves.append(('D', i-1, j))
-        if j > 0:
-            moves.append(('R', i, j-1))
-        
-        for move_type, pi, pj in moves:
-            if is_required_diag and move_type != 'X':
-                continue
-            prev_mod = (move_num - 1) % 3
-            if dp[pi][pj][prev_mod] + grid[i][j] == dp[i][j][mod]:
-                path.append(move_type)
-                i, j = pi, pj
-                mod = prev_mod
-                found = True
-                break
-        
-        if not found:
-            # This shouldn't happen with the DP logic
-            break
-    
-    path.reverse()
-    return max_sum, ''.join(path)
+(no code extracted)
