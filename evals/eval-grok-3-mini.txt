@@ -1,19 +1,114 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-29T22:02:21.018681+00:00
+Evaluated: 2026-03-29T22:20:16.672518+00:00
 
 === TIMING ===
-Response time: 0.18s
+Response time: 56.39s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_generic
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. retried and the latest reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return 0, ""
+    N = len(grid)
+    memo = {}
+    
+    def dfs(i, j, m):
+        if (i, j, m) in memo:
+            return memo[(i, j, m)]
+        
+        if i == N-1 and j == N-1:
+            result = (grid[i][j], "")
+        else:
+            k = m + 1
+            possible_moves = []
+            if k % 3 == 0:
+                if i+1 < N and j+1 < N:
+                    possible_moves = [('X', i+1, j+1)]
+                else:
+                    if i+1 < N:
+                        possible_moves.append(('D', i+1, j))
+                    if j+1 < N:
+                        possible_moves.append(('R', i, j+1))
+            else:
+                if i+1 < N and j+1 < N:
+                    possible_moves.append(('X', i+1, j+1))
+                if i+1 < N:
+                    possible_moves.append(('D', i+1, j))
+                if j+1 < N:
+                    possible_moves.append(('R', i, j+1))
+            
+            best_sum = float('-inf')
+            best_path = None
+            for move, next_i, next_j in possible_moves:
+                sum_sub, path_sub = dfs(next_i, next_j, m+1)
+                total_sum = grid[i][j] + sum_sub
+                if total_sum > best_sum:
+                    best_sum = total_sum
+                    best_path = move + path_sub
+            result = (best_sum, best_path)
+        
+        memo[(i, j, m)] = result
+        return result
+    
+    max_sum, path = dfs(0, 0, 0)
+    return max_sum, path
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return 0, ""
+    N = len(grid)
+    memo = {}
+    
+    def dfs(i, j, m):
+        if (i, j, m) in memo:
+            return memo[(i, j, m)]
+        
+        if i == N-1 and j == N-1:
+            result = (grid[i][j], "")
+        else:
+            k = m + 1
+            possible_moves = []
+            if k % 3 == 0:
+                if i+1 < N and j+1 < N:
+                    possible_moves = [('X', i+1, j+1)]
+                else:
+                    if i+1 < N:
+                        possible_moves.append(('D', i+1, j))
+                    if j+1 < N:
+                        possible_moves.append(('R', i, j+1))
+            else:
+                if i+1 < N and j+1 < N:
+                    possible_moves.append(('X', i+1, j+1))
+                if i+1 < N:
+                    possible_moves.append(('D', i+1, j))
+                if j+1 < N:
+                    possible_moves.append(('R', i, j+1))
+            
+            best_sum = float('-inf')
+            best_path = None
+            for move, next_i, next_j in possible_moves:
+                sum_sub, path_sub = dfs(next_i, next_j, m+1)
+                total_sum = grid[i][j] + sum_sub
+                if total_sum > best_sum:
+                    best_sum = total_sum
+                    best_path = move + path_sub
+            result = (best_sum, best_path)
+        
+        memo[(i, j, m)] = result
+        return result
+    
+    max_sum, path = dfs(0, 0, 0)
+    return max_sum, path
