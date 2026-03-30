@@ -1,0 +1,19 @@
+Model: qwen3.5-omni-plus-realtime-2026-03-15
+Provider: qwen
+Evaluated: 2026-03-30T03:17:06.930789+00:00
+
+=== TIMING ===
+Response time: 0.7s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-58f1854d-67ad-9f6e-bb01-fad15469980a","request_id":"58f1854d-67ad-9f6e-bb01-fad15469980a"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
