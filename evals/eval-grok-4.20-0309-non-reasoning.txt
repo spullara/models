@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-03-29T22:24:11.698768+00:00
+Evaluated: 2026-03-31T08:46:28.791198+00:00
 
 === TIMING ===
-Response time: 2.18s
+Response time: 3.12s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -35,38 +35,52 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
                 continue
             for moves in range(1, i + j + 1):
                 if moves not in dp[i][j]:
+                    dp[i][j][moves] = (INF, "")
+    
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            curr_moves = i + j
+            must_diag = (curr_moves % 3 == 0)
+            val = grid[i][j]
+            
+            for prev_moves in range(curr_moves):
+                if prev_moves not in dp[i][j]:
                     continue
-                curr_sum, path = dp[i][j][moves]
-                need_diag = (moves % 3 == 0)
-                dirs = []
-                if need_diag:
-                    if i + 1 < n and j + 1 < n:
-                        dirs.append((i+1, j+1, 'X'))
-                    dirs.append((i, j+1, 'R') if j+1 < n else None)
-                    dirs.append((i+1, j, 'D') if i+1 < n else None)
-                    dirs = [d for d in dirs if d]
-                else:
-                    if j + 1 < n:
-                        dirs.append((i, j+1, 'R'))
-                    if i + 1 < n:
-                        dirs.append((i+1, j, 'D'))
+                prev_sum, prev_path = dp[i][j][prev_moves]
+                if prev_sum == INF:
+                    continue
                 
-                for ni, nj, move in dirs:
-                    if ni is None or nj is None:
-                        continue
-                    new_sum = curr_sum + grid[ni][nj]
-                    new_path = path + move
-                    new_moves = moves + 1
-                    if new_moves not in dp[ni][nj] or new_sum > dp[ni][nj][new_moves][0]:
-                        dp[ni][nj][new_moves] = (new_sum, new_path)
+                for di, dj, move_char in [(-1, 0, 'D'), (0, -1, 'R'), (-1, -1, 'X')]:
+                    pi, pj = i + di, j + dj
+                    if 0 <= pi < n and 0 <= pj < n:
+                        if (di, dj) == (-1, -1):
+                            is_diag = True
+                        else:
+                            is_diag = False
+                        
+                        if must_diag and not is_diag and prev_moves % 3 == 2:
+                            continue
+                        
+                        new_sum = prev_sum + val
+                        new_path = prev_path + move_char
+                        new_total_moves = prev_moves + 1
+                        
+                        if new_total_moves not in dp[i][j] or new_sum > dp[i][j][new_total_moves][0]:
+                            dp[i][j][new_total_moves] = (new_sum, new_path)
     
     max_sum = INF
     best_path = ""
-    for moves, (s, p) in dp[n-1][n-1].items():
+    for moves in dp[n-1][n-1]:
+        s, p = dp[n-1][n-1][moves]
         if s > max_sum:
             max_sum = s
             best_path = p
-    return (int(max_sum), best_path) if max_sum != INF else (0, "")
+    
+    if max_sum == INF:
+        return (0, "")
+    return (max_sum, best_path)
 ```
 
 === EXTRACTED CODE ===
@@ -87,35 +101,49 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
                 continue
             for moves in range(1, i + j + 1):
                 if moves not in dp[i][j]:
+                    dp[i][j][moves] = (INF, "")
+    
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            curr_moves = i + j
+            must_diag = (curr_moves % 3 == 0)
+            val = grid[i][j]
+            
+            for prev_moves in range(curr_moves):
+                if prev_moves not in dp[i][j]:
                     continue
-                curr_sum, path = dp[i][j][moves]
-                need_diag = (moves % 3 == 0)
-                dirs = []
-                if need_diag:
-                    if i + 1 < n and j + 1 < n:
-                        dirs.append((i+1, j+1, 'X'))
-                    dirs.append((i, j+1, 'R') if j+1 < n else None)
-                    dirs.append((i+1, j, 'D') if i+1 < n else None)
-                    dirs = [d for d in dirs if d]
-                else:
-                    if j + 1 < n:
-                        dirs.append((i, j+1, 'R'))
-                    if i + 1 < n:
-                        dirs.append((i+1, j, 'D'))
+                prev_sum, prev_path = dp[i][j][prev_moves]
+                if prev_sum == INF:
+                    continue
                 
-                for ni, nj, move in dirs:
-                    if ni is None or nj is None:
-                        continue
-                    new_sum = curr_sum + grid[ni][nj]
-                    new_path = path + move
-                    new_moves = moves + 1
-                    if new_moves not in dp[ni][nj] or new_sum > dp[ni][nj][new_moves][0]:
-                        dp[ni][nj][new_moves] = (new_sum, new_path)
+                for di, dj, move_char in [(-1, 0, 'D'), (0, -1, 'R'), (-1, -1, 'X')]:
+                    pi, pj = i + di, j + dj
+                    if 0 <= pi < n and 0 <= pj < n:
+                        if (di, dj) == (-1, -1):
+                            is_diag = True
+                        else:
+                            is_diag = False
+                        
+                        if must_diag and not is_diag and prev_moves % 3 == 2:
+                            continue
+                        
+                        new_sum = prev_sum + val
+                        new_path = prev_path + move_char
+                        new_total_moves = prev_moves + 1
+                        
+                        if new_total_moves not in dp[i][j] or new_sum > dp[i][j][new_total_moves][0]:
+                            dp[i][j][new_total_moves] = (new_sum, new_path)
     
     max_sum = INF
     best_path = ""
-    for moves, (s, p) in dp[n-1][n-1].items():
+    for moves in dp[n-1][n-1]:
+        s, p = dp[n-1][n-1][moves]
         if s > max_sum:
             max_sum = s
             best_path = p
-    return (int(max_sum), best_path) if max_sum != INF else (0, "")
+    
+    if max_sum == INF:
+        return (0, "")
+    return (max_sum, best_path)
