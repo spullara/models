@@ -1,9 +1,9 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-29T22:21:13.095420+00:00
+Evaluated: 2026-03-31T08:43:21.046290+00:00
 
 === TIMING ===
-Response time: 96.97s
+Response time: 78.99s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,162 +17,90 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
+import functools
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
     N = len(grid)
-    from functools import lru_cache
-    @lru_cache(maxsize=None)
-    def get_max_sum(i: int, j: int, m: int) -> float:
+    @functools.lru_cache(maxsize=None)
+    def recurse(i, j, k):
         if i == N - 1 and j == N - 1:
-            return grid[i][j]
-        next_move_num = m + 1
-        is_forced = (next_move_num % 3 == 0)
-        can_R = j + 1 < N
-        can_D = i + 1 < N
-        can_X = i + 1 < N and j + 1 < N
+            return grid[i][j], ""
+        move_num = k + 1
+        required = move_num % 3 == 0
+        can_x = i + 1 < N and j + 1 < N
         possible = []
-        if is_forced:
-            if can_X:
+        if required:
+            if can_x:
                 possible = [('X', i + 1, j + 1)]
             else:
-                if can_R:
+                if j + 1 < N:
                     possible.append(('R', i, j + 1))
-                if can_D:
+                if i + 1 < N:
                     possible.append(('D', i + 1, j))
         else:
-            if can_R:
+            if j + 1 < N:
                 possible.append(('R', i, j + 1))
-            if can_D:
+            if i + 1 < N:
                 possible.append(('D', i + 1, j))
-            if can_X:
+            if can_x:
                 possible.append(('X', i + 1, j + 1))
-        if not possible:
-            return float('-inf')
-        max_s = float('-inf')
-        for _, ni, nj in possible:
-            sub = get_max_sum(ni, nj, m + 1)
-            if sub != float('-inf'):
-                max_s = max(max_s, sub)
-        if max_s == float('-inf'):
-            return float('-inf')
-        return grid[i][j] + max_s
-    total_max = get_max_sum(0, 0, 0)
-    if total_max == float('-inf'):
-        return (0, "")
-    path_list = []
-    i, j, m = 0, 0, 0
-    while i != N - 1 or j != N - 1:
-        next_move_num = m + 1
-        is_forced = (next_move_num % 3 == 0)
-        can_R = j + 1 < N
-        can_D = i + 1 < N
-        can_X = i + 1 < N and j + 1 < N
-        possible = []
-        if is_forced:
-            if can_X:
-                possible = [('X', i + 1, j + 1)]
-            else:
-                if can_R:
-                    possible.append(('R', i, j + 1))
-                if can_D:
-                    possible.append(('D', i + 1, j))
-        else:
-            if can_R:
-                possible.append(('R', i, j + 1))
-            if can_D:
-                possible.append(('D', i + 1, j))
-            if can_X:
-                possible.append(('X', i + 1, j + 1))
-        target_sub = get_max_sum(i, j, m) - grid[i][j]
-        for move_char, ni, nj in possible:
-            sub = get_max_sum(ni, nj, m + 1)
-            if sub == target_sub:
-                path_list.append(move_char)
-                i, j, m = ni, nj, m + 1
-                break
-        else:
-            raise ValueError("Error in reconstruction")
-    path_str = ''.join(path_list)
-    return int(total_max), path_str
+        best_sum = float('-inf')
+        best_path = ""
+        for char, ni, nj in possible:
+            sub_sum, sub_path = recurse(ni, nj, k + 1)
+            if sub_sum == float('-inf'):
+                continue
+            total = grid[i][j] + sub_sum
+            if total > best_sum:
+                best_sum = total
+                best_path = char + sub_path
+        if best_sum == float('-inf'):
+            return float('-inf'), ""
+        return best_sum, best_path
+    max_sum, path = recurse(0, 0, 0)
+    return int(max_sum), path
 ```
 
 === EXTRACTED CODE ===
+import functools
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
     N = len(grid)
-    from functools import lru_cache
-    @lru_cache(maxsize=None)
-    def get_max_sum(i: int, j: int, m: int) -> float:
+    @functools.lru_cache(maxsize=None)
+    def recurse(i, j, k):
         if i == N - 1 and j == N - 1:
-            return grid[i][j]
-        next_move_num = m + 1
-        is_forced = (next_move_num % 3 == 0)
-        can_R = j + 1 < N
-        can_D = i + 1 < N
-        can_X = i + 1 < N and j + 1 < N
+            return grid[i][j], ""
+        move_num = k + 1
+        required = move_num % 3 == 0
+        can_x = i + 1 < N and j + 1 < N
         possible = []
-        if is_forced:
-            if can_X:
+        if required:
+            if can_x:
                 possible = [('X', i + 1, j + 1)]
             else:
-                if can_R:
+                if j + 1 < N:
                     possible.append(('R', i, j + 1))
-                if can_D:
+                if i + 1 < N:
                     possible.append(('D', i + 1, j))
         else:
-            if can_R:
+            if j + 1 < N:
                 possible.append(('R', i, j + 1))
-            if can_D:
+            if i + 1 < N:
                 possible.append(('D', i + 1, j))
-            if can_X:
+            if can_x:
                 possible.append(('X', i + 1, j + 1))
-        if not possible:
-            return float('-inf')
-        max_s = float('-inf')
-        for _, ni, nj in possible:
-            sub = get_max_sum(ni, nj, m + 1)
-            if sub != float('-inf'):
-                max_s = max(max_s, sub)
-        if max_s == float('-inf'):
-            return float('-inf')
-        return grid[i][j] + max_s
-    total_max = get_max_sum(0, 0, 0)
-    if total_max == float('-inf'):
-        return (0, "")
-    path_list = []
-    i, j, m = 0, 0, 0
-    while i != N - 1 or j != N - 1:
-        next_move_num = m + 1
-        is_forced = (next_move_num % 3 == 0)
-        can_R = j + 1 < N
-        can_D = i + 1 < N
-        can_X = i + 1 < N and j + 1 < N
-        possible = []
-        if is_forced:
-            if can_X:
-                possible = [('X', i + 1, j + 1)]
-            else:
-                if can_R:
-                    possible.append(('R', i, j + 1))
-                if can_D:
-                    possible.append(('D', i + 1, j))
-        else:
-            if can_R:
-                possible.append(('R', i, j + 1))
-            if can_D:
-                possible.append(('D', i + 1, j))
-            if can_X:
-                possible.append(('X', i + 1, j + 1))
-        target_sub = get_max_sum(i, j, m) - grid[i][j]
-        for move_char, ni, nj in possible:
-            sub = get_max_sum(ni, nj, m + 1)
-            if sub == target_sub:
-                path_list.append(move_char)
-                i, j, m = ni, nj, m + 1
-                break
-        else:
-            raise ValueError("Error in reconstruction")
-    path_str = ''.join(path_list)
-    return int(total_max), path_str
+        best_sum = float('-inf')
+        best_path = ""
+        for char, ni, nj in possible:
+            sub_sum, sub_path = recurse(ni, nj, k + 1)
+            if sub_sum == float('-inf'):
+                continue
+            total = grid[i][j] + sub_sum
+            if total > best_sum:
+                best_sum = total
+                best_path = char + sub_path
+        if best_sum == float('-inf'):
+            return float('-inf'), ""
+        return best_sum, best_path
+    max_sum, path = recurse(0, 0, 0)
+    return int(max_sum), path
