@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-03-31 12:00:17
+Last updated: 2026-03-31 14:00:18
 
 ## Summary
 
@@ -11,7 +11,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/9
 
-**Gemini**: 48/70
+**Gemini**: 49/70
 
 **Grok**: 14/9
 
@@ -226,6 +226,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/veo-3.1-lite-generate-preview (added: 2026-03-31)
 - models/gemini-3.1-flash-live-preview (added: 2026-03-26)
 - models/lyria-3-pro-preview (added: 2026-03-25)
 - models/lyria-3-clip-preview (added: 2026-03-25)
