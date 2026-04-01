@@ -132,4 +132,6 @@ qwq-plus-2025-03-05
 text-embedding-v3
 text-embedding-v4
 tongyi-tingwu-slp
+wan2.7-image
+wan2.7-image-pro
 z-image-turbo
