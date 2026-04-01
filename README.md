@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-04-01 23:23:15
+Last updated: 2026-04-01 23:30:13
 
 ## Summary
 
@@ -11,7 +11,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/9
 
-**Gemini**: 49/70
+**Gemini**: 48/71
 
 **Grok**: 14/9
 
@@ -256,7 +256,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-pro-latest (added: 2025-09-25)
 - models/gemini-flash-lite-latest (added: 2025-09-25)
 - models/gemini-flash-latest (added: 2025-09-25)
-- models/gemini-2.5-flash-lite-preview-09-2025 (added: 2025-09-25)
 - models/gemini-2.5-flash-lite (added: 2025-07-22)
 - models/gemini-embedding-001 (added: 2025-07-14)
 - models/gemma-3n-e2b-it (added: 2025-06-26)
@@ -278,6 +277,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/gemini-2.5-flash-lite-preview-09-2025 (deleted: 2026-04-01)
 - models/gemini-2.0-flash-exp-image-generation (deleted: 2026-03-10)
 - models/imagen-4.0-ultra-generate-preview-06-06 (deleted: 2026-02-20)
 - models/imagen-4.0-generate-preview-06-06 (deleted: 2026-02-20)
