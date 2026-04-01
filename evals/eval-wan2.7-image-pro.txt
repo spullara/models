@@ -1,0 +1,19 @@
+Model: wan2.7-image-pro
+Provider: qwen
+Evaluated: 2026-04-01T06:09:06.129776+00:00
+
+=== TIMING ===
+Response time: 0.89s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-141fa9df-e338-99d8-bdac-5d7f774da08e","request_id":"141fa9df-e338-99d8-bdac-5d7f774da08e"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
