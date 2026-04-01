@@ -1,0 +1,19 @@
+Model: models/gemini-2.5-flash-lite-preview-09-2025
+Provider: gemini
+Evaluated: 2026-04-01T23:17:06.575848+00:00
+
+=== TIMING ===
+Response time: 0.14s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: 
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
