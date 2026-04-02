@@ -1,6 +1,6 @@
 Model: models/gemma-4-31b-it
 Provider: gemini
-Evaluated: 2026-04-02T15:37:06.567047+00:00
+Evaluated: 2026-04-02T16:00:07.343802+00:00
 
 === TIMING ===
 Response time: 0.14s
