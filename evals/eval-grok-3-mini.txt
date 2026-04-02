@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-03-31T08:42:21.516262+00:00
+Evaluated: 2026-04-02T14:39:11.665079+00:00
 
 === TIMING ===
-Response time: 59.5s
+Response time: 41.14s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,108 +17,94 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
+from functools import lru_cache
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return 0, ""
     N = len(grid)
-    memo = {}
     
-    def dp(i, j, m):
-        if (i, j, m) in memo:
-            return memo[(i, j, m)]
-        
+    @lru_cache(None)
+    def dp(i: int, j: int, move_count: int) -> tuple[int, str]:
         if i == N-1 and j == N-1:
-            result = (grid[i][j], "")
-            memo[(i, j, m)] = result
-            return result
+            return grid[i][j], ""
         
-        possible_moves = []
-        k = m + 1
-        if k % 3 == 0:
-            if i+1 < N and j+1 < N:
-                possible_moves = ['X']
-            elif i+1 < N:
-                possible_moves = ['D']
-            elif j+1 < N:
-                possible_moves = ['R']
-        else:
-            if i+1 < N and j+1 < N:
-                possible_moves.append('X')
-            if i+1 < N:
-                possible_moves.append('D')
-            if j+1 < N:
-                possible_moves.append('R')
+        next_move_num = move_count + 1
+        mandatory_X = (next_move_num % 3 == 0)
         
-        max_sum_so_far = float('-inf')
-        best_path = None
-        for move in possible_moves:
-            if move == 'R':
-                next_i, next_j = i, j+1
+        moves = []
+        if i+1 < N and j+1 < N:
+            moves.append('X')
+        if i+1 < N:
+            moves.append('D')
+        if j+1 < N:
+            moves.append('R')
+        
+        candidates = []
+        for move in moves:
+            if mandatory_X and move != 'X':
+                continue
+            if move == 'X':
+                ni, nj = i+1, j+1
             elif move == 'D':
-                next_i, next_j = i+1, j
-            elif move == 'X':
-                next_i, next_j = i+1, j+1
-            
-            next_sum, next_path = dp(next_i, next_j, k)
-            total_sum = grid[i][j] + next_sum
-            if total_sum > max_sum_so_far:
-                max_sum_so_far = total_sum
-                best_path = move + next_path
+                ni, nj = i+1, j
+            elif move == 'R':
+                ni, nj = i, j+1
+            sub_sum, sub_path = dp(ni, nj, move_count + 1)
+            total_sum = grid[i][j] + sub_sum
+            candidates.append((total_sum, move + sub_path))
         
-        memo[(i, j, m)] = (max_sum_so_far, best_path)
-        return memo[(i, j, m)]
+        if candidates:
+            return max(candidates, key=lambda x: x[0])
+        else:
+            return float('-inf'), ""
     
-    max_sum, path_string = dp(0, 0, 0)
-    return max_sum, path_string
+    sum_val, path = dp(0, 0, 0)
+    return sum_val, path
 ```
 
 === EXTRACTED CODE ===
+from functools import lru_cache
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return 0, ""
     N = len(grid)
-    memo = {}
     
-    def dp(i, j, m):
-        if (i, j, m) in memo:
-            return memo[(i, j, m)]
-        
+    @lru_cache(None)
+    def dp(i: int, j: int, move_count: int) -> tuple[int, str]:
         if i == N-1 and j == N-1:
-            result = (grid[i][j], "")
-            memo[(i, j, m)] = result
-            return result
+            return grid[i][j], ""
         
-        possible_moves = []
-        k = m + 1
-        if k % 3 == 0:
-            if i+1 < N and j+1 < N:
-                possible_moves = ['X']
-            elif i+1 < N:
-                possible_moves = ['D']
-            elif j+1 < N:
-                possible_moves = ['R']
-        else:
-            if i+1 < N and j+1 < N:
-                possible_moves.append('X')
-            if i+1 < N:
-                possible_moves.append('D')
-            if j+1 < N:
-                possible_moves.append('R')
+        next_move_num = move_count + 1
+        mandatory_X = (next_move_num % 3 == 0)
         
-        max_sum_so_far = float('-inf')
-        best_path = None
-        for move in possible_moves:
-            if move == 'R':
-                next_i, next_j = i, j+1
+        moves = []
+        if i+1 < N and j+1 < N:
+            moves.append('X')
+        if i+1 < N:
+            moves.append('D')
+        if j+1 < N:
+            moves.append('R')
+        
+        candidates = []
+        for move in moves:
+            if mandatory_X and move != 'X':
+                continue
+            if move == 'X':
+                ni, nj = i+1, j+1
             elif move == 'D':
-                next_i, next_j = i+1, j
-            elif move == 'X':
-                next_i, next_j = i+1, j+1
-            
-            next_sum, next_path = dp(next_i, next_j, k)
-            total_sum = grid[i][j] + next_sum
-            if total_sum > max_sum_so_far:
-                max_sum_so_far = total_sum
-                best_path = move + next_path
+                ni, nj = i+1, j
+            elif move == 'R':
+                ni, nj = i, j+1
+            sub_sum, sub_path = dp(ni, nj, move_count + 1)
+            total_sum = grid[i][j] + sub_sum
+            candidates.append((total_sum, move + sub_path))
         
-        memo[(i, j, m)] = (max_sum_so_far, best_path)
-        return memo[(i, j, m)]
+        if candidates:
+            return max(candidates, key=lambda x: x[0])
+        else:
+            return float('-inf'), ""
     
-    max_sum, path_string = dp(0, 0, 0)
-    return max_sum, path_string
+    sum_val, path = dp(0, 0, 0)
+    return sum_val, path
