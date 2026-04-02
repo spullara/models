@@ -1,9 +1,9 @@
 Model: grok-4-1-fast-reasoning
 Provider: grok
-Evaluated: 2026-03-31T08:44:43.451639+00:00
+Evaluated: 2026-04-02T14:40:55.588356+00:00
 
 === TIMING ===
-Response time: 36.53s
+Response time: 56.43s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,108 +17,108 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+from collections import deque
+from typing import Tuple
+
+def solve_grid(grid: list[list[int]]) -> Tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
     N = len(grid)
-    INF = float('-inf')
-    MAX_MOVES = 2 * (N - 1) + 1
-    dp = [[[INF for _ in range(MAX_MOVES)] for _ in range(N)] for _ in range(N)]
-    prev = [[[None for _ in range(MAX_MOVES)] for _ in range(N)] for _ in range(N)]
+    NEG_INF = -10**18
+    dp = [[[NEG_INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
-    directions = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
-    for moves in range(MAX_MOVES - 1):
-        for i in range(N):
-            for j in range(N):
-                if dp[i][j][moves] == INF:
-                    continue
-                next_move_num = moves + 1
-                is_forced_x = (next_move_num % 3 == 0)
-                possible_moves = []
-                if not is_forced_x:
-                    possible_moves = ['R', 'D', 'X']
-                else:
-                    if i + 1 < N and j + 1 < N:
-                        possible_moves = ['X']
-                    else:
-                        possible_moves = ['R', 'D']
-                for move in possible_moves:
-                    di, dj = directions[move]
-                    ni, nj = i + di, j + dj
-                    if 0 <= ni < N and 0 <= nj < N:
-                        new_sum = dp[i][j][moves] + grid[ni][nj]
-                        new_moves = moves + 1
-                        if new_sum > dp[ni][nj][new_moves]:
-                            dp[ni][nj][new_moves] = new_sum
-                            prev[ni][nj][new_moves] = (i, j, move)
-    max_sum = INF
-    best_m = -1
-    for m in range(MAX_MOVES):
-        if dp[N - 1][N - 1][m] > max_sum:
-            max_sum = dp[N - 1][N - 1][m]
-            best_m = m
-    if max_sum == INF:
+    q = deque()
+    q.append((0, 0, 0))
+    moves = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+    while q:
+        r, c, rem = q.popleft()
+        curr_sum = dp[r][c][rem]
+        for char, dr, dc in moves:
+            nr = r + dr
+            nc = c + dc
+            if nr >= N or nc >= N:
+                continue
+            next_cell = grid[nr][nc]
+            is_must_x = (rem == 2)
+            if is_must_x and char != 'X' and (r + 1 < N and c + 1 < N):
+                continue
+            next_rem = (rem + 1) % 3
+            candidate = curr_sum + next_cell
+            if candidate > dp[nr][nc][next_rem]:
+                dp[nr][nc][next_rem] = candidate
+                parent[nr][nc][next_rem] = (r, c, rem, char)
+                q.append((nr, nc, next_rem))
+    best_sum = NEG_INF
+    best_rem = -1
+    for rem in range(3):
+        if dp[N-1][N-1][rem] > best_sum:
+            best_sum = dp[N-1][N-1][rem]
+            best_rem = rem
+    if best_sum == NEG_INF:
         return 0, ""
+    # reconstruct path
     path = []
-    ci, cj, cm = N - 1, N - 1, best_m
-    while cm > 0:
-        pi, pj, move = prev[ci][cj][cm]
+    cur_r, cur_c, cur_rem = N-1, N-1, best_rem
+    while cur_r != 0 or cur_c != 0:
+        prev = parent[cur_r][cur_c][cur_rem]
+        p_r, p_c, p_rem, move = prev
         path.append(move)
-        ci, cj, cm = pi, pj, cm - 1
+        cur_r, cur_c, cur_rem = p_r, p_c, p_rem
     path.reverse()
     path_str = ''.join(path)
-    return int(max_sum), path_str
+    return best_sum, path_str
 ```
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+from collections import deque
+from typing import Tuple
+
+def solve_grid(grid: list[list[int]]) -> Tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
     N = len(grid)
-    INF = float('-inf')
-    MAX_MOVES = 2 * (N - 1) + 1
-    dp = [[[INF for _ in range(MAX_MOVES)] for _ in range(N)] for _ in range(N)]
-    prev = [[[None for _ in range(MAX_MOVES)] for _ in range(N)] for _ in range(N)]
+    NEG_INF = -10**18
+    dp = [[[NEG_INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
     dp[0][0][0] = grid[0][0]
-    directions = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
-    for moves in range(MAX_MOVES - 1):
-        for i in range(N):
-            for j in range(N):
-                if dp[i][j][moves] == INF:
-                    continue
-                next_move_num = moves + 1
-                is_forced_x = (next_move_num % 3 == 0)
-                possible_moves = []
-                if not is_forced_x:
-                    possible_moves = ['R', 'D', 'X']
-                else:
-                    if i + 1 < N and j + 1 < N:
-                        possible_moves = ['X']
-                    else:
-                        possible_moves = ['R', 'D']
-                for move in possible_moves:
-                    di, dj = directions[move]
-                    ni, nj = i + di, j + dj
-                    if 0 <= ni < N and 0 <= nj < N:
-                        new_sum = dp[i][j][moves] + grid[ni][nj]
-                        new_moves = moves + 1
-                        if new_sum > dp[ni][nj][new_moves]:
-                            dp[ni][nj][new_moves] = new_sum
-                            prev[ni][nj][new_moves] = (i, j, move)
-    max_sum = INF
-    best_m = -1
-    for m in range(MAX_MOVES):
-        if dp[N - 1][N - 1][m] > max_sum:
-            max_sum = dp[N - 1][N - 1][m]
-            best_m = m
-    if max_sum == INF:
+    q = deque()
+    q.append((0, 0, 0))
+    moves = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+    while q:
+        r, c, rem = q.popleft()
+        curr_sum = dp[r][c][rem]
+        for char, dr, dc in moves:
+            nr = r + dr
+            nc = c + dc
+            if nr >= N or nc >= N:
+                continue
+            next_cell = grid[nr][nc]
+            is_must_x = (rem == 2)
+            if is_must_x and char != 'X' and (r + 1 < N and c + 1 < N):
+                continue
+            next_rem = (rem + 1) % 3
+            candidate = curr_sum + next_cell
+            if candidate > dp[nr][nc][next_rem]:
+                dp[nr][nc][next_rem] = candidate
+                parent[nr][nc][next_rem] = (r, c, rem, char)
+                q.append((nr, nc, next_rem))
+    best_sum = NEG_INF
+    best_rem = -1
+    for rem in range(3):
+        if dp[N-1][N-1][rem] > best_sum:
+            best_sum = dp[N-1][N-1][rem]
+            best_rem = rem
+    if best_sum == NEG_INF:
         return 0, ""
+    # reconstruct path
     path = []
-    ci, cj, cm = N - 1, N - 1, best_m
-    while cm > 0:
-        pi, pj, move = prev[ci][cj][cm]
+    cur_r, cur_c, cur_rem = N-1, N-1, best_rem
+    while cur_r != 0 or cur_c != 0:
+        prev = parent[cur_r][cur_c][cur_rem]
+        p_r, p_c, p_rem, move = prev
         path.append(move)
-        ci, cj, cm = pi, pj, cm - 1
+        cur_r, cur_c, cur_rem = p_r, p_c, p_rem
     path.reverse()
     path_str = ''.join(path)
-    return int(max_sum), path_str
+    return best_sum, path_str
