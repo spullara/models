@@ -1,9 +1,9 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-03-31T08:43:21.046290+00:00
+Evaluated: 2026-04-02T14:39:52.829460+00:00
 
 === TIMING ===
-Response time: 78.99s
+Response time: 58.77s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,90 +17,92 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-import functools
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    @functools.lru_cache(maxsize=None)
-    def recurse(i, j, k):
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        move_num = k + 1
-        required = move_num % 3 == 0
-        can_x = i + 1 < N and j + 1 < N
-        possible = []
-        if required:
-            if can_x:
-                possible = [('X', i + 1, j + 1)]
-            else:
-                if j + 1 < N:
-                    possible.append(('R', i, j + 1))
-                if i + 1 < N:
-                    possible.append(('D', i + 1, j))
-        else:
-            if j + 1 < N:
-                possible.append(('R', i, j + 1))
-            if i + 1 < N:
-                possible.append(('D', i + 1, j))
-            if can_x:
-                possible.append(('X', i + 1, j + 1))
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    memo = {}
+
+    def dfs(i: int, j: int, moves: int) -> tuple[int, str]:
+        key = (i, j, moves)
+        if key in memo:
+            return memo[key]
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
         best_sum = float('-inf')
         best_path = ""
-        for char, ni, nj in possible:
-            sub_sum, sub_path = recurse(ni, nj, k + 1)
-            if sub_sum == float('-inf'):
-                continue
+        k = moves + 1
+        is_forced = (k % 3 == 0)
+        directions = []
+        if is_forced:
+            if i < n - 1 and j < n - 1:
+                directions = [('X', i + 1, j + 1)]
+            else:
+                if i < n - 1:
+                    directions.append(('D', i + 1, j))
+                if j < n - 1:
+                    directions.append(('R', i, j + 1))
+        else:
+            if i < n - 1:
+                directions.append(('D', i + 1, j))
+            if j < n - 1:
+                directions.append(('R', i, j + 1))
+            if i < n - 1 and j < n - 1:
+                directions.append(('X', i + 1, j + 1))
+        for dir_char, ni, nj in directions:
+            sub_sum, sub_path = dfs(ni, nj, moves + 1)
             total = grid[i][j] + sub_sum
             if total > best_sum:
                 best_sum = total
-                best_path = char + sub_path
-        if best_sum == float('-inf'):
-            return float('-inf'), ""
-        return best_sum, best_path
-    max_sum, path = recurse(0, 0, 0)
-    return int(max_sum), path
+                best_path = dir_char + sub_path
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+
+    res_sum, res_path = dfs(0, 0, 0)
+    return (res_sum, res_path)
 ```
 
 === EXTRACTED CODE ===
-import functools
-
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    @functools.lru_cache(maxsize=None)
-    def recurse(i, j, k):
-        if i == N - 1 and j == N - 1:
-            return grid[i][j], ""
-        move_num = k + 1
-        required = move_num % 3 == 0
-        can_x = i + 1 < N and j + 1 < N
-        possible = []
-        if required:
-            if can_x:
-                possible = [('X', i + 1, j + 1)]
-            else:
-                if j + 1 < N:
-                    possible.append(('R', i, j + 1))
-                if i + 1 < N:
-                    possible.append(('D', i + 1, j))
-        else:
-            if j + 1 < N:
-                possible.append(('R', i, j + 1))
-            if i + 1 < N:
-                possible.append(('D', i + 1, j))
-            if can_x:
-                possible.append(('X', i + 1, j + 1))
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    memo = {}
+
+    def dfs(i: int, j: int, moves: int) -> tuple[int, str]:
+        key = (i, j, moves)
+        if key in memo:
+            return memo[key]
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
         best_sum = float('-inf')
         best_path = ""
-        for char, ni, nj in possible:
-            sub_sum, sub_path = recurse(ni, nj, k + 1)
-            if sub_sum == float('-inf'):
-                continue
+        k = moves + 1
+        is_forced = (k % 3 == 0)
+        directions = []
+        if is_forced:
+            if i < n - 1 and j < n - 1:
+                directions = [('X', i + 1, j + 1)]
+            else:
+                if i < n - 1:
+                    directions.append(('D', i + 1, j))
+                if j < n - 1:
+                    directions.append(('R', i, j + 1))
+        else:
+            if i < n - 1:
+                directions.append(('D', i + 1, j))
+            if j < n - 1:
+                directions.append(('R', i, j + 1))
+            if i < n - 1 and j < n - 1:
+                directions.append(('X', i + 1, j + 1))
+        for dir_char, ni, nj in directions:
+            sub_sum, sub_path = dfs(ni, nj, moves + 1)
             total = grid[i][j] + sub_sum
             if total > best_sum:
                 best_sum = total
-                best_path = char + sub_path
-        if best_sum == float('-inf'):
-            return float('-inf'), ""
-        return best_sum, best_path
-    max_sum, path = recurse(0, 0, 0)
-    return int(max_sum), path
+                best_path = dir_char + sub_path
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+
+    res_sum, res_path = dfs(0, 0, 0)
+    return (res_sum, res_path)
