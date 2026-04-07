@@ -30,6 +30,7 @@ mistral-medium-2505
 mistral-medium-2508
 mistral-medium-latest
 mistral-moderation-2411
+mistral-moderation-2603
 mistral-moderation-latest
 mistral-ocr-2505
 mistral-ocr-2512
