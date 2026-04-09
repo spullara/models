@@ -1,16 +1,16 @@
 Model: qwen3.5-omni-flash-realtime-2026-03-15
 Provider: qwen
-Evaluated: 2026-03-30T03:15:07.721208+00:00
+Evaluated: 2026-04-09T15:27:07.280576+00:00
 
 === TIMING ===
-Response time: 0.7s
+Response time: 0.72s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-f0d06844-847e-924c-9949-a98dce44d01e","request_id":"f0d06844-847e-924c-9949-a98dce44d01e"}
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-da0a6683-52cc-981b-a6db-c5360ccbb56b","request_id":"da0a6683-52cc-981b-a6db-c5360ccbb56b"}
 
 === RAW RESPONSE ===
 (no response)
