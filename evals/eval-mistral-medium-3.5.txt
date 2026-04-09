@@ -1,0 +1,102 @@
+Model: mistral-medium-3.5
+Provider: mistral
+Evaluated: 2026-04-09T14:29:13.350370+00:00
+
+=== TIMING ===
+Response time: 11.55s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    from functools import lru_cache
+    @lru_cache(maxsize=None)
+    def dfs(i, j, step):
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+        max_sum = -1
+        best_path = ""
+        moves = []
+        if j + 1 < n:
+            moves.append(('R', i, j + 1))
+        if i + 1 < n:
+            moves.append(('D', i + 1, j))
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1))
+        required = (step % 3 == 0)
+        for move, ni, nj in moves:
+            if move == 'X' and not required:
+                continue
+            if required and move != 'X':
+                continue
+            s, p = dfs(ni, nj, step + 1)
+            s += grid[i][j]
+            if s > max_sum or (s == max_sum and len(p) < len(best_path)):
+                max_sum = s
+                best_path = move + p
+        if required and max_sum == -1:
+            for move, ni, nj in moves:
+                if move == 'X':
+                    continue
+                s, p = dfs(ni, nj, step + 1)
+                s += grid[i][j]
+                if s > max_sum or (s == max_sum and len(p) < len(best_path)):
+                    max_sum = s
+                    best_path = move + p
+        return (max_sum, best_path)
+    max_sum, path = dfs(0, 0, 1)
+    return (max_sum, path)
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    from functools import lru_cache
+    @lru_cache(maxsize=None)
+    def dfs(i, j, step):
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+        max_sum = -1
+        best_path = ""
+        moves = []
+        if j + 1 < n:
+            moves.append(('R', i, j + 1))
+        if i + 1 < n:
+            moves.append(('D', i + 1, j))
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1))
+        required = (step % 3 == 0)
+        for move, ni, nj in moves:
+            if move == 'X' and not required:
+                continue
+            if required and move != 'X':
+                continue
+            s, p = dfs(ni, nj, step + 1)
+            s += grid[i][j]
+            if s > max_sum or (s == max_sum and len(p) < len(best_path)):
+                max_sum = s
+                best_path = move + p
+        if required and max_sum == -1:
+            for move, ni, nj in moves:
+                if move == 'X':
+                    continue
+                s, p = dfs(ni, nj, step + 1)
+                s += grid[i][j]
+                if s > max_sum or (s == max_sum and len(p) < len(best_path)):
+                    max_sum = s
+                    best_path = move + p
+        return (max_sum, best_path)
+    max_sum, path = dfs(0, 0, 1)
+    return (max_sum, path)
