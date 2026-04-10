@@ -1,19 +1,94 @@
 Model: mistral-medium-3.5.0
 Provider: mistral
-Evaluated: 2026-04-09T14:29:24.932563+00:00
+Evaluated: 2026-04-10T07:26:15.071002+00:00
 
 === TIMING ===
-Response time: 0.44s
+Response time: 2.51s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: direct
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 429: {"object":"error","message":"Service tier capacity exceeded for this model.","type":"service_tier_capacity_exceeded","param":null,"code":"3505","raw_status_code":429}
+Returned sum: 34
+Calculated sum: 34
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    from heapq import heappop, heappush
+
+    heap = []
+    heappush(heap, (-grid[0][0], 0, 0, 0, ""))
+    visited = {}
+
+    directions = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
+
+    while heap:
+        neg_sum, i, j, move_count, path = heappop(heap)
+        current_sum = -neg_sum
+
+        if i == n - 1 and j == n - 1:
+            return (current_sum, path)
+
+        if (i, j, move_count % 3) in visited and visited[(i, j, move_count % 3)] >= current_sum:
+            continue
+        visited[(i, j, move_count % 3)] = current_sum
+
+        next_move_num = move_count + 1
+        required_diagonal = (next_move_num % 3 == 0)
+
+        for move, (di, dj) in directions.items():
+            ni, nj = i + di, j + dj
+            if 0 <= ni < n and 0 <= nj < n:
+                if required_diagonal and move != 'X':
+                    continue
+                new_sum = current_sum + grid[ni][nj]
+                new_path = path + move
+                heappush(heap, (-new_sum, ni, nj, next_move_num, new_path))
+
+    return (0, "")
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    from heapq import heappop, heappush
+
+    heap = []
+    heappush(heap, (-grid[0][0], 0, 0, 0, ""))
+    visited = {}
+
+    directions = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
+
+    while heap:
+        neg_sum, i, j, move_count, path = heappop(heap)
+        current_sum = -neg_sum
+
+        if i == n - 1 and j == n - 1:
+            return (current_sum, path)
+
+        if (i, j, move_count % 3) in visited and visited[(i, j, move_count % 3)] >= current_sum:
+            continue
+        visited[(i, j, move_count % 3)] = current_sum
+
+        next_move_num = move_count + 1
+        required_diagonal = (next_move_num % 3 == 0)
+
+        for move, (di, dj) in directions.items():
+            ni, nj = i + di, j + dj
+            if 0 <= ni < n and 0 <= nj < n:
+                if required_diagonal and move != 'X':
+                    continue
+                new_sum = current_sum + grid[ni][nj]
+                new_path = path + move
+                heappush(heap, (-new_sum, ni, nj, next_move_num, new_path))
+
+    return (0, "")

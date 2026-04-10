@@ -1,19 +1,80 @@
 Model: mistral-medium-2604
 Provider: mistral
-Evaluated: 2026-04-09T14:29:05.860241+00:00
+Evaluated: 2026-04-10T07:26:06.947274+00:00
 
 === TIMING ===
-Response time: 0.38s
+Response time: 2.03s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: direct
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 429: {"object":"error","message":"Service tier capacity exceeded for this model.","type":"service_tier_capacity_exceeded","param":null,"code":"3505","raw_status_code":429}
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    max_sum = -1
+    best_path = ""
+
+    from collections import deque
+    queue = deque()
+    queue.append((0, 0, 0, grid[0][0], ""))
+    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+
+    while queue:
+        i, j, step, current_sum, path = queue.popleft()
+        if i == n - 1 and j == n - 1:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
+            continue
+        for move, di, dj in directions:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < n and 0 <= nj < n:
+                new_step = step + 1
+                if new_step % 3 == 0 and move != 'X':
+                    continue
+                if move == 'X' and new_step % 3 != 0:
+                    continue
+                new_sum = current_sum + grid[ni][nj]
+                new_path = path + move
+                queue.append((ni, nj, new_step, new_sum, new_path))
+
+    return (max_sum, best_path)
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    max_sum = -1
+    best_path = ""
+
+    from collections import deque
+    queue = deque()
+    queue.append((0, 0, 0, grid[0][0], ""))
+    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+
+    while queue:
+        i, j, step, current_sum, path = queue.popleft()
+        if i == n - 1 and j == n - 1:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
+            continue
+        for move, di, dj in directions:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < n and 0 <= nj < n:
+                new_step = step + 1
+                if new_step % 3 == 0 and move != 'X':
+                    continue
+                if move == 'X' and new_step % 3 != 0:
+                    continue
+                new_sum = current_sum + grid[ni][nj]
+                new_path = path + move
+                queue.append((ni, nj, new_step, new_sum, new_path))
+
+    return (max_sum, best_path)

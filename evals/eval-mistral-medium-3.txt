@@ -1,17 +1,17 @@
 Model: mistral-medium-3
 Provider: mistral
-Evaluated: 2026-04-09T14:29:06.241807+00:00
+Evaluated: 2026-04-10T07:26:09.020562+00:00
 
 === TIMING ===
-Response time: 7.08s
+Response time: 3.06s
 
 === CODE EXTRACTION ===
 Method: direct
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 34
-Calculated sum: 34
+Returned sum: 60
+Calculated sum: 60
 Sum matches: YES
 Path valid: YES
 
@@ -21,39 +21,53 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    from heapq import heappop, heappush
+    from collections import deque
+    queue = deque()
+    queue.append((0, 0, 0, grid[0][0], ""))
+    max_sum = -1
+    best_path = ""
 
-    heap = []
-    heappush(heap, (-grid[0][0], 0, 0, 0, ""))
-
-    visited = {}
-    directions = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
-
-    while heap:
-        neg_sum, i, j, move_count, path = heappop(heap)
-        current_sum = -neg_sum
+    while queue:
+        i, j, moves, current_sum, path = queue.popleft()
 
         if i == n - 1 and j == n - 1:
-            return (current_sum, path)
-
-        if (i, j, move_count % 3) in visited and visited[(i, j, move_count % 3)] >= current_sum:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
             continue
-        visited[(i, j, move_count % 3)] = current_sum
 
-        next_move_count = move_count + 1
-        required_diagonal = (next_move_count % 3 == 0)
+        next_moves = moves + 1
+        is_third_move = (next_moves % 3 == 0)
 
-        for move, (di, dj) in directions.items():
-            ni, nj = i + di, j + dj
-            if ni >= n or nj >= n:
-                continue
-            if required_diagonal and move != 'X':
-                continue
-            new_sum = current_sum + grid[ni][nj]
-            new_path = path + move
-            heappush(heap, (-new_sum, ni, nj, next_move_count, new_path))
+        if is_third_move:
+            if i + 1 < n and j + 1 < n:
+                new_sum = current_sum + grid[i + 1][j + 1]
+                new_path = path + "X"
+                queue.append((i + 1, j + 1, next_moves, new_sum, new_path))
+            else:
+                if i + 1 < n:
+                    new_sum = current_sum + grid[i + 1][j]
+                    new_path = path + "D"
+                    queue.append((i + 1, j, next_moves, new_sum, new_path))
+                if j + 1 < n:
+                    new_sum = current_sum + grid[i][j + 1]
+                    new_path = path + "R"
+                    queue.append((i, j + 1, next_moves, new_sum, new_path))
+        else:
+            if i + 1 < n:
+                new_sum = current_sum + grid[i + 1][j]
+                new_path = path + "D"
+                queue.append((i + 1, j, next_moves, new_sum, new_path))
+            if j + 1 < n:
+                new_sum = current_sum + grid[i][j + 1]
+                new_path = path + "R"
+                queue.append((i, j + 1, next_moves, new_sum, new_path))
+            if i + 1 < n and j + 1 < n:
+                new_sum = current_sum + grid[i + 1][j + 1]
+                new_path = path + "X"
+                queue.append((i + 1, j + 1, next_moves, new_sum, new_path))
 
-    return (0, "")
+    return (max_sum, best_path)
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
@@ -61,36 +75,50 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    from heapq import heappop, heappush
+    from collections import deque
+    queue = deque()
+    queue.append((0, 0, 0, grid[0][0], ""))
+    max_sum = -1
+    best_path = ""
 
-    heap = []
-    heappush(heap, (-grid[0][0], 0, 0, 0, ""))
-
-    visited = {}
-    directions = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
-
-    while heap:
-        neg_sum, i, j, move_count, path = heappop(heap)
-        current_sum = -neg_sum
+    while queue:
+        i, j, moves, current_sum, path = queue.popleft()
 
         if i == n - 1 and j == n - 1:
-            return (current_sum, path)
-
-        if (i, j, move_count % 3) in visited and visited[(i, j, move_count % 3)] >= current_sum:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
             continue
-        visited[(i, j, move_count % 3)] = current_sum
 
-        next_move_count = move_count + 1
-        required_diagonal = (next_move_count % 3 == 0)
+        next_moves = moves + 1
+        is_third_move = (next_moves % 3 == 0)
 
-        for move, (di, dj) in directions.items():
-            ni, nj = i + di, j + dj
-            if ni >= n or nj >= n:
-                continue
-            if required_diagonal and move != 'X':
-                continue
-            new_sum = current_sum + grid[ni][nj]
-            new_path = path + move
-            heappush(heap, (-new_sum, ni, nj, next_move_count, new_path))
+        if is_third_move:
+            if i + 1 < n and j + 1 < n:
+                new_sum = current_sum + grid[i + 1][j + 1]
+                new_path = path + "X"
+                queue.append((i + 1, j + 1, next_moves, new_sum, new_path))
+            else:
+                if i + 1 < n:
+                    new_sum = current_sum + grid[i + 1][j]
+                    new_path = path + "D"
+                    queue.append((i + 1, j, next_moves, new_sum, new_path))
+                if j + 1 < n:
+                    new_sum = current_sum + grid[i][j + 1]
+                    new_path = path + "R"
+                    queue.append((i, j + 1, next_moves, new_sum, new_path))
+        else:
+            if i + 1 < n:
+                new_sum = current_sum + grid[i + 1][j]
+                new_path = path + "D"
+                queue.append((i + 1, j, next_moves, new_sum, new_path))
+            if j + 1 < n:
+                new_sum = current_sum + grid[i][j + 1]
+                new_path = path + "R"
+                queue.append((i, j + 1, next_moves, new_sum, new_path))
+            if i + 1 < n and j + 1 < n:
+                new_sum = current_sum + grid[i + 1][j + 1]
+                new_path = path + "X"
+                queue.append((i + 1, j + 1, next_moves, new_sum, new_path))
 
-    return (0, "")
+    return (max_sum, best_path)

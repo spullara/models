@@ -1,19 +1,78 @@
 Model: mistral-medium-c21211-r0-75
 Provider: mistral
-Evaluated: 2026-04-09T14:29:25.369429+00:00
+Evaluated: 2026-04-10T07:26:17.610668+00:00
 
 === TIMING ===
-Response time: 0.39s
+Response time: 2.31s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: direct
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 429: {"object":"error","message":"Service tier capacity exceeded for this model.","type":"service_tier_capacity_exceeded","param":null,"code":"3505","raw_status_code":429}
+Returned sum: 59
+Calculated sum: 60
+Sum matches: NO
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    max_sum = -1
+    best_path = ""
+
+    from collections import deque
+    queue = deque()
+    queue.append((0, 0, 0, "", 0))
+
+    while queue:
+        i, j, current_sum, path, move_count = queue.popleft()
+        if i == n - 1 and j == n - 1:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
+            continue
+        next_move_count = move_count + 1
+        is_required_diagonal = (next_move_count % 3 == 0)
+        if is_required_diagonal and i + 1 < n and j + 1 < n:
+            queue.append((i + 1, j + 1, current_sum + grid[i + 1][j + 1], path + "X", next_move_count))
+        else:
+            if j + 1 < n:
+                queue.append((i, j + 1, current_sum + grid[i][j + 1], path + "R", next_move_count))
+            if i + 1 < n:
+                queue.append((i + 1, j, current_sum + grid[i + 1][j], path + "D", next_move_count))
+            if not is_required_diagonal and i + 1 < n and j + 1 < n:
+                queue.append((i + 1, j + 1, current_sum + grid[i + 1][j + 1], path + "X", next_move_count))
+
+    return (max_sum, best_path)
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    max_sum = -1
+    best_path = ""
+
+    from collections import deque
+    queue = deque()
+    queue.append((0, 0, 0, "", 0))
+
+    while queue:
+        i, j, current_sum, path, move_count = queue.popleft()
+        if i == n - 1 and j == n - 1:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
+            continue
+        next_move_count = move_count + 1
+        is_required_diagonal = (next_move_count % 3 == 0)
+        if is_required_diagonal and i + 1 < n and j + 1 < n:
+            queue.append((i + 1, j + 1, current_sum + grid[i + 1][j + 1], path + "X", next_move_count))
+        else:
+            if j + 1 < n:
+                queue.append((i, j + 1, current_sum + grid[i][j + 1], path + "R", next_move_count))
+            if i + 1 < n:
+                queue.append((i + 1, j, current_sum + grid[i + 1][j], path + "D", next_move_count))
+            if not is_required_diagonal and i + 1 < n and j + 1 < n:
+                queue.append((i + 1, j + 1, current_sum + grid[i + 1][j + 1], path + "X", next_move_count))
+
+    return (max_sum, best_path)
