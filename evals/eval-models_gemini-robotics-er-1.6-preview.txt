@@ -1,0 +1,19 @@
+Model: models/gemini-robotics-er-1.6-preview
+Provider: gemini
+Evaluated: 2026-04-14T15:00:06.949643+00:00
+
+=== TIMING ===
+Response time: 0.13s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: 
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
