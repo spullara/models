@@ -1,0 +1,19 @@
+Model: models/gemini-3.1-flash-tts-preview
+Provider: gemini
+Evaluated: 2026-04-15T14:00:06.970751+00:00
+
+=== TIMING ===
+Response time: 0.15s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: 
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
