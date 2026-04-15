@@ -10,7 +10,6 @@ models/gemini-2.5-flash-image
 models/gemini-2.5-flash-lite
 models/gemini-2.5-flash-native-audio-latest
 models/gemini-2.5-flash-native-audio-preview-09-2025
-models/gemini-2.5-flash-native-audio-preview-12-2025
 models/gemini-2.5-flash-preview-tts
 models/gemini-2.5-pro
 models/gemini-2.5-pro-preview-tts
@@ -19,6 +18,7 @@ models/gemini-3-pro-image-preview
 models/gemini-3-pro-preview
 models/gemini-3.1-flash-image-preview
 models/gemini-3.1-flash-lite-preview
+models/gemini-3.1-flash-tts-preview
 models/gemini-3.1-pro-preview
 models/gemini-3.1-pro-preview-customtools
 models/gemini-embedding-001
