@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-04-14 15:00:21
+Last updated: 2026-04-15 14:00:21
 
 ## Summary
 
@@ -11,7 +11,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/9
 
-**Gemini**: 50/72
+**Gemini**: 50/73
 
 **Grok**: 14/9
 
@@ -226,6 +226,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-3.1-flash-tts-preview (added: 2026-04-15)
 - models/gemini-robotics-er-1.6-preview (added: 2026-04-14)
 - models/gemma-4-31b-it (added: 2026-04-02)
 - models/gemma-4-26b-a4b-it (added: 2026-04-02)
@@ -237,7 +238,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
-- models/gemini-2.5-flash-native-audio-preview-12-2025 (added: 2026-01-27)
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
@@ -279,6 +279,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-04-15)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-04-14)
 - models/gemini-2.5-flash-lite-preview-09-2025 (deleted: 2026-04-01)
 - models/gemini-2.0-flash-exp-image-generation (deleted: 2026-03-10)
