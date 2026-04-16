@@ -1,0 +1,116 @@
+Model: claude-opus-4-7
+Provider: anthropic
+Evaluated: 2026-04-16T14:22:06.721091+00:00
+
+=== TIMING ===
+Response time: 6.28s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    from functools import lru_cache
+    
+    @lru_cache(maxsize=None)
+    def dp(r, c, move_count):
+        if r == N - 1 and c == N - 1:
+            return (0, "")
+        
+        next_move = move_count + 1
+        must_diagonal = (next_move % 3 == 0)
+        
+        candidates = []
+        
+        diag_possible = (r + 1 < N and c + 1 < N)
+        right_possible = (c + 1 < N)
+        down_possible = (r + 1 < N)
+        
+        if must_diagonal:
+            if diag_possible:
+                val, path = dp(r + 1, c + 1, next_move)
+                candidates.append((grid[r + 1][c + 1] + val, "X" + path))
+            else:
+                if right_possible:
+                    val, path = dp(r, c + 1, next_move)
+                    candidates.append((grid[r][c + 1] + val, "R" + path))
+                if down_possible:
+                    val, path = dp(r + 1, c, next_move)
+                    candidates.append((grid[r + 1][c] + val, "D" + path))
+        else:
+            if right_possible:
+                val, path = dp(r, c + 1, next_move)
+                candidates.append((grid[r][c + 1] + val, "R" + path))
+            if down_possible:
+                val, path = dp(r + 1, c, next_move)
+                candidates.append((grid[r + 1][c] + val, "D" + path))
+            if diag_possible:
+                val, path = dp(r + 1, c + 1, next_move)
+                candidates.append((grid[r + 1][c + 1] + val, "X" + path))
+        
+        if not candidates:
+            return (float('-inf'), "")
+        
+        return max(candidates, key=lambda x: x[0])
+    
+    best_val, best_path = dp(0, 0, 0)
+    return (grid[0][0] + best_val, best_path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    from functools import lru_cache
+    
+    @lru_cache(maxsize=None)
+    def dp(r, c, move_count):
+        if r == N - 1 and c == N - 1:
+            return (0, "")
+        
+        next_move = move_count + 1
+        must_diagonal = (next_move % 3 == 0)
+        
+        candidates = []
+        
+        diag_possible = (r + 1 < N and c + 1 < N)
+        right_possible = (c + 1 < N)
+        down_possible = (r + 1 < N)
+        
+        if must_diagonal:
+            if diag_possible:
+                val, path = dp(r + 1, c + 1, next_move)
+                candidates.append((grid[r + 1][c + 1] + val, "X" + path))
+            else:
+                if right_possible:
+                    val, path = dp(r, c + 1, next_move)
+                    candidates.append((grid[r][c + 1] + val, "R" + path))
+                if down_possible:
+                    val, path = dp(r + 1, c, next_move)
+                    candidates.append((grid[r + 1][c] + val, "D" + path))
+        else:
+            if right_possible:
+                val, path = dp(r, c + 1, next_move)
+                candidates.append((grid[r][c + 1] + val, "R" + path))
+            if down_possible:
+                val, path = dp(r + 1, c, next_move)
+                candidates.append((grid[r + 1][c] + val, "D" + path))
+            if diag_possible:
+                val, path = dp(r + 1, c + 1, next_move)
+                candidates.append((grid[r + 1][c + 1] + val, "X" + path))
+        
+        if not candidates:
+            return (float('-inf'), "")
+        
+        return max(candidates, key=lambda x: x[0])
+    
+    best_val, best_path = dp(0, 0, 0)
+    return (grid[0][0] + best_val, best_path)
