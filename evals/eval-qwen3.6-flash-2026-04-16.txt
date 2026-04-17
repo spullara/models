@@ -1,0 +1,19 @@
+Model: qwen3.6-flash-2026-04-16
+Provider: qwen
+Evaluated: 2026-04-17T05:44:05.944921+00:00
+
+=== TIMING ===
+Response time: 0.83s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-74861ce9-c7da-9817-b0ee-5ae482f9020d","request_id":"74861ce9-c7da-9817-b0ee-5ae482f9020d"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
