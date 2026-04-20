@@ -1,0 +1,152 @@
+Model: kimi-k2.6
+Provider: kimi
+Evaluated: 2026-04-20T15:11:06.457615+00:00
+
+=== TIMING ===
+Response time: 93.26s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    dp = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = (grid[0][0], "")
+    for i in range(N):
+        for j in range(N):
+            for t in range(3):
+                state = dp[i][j][t]
+                if state is None:
+                    continue
+                cur_sum, cur_path = state
+                forced = (t == 2)
+                if forced:
+                    if i + 1 < N and j + 1 < N:
+                        ni, nj = i + 1, j + 1
+                        ns = cur_sum + grid[ni][nj]
+                        np = cur_path + "X"
+                        nt = 0
+                        if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                            dp[ni][nj][nt] = (ns, np)
+                    else:
+                        if j + 1 < N:
+                            ni, nj = i, j + 1
+                            ns = cur_sum + grid[ni][nj]
+                            np = cur_path + "R"
+                            nt = 0
+                            if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                                dp[ni][nj][nt] = (ns, np)
+                        if i + 1 < N:
+                            ni, nj = i + 1, j
+                            ns = cur_sum + grid[ni][nj]
+                            np = cur_path + "D"
+                            nt = 0
+                            if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                                dp[ni][nj][nt] = (ns, np)
+                else:
+                    if j + 1 < N:
+                        ni, nj = i, j + 1
+                        ns = cur_sum + grid[ni][nj]
+                        np = cur_path + "R"
+                        nt = (t + 1) % 3
+                        if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                            dp[ni][nj][nt] = (ns, np)
+                    if i + 1 < N:
+                        ni, nj = i + 1, j
+                        ns = cur_sum + grid[ni][nj]
+                        np = cur_path + "D"
+                        nt = (t + 1) % 3
+                        if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                            dp[ni][nj][nt] = (ns, np)
+                    if i + 1 < N and j + 1 < N:
+                        ni, nj = i + 1, j + 1
+                        ns = cur_sum + grid[ni][nj]
+                        np = cur_path + "X"
+                        nt = (t + 1) % 3
+                        if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                            dp[ni][nj][nt] = (ns, np)
+    best = None
+    for t in range(3):
+        state = dp[N - 1][N - 1][t]
+        if state is not None:
+            if best is None or state[0] > best[0]:
+                best = state
+    return best if best is not None else (grid[0][0], "")
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    dp = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = (grid[0][0], "")
+    for i in range(N):
+        for j in range(N):
+            for t in range(3):
+                state = dp[i][j][t]
+                if state is None:
+                    continue
+                cur_sum, cur_path = state
+                forced = (t == 2)
+                if forced:
+                    if i + 1 < N and j + 1 < N:
+                        ni, nj = i + 1, j + 1
+                        ns = cur_sum + grid[ni][nj]
+                        np = cur_path + "X"
+                        nt = 0
+                        if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                            dp[ni][nj][nt] = (ns, np)
+                    else:
+                        if j + 1 < N:
+                            ni, nj = i, j + 1
+                            ns = cur_sum + grid[ni][nj]
+                            np = cur_path + "R"
+                            nt = 0
+                            if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                                dp[ni][nj][nt] = (ns, np)
+                        if i + 1 < N:
+                            ni, nj = i + 1, j
+                            ns = cur_sum + grid[ni][nj]
+                            np = cur_path + "D"
+                            nt = 0
+                            if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                                dp[ni][nj][nt] = (ns, np)
+                else:
+                    if j + 1 < N:
+                        ni, nj = i, j + 1
+                        ns = cur_sum + grid[ni][nj]
+                        np = cur_path + "R"
+                        nt = (t + 1) % 3
+                        if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                            dp[ni][nj][nt] = (ns, np)
+                    if i + 1 < N:
+                        ni, nj = i + 1, j
+                        ns = cur_sum + grid[ni][nj]
+                        np = cur_path + "D"
+                        nt = (t + 1) % 3
+                        if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                            dp[ni][nj][nt] = (ns, np)
+                    if i + 1 < N and j + 1 < N:
+                        ni, nj = i + 1, j + 1
+                        ns = cur_sum + grid[ni][nj]
+                        np = cur_path + "X"
+                        nt = (t + 1) % 3
+                        if dp[ni][nj][nt] is None or ns > dp[ni][nj][nt][0]:
+                            dp[ni][nj][nt] = (ns, np)
+    best = None
+    for t in range(3):
+        state = dp[N - 1][N - 1][t]
+        if state is not None:
+            if best is None or state[0] > best[0]:
+                best = state
+    return best if best is not None else (grid[0][0], "")
