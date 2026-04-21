@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-04-21T22:51:40.967179+00:00
+Evaluated: 2026-04-21T23:06:01.359069+00:00
 
 === TIMING ===
-Response time: 24.17s
+Response time: 43.49s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,61 +18,109 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    best_sum = -float('inf')
-    best_path = ""
-    def dfs(row, col, cur_sum, moves, path):
-        nonlocal best_sum, best_path
-        if row == N - 1 and col == N - 1:
-            if cur_sum > best_sum:
-                best_sum = cur_sum
-                best_path = path
-            return
-        next_moves = moves + 1
-        must_diag = (next_moves % 3 == 0)
-        can_diag = (row + 1 < N and col + 1 < N)
-        if must_diag and can_diag:
-            new_row = row + 1
-            new_col = col + 1
-            dfs(new_row, new_col, cur_sum + grid[new_row][new_col], next_moves, path + "X")
-        else:
-            for dr, dc, move_char in [(0, 1, "R"), (1, 0, "D"), (1, 1, "X")]:
-                new_row = row + dr
-                new_col = col + dc
-                if new_row < N and new_col < N:
-                    dfs(new_row, new_col, cur_sum + grid[new_row][new_col], next_moves, path + move_char)
-    if N == 0:
+    if not grid or not grid[0]:
         return 0, ""
-    dfs(0, 0, grid[0][0], 0, "")
-    return best_sum, best_path
+    n = len(grid)
+    memo = {}
+    def dp(r, c, moves):
+        if r == n - 1 and c == n - 1:
+            return grid[r][c], ""
+        if (r, c, moves) in memo:
+            return memo[(r, c, moves)]
+        max_sum = float('-inf')
+        best_path = ""
+        next_move_num = moves + 1
+        must_diagonal = (next_move_num % 3 == 0)
+        directions = []
+        can_right = c + 1 < n
+        can_down = r + 1 < n
+        can_diag = can_right and can_down
+        if must_diagonal:
+            if can_diag:
+                directions.append(('X', 1, 1))
+            else:
+                if can_right:
+                    directions.append(('R', 0, 1))
+                if can_down:
+                    directions.append(('D', 1, 0))
+        else:
+            if can_right:
+                directions.append(('R', 0, 1))
+            if can_down:
+                directions.append(('D', 1, 0))
+            if can_diag:
+                directions.append(('X', 1, 1))
+        for move_char, dr, dc in directions:
+            nr, nc = r + dr, c + dc
+            sub_sum, sub_path = dp(nr, nc, moves + 1)
+            if sub_sum == float('-inf'):
+                continue
+            total = grid[r][c] + sub_sum
+            if total > max_sum:
+                max_sum = total
+                best_path = move_char + sub_path
+        if max_sum == float('-inf'):
+            res = (float('-inf'), "")
+        else:
+            res = (max_sum, best_path)
+        memo[(r, c, moves)] = res
+        return res
+    total, path = dp(0, 0, 0)
+    if total == float('-inf'):
+        return 0, ""
+    return total, path
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    best_sum = -float('inf')
-    best_path = ""
-    def dfs(row, col, cur_sum, moves, path):
-        nonlocal best_sum, best_path
-        if row == N - 1 and col == N - 1:
-            if cur_sum > best_sum:
-                best_sum = cur_sum
-                best_path = path
-            return
-        next_moves = moves + 1
-        must_diag = (next_moves % 3 == 0)
-        can_diag = (row + 1 < N and col + 1 < N)
-        if must_diag and can_diag:
-            new_row = row + 1
-            new_col = col + 1
-            dfs(new_row, new_col, cur_sum + grid[new_row][new_col], next_moves, path + "X")
-        else:
-            for dr, dc, move_char in [(0, 1, "R"), (1, 0, "D"), (1, 1, "X")]:
-                new_row = row + dr
-                new_col = col + dc
-                if new_row < N and new_col < N:
-                    dfs(new_row, new_col, cur_sum + grid[new_row][new_col], next_moves, path + move_char)
-    if N == 0:
+    if not grid or not grid[0]:
         return 0, ""
-    dfs(0, 0, grid[0][0], 0, "")
-    return best_sum, best_path
+    n = len(grid)
+    memo = {}
+    def dp(r, c, moves):
+        if r == n - 1 and c == n - 1:
+            return grid[r][c], ""
+        if (r, c, moves) in memo:
+            return memo[(r, c, moves)]
+        max_sum = float('-inf')
+        best_path = ""
+        next_move_num = moves + 1
+        must_diagonal = (next_move_num % 3 == 0)
+        directions = []
+        can_right = c + 1 < n
+        can_down = r + 1 < n
+        can_diag = can_right and can_down
+        if must_diagonal:
+            if can_diag:
+                directions.append(('X', 1, 1))
+            else:
+                if can_right:
+                    directions.append(('R', 0, 1))
+                if can_down:
+                    directions.append(('D', 1, 0))
+        else:
+            if can_right:
+                directions.append(('R', 0, 1))
+            if can_down:
+                directions.append(('D', 1, 0))
+            if can_diag:
+                directions.append(('X', 1, 1))
+        for move_char, dr, dc in directions:
+            nr, nc = r + dr, c + dc
+            sub_sum, sub_path = dp(nr, nc, moves + 1)
+            if sub_sum == float('-inf'):
+                continue
+            total = grid[r][c] + sub_sum
+            if total > max_sum:
+                max_sum = total
+                best_path = move_char + sub_path
+        if max_sum == float('-inf'):
+            res = (float('-inf'), "")
+        else:
+            res = (max_sum, best_path)
+        memo[(r, c, moves)] = res
+        return res
+    total, path = dp(0, 0, 0)
+    if total == float('-inf'):
+        return 0, ""
+    return total, path
