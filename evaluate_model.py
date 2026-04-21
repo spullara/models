@@ -84,12 +84,12 @@ def get_chat_endpoint(provider: str) -> dict:
             'format': 'gemini'
         },
         'grok': {
-            'url': 'https://api.x.ai/v1/chat/completions',
+            'url': 'https://api.x.ai/v1/responses',
             'headers': lambda: {
                 'Authorization': f"Bearer {os.getenv('GROK_API_KEY')}",
                 'Content-Type': 'application/json'
             },
-            'format': 'openai'
+            'format': 'openai_responses'
         },
         'mistral': {
             'url': 'https://api.mistral.ai/v1/chat/completions',
