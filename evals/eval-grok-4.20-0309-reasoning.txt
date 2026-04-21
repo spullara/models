@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-04-21T23:06:01.359069+00:00
+Evaluated: 2026-04-21T23:07:49.565487+00:00
 
 === TIMING ===
-Response time: 43.49s
+Response time: 47.49s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -19,108 +19,88 @@ Path valid: YES
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return 0, ""
+        return (0, "")
     n = len(grid)
     memo = {}
-    def dp(r, c, moves):
-        if r == n - 1 and c == n - 1:
-            return grid[r][c], ""
-        if (r, c, moves) in memo:
-            return memo[(r, c, moves)]
-        max_sum = float('-inf')
-        best_path = ""
+    def dfs(i, j, moves):
+        if i == n - 1 and j == n - 1:
+            return grid[i][j], ""
+        key = (i, j, moves)
+        if key in memo:
+            return memo[key]
         next_move_num = moves + 1
         must_diagonal = (next_move_num % 3 == 0)
-        directions = []
-        can_right = c + 1 < n
-        can_down = r + 1 < n
-        can_diag = can_right and can_down
+        directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+        possible = []
+        for char, di, dj in directions:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < n and 0 <= nj < n:
+                possible.append((char, ni, nj))
         if must_diagonal:
-            if can_diag:
-                directions.append(('X', 1, 1))
-            else:
-                if can_right:
-                    directions.append(('R', 0, 1))
-                if can_down:
-                    directions.append(('D', 1, 0))
+            x_moves = [p for p in possible if p[0] == 'X']
+            candidates = x_moves if x_moves else possible
         else:
-            if can_right:
-                directions.append(('R', 0, 1))
-            if can_down:
-                directions.append(('D', 1, 0))
-            if can_diag:
-                directions.append(('X', 1, 1))
-        for move_char, dr, dc in directions:
-            nr, nc = r + dr, c + dc
-            sub_sum, sub_path = dp(nr, nc, moves + 1)
-            if sub_sum == float('-inf'):
+            candidates = possible
+        best_sum = -float('inf')
+        best_path = ""
+        for char, ni, nj in candidates:
+            future_sum, future_path = dfs(ni, nj, moves + 1)
+            if future_sum == -float('inf'):
                 continue
-            total = grid[r][c] + sub_sum
-            if total > max_sum:
-                max_sum = total
-                best_path = move_char + sub_path
-        if max_sum == float('-inf'):
-            res = (float('-inf'), "")
-        else:
-            res = (max_sum, best_path)
-        memo[(r, c, moves)] = res
-        return res
-    total, path = dp(0, 0, 0)
-    if total == float('-inf'):
-        return 0, ""
-    return total, path
+            total = grid[i][j] + future_sum
+            this_path = char + future_path
+            if total > best_sum:
+                best_sum = total
+                best_path = this_path
+        if best_sum == -float('inf'):
+            best_sum = -float('inf')
+            best_path = ""
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+    max_sum, path = dfs(0, 0, 0)
+    return (max_sum, path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return 0, ""
+        return (0, "")
     n = len(grid)
     memo = {}
-    def dp(r, c, moves):
-        if r == n - 1 and c == n - 1:
-            return grid[r][c], ""
-        if (r, c, moves) in memo:
-            return memo[(r, c, moves)]
-        max_sum = float('-inf')
-        best_path = ""
+    def dfs(i, j, moves):
+        if i == n - 1 and j == n - 1:
+            return grid[i][j], ""
+        key = (i, j, moves)
+        if key in memo:
+            return memo[key]
         next_move_num = moves + 1
         must_diagonal = (next_move_num % 3 == 0)
-        directions = []
-        can_right = c + 1 < n
-        can_down = r + 1 < n
-        can_diag = can_right and can_down
+        directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+        possible = []
+        for char, di, dj in directions:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < n and 0 <= nj < n:
+                possible.append((char, ni, nj))
         if must_diagonal:
-            if can_diag:
-                directions.append(('X', 1, 1))
-            else:
-                if can_right:
-                    directions.append(('R', 0, 1))
-                if can_down:
-                    directions.append(('D', 1, 0))
+            x_moves = [p for p in possible if p[0] == 'X']
+            candidates = x_moves if x_moves else possible
         else:
-            if can_right:
-                directions.append(('R', 0, 1))
-            if can_down:
-                directions.append(('D', 1, 0))
-            if can_diag:
-                directions.append(('X', 1, 1))
-        for move_char, dr, dc in directions:
-            nr, nc = r + dr, c + dc
-            sub_sum, sub_path = dp(nr, nc, moves + 1)
-            if sub_sum == float('-inf'):
+            candidates = possible
+        best_sum = -float('inf')
+        best_path = ""
+        for char, ni, nj in candidates:
+            future_sum, future_path = dfs(ni, nj, moves + 1)
+            if future_sum == -float('inf'):
                 continue
-            total = grid[r][c] + sub_sum
-            if total > max_sum:
-                max_sum = total
-                best_path = move_char + sub_path
-        if max_sum == float('-inf'):
-            res = (float('-inf'), "")
-        else:
-            res = (max_sum, best_path)
-        memo[(r, c, moves)] = res
-        return res
-    total, path = dp(0, 0, 0)
-    if total == float('-inf'):
-        return 0, ""
-    return total, path
+            total = grid[i][j] + future_sum
+            this_path = char + future_path
+            if total > best_sum:
+                best_sum = total
+                best_path = this_path
+        if best_sum == -float('inf'):
+            best_sum = -float('inf')
+            best_path = ""
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+    max_sum, path = dfs(0, 0, 0)
+    return (max_sum, path)
