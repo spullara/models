@@ -1,6 +1,6 @@
 Model: grok-imagine-image
 Provider: grok
-Evaluated: 2026-04-21T22:47:05.947404+00:00
+Evaluated: 2026-04-21T22:49:11.396034+00:00
 
 === TIMING ===
 Response time: 0.16s
