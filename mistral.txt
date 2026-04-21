@@ -21,6 +21,8 @@ ministral-8b-2512
 ministral-8b-latest
 mistral-embed
 mistral-embed-2312
+mistral-embed-dim128-2510
+mistral-embed-dim256-2510
 mistral-large-2411
 mistral-large-2512
 mistral-large-latest
