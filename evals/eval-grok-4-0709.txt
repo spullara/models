@@ -1,150 +1,19 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-04-21T15:51:25.005046+00:00
+Evaluated: 2026-04-21T22:51:12.557251+00:00
 
 === TIMING ===
-Response time: 84.31s
+Response time: 0.17s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    N = len(grid)
-    INF = float('inf')
-    M_MAX = 2 * (N - 1) + 1
-    dp = [[[-INF for _ in range(M_MAX)] for _ in range(N)] for _ in range(N)]
-    prev = [[[None for _ in range(M_MAX)] for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    for m in range(M_MAX - 1):
-        for i in range(N):
-            for j in range(N):
-                if dp[i][j][m] == -INF:
-                    continue
-                curr_sum = dp[i][j][m]
-                next_num = m + 1
-                can_R = j + 1 < N
-                can_D = i + 1 < N
-                can_X = i + 1 < N and j + 1 < N
-                must_X = (next_num % 3 == 0)
-                allowed = []
-                if must_X:
-                    if can_X:
-                        allowed = ['X']
-                    else:
-                        if can_R:
-                            allowed.append('R')
-                        if can_D:
-                            allowed.append('D')
-                else:
-                    if can_R:
-                        allowed.append('R')
-                    if can_D:
-                        allowed.append('D')
-                    if can_X:
-                        allowed.append('X')
-                for move in allowed:
-                    if move == 'R':
-                        ni, nj = i, j + 1
-                    elif move == 'D':
-                        ni, nj = i + 1, j
-                    else:
-                        ni, nj = i + 1, j + 1
-                    new_sum = curr_sum + grid[ni][nj]
-                    if new_sum > dp[ni][nj][m + 1]:
-                        dp[ni][nj][m + 1] = new_sum
-                        prev[ni][nj][m + 1] = (i, j, m, move)
-    max_sum = -INF
-    best_m = -1
-    for mm in range(M_MAX):
-        if dp[N - 1][N - 1][mm] > max_sum:
-            max_sum = dp[N - 1][N - 1][mm]
-            best_m = mm
-    if max_sum == -INF:
-        return (0, "")
-    path = []
-    curr_i, curr_j, curr_m = N - 1, N - 1, best_m
-    while curr_m > 0:
-        p_i, p_j, p_m, move = prev[curr_i][curr_j][curr_m]
-        path.append(move)
-        curr_i, curr_j, curr_m = p_i, p_j, p_m
-    path.reverse()
-    path_str = ''.join(path)
-    return (int(max_sum), path_str)
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    N = len(grid)
-    INF = float('inf')
-    M_MAX = 2 * (N - 1) + 1
-    dp = [[[-INF for _ in range(M_MAX)] for _ in range(N)] for _ in range(N)]
-    prev = [[[None for _ in range(M_MAX)] for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    for m in range(M_MAX - 1):
-        for i in range(N):
-            for j in range(N):
-                if dp[i][j][m] == -INF:
-                    continue
-                curr_sum = dp[i][j][m]
-                next_num = m + 1
-                can_R = j + 1 < N
-                can_D = i + 1 < N
-                can_X = i + 1 < N and j + 1 < N
-                must_X = (next_num % 3 == 0)
-                allowed = []
-                if must_X:
-                    if can_X:
-                        allowed = ['X']
-                    else:
-                        if can_R:
-                            allowed.append('R')
-                        if can_D:
-                            allowed.append('D')
-                else:
-                    if can_R:
-                        allowed.append('R')
-                    if can_D:
-                        allowed.append('D')
-                    if can_X:
-                        allowed.append('X')
-                for move in allowed:
-                    if move == 'R':
-                        ni, nj = i, j + 1
-                    elif move == 'D':
-                        ni, nj = i + 1, j
-                    else:
-                        ni, nj = i + 1, j + 1
-                    new_sum = curr_sum + grid[ni][nj]
-                    if new_sum > dp[ni][nj][m + 1]:
-                        dp[ni][nj][m + 1] = new_sum
-                        prev[ni][nj][m + 1] = (i, j, m, move)
-    max_sum = -INF
-    best_m = -1
-    for mm in range(M_MAX):
-        if dp[N - 1][N - 1][mm] > max_sum:
-            max_sum = dp[N - 1][N - 1][mm]
-            best_m = mm
-    if max_sum == -INF:
-        return (0, "")
-    path = []
-    curr_i, curr_j, curr_m = N - 1, N - 1, best_m
-    while curr_m > 0:
-        p_i, p_j, p_m, move = prev[curr_i][curr_j][curr_m]
-        path.append(move)
-        curr_i, curr_j, curr_m = p_i, p_j, p_m
-    path.reverse()
-    path_str = ''.join(path)
-    return (int(max_sum), path_str)
+(no code extracted)

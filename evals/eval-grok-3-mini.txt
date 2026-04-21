@@ -1,164 +1,19 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-04-21T15:50:15.042152+00:00
+Evaluated: 2026-04-21T22:51:12.395461+00:00
 
 === TIMING ===
-Response time: 69.93s
+Response time: 0.16s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0:
-        return (0, "")
-    
-    memo = {}
-    
-    def dp(i, j, k):
-        if (i, j, k) in memo:
-            return memo[(i, j, k)]
-        
-        if i == N-1 and j == N-1:
-            memo[(i, j, k)] = (0, "")
-            return (0, "")
-        
-        m = k + 1  # Next move number (1-based)
-        
-        if m % 3 == 0:  # Must be X if possible
-            if i < N-1 and j < N-1:
-                next_i, next_j = i+1, j+1
-                sub_sum, sub_path = dp(next_i, next_j, m)
-                total_sum = grid[next_i][next_j] + sub_sum
-                best_path = "X" + sub_path
-                memo[(i, j, k)] = (total_sum, best_path)
-                return (total_sum, best_path)
-            else:
-                candidates = []
-                if i < N-1:  # D possible
-                    next_i, next_j = i+1, j
-                    sub_sum, sub_path = dp(next_i, next_j, m)
-                    total_sum_D = grid[next_i][next_j] + sub_sum
-                    candidates.append((total_sum_D, "D" + sub_path))
-                if j < N-1:  # R possible
-                    next_i, next_j = i, j+1
-                    sub_sum, sub_path = dp(next_i, next_j, m)
-                    total_sum_R = grid[next_i][next_j] + sub_sum
-                    candidates.append((total_sum_R, "R" + sub_path))
-                if candidates:
-                    best = max(candidates, key=lambda x: x[0])
-                    memo[(i, j, k)] = best
-                    return best
-                else:
-                    memo[(i, j, k)] = (float('-inf'), "")
-                    return (float('-inf'), "")
-        else:  # Any move possible
-            candidates = []
-            if j < N-1:  # R
-                next_i, next_j = i, j+1
-                sub_sum, sub_path = dp(next_i, next_j, m)
-                total_sum_R = grid[next_i][next_j] + sub_sum
-                candidates.append((total_sum_R, "R" + sub_path))
-            if i < N-1:  # D
-                next_i, next_j = i+1, j
-                sub_sum, sub_path = dp(next_i, next_j, m)
-                total_sum_D = grid[next_i][next_j] + sub_sum
-                candidates.append((total_sum_D, "D" + sub_path))
-            if i < N-1 and j < N-1:  # X
-                next_i, next_j = i+1, j+1
-                sub_sum, sub_path = dp(next_i, next_j, m)
-                total_sum_X = grid[next_i][next_j] + sub_sum
-                candidates.append((total_sum_X, "X" + sub_path))
-            if candidates:
-                best = max(candidates, key=lambda x: x[0])
-                memo[(i, j, k)] = best
-                return best
-            else:
-                memo[(i, j, k)] = (float('-inf'), "")
-                return (float('-inf'), "")
-    
-    sum_val, path = dp(0, 0, 0)
-    return (grid[0][0] + sum_val, path)
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0:
-        return (0, "")
-    
-    memo = {}
-    
-    def dp(i, j, k):
-        if (i, j, k) in memo:
-            return memo[(i, j, k)]
-        
-        if i == N-1 and j == N-1:
-            memo[(i, j, k)] = (0, "")
-            return (0, "")
-        
-        m = k + 1  # Next move number (1-based)
-        
-        if m % 3 == 0:  # Must be X if possible
-            if i < N-1 and j < N-1:
-                next_i, next_j = i+1, j+1
-                sub_sum, sub_path = dp(next_i, next_j, m)
-                total_sum = grid[next_i][next_j] + sub_sum
-                best_path = "X" + sub_path
-                memo[(i, j, k)] = (total_sum, best_path)
-                return (total_sum, best_path)
-            else:
-                candidates = []
-                if i < N-1:  # D possible
-                    next_i, next_j = i+1, j
-                    sub_sum, sub_path = dp(next_i, next_j, m)
-                    total_sum_D = grid[next_i][next_j] + sub_sum
-                    candidates.append((total_sum_D, "D" + sub_path))
-                if j < N-1:  # R possible
-                    next_i, next_j = i, j+1
-                    sub_sum, sub_path = dp(next_i, next_j, m)
-                    total_sum_R = grid[next_i][next_j] + sub_sum
-                    candidates.append((total_sum_R, "R" + sub_path))
-                if candidates:
-                    best = max(candidates, key=lambda x: x[0])
-                    memo[(i, j, k)] = best
-                    return best
-                else:
-                    memo[(i, j, k)] = (float('-inf'), "")
-                    return (float('-inf'), "")
-        else:  # Any move possible
-            candidates = []
-            if j < N-1:  # R
-                next_i, next_j = i, j+1
-                sub_sum, sub_path = dp(next_i, next_j, m)
-                total_sum_R = grid[next_i][next_j] + sub_sum
-                candidates.append((total_sum_R, "R" + sub_path))
-            if i < N-1:  # D
-                next_i, next_j = i+1, j
-                sub_sum, sub_path = dp(next_i, next_j, m)
-                total_sum_D = grid[next_i][next_j] + sub_sum
-                candidates.append((total_sum_D, "D" + sub_path))
-            if i < N-1 and j < N-1:  # X
-                next_i, next_j = i+1, j+1
-                sub_sum, sub_path = dp(next_i, next_j, m)
-                total_sum_X = grid[next_i][next_j] + sub_sum
-                candidates.append((total_sum_X, "X" + sub_path))
-            if candidates:
-                best = max(candidates, key=lambda x: x[0])
-                memo[(i, j, k)] = best
-                return best
-            else:
-                memo[(i, j, k)] = (float('-inf'), "")
-                return (float('-inf'), "")
-    
-    sum_val, path = dp(0, 0, 0)
-    return (grid[0][0] + sum_val, path)
+(no code extracted)
