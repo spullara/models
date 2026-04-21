@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-04-02T15:17:53.335478+00:00
+Evaluated: 2026-04-21T15:47:08.589243+00:00
 
 === TIMING ===
-Response time: 1.5s
+Response time: 2.21s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -24,34 +24,30 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
     
-    dp = [[(float('-inf'), "") for _ in range(n)] for _ in range(n)]
+    INF = float('-inf')
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
     dp[0][0] = (grid[0][0], "")
     
     dirs = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
     
     for i in range(n):
         for j in range(n):
-            if i == 0 and j == 0:
+            if dp[i][j][0] == INF:
                 continue
-            for di, dj, move in dirs:
-                pi, pj = i - di, j - dj
-                if 0 <= pi < n and 0 <= pj < n:
-                    prev_sum, prev_path = dp[pi][pj]
-                    if prev_sum == float('-inf'):
+            moves_made = len(dp[i][j][1])
+            must_diag = (moves_made % 3 == 2)
+            
+            for di, dj, ch in dirs:
+                ni, nj = i + di, j + dj
+                if 0 <= ni < n and 0 <= nj < n:
+                    if must_diag and ch != 'X' and (i + 1 < n and j + 1 < n):
                         continue
-                    move_count = len(prev_path)
-                    must_diag = (move_count % 3 == 2)
-                    if must_diag and move != 'X' and (pi + 1 < n and pj + 1 < n):
-                        continue
-                    new_sum = prev_sum + grid[i][j]
-                    new_path = prev_path + move
-                    if new_sum > dp[i][j][0]:
-                        dp[i][j] = (new_sum, new_path)
+                    new_sum = dp[i][j][0] + grid[ni][nj]
+                    new_path = dp[i][j][1] + ch
+                    if new_sum > dp[ni][nj][0]:
+                        dp[ni][nj] = (new_sum, new_path)
     
-    max_sum, path = dp[n-1][n-1]
-    if max_sum == float('-inf'):
-        return (0, "")
-    return (max_sum, path)
+    return dp[n-1][n-1]
 ```
 
 === EXTRACTED CODE ===
@@ -62,31 +58,27 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
     
-    dp = [[(float('-inf'), "") for _ in range(n)] for _ in range(n)]
+    INF = float('-inf')
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
     dp[0][0] = (grid[0][0], "")
     
     dirs = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
     
     for i in range(n):
         for j in range(n):
-            if i == 0 and j == 0:
+            if dp[i][j][0] == INF:
                 continue
-            for di, dj, move in dirs:
-                pi, pj = i - di, j - dj
-                if 0 <= pi < n and 0 <= pj < n:
-                    prev_sum, prev_path = dp[pi][pj]
-                    if prev_sum == float('-inf'):
+            moves_made = len(dp[i][j][1])
+            must_diag = (moves_made % 3 == 2)
+            
+            for di, dj, ch in dirs:
+                ni, nj = i + di, j + dj
+                if 0 <= ni < n and 0 <= nj < n:
+                    if must_diag and ch != 'X' and (i + 1 < n and j + 1 < n):
                         continue
-                    move_count = len(prev_path)
-                    must_diag = (move_count % 3 == 2)
-                    if must_diag and move != 'X' and (pi + 1 < n and pj + 1 < n):
-                        continue
-                    new_sum = prev_sum + grid[i][j]
-                    new_path = prev_path + move
-                    if new_sum > dp[i][j][0]:
-                        dp[i][j] = (new_sum, new_path)
+                    new_sum = dp[i][j][0] + grid[ni][nj]
+                    new_path = dp[i][j][1] + ch
+                    if new_sum > dp[ni][nj][0]:
+                        dp[ni][nj] = (new_sum, new_path)
     
-    max_sum, path = dp[n-1][n-1]
-    if max_sum == float('-inf'):
-        return (0, "")
-    return (max_sum, path)
+    return dp[n-1][n-1]
