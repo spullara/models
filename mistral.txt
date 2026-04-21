@@ -30,6 +30,11 @@ mistral-large-pixtral-2411
 mistral-medium
 mistral-medium-2505
 mistral-medium-2508
+mistral-medium-2604
+mistral-medium-3
+mistral-medium-3-5
+mistral-medium-3.5
+mistral-medium-c21211-r0-75
 mistral-medium-latest
 mistral-moderation-2411
 mistral-moderation-2603
