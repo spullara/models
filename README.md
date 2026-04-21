@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-04-21 16:14:19
+Last updated: 2026-04-21 16:20:17
 
 ## Summary
 
@@ -227,6 +227,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/deep-research-preview-04-2026 (added: 2026-04-21)
+- models/deep-research-max-preview-04-2026 (added: 2026-04-21)
 - models/gemini-3.1-flash-tts-preview (added: 2026-04-15)
 - models/gemini-robotics-er-1.6-preview (added: 2026-04-14)
 - models/gemma-4-31b-it (added: 2026-04-02)
@@ -239,10 +241,8 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
-- models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
-- models/gemini-2.5-flash-native-audio-latest (added: 2025-12-10)
 - models/veo-3.1-fast-generate-preview (added: 2025-12-09)
 - models/veo-3.1-generate-preview (added: 2025-12-05)
 - models/veo-3.0-generate-001 (added: 2025-12-05)
@@ -280,8 +280,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- models/deep-research-preview-04-2026 (deleted: 2026-04-21)
-- models/deep-research-max-preview-04-2026 (deleted: 2026-04-21)
+- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-04-21)
+- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-04-21)
 - models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-04-15)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-04-14)
 - models/gemini-2.5-flash-lite-preview-09-2025 (deleted: 2026-04-01)
