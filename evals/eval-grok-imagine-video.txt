@@ -1,16 +1,16 @@
 Model: grok-imagine-video
 Provider: grok
-Evaluated: 2026-04-21T23:00:06.133089+00:00
+Evaluated: 2026-04-21T23:10:00.485774+00:00
 
 === TIMING ===
-Response time: 0.16s
+Response time: 0.23s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+API Error: HTTP 400: {"code":"Client specified an invalid argument","error":"Model not found: grok-imagine-video"}
 
 === RAW RESPONSE ===
 (no response)
