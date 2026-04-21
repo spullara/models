@@ -1,124 +1,155 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-04-02T15:14:12.828448+00:00
+Evaluated: 2026-04-21T15:43:11.938368+00:00
 
 === TIMING ===
-Response time: 49.03s
+Response time: 92.8s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Returned sum: 0
+Calculated sum: 1
+Sum matches: NO
+Path valid: NO
+Path error: Path ended at (0, 0) instead of (3, 3)
 
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    import sys
     N = len(grid)
     if N == 0:
-        return 0, ""
+        return (0, "")
     
-    memo = [[[None] * 3 for _ in range(N)] for _ in range(N)]
+    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
+    predecessor = [[[(None, None, None, None) for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    def recursive(i, j, mod):
-        if i >= N or j >= N:
-            return float('-inf'), ""
-        
-        if memo[i][j][mod] is not None:
-            return memo[i][j][mod]
-        
-        if i == N-1 and j == N-1:
-            memo[i][j][mod] = (grid[i][j], "")
-            return memo[i][j][mod]
-        
-        max_sum = float('-inf')
-        best_path = ""
-        candidates = []
-        
-        # Right
-        if j + 1 < N:
-            move_type = 'R'
-            if not ((mod + 1) % 3 == 0 and move_type != 'X'):
-                candidates.append((i, j + 1, move_type))
-        
-        # Down
-        if i + 1 < N:
-            move_type = 'D'
-            if not ((mod + 1) % 3 == 0 and move_type != 'X'):
-                candidates.append((i + 1, j, move_type))
-        
-        # Diagonal
-        if i + 1 < N and j + 1 < N:
-            move_type = 'X'
-            if not ((mod + 1) % 3 == 0 and move_type != 'X'):
-                candidates.append((i + 1, j + 1, move_type))
-        
-        for next_i, next_j, move_type in candidates:
-            sub_sum, sub_path = recursive(next_i, next_j, (mod + 1) % 3)
-            current_sum = grid[i][j] + sub_sum
-            if current_sum > max_sum:
-                max_sum = current_sum
-                best_path = move_type + sub_path
-        
-        memo[i][j][mod] = (max_sum, best_path)
-        return memo[i][j][mod]
+    if N > 0:
+        dp[0][0][0] = grid[0][0]
     
-    return recursive(0, 0, 0)
+    for i in range(N):
+        for j in range(N):
+            for mod in range(3):
+                prev_mod = (mod - 1 + 3) % 3
+                
+                if j - 1 >= 0:  # From (i, j-1) via R
+                    move_type = 'R'
+                    if mod == 0 and move_type != 'X':
+                        continue
+                    if dp[i][j-1][prev_mod] != float('-inf'):
+                        new_sum = dp[i][j-1][prev_mod] + grid[i][j]
+                        if new_sum > dp[i][j][mod]:
+                            dp[i][j][mod] = new_sum
+                            predecessor[i][j][mod] = (i, j-1, prev_mod, 'R')
+                
+                if i - 1 >= 0:  # From (i-1, j) via D
+                    move_type = 'D'
+                    if mod == 0 and move_type != 'X':
+                        continue
+                    if dp[i-1][j][prev_mod] != float('-inf'):
+                        new_sum = dp[i-1][j][prev_mod] + grid[i][j]
+                        if new_sum > dp[i][j][mod]:
+                            dp[i][j][mod] = new_sum
+                            predecessor[i][j][mod] = (i-1, j, prev_mod, 'D')
+                
+                if i - 1 >= 0 and j - 1 >= 0:  # From (i-1, j-1) via X
+                    move_type = 'X'
+                    if mod == 0 and move_type != 'X':
+                        continue
+                    if dp[i-1][j-1][prev_mod] != float('-inf'):
+                        new_sum = dp[i-1][j-1][prev_mod] + grid[i][j]
+                        if new_sum > dp[i][j][mod]:
+                            dp[i][j][mod] = new_sum
+                            predecessor[i][j][mod] = (i-1, j-1, prev_mod, 'X')
+    
+    max_sum = max(dp[N-1][N-1])
+    if max_sum == float('-inf'):
+        return (0, "")  # Impossible, but return default
+    best_mod = dp[N-1][N-1].index(max_sum)
+    
+    path = []
+    current_i, current_j, current_mod = N-1, N-1, best_mod
+    while (current_i, current_j) != (0, 0) or current_mod != 0:
+        prev = predecessor[current_i][current_j][current_mod]
+        if prev != (None, None, None, None):
+            prev_i, prev_j, prev_mod, move_type = prev
+            path.append(move_type)
+            current_i, current_j, current_mod = prev_i, prev_j, prev_mod
+        else:
+            break  # Should not happen
+    path.reverse()
+    path_string = ''.join(path)
+    
+    return (max_sum, path_string)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    import sys
     N = len(grid)
     if N == 0:
-        return 0, ""
+        return (0, "")
     
-    memo = [[[None] * 3 for _ in range(N)] for _ in range(N)]
+    dp = [[[float('-inf')] * 3 for _ in range(N)] for _ in range(N)]
+    predecessor = [[[(None, None, None, None) for _ in range(3)] for _ in range(N)] for _ in range(N)]
     
-    def recursive(i, j, mod):
-        if i >= N or j >= N:
-            return float('-inf'), ""
-        
-        if memo[i][j][mod] is not None:
-            return memo[i][j][mod]
-        
-        if i == N-1 and j == N-1:
-            memo[i][j][mod] = (grid[i][j], "")
-            return memo[i][j][mod]
-        
-        max_sum = float('-inf')
-        best_path = ""
-        candidates = []
-        
-        # Right
-        if j + 1 < N:
-            move_type = 'R'
-            if not ((mod + 1) % 3 == 0 and move_type != 'X'):
-                candidates.append((i, j + 1, move_type))
-        
-        # Down
-        if i + 1 < N:
-            move_type = 'D'
-            if not ((mod + 1) % 3 == 0 and move_type != 'X'):
-                candidates.append((i + 1, j, move_type))
-        
-        # Diagonal
-        if i + 1 < N and j + 1 < N:
-            move_type = 'X'
-            if not ((mod + 1) % 3 == 0 and move_type != 'X'):
-                candidates.append((i + 1, j + 1, move_type))
-        
-        for next_i, next_j, move_type in candidates:
-            sub_sum, sub_path = recursive(next_i, next_j, (mod + 1) % 3)
-            current_sum = grid[i][j] + sub_sum
-            if current_sum > max_sum:
-                max_sum = current_sum
-                best_path = move_type + sub_path
-        
-        memo[i][j][mod] = (max_sum, best_path)
-        return memo[i][j][mod]
+    if N > 0:
+        dp[0][0][0] = grid[0][0]
     
-    return recursive(0, 0, 0)
+    for i in range(N):
+        for j in range(N):
+            for mod in range(3):
+                prev_mod = (mod - 1 + 3) % 3
+                
+                if j - 1 >= 0:  # From (i, j-1) via R
+                    move_type = 'R'
+                    if mod == 0 and move_type != 'X':
+                        continue
+                    if dp[i][j-1][prev_mod] != float('-inf'):
+                        new_sum = dp[i][j-1][prev_mod] + grid[i][j]
+                        if new_sum > dp[i][j][mod]:
+                            dp[i][j][mod] = new_sum
+                            predecessor[i][j][mod] = (i, j-1, prev_mod, 'R')
+                
+                if i - 1 >= 0:  # From (i-1, j) via D
+                    move_type = 'D'
+                    if mod == 0 and move_type != 'X':
+                        continue
+                    if dp[i-1][j][prev_mod] != float('-inf'):
+                        new_sum = dp[i-1][j][prev_mod] + grid[i][j]
+                        if new_sum > dp[i][j][mod]:
+                            dp[i][j][mod] = new_sum
+                            predecessor[i][j][mod] = (i-1, j, prev_mod, 'D')
+                
+                if i - 1 >= 0 and j - 1 >= 0:  # From (i-1, j-1) via X
+                    move_type = 'X'
+                    if mod == 0 and move_type != 'X':
+                        continue
+                    if dp[i-1][j-1][prev_mod] != float('-inf'):
+                        new_sum = dp[i-1][j-1][prev_mod] + grid[i][j]
+                        if new_sum > dp[i][j][mod]:
+                            dp[i][j][mod] = new_sum
+                            predecessor[i][j][mod] = (i-1, j-1, prev_mod, 'X')
+    
+    max_sum = max(dp[N-1][N-1])
+    if max_sum == float('-inf'):
+        return (0, "")  # Impossible, but return default
+    best_mod = dp[N-1][N-1].index(max_sum)
+    
+    path = []
+    current_i, current_j, current_mod = N-1, N-1, best_mod
+    while (current_i, current_j) != (0, 0) or current_mod != 0:
+        prev = predecessor[current_i][current_j][current_mod]
+        if prev != (None, None, None, None):
+            prev_i, prev_j, prev_mod, move_type = prev
+            path.append(move_type)
+            current_i, current_j, current_mod = prev_i, prev_j, prev_mod
+        else:
+            break  # Should not happen
+    path.reverse()
+    path_string = ''.join(path)
+    
+    return (max_sum, path_string)
