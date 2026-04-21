@@ -1,19 +1,140 @@
 Model: grok-4-1-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-04-21T15:46:06.634923+00:00
+Evaluated: 2026-04-21T15:52:49.345917+00:00
 
 === TIMING ===
-Response time: 0.17s
+Response time: 3.23s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    
+    n = len(grid)
+    INF = float('-inf')
+    
+    # dp[i][j][k] = (max_sum, path) where k % 3 == 0 means must do diagonal if possible
+    dp = [[[(INF, "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    
+    # Initialize start
+    dp[0][0][0] = (grid[0][0], "")
+    
+    for i in range(n):
+        for j in range(n):
+            for k in range(3):
+                if dp[i][j][k][0] == INF:
+                    continue
+                    
+                curr_sum, path = dp[i][j][k]
+                is_diag_required = (len(path) + 1) % 3 == 0
+                
+                # Possible moves
+                moves = []
+                if j + 1 < n:
+                    moves.append(('R', i, j + 1))
+                if i + 1 < n:
+                    moves.append(('D', i + 1, j))
+                if i + 1 < n and j + 1 < n:
+                    moves.append(('X', i + 1, j + 1))
+                
+                # Filter moves based on diagonal requirement
+                if is_diag_required:
+                    diag_possible = any(m[0] == 'X' for m in moves)
+                    if not diag_possible:
+                        # Use R or D if diagonal not possible
+                        valid_moves = [m for m in moves if m[0] != 'X']
+                    else:
+                        valid_moves = [m for m in moves if m[0] == 'X']
+                else:
+                    valid_moves = moves
+                
+                next_mod = (len(path) + 1) % 3
+                
+                for move_char, ni, nj in valid_moves:
+                    new_sum = curr_sum + grid[ni][nj]
+                    new_path = path + move_char
+                    
+                    if new_sum > dp[ni][nj][next_mod][0]:
+                        dp[ni][nj][next_mod] = (new_sum, new_path)
+    
+    # Find max at bottom-right
+    max_sum = INF
+    best_path = ""
+    for k in range(3):
+        if dp[n-1][n-1][k][0] > max_sum:
+            max_sum, best_path = dp[n-1][n-1][k]
+    
+    return (max_sum, best_path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    
+    n = len(grid)
+    INF = float('-inf')
+    
+    # dp[i][j][k] = (max_sum, path) where k % 3 == 0 means must do diagonal if possible
+    dp = [[[(INF, "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    
+    # Initialize start
+    dp[0][0][0] = (grid[0][0], "")
+    
+    for i in range(n):
+        for j in range(n):
+            for k in range(3):
+                if dp[i][j][k][0] == INF:
+                    continue
+                    
+                curr_sum, path = dp[i][j][k]
+                is_diag_required = (len(path) + 1) % 3 == 0
+                
+                # Possible moves
+                moves = []
+                if j + 1 < n:
+                    moves.append(('R', i, j + 1))
+                if i + 1 < n:
+                    moves.append(('D', i + 1, j))
+                if i + 1 < n and j + 1 < n:
+                    moves.append(('X', i + 1, j + 1))
+                
+                # Filter moves based on diagonal requirement
+                if is_diag_required:
+                    diag_possible = any(m[0] == 'X' for m in moves)
+                    if not diag_possible:
+                        # Use R or D if diagonal not possible
+                        valid_moves = [m for m in moves if m[0] != 'X']
+                    else:
+                        valid_moves = [m for m in moves if m[0] == 'X']
+                else:
+                    valid_moves = moves
+                
+                next_mod = (len(path) + 1) % 3
+                
+                for move_char, ni, nj in valid_moves:
+                    new_sum = curr_sum + grid[ni][nj]
+                    new_path = path + move_char
+                    
+                    if new_sum > dp[ni][nj][next_mod][0]:
+                        dp[ni][nj][next_mod] = (new_sum, new_path)
+    
+    # Find max at bottom-right
+    max_sum = INF
+    best_path = ""
+    for k in range(3):
+        if dp[n-1][n-1][k][0] > max_sum:
+            max_sum, best_path = dp[n-1][n-1][k]
+    
+    return (max_sum, best_path)
