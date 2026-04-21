@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-04-21 22:56:18
+Last updated: 2026-04-21 22:57:19
 
 ## Summary
 
@@ -13,7 +13,7 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 50/75
 
-**Grok**: 14/9
+**Grok**: 2/21
 
 **Mistral**: 67/29
 
@@ -362,23 +362,23 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- grok-4.20-multi-agent-0309 (added: 2026-03-19)
-- grok-4.20-0309-reasoning (added: 2026-03-19)
-- grok-4.20-0309-non-reasoning (added: 2026-03-19)
 - grok-imagine-image-pro (added: 2026-02-07)
-- grok-imagine-video (added: 2026-01-29)
 - grok-imagine-image (added: 2026-01-29)
-- grok-4-1-fast-reasoning (added: 2025-11-19)
-- grok-4-1-fast-non-reasoning (added: 2025-11-19)
-- grok-4-fast-reasoning (added: 2025-09-20)
-- grok-4-fast-non-reasoning (added: 2025-09-20)
-- grok-code-fast-1 (added: 2025-09-04)
-- grok-4-0709 (added: 2025-09-04)
-- grok-3-mini (added: 2025-09-04)
-- grok-3 (added: 2025-09-04)
 
 ### Deleted Models
 
+- grok-imagine-video (deleted: 2026-04-21)
+- grok-code-fast-1 (deleted: 2026-04-21)
+- grok-4.20-multi-agent-0309 (deleted: 2026-04-21)
+- grok-4.20-0309-reasoning (deleted: 2026-04-21)
+- grok-4.20-0309-non-reasoning (deleted: 2026-04-21)
+- grok-4-fast-reasoning (deleted: 2026-04-21)
+- grok-4-fast-non-reasoning (deleted: 2026-04-21)
+- grok-4-1-fast-reasoning (deleted: 2026-04-21)
+- grok-4-1-fast-non-reasoning (deleted: 2026-04-21)
+- grok-4-0709 (deleted: 2026-04-21)
+- grok-3-mini (deleted: 2026-04-21)
+- grok-3 (deleted: 2026-04-21)
 - grok-4.20-multi-agent-beta-0309 (deleted: 2026-03-19)
 - grok-4.20-beta-0309-reasoning (deleted: 2026-03-19)
 - grok-4.20-beta-0309-non-reasoning (deleted: 2026-03-19)
