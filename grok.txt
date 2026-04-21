@@ -9,4 +9,3 @@ grok-4.20-0309-non-reasoning
 grok-4.20-0309-reasoning
 grok-4.20-multi-agent-0309
 grok-code-fast-1
-grok-imagine-video
