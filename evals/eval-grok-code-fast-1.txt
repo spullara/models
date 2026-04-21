@@ -1,107 +1,150 @@
 Model: grok-code-fast-1
 Provider: grok
-Evaluated: 2026-04-02T15:18:16.020554+00:00
+Evaluated: 2026-04-21T15:47:43.796455+00:00
 
 === TIMING ===
-Response time: 28.28s
+Response time: 34.05s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 55
-Calculated sum: 6
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-from math import inf
+import sys
 
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
     N = len(grid)
-    memo = {}
-
-    def dfs(i, j, moves_made, current_sum, current_path):
-        if i == N - 1 and j == N - 1:
-            return current_sum, current_path
-        key = (i, j, moves_made)
-        if key in memo:
-            return memo[key]
-        max_res = (-inf, "")
-        next_moves = moves_made + 1
-        must_diagonal = (next_moves % 3 == 0)
-        possible_moves = []
-        if must_diagonal:
-            if i + 1 < N and j + 1 < N:
-                possible_moves.append(('X', i + 1, j + 1))
-            if j + 1 < N:
-                possible_moves.append(('R', i, j + 1))
-            if i + 1 < N:
-                possible_moves.append(('D', i + 1, j))
-        else:
-            if j + 1 < N:
-                possible_moves.append(('R', i, j + 1))
-            if i + 1 < N:
-                possible_moves.append(('D', i + 1, j))
-            if i + 1 < N and j + 1 < N:
-                possible_moves.append(('X', i + 1, j + 1))
-        for move, ni, nj in possible_moves:
-            new_sum = current_sum + grid[ni][nj]
-            new_path = current_path + move
-            res = dfs(ni, nj, next_moves, new_sum, new_path)
-            if res[0] > max_res[0]:
-                max_res = res
-        memo[key] = max_res
-        return max_res
-
-    return dfs(0, 0, 0, grid[0][0], "")
+    if N == 1:
+        return grid[0][0], ""
+    
+    INF = -sys.maxsize
+    dp = [[[INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for i in range(N):
+        for j in range(N):
+            for k in range(3):
+                if dp[i][j][k] == INF:
+                    continue
+                # Try D
+                if i + 1 < N:
+                    nk = (k + 1) % 3
+                    if not (nk == 0 and j + 1 < N):
+                        new_sum = dp[i][j][k] + grid[i+1][j]
+                        if new_sum > dp[i+1][j][nk]:
+                            dp[i+1][j][nk] = new_sum
+                            prev[i+1][j][nk] = (i, j, k, 'D')
+                # Try R
+                if j + 1 < N:
+                    nk = (k + 1) % 3
+                    if not (nk == 0 and i + 1 < N):
+                        new_sum = dp[i][j][k] + grid[i][j+1]
+                        if new_sum > dp[i][j+1][nk]:
+                            dp[i][j+1][nk] = new_sum
+                            prev[i][j+1][nk] = (i, j, k, 'R')
+                # Try X
+                if i + 1 < N and j + 1 < N:
+                    nk = (k + 1) % 3
+                    new_sum = dp[i][j][k] + grid[i+1][j+1]
+                    if new_sum > dp[i+1][j+1][nk]:
+                        dp[i+1][j+1][nk] = new_sum
+                        prev[i+1][j+1][nk] = (i, j, k, 'X')
+    
+    # Find the max at (N-1, N-1)
+    max_sum = INF
+    best_k = -1
+    for k in range(3):
+        if dp[N-1][N-1][k] > max_sum:
+            max_sum = dp[N-1][N-1][k]
+            best_k = k
+    
+    if max_sum == INF:
+        return 0, ""  # No path, though shouldn't happen
+    
+    # Reconstruct path
+    path = []
+    ci, cj, ck = N-1, N-1, best_k
+    while ci != 0 or cj != 0:
+        pi, pj, pk, move = prev[ci][cj][ck]
+        path.append(move)
+        ci, cj, ck = pi, pj, pk
+    path.reverse()
+    return max_sum, ''.join(path)
 ```
 
 === EXTRACTED CODE ===
-from math import inf
+import sys
 
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
     N = len(grid)
-    memo = {}
-
-    def dfs(i, j, moves_made, current_sum, current_path):
-        if i == N - 1 and j == N - 1:
-            return current_sum, current_path
-        key = (i, j, moves_made)
-        if key in memo:
-            return memo[key]
-        max_res = (-inf, "")
-        next_moves = moves_made + 1
-        must_diagonal = (next_moves % 3 == 0)
-        possible_moves = []
-        if must_diagonal:
-            if i + 1 < N and j + 1 < N:
-                possible_moves.append(('X', i + 1, j + 1))
-            if j + 1 < N:
-                possible_moves.append(('R', i, j + 1))
-            if i + 1 < N:
-                possible_moves.append(('D', i + 1, j))
-        else:
-            if j + 1 < N:
-                possible_moves.append(('R', i, j + 1))
-            if i + 1 < N:
-                possible_moves.append(('D', i + 1, j))
-            if i + 1 < N and j + 1 < N:
-                possible_moves.append(('X', i + 1, j + 1))
-        for move, ni, nj in possible_moves:
-            new_sum = current_sum + grid[ni][nj]
-            new_path = current_path + move
-            res = dfs(ni, nj, next_moves, new_sum, new_path)
-            if res[0] > max_res[0]:
-                max_res = res
-        memo[key] = max_res
-        return max_res
-
-    return dfs(0, 0, 0, grid[0][0], "")
+    if N == 1:
+        return grid[0][0], ""
+    
+    INF = -sys.maxsize
+    dp = [[[INF for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    prev = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for i in range(N):
+        for j in range(N):
+            for k in range(3):
+                if dp[i][j][k] == INF:
+                    continue
+                # Try D
+                if i + 1 < N:
+                    nk = (k + 1) % 3
+                    if not (nk == 0 and j + 1 < N):
+                        new_sum = dp[i][j][k] + grid[i+1][j]
+                        if new_sum > dp[i+1][j][nk]:
+                            dp[i+1][j][nk] = new_sum
+                            prev[i+1][j][nk] = (i, j, k, 'D')
+                # Try R
+                if j + 1 < N:
+                    nk = (k + 1) % 3
+                    if not (nk == 0 and i + 1 < N):
+                        new_sum = dp[i][j][k] + grid[i][j+1]
+                        if new_sum > dp[i][j+1][nk]:
+                            dp[i][j+1][nk] = new_sum
+                            prev[i][j+1][nk] = (i, j, k, 'R')
+                # Try X
+                if i + 1 < N and j + 1 < N:
+                    nk = (k + 1) % 3
+                    new_sum = dp[i][j][k] + grid[i+1][j+1]
+                    if new_sum > dp[i+1][j+1][nk]:
+                        dp[i+1][j+1][nk] = new_sum
+                        prev[i+1][j+1][nk] = (i, j, k, 'X')
+    
+    # Find the max at (N-1, N-1)
+    max_sum = INF
+    best_k = -1
+    for k in range(3):
+        if dp[N-1][N-1][k] > max_sum:
+            max_sum = dp[N-1][N-1][k]
+            best_k = k
+    
+    if max_sum == INF:
+        return 0, ""  # No path, though shouldn't happen
+    
+    # Reconstruct path
+    path = []
+    ci, cj, ck = N-1, N-1, best_k
+    while ci != 0 or cj != 0:
+        pi, pj, pk, move = prev[ci][cj][ck]
+        path.append(move)
+        ci, cj, ck = pi, pj, pk
+    path.reverse()
+    return max_sum, ''.join(path)
