@@ -1,9 +1,9 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-04-21T23:01:15.800530+00:00
+Evaluated: 2026-04-21T23:03:11.579886+00:00
 
 === TIMING ===
-Response time: 80.9s
+Response time: 93.4s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,102 +17,126 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+from typing import List, Tuple
+
+def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
+    if not grid:
+        return 0, ""
     N = len(grid)
-    memo = {}
+    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]  # Each is (sum, string)
     
-    def dfs(i, j, moves_mod_3):
+    def dp_func(i, j, mod):
         if i >= N or j >= N:
             return float('-inf'), ""
+        if memo[i][j][mod] is not None:
+            return memo[i][j][mod]
+        
         if i == N-1 and j == N-1:
-            return grid[i][j], ""
+            memo[i][j][mod] = (grid[i][j], "")
+            return memo[i][j][mod]
         
-        if (i, j, moves_mod_3) in memo:
-            return memo[(i, j, moves_mod_3)]
+        total_sum = grid[i][j]
+        next_mod = (mod + 1) % 3
+        options = []  # List of (sub_sum, sub_path, move)
         
-        is_next_mandatory_X = (moves_mod_3 == 2)
+        if (mod + 1) % 3 == 0:  # Next move must be X if possible
+            if i+1 < N and j+1 < N:
+                sub_sum, sub_path = dp_func(i+1, j+1, next_mod)
+                if sub_sum != float('-inf'):
+                    options.append((sub_sum, sub_path, 'X'))
+            if not options:  # X not possible, add R and D
+                if j+1 < N:
+                    sub_sum, sub_path = dp_func(i, j+1, next_mod)
+                    if sub_sum != float('-inf'):
+                        options.append((sub_sum, sub_path, 'R'))
+                if i+1 < N:
+                    sub_sum, sub_path = dp_func(i+1, j, next_mod)
+                    if sub_sum != float('-inf'):
+                        options.append((sub_sum, sub_path, 'D'))
+        else:  # No restriction
+            if j+1 < N:
+                sub_sum, sub_path = dp_func(i, j+1, next_mod)
+                if sub_sum != float('-inf'):
+                    options.append((sub_sum, sub_path, 'R'))
+            if i+1 < N:
+                sub_sum, sub_path = dp_func(i+1, j, next_mod)
+                if sub_sum != float('-inf'):
+                    options.append((sub_sum, sub_path, 'D'))
+            if i+1 < N and j+1 < N:
+                sub_sum, sub_path = dp_func(i+1, j+1, next_mod)
+                if sub_sum != float('-inf'):
+                    options.append((sub_sum, sub_path, 'X'))
         
-        possible_moves = []
-        if i+1 < N and j+1 < N:
-            possible_moves.append(('X', i+1, j+1))
-        if j+1 < N:
-            possible_moves.append(('R', i, j+1))
-        if i+1 < N:
-            possible_moves.append(('D', i+1, j))
-        
-        if is_next_mandatory_X:
-            candidates = [move for move in possible_moves if move[0] == 'X']
-            if not candidates:
-                candidates = possible_moves
+        if options:
+            best_option = max(options, key=lambda x: x[0])
+            total_sum += best_option[0]
+            full_path = best_option[2] + best_option[1]  # move + sub_path
+            memo[i][j][mod] = (total_sum, full_path)
         else:
-            candidates = possible_moves
-        
-        if candidates:
-            best_sum = float('-inf')
-            best_path = None
-            for move_type, ni, nj in candidates:
-                sub_sum, sub_path = dfs(ni, nj, (moves_mod_3 + 1) % 3)
-                current_sum = grid[i][j] + sub_sum
-                if current_sum > best_sum:
-                    best_sum = current_sum
-                    best_path = move_type + sub_path
-            memo[(i, j, moves_mod_3)] = (best_sum, best_path)
-            return best_sum, best_path
-        else:
-            return float('-inf'), ""
+            memo[i][j][mod] = (total_sum, "")  # Should only happen at end
+        return memo[i][j][mod]
     
-    if N == 0:
-        return 0, ""
-    result_sum, result_path = dfs(0, 0, 0)
-    return result_sum, result_path
+    return dp_func(0, 0, 0)
 ```
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+from typing import List, Tuple
+
+def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
+    if not grid:
+        return 0, ""
     N = len(grid)
-    memo = {}
+    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]  # Each is (sum, string)
     
-    def dfs(i, j, moves_mod_3):
+    def dp_func(i, j, mod):
         if i >= N or j >= N:
             return float('-inf'), ""
+        if memo[i][j][mod] is not None:
+            return memo[i][j][mod]
+        
         if i == N-1 and j == N-1:
-            return grid[i][j], ""
+            memo[i][j][mod] = (grid[i][j], "")
+            return memo[i][j][mod]
         
-        if (i, j, moves_mod_3) in memo:
-            return memo[(i, j, moves_mod_3)]
+        total_sum = grid[i][j]
+        next_mod = (mod + 1) % 3
+        options = []  # List of (sub_sum, sub_path, move)
         
-        is_next_mandatory_X = (moves_mod_3 == 2)
+        if (mod + 1) % 3 == 0:  # Next move must be X if possible
+            if i+1 < N and j+1 < N:
+                sub_sum, sub_path = dp_func(i+1, j+1, next_mod)
+                if sub_sum != float('-inf'):
+                    options.append((sub_sum, sub_path, 'X'))
+            if not options:  # X not possible, add R and D
+                if j+1 < N:
+                    sub_sum, sub_path = dp_func(i, j+1, next_mod)
+                    if sub_sum != float('-inf'):
+                        options.append((sub_sum, sub_path, 'R'))
+                if i+1 < N:
+                    sub_sum, sub_path = dp_func(i+1, j, next_mod)
+                    if sub_sum != float('-inf'):
+                        options.append((sub_sum, sub_path, 'D'))
+        else:  # No restriction
+            if j+1 < N:
+                sub_sum, sub_path = dp_func(i, j+1, next_mod)
+                if sub_sum != float('-inf'):
+                    options.append((sub_sum, sub_path, 'R'))
+            if i+1 < N:
+                sub_sum, sub_path = dp_func(i+1, j, next_mod)
+                if sub_sum != float('-inf'):
+                    options.append((sub_sum, sub_path, 'D'))
+            if i+1 < N and j+1 < N:
+                sub_sum, sub_path = dp_func(i+1, j+1, next_mod)
+                if sub_sum != float('-inf'):
+                    options.append((sub_sum, sub_path, 'X'))
         
-        possible_moves = []
-        if i+1 < N and j+1 < N:
-            possible_moves.append(('X', i+1, j+1))
-        if j+1 < N:
-            possible_moves.append(('R', i, j+1))
-        if i+1 < N:
-            possible_moves.append(('D', i+1, j))
-        
-        if is_next_mandatory_X:
-            candidates = [move for move in possible_moves if move[0] == 'X']
-            if not candidates:
-                candidates = possible_moves
+        if options:
+            best_option = max(options, key=lambda x: x[0])
+            total_sum += best_option[0]
+            full_path = best_option[2] + best_option[1]  # move + sub_path
+            memo[i][j][mod] = (total_sum, full_path)
         else:
-            candidates = possible_moves
-        
-        if candidates:
-            best_sum = float('-inf')
-            best_path = None
-            for move_type, ni, nj in candidates:
-                sub_sum, sub_path = dfs(ni, nj, (moves_mod_3 + 1) % 3)
-                current_sum = grid[i][j] + sub_sum
-                if current_sum > best_sum:
-                    best_sum = current_sum
-                    best_path = move_type + sub_path
-            memo[(i, j, moves_mod_3)] = (best_sum, best_path)
-            return best_sum, best_path
-        else:
-            return float('-inf'), ""
+            memo[i][j][mod] = (total_sum, "")  # Should only happen at end
+        return memo[i][j][mod]
     
-    if N == 0:
-        return 0, ""
-    result_sum, result_path = dfs(0, 0, 0)
-    return result_sum, result_path
+    return dp_func(0, 0, 0)
