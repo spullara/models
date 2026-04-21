@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-04-21T18:15:39.081991+00:00
+Evaluated: 2026-04-21T22:51:40.967179+00:00
 
 === TIMING ===
-Response time: 38.78s
+Response time: 24.17s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -19,90 +19,60 @@ Path valid: YES
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    if N == 0 or len(grid[0]) == 0:
-        return 0, ""
-    INF = float('-inf')
-    dp_sum = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
-    dp_path = [[[""] * 3 for _ in range(N)] for _ in range(N)]
-    dp_sum[0][0][0] = grid[0][0]
-    dp_path[0][0][0] = ""
-    for total in range(2 * N - 1):
-        for r in range(max(0, total - (N - 1)), min(total, N - 1) + 1):
-            c = total - r
-            if c < 0 or c >= N:
-                continue
-            for mod in range(3):
-                if dp_sum[r][c][mod] == INF:
-                    continue
-                curr_sum = dp_sum[r][c][mod]
-                curr_path = dp_path[r][c][mod]
-                is_req_diag = ((mod + 1) % 3 == 0)
-                diag_possible = (r + 1 < N and c + 1 < N)
-                poss = []
-                if c + 1 < N:
-                    poss.append((r, c + 1, 'R'))
-                if r + 1 < N:
-                    poss.append((r + 1, c, 'D'))
-                if r + 1 < N and c + 1 < N:
-                    poss.append((r + 1, c + 1, 'X'))
-                for nr, nc, let in poss:
-                    if is_req_diag and diag_possible and let != 'X':
-                        continue
-                    new_sum = curr_sum + grid[nr][nc]
-                    new_mod = (mod + 1) % 3
-                    if new_sum > dp_sum[nr][nc][new_mod]:
-                        dp_sum[nr][nc][new_mod] = new_sum
-                        dp_path[nr][nc][new_mod] = curr_path + let
-    max_sum = INF
+    best_sum = -float('inf')
     best_path = ""
-    for m in range(3):
-        if dp_sum[N - 1][N - 1][m] > max_sum:
-            max_sum = dp_sum[N - 1][N - 1][m]
-            best_path = dp_path[N - 1][N - 1][m]
-    return int(max_sum), best_path
+    def dfs(row, col, cur_sum, moves, path):
+        nonlocal best_sum, best_path
+        if row == N - 1 and col == N - 1:
+            if cur_sum > best_sum:
+                best_sum = cur_sum
+                best_path = path
+            return
+        next_moves = moves + 1
+        must_diag = (next_moves % 3 == 0)
+        can_diag = (row + 1 < N and col + 1 < N)
+        if must_diag and can_diag:
+            new_row = row + 1
+            new_col = col + 1
+            dfs(new_row, new_col, cur_sum + grid[new_row][new_col], next_moves, path + "X")
+        else:
+            for dr, dc, move_char in [(0, 1, "R"), (1, 0, "D"), (1, 1, "X")]:
+                new_row = row + dr
+                new_col = col + dc
+                if new_row < N and new_col < N:
+                    dfs(new_row, new_col, cur_sum + grid[new_row][new_col], next_moves, path + move_char)
+    if N == 0:
+        return 0, ""
+    dfs(0, 0, grid[0][0], 0, "")
+    return best_sum, best_path
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     N = len(grid)
-    if N == 0 or len(grid[0]) == 0:
-        return 0, ""
-    INF = float('-inf')
-    dp_sum = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
-    dp_path = [[[""] * 3 for _ in range(N)] for _ in range(N)]
-    dp_sum[0][0][0] = grid[0][0]
-    dp_path[0][0][0] = ""
-    for total in range(2 * N - 1):
-        for r in range(max(0, total - (N - 1)), min(total, N - 1) + 1):
-            c = total - r
-            if c < 0 or c >= N:
-                continue
-            for mod in range(3):
-                if dp_sum[r][c][mod] == INF:
-                    continue
-                curr_sum = dp_sum[r][c][mod]
-                curr_path = dp_path[r][c][mod]
-                is_req_diag = ((mod + 1) % 3 == 0)
-                diag_possible = (r + 1 < N and c + 1 < N)
-                poss = []
-                if c + 1 < N:
-                    poss.append((r, c + 1, 'R'))
-                if r + 1 < N:
-                    poss.append((r + 1, c, 'D'))
-                if r + 1 < N and c + 1 < N:
-                    poss.append((r + 1, c + 1, 'X'))
-                for nr, nc, let in poss:
-                    if is_req_diag and diag_possible and let != 'X':
-                        continue
-                    new_sum = curr_sum + grid[nr][nc]
-                    new_mod = (mod + 1) % 3
-                    if new_sum > dp_sum[nr][nc][new_mod]:
-                        dp_sum[nr][nc][new_mod] = new_sum
-                        dp_path[nr][nc][new_mod] = curr_path + let
-    max_sum = INF
+    best_sum = -float('inf')
     best_path = ""
-    for m in range(3):
-        if dp_sum[N - 1][N - 1][m] > max_sum:
-            max_sum = dp_sum[N - 1][N - 1][m]
-            best_path = dp_path[N - 1][N - 1][m]
-    return int(max_sum), best_path
+    def dfs(row, col, cur_sum, moves, path):
+        nonlocal best_sum, best_path
+        if row == N - 1 and col == N - 1:
+            if cur_sum > best_sum:
+                best_sum = cur_sum
+                best_path = path
+            return
+        next_moves = moves + 1
+        must_diag = (next_moves % 3 == 0)
+        can_diag = (row + 1 < N and col + 1 < N)
+        if must_diag and can_diag:
+            new_row = row + 1
+            new_col = col + 1
+            dfs(new_row, new_col, cur_sum + grid[new_row][new_col], next_moves, path + "X")
+        else:
+            for dr, dc, move_char in [(0, 1, "R"), (1, 0, "D"), (1, 1, "X")]:
+                new_row = row + dr
+                new_col = col + dc
+                if new_row < N and new_col < N:
+                    dfs(new_row, new_col, cur_sum + grid[new_row][new_col], next_moves, path + move_char)
+    if N == 0:
+        return 0, ""
+    dfs(0, 0, grid[0][0], 0, "")
+    return best_sum, best_path
