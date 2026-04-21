@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-04-21T15:54:18.924908+00:00
+Evaluated: 2026-04-21T18:17:04.127953+00:00
 
 === TIMING ===
-Response time: 2.12s
+Response time: 1.99s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -39,13 +39,14 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
             
             for di, dj, let in dirs:
                 ni, nj = i + di, j + dj
-                if 0 <= ni < n and 0 <= nj < n:
-                    if must_diag and let != 'X' and (i + 1 < n and j + 1 < n):
-                        continue
-                    new_sum = dp[i][j][0] + grid[ni][nj]
-                    new_path = dp[i][j][1] + let
-                    if new_sum > dp[ni][nj][0]:
-                        dp[ni][nj] = (new_sum, new_path)
+                if ni >= n or nj >= n:
+                    continue
+                if must_diag and let != 'X' and (i + 1 < n and j + 1 < n):
+                    continue
+                new_sum = dp[i][j][0] + grid[ni][nj]
+                new_path = dp[i][j][1] + let
+                if new_sum > dp[ni][nj][0]:
+                    dp[ni][nj] = (new_sum, new_path)
     
     return dp[n-1][n-1]
 ```
@@ -73,12 +74,13 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
             
             for di, dj, let in dirs:
                 ni, nj = i + di, j + dj
-                if 0 <= ni < n and 0 <= nj < n:
-                    if must_diag and let != 'X' and (i + 1 < n and j + 1 < n):
-                        continue
-                    new_sum = dp[i][j][0] + grid[ni][nj]
-                    new_path = dp[i][j][1] + let
-                    if new_sum > dp[ni][nj][0]:
-                        dp[ni][nj] = (new_sum, new_path)
+                if ni >= n or nj >= n:
+                    continue
+                if must_diag and let != 'X' and (i + 1 < n and j + 1 < n):
+                    continue
+                new_sum = dp[i][j][0] + grid[ni][nj]
+                new_path = dp[i][j][1] + let
+                if new_sum > dp[ni][nj][0]:
+                    dp[ni][nj] = (new_sum, new_path)
     
     return dp[n-1][n-1]

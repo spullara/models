@@ -1,19 +1,88 @@
 Model: grok-4.20-multi-agent-0309
 Provider: grok
-Evaluated: 2026-04-21T15:54:45.477709+00:00
+Evaluated: 2026-04-21T18:17:45.007746+00:00
 
 === TIMING ===
-Response time: 0.17s
+Response time: 42.84s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 400: "Multi Agent requests are not allowed on chat completions"
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    n = len(grid)
+    max_sum = float('-inf')
+    best_path = ""
+    def dfs(r, c, path, cur_sum, moves):
+        nonlocal max_sum, best_path
+        if r == n - 1 and c == n - 1:
+            if cur_sum > max_sum:
+                max_sum = cur_sum
+                best_path = path
+            return
+        must_diag = (moves % 3 == 2)
+        if must_diag:
+            if r + 1 < n and c + 1 < n:
+                nr = r + 1
+                nc = c + 1
+                dfs(nr, nc, path + 'X', cur_sum + grid[nr][nc], moves + 1)
+            else:
+                for mchar, dr, dc in [('R', 0, 1), ('D', 1, 0)]:
+                    nr = r + dr
+                    nc = c + dc
+                    if nr < n and nc < n:
+                        dfs(nr, nc, path + mchar, cur_sum + grid[nr][nc], moves + 1)
+        else:
+            for mchar, dr, dc in [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]:
+                nr = r + dr
+                nc = c + dc
+                if nr < n and nc < n:
+                    dfs(nr, nc, path + mchar, cur_sum + grid[nr][nc], moves + 1)
+    dfs(0, 0, "", grid[0][0], 0)
+    return int(max_sum), best_path
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    n = len(grid)
+    max_sum = float('-inf')
+    best_path = ""
+    def dfs(r, c, path, cur_sum, moves):
+        nonlocal max_sum, best_path
+        if r == n - 1 and c == n - 1:
+            if cur_sum > max_sum:
+                max_sum = cur_sum
+                best_path = path
+            return
+        must_diag = (moves % 3 == 2)
+        if must_diag:
+            if r + 1 < n and c + 1 < n:
+                nr = r + 1
+                nc = c + 1
+                dfs(nr, nc, path + 'X', cur_sum + grid[nr][nc], moves + 1)
+            else:
+                for mchar, dr, dc in [('R', 0, 1), ('D', 1, 0)]:
+                    nr = r + dr
+                    nc = c + dc
+                    if nr < n and nc < n:
+                        dfs(nr, nc, path + mchar, cur_sum + grid[nr][nc], moves + 1)
+        else:
+            for mchar, dr, dc in [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]:
+                nr = r + dr
+                nc = c + dc
+                if nr < n and nc < n:
+                    dfs(nr, nc, path + mchar, cur_sum + grid[nr][nc], moves + 1)
+    dfs(0, 0, "", grid[0][0], 0)
+    return int(max_sum), best_path
