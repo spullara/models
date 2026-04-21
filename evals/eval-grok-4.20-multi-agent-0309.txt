@@ -1,9 +1,9 @@
 Model: grok-4.20-multi-agent-0309
 Provider: grok
-Evaluated: 2026-04-21T18:17:45.007746+00:00
+Evaluated: 2026-04-21T22:52:05.167621+00:00
 
 === TIMING ===
-Response time: 42.84s
+Response time: 28.01s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -19,70 +19,72 @@ Path valid: YES
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return 0, ""
+        return (0, "")
     n = len(grid)
-    max_sum = float('-inf')
-    best_path = ""
-    def dfs(r, c, path, cur_sum, moves):
-        nonlocal max_sum, best_path
-        if r == n - 1 and c == n - 1:
-            if cur_sum > max_sum:
-                max_sum = cur_sum
-                best_path = path
+    max_sum = [-float('inf')]
+    best_path = [""]
+    def dfs(i, j, current_sum, path, moves):
+        if i == n - 1 and j == n - 1:
+            if current_sum > max_sum[0]:
+                max_sum[0] = current_sum
+                best_path[0] = path
             return
-        must_diag = (moves % 3 == 2)
-        if must_diag:
-            if r + 1 < n and c + 1 < n:
-                nr = r + 1
-                nc = c + 1
-                dfs(nr, nc, path + 'X', cur_sum + grid[nr][nc], moves + 1)
+        next_move = moves + 1
+        must_diagonal = (next_move % 3 == 0)
+        candidates = []
+        if must_diagonal:
+            if i + 1 < n and j + 1 < n:
+                candidates.append((i + 1, j + 1, 'X'))
             else:
-                for mchar, dr, dc in [('R', 0, 1), ('D', 1, 0)]:
-                    nr = r + dr
-                    nc = c + dc
-                    if nr < n and nc < n:
-                        dfs(nr, nc, path + mchar, cur_sum + grid[nr][nc], moves + 1)
+                if j + 1 < n:
+                    candidates.append((i, j + 1, 'R'))
+                if i + 1 < n:
+                    candidates.append((i + 1, j, 'D'))
         else:
-            for mchar, dr, dc in [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]:
-                nr = r + dr
-                nc = c + dc
-                if nr < n and nc < n:
-                    dfs(nr, nc, path + mchar, cur_sum + grid[nr][nc], moves + 1)
-    dfs(0, 0, "", grid[0][0], 0)
-    return int(max_sum), best_path
+            if j + 1 < n:
+                candidates.append((i, j + 1, 'R'))
+            if i + 1 < n:
+                candidates.append((i + 1, j, 'D'))
+            if i + 1 < n and j + 1 < n:
+                candidates.append((i + 1, j + 1, 'X'))
+        for ni, nj, move in candidates:
+            dfs(ni, nj, current_sum + grid[ni][nj], path + move, moves + 1)
+    dfs(0, 0, grid[0][0], "", 0)
+    return (max_sum[0], best_path[0])
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return 0, ""
+        return (0, "")
     n = len(grid)
-    max_sum = float('-inf')
-    best_path = ""
-    def dfs(r, c, path, cur_sum, moves):
-        nonlocal max_sum, best_path
-        if r == n - 1 and c == n - 1:
-            if cur_sum > max_sum:
-                max_sum = cur_sum
-                best_path = path
+    max_sum = [-float('inf')]
+    best_path = [""]
+    def dfs(i, j, current_sum, path, moves):
+        if i == n - 1 and j == n - 1:
+            if current_sum > max_sum[0]:
+                max_sum[0] = current_sum
+                best_path[0] = path
             return
-        must_diag = (moves % 3 == 2)
-        if must_diag:
-            if r + 1 < n and c + 1 < n:
-                nr = r + 1
-                nc = c + 1
-                dfs(nr, nc, path + 'X', cur_sum + grid[nr][nc], moves + 1)
+        next_move = moves + 1
+        must_diagonal = (next_move % 3 == 0)
+        candidates = []
+        if must_diagonal:
+            if i + 1 < n and j + 1 < n:
+                candidates.append((i + 1, j + 1, 'X'))
             else:
-                for mchar, dr, dc in [('R', 0, 1), ('D', 1, 0)]:
-                    nr = r + dr
-                    nc = c + dc
-                    if nr < n and nc < n:
-                        dfs(nr, nc, path + mchar, cur_sum + grid[nr][nc], moves + 1)
+                if j + 1 < n:
+                    candidates.append((i, j + 1, 'R'))
+                if i + 1 < n:
+                    candidates.append((i + 1, j, 'D'))
         else:
-            for mchar, dr, dc in [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]:
-                nr = r + dr
-                nc = c + dc
-                if nr < n and nc < n:
-                    dfs(nr, nc, path + mchar, cur_sum + grid[nr][nc], moves + 1)
-    dfs(0, 0, "", grid[0][0], 0)
-    return int(max_sum), best_path
+            if j + 1 < n:
+                candidates.append((i, j + 1, 'R'))
+            if i + 1 < n:
+                candidates.append((i + 1, j, 'D'))
+            if i + 1 < n and j + 1 < n:
+                candidates.append((i + 1, j + 1, 'X'))
+        for ni, nj, move in candidates:
+            dfs(ni, nj, current_sum + grid[ni][nj], path + move, moves + 1)
+    dfs(0, 0, grid[0][0], "", 0)
+    return (max_sum[0], best_path[0])
