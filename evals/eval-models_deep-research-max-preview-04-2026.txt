@@ -1,0 +1,19 @@
+Model: models/deep-research-max-preview-04-2026
+Provider: gemini
+Evaluated: 2026-04-21T16:06:06.244377+00:00
+
+=== TIMING ===
+Response time: 0.13s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: 
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
