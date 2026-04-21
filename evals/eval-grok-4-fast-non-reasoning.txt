@@ -1,179 +1,19 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-04-02T15:17:07.269882+00:00
+Evaluated: 2026-04-21T15:46:44.506354+00:00
 
 === TIMING ===
-Response time: 5.86s
+Response time: 0.24s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 73
-Calculated sum: 15
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. retried and the latest reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    
-    n = len(grid)
-    INF = float('-inf')
-    
-    # dp[i][j][k] = max sum to reach (i,j) with k % 3 moves made
-    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = grid[0][0]
-    
-    # backtrack to reconstruct path
-    prev = [[[(None, None, None) for _ in range(3)] for _ in range(n)] for _ in range(n)]
-    
-    for i in range(n):
-        for j in range(n):
-            for k in range(3):
-                if dp[i][j][k] == INF:
-                    continue
-                
-                moves_made = 3 * (k // 3) + k  # total moves to reach here
-                is_diag_required = (moves_made + 1) % 3 == 0
-                current_move_num = moves_made + 1
-                
-                # Try right
-                if j + 1 < n:
-                    new_i, new_j, new_k = i, j + 1, (k + 1) % 3
-                    new_sum = dp[i][j][k] + grid[new_i][new_j]
-                    if new_sum > dp[new_i][new_j][new_k]:
-                        dp[new_i][new_j][new_k] = new_sum
-                        prev[new_i][new_j][new_k] = (i, j, k)
-                
-                # Try down
-                if i + 1 < n:
-                    new_i, new_j, new_k = i + 1, j, (k + 1) % 3
-                    new_sum = dp[i][j][k] + grid[new_i][new_j]
-                    if new_sum > dp[new_i][new_j][new_k]:
-                        dp[new_i][new_j][new_k] = new_sum
-                        prev[new_i][new_j][new_k] = (i, j, k)
-                
-                # Try diagonal (always allowed, but required at specific steps)
-                if i + 1 < n and j + 1 < n:
-                    new_i, new_j, new_k = i + 1, j + 1, (k + 1) % 3
-                    new_sum = dp[i][j][k] + grid[new_i][new_j]
-                    if new_sum > dp[new_i][new_j][new_k]:
-                        dp[new_i][new_j][new_k] = new_sum
-                        prev[new_i][new_j][new_k] = (i, j, k)
-    
-    # Find max sum at bottom-right
-    max_sum = max(dp[n-1][n-1])
-    if max_sum == INF:
-        return 0, ""
-    
-    # Backtrack to find path
-    best_k = dp[n-1][n-1].index(max_sum)
-    path = []
-    current_i, current_j, current_k = n-1, n-1, best_k
-    
-    while current_i != 0 or current_j != 0:
-        prev_i, prev_j, prev_k = prev[current_i][current_j][current_k]
-        if prev_i is None:
-            break
-        
-        # Determine move type
-        if current_i == prev_i and current_j == prev_j + 1:
-            move = 'R'
-        elif current_i == prev_i + 1 and current_j == prev_j:
-            move = 'D'
-        else:  # diagonal
-            move = 'X'
-        
-        path.append(move)
-        current_i, current_j, current_k = prev_i, prev_j, prev_k
-    
-    path.reverse()
-    path_string = ''.join(path)
-    
-    return max_sum, path_string
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    
-    n = len(grid)
-    INF = float('-inf')
-    
-    # dp[i][j][k] = max sum to reach (i,j) with k % 3 moves made
-    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = grid[0][0]
-    
-    # backtrack to reconstruct path
-    prev = [[[(None, None, None) for _ in range(3)] for _ in range(n)] for _ in range(n)]
-    
-    for i in range(n):
-        for j in range(n):
-            for k in range(3):
-                if dp[i][j][k] == INF:
-                    continue
-                
-                moves_made = 3 * (k // 3) + k  # total moves to reach here
-                is_diag_required = (moves_made + 1) % 3 == 0
-                current_move_num = moves_made + 1
-                
-                # Try right
-                if j + 1 < n:
-                    new_i, new_j, new_k = i, j + 1, (k + 1) % 3
-                    new_sum = dp[i][j][k] + grid[new_i][new_j]
-                    if new_sum > dp[new_i][new_j][new_k]:
-                        dp[new_i][new_j][new_k] = new_sum
-                        prev[new_i][new_j][new_k] = (i, j, k)
-                
-                # Try down
-                if i + 1 < n:
-                    new_i, new_j, new_k = i + 1, j, (k + 1) % 3
-                    new_sum = dp[i][j][k] + grid[new_i][new_j]
-                    if new_sum > dp[new_i][new_j][new_k]:
-                        dp[new_i][new_j][new_k] = new_sum
-                        prev[new_i][new_j][new_k] = (i, j, k)
-                
-                # Try diagonal (always allowed, but required at specific steps)
-                if i + 1 < n and j + 1 < n:
-                    new_i, new_j, new_k = i + 1, j + 1, (k + 1) % 3
-                    new_sum = dp[i][j][k] + grid[new_i][new_j]
-                    if new_sum > dp[new_i][new_j][new_k]:
-                        dp[new_i][new_j][new_k] = new_sum
-                        prev[new_i][new_j][new_k] = (i, j, k)
-    
-    # Find max sum at bottom-right
-    max_sum = max(dp[n-1][n-1])
-    if max_sum == INF:
-        return 0, ""
-    
-    # Backtrack to find path
-    best_k = dp[n-1][n-1].index(max_sum)
-    path = []
-    current_i, current_j, current_k = n-1, n-1, best_k
-    
-    while current_i != 0 or current_j != 0:
-        prev_i, prev_j, prev_k = prev[current_i][current_j][current_k]
-        if prev_i is None:
-            break
-        
-        # Determine move type
-        if current_i == prev_i and current_j == prev_j + 1:
-            move = 'R'
-        elif current_i == prev_i + 1 and current_j == prev_j:
-            move = 'D'
-        else:  # diagonal
-            move = 'X'
-        
-        path.append(move)
-        current_i, current_j, current_k = prev_i, prev_j, prev_k
-    
-    path.reverse()
-    path_string = ''.join(path)
-    
-    return max_sum, path_string
+(no code extracted)
