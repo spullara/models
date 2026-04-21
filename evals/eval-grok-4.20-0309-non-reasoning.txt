@@ -1,19 +1,20 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-04-21T22:51:38.350155+00:00
+Evaluated: 2026-04-21T23:05:57.887556+00:00
 
 === TIMING ===
-Response time: 2.59s
+Response time: 3.44s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Returned sum: 61
+Calculated sum: 16
+Sum matches: NO
+Path valid: NO
+Path error: Move 3 must be diagonal (X) but was D
 
 === RAW RESPONSE ===
 ```python
@@ -25,48 +26,41 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         return (grid[0][0], "")
     
     INF = float('-inf')
-    dp = [[{} for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = (grid[0][0], "")
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+    
+    dirs = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
     
     for i in range(n):
         for j in range(n):
-            if not dp[i][j]:
+            if dp[i][j][0] == INF:
                 continue
-            for moves, (score, path) in list(dp[i][j].items()):
-                if i == n-1 and j == n-1:
+            moves = 0
+            ci, cj = i, j
+            while ci > 0 or cj > 0:
+                moves += 1
+                if ci > 0:
+                    ci -= 1
+                    if cj > 0 and (ci, cj) == (i-1, j-1):
+                        cj -= 1
+                elif cj > 0:
+                    cj -= 1
+            step = moves + 1
+            
+            must_diag = (step % 3 == 0)
+            
+            for di, dj, let in dirs:
+                ni, nj = i + di, j + dj
+                if ni >= n or nj >= n:
                     continue
-                rem = (moves + 1) % 3
-                is_diag_must = (rem == 0)
-                
-                dirs = []
-                if is_diag_must:
-                    if i + 1 < n and j + 1 < n:
-                        dirs.append((i+1, j+1, 'X'))
-                    else:
-                        if j + 1 < n:
-                            dirs.append((i, j+1, 'R'))
-                        if i + 1 < n:
-                            dirs.append((i+1, j, 'D'))
-                else:
-                    if j + 1 < n:
-                        dirs.append((i, j+1, 'R'))
-                    if i + 1 < n:
-                        dirs.append((i+1, j, 'D'))
-                    if i + 1 < n and j + 1 < n:
-                        dirs.append((i+1, j+1, 'X'))
-                
-                for ni, nj, ch in dirs:
-                    new_score = score + grid[ni][nj]
-                    new_path = path + ch
-                    new_moves = moves + 1
-                    if new_moves not in dp[ni][nj] or new_score > dp[ni][nj][new_moves][0]:
-                        dp[ni][nj][new_moves] = (new_score, new_path)
+                if must_diag and let != 'X' and (i + 1 < n and j + 1 < n):
+                    continue
+                new_sum = dp[i][j][0] + grid[ni][nj]
+                new_path = dp[i][j][1] + let
+                if new_sum > dp[ni][nj][0]:
+                    dp[ni][nj] = (new_sum, new_path)
     
-    if not dp[n-1][n-1]:
-        return (0, "")
-    
-    best = max(dp[n-1][n-1].values(), key=lambda x: x[0])
-    return (best[0], best[1])
+    return dp[n-1][n-1]
 ```
 
 === EXTRACTED CODE ===
@@ -78,45 +72,38 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
         return (grid[0][0], "")
     
     INF = float('-inf')
-    dp = [[{} for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = (grid[0][0], "")
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+    
+    dirs = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
     
     for i in range(n):
         for j in range(n):
-            if not dp[i][j]:
+            if dp[i][j][0] == INF:
                 continue
-            for moves, (score, path) in list(dp[i][j].items()):
-                if i == n-1 and j == n-1:
+            moves = 0
+            ci, cj = i, j
+            while ci > 0 or cj > 0:
+                moves += 1
+                if ci > 0:
+                    ci -= 1
+                    if cj > 0 and (ci, cj) == (i-1, j-1):
+                        cj -= 1
+                elif cj > 0:
+                    cj -= 1
+            step = moves + 1
+            
+            must_diag = (step % 3 == 0)
+            
+            for di, dj, let in dirs:
+                ni, nj = i + di, j + dj
+                if ni >= n or nj >= n:
                     continue
-                rem = (moves + 1) % 3
-                is_diag_must = (rem == 0)
-                
-                dirs = []
-                if is_diag_must:
-                    if i + 1 < n and j + 1 < n:
-                        dirs.append((i+1, j+1, 'X'))
-                    else:
-                        if j + 1 < n:
-                            dirs.append((i, j+1, 'R'))
-                        if i + 1 < n:
-                            dirs.append((i+1, j, 'D'))
-                else:
-                    if j + 1 < n:
-                        dirs.append((i, j+1, 'R'))
-                    if i + 1 < n:
-                        dirs.append((i+1, j, 'D'))
-                    if i + 1 < n and j + 1 < n:
-                        dirs.append((i+1, j+1, 'X'))
-                
-                for ni, nj, ch in dirs:
-                    new_score = score + grid[ni][nj]
-                    new_path = path + ch
-                    new_moves = moves + 1
-                    if new_moves not in dp[ni][nj] or new_score > dp[ni][nj][new_moves][0]:
-                        dp[ni][nj][new_moves] = (new_score, new_path)
+                if must_diag and let != 'X' and (i + 1 < n and j + 1 < n):
+                    continue
+                new_sum = dp[i][j][0] + grid[ni][nj]
+                new_path = dp[i][j][1] + let
+                if new_sum > dp[ni][nj][0]:
+                    dp[ni][nj] = (new_sum, new_path)
     
-    if not dp[n-1][n-1]:
-        return (0, "")
-    
-    best = max(dp[n-1][n-1].values(), key=lambda x: x[0])
-    return (best[0], best[1])
+    return dp[n-1][n-1]
