@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-04-21 23:10:17
+Last updated: 2026-04-22 16:00:23
 
 ## Summary
 
@@ -11,7 +11,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/10
 
-**Gemini**: 50/75
+**Gemini**: 50/76
 
 **Grok**: 14/9
 
@@ -229,13 +229,13 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-embedding-2 (added: 2026-04-22)
 - models/deep-research-preview-04-2026 (added: 2026-04-21)
 - models/deep-research-max-preview-04-2026 (added: 2026-04-21)
 - models/gemini-3.1-flash-tts-preview (added: 2026-04-15)
 - models/gemini-robotics-er-1.6-preview (added: 2026-04-14)
 - models/gemma-4-31b-it (added: 2026-04-02)
 - models/gemma-4-26b-a4b-it (added: 2026-04-02)
-- models/veo-3.1-lite-generate-preview (added: 2026-03-31)
 - models/lyria-3-pro-preview (added: 2026-03-25)
 - models/lyria-3-clip-preview (added: 2026-03-25)
 - models/gemini-embedding-2-preview (added: 2026-03-10)
@@ -282,6 +282,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/veo-3.1-lite-generate-preview (deleted: 2026-04-22)
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-04-21)
 - models/gemini-2.5-flash-native-audio-latest (deleted: 2026-04-21)
 - models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-04-15)
