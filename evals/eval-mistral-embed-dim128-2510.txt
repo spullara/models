@@ -1,9 +1,9 @@
 Model: mistral-embed-dim128-2510
 Provider: mistral
-Evaluated: 2026-04-21T13:11:06.067978+00:00
+Evaluated: 2026-04-23T14:41:07.251012+00:00
 
 === TIMING ===
-Response time: 0.35s
+Response time: 0.33s
 
 === CODE EXTRACTION ===
 Method: None

@@ -1,34 +1,32 @@
 Model: mistral-medium-2604
 Provider: mistral
-Evaluated: 2026-04-21T15:28:06.351750+00:00
+Evaluated: 2026-04-23T14:41:07.896923+00:00
 
 === TIMING ===
-Response time: 3.74s
+Response time: 2.5s
 
 === CODE EXTRACTION ===
 Method: direct
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 73
-Calculated sum: 6
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 0:
         return (0, "")
-    memo = {}
 
-    def dfs(i, j, move_count, path):
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
+    def dfs(i, j, step):
         if i == n - 1 and j == n - 1:
-            return (grid[i][j], path)
-        key = (i, j, move_count)
-        if key in memo:
-            return memo[key]
+            return (grid[i][j], "")
         max_sum = -1
         best_path = ""
         moves = []
@@ -38,45 +36,38 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
             moves.append(('D', i + 1, j))
         if i + 1 < n and j + 1 < n:
             moves.append(('X', i + 1, j + 1))
-        is_third_move = (move_count + 1) % 3 == 0
+
+        is_third = (step % 3 == 0)
+        if is_third:
+            diagonal_moves = [m for m in moves if m[0] == 'X']
+            if diagonal_moves:
+                moves = diagonal_moves
+            else:
+                moves = [m for m in moves if m[0] in ('R', 'D')]
+
         for move, ni, nj in moves:
-            if is_third_move and move != 'X':
-                continue
-            current_sum, current_path = dfs(ni, nj, move_count + 1, path + move)
+            current_sum, current_path = dfs(ni, nj, step + 1)
             current_sum += grid[i][j]
             if current_sum > max_sum or (current_sum == max_sum and len(current_path) < len(best_path)):
                 max_sum = current_sum
-                best_path = current_path
-        if not moves:
-            return (-1, "")
-        if is_third_move:
-            for move, ni, nj in moves:
-                if move == 'X':
-                    continue
-                current_sum, current_path = dfs(ni, nj, move_count + 1, path + move)
-                current_sum += grid[i][j]
-                if current_sum > max_sum or (current_sum == max_sum and len(current_path) < len(best_path)):
-                    max_sum = current_sum
-                    best_path = current_path
-        memo[key] = (max_sum, best_path)
-        return memo[key]
+                best_path = move + current_path
+        return (max_sum, best_path)
 
-    total_sum, path_str = dfs(0, 0, 0, "")
-    return (total_sum, path_str)
+    total, path = dfs(0, 0, 1)
+    return (total, path)
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 0:
         return (0, "")
-    memo = {}
 
-    def dfs(i, j, move_count, path):
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
+    def dfs(i, j, step):
         if i == n - 1 and j == n - 1:
-            return (grid[i][j], path)
-        key = (i, j, move_count)
-        if key in memo:
-            return memo[key]
+            return (grid[i][j], "")
         max_sum = -1
         best_path = ""
         moves = []
@@ -86,28 +77,22 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
             moves.append(('D', i + 1, j))
         if i + 1 < n and j + 1 < n:
             moves.append(('X', i + 1, j + 1))
-        is_third_move = (move_count + 1) % 3 == 0
+
+        is_third = (step % 3 == 0)
+        if is_third:
+            diagonal_moves = [m for m in moves if m[0] == 'X']
+            if diagonal_moves:
+                moves = diagonal_moves
+            else:
+                moves = [m for m in moves if m[0] in ('R', 'D')]
+
         for move, ni, nj in moves:
-            if is_third_move and move != 'X':
-                continue
-            current_sum, current_path = dfs(ni, nj, move_count + 1, path + move)
+            current_sum, current_path = dfs(ni, nj, step + 1)
             current_sum += grid[i][j]
             if current_sum > max_sum or (current_sum == max_sum and len(current_path) < len(best_path)):
                 max_sum = current_sum
-                best_path = current_path
-        if not moves:
-            return (-1, "")
-        if is_third_move:
-            for move, ni, nj in moves:
-                if move == 'X':
-                    continue
-                current_sum, current_path = dfs(ni, nj, move_count + 1, path + move)
-                current_sum += grid[i][j]
-                if current_sum > max_sum or (current_sum == max_sum and len(current_path) < len(best_path)):
-                    max_sum = current_sum
-                    best_path = current_path
-        memo[key] = (max_sum, best_path)
-        return memo[key]
+                best_path = move + current_path
+        return (max_sum, best_path)
 
-    total_sum, path_str = dfs(0, 0, 0, "")
-    return (total_sum, path_str)
+    total, path = dfs(0, 0, 1)
+    return (total, path)

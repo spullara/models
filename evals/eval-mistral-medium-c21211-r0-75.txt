@@ -1,9 +1,9 @@
 Model: mistral-medium-c21211-r0-75
 Provider: mistral
-Evaluated: 2026-04-21T15:28:22.236861+00:00
+Evaluated: 2026-04-23T14:41:18.416542+00:00
 
 === TIMING ===
-Response time: 2.91s
+Response time: 2.26s
 
 === CODE EXTRACTION ===
 Method: direct
@@ -20,69 +20,73 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 0:
         return (0, "")
-    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
-    max_sum = -1
-    best_path = ""
 
-    from collections import deque
-    queue = deque()
-    queue.append((0, 0, grid[0][0], "", 0))
-    visited = {}
+    from functools import lru_cache
 
-    while queue:
-        i, j, current_sum, path, move_count = queue.popleft()
+    @lru_cache(maxsize=None)
+    def dp(i, j, step):
         if i == n - 1 and j == n - 1:
-            if current_sum > max_sum:
+            return (grid[i][j], "")
+        max_sum = -1
+        best_path = ""
+        next_step = step + 1
+        moves = []
+        if j + 1 < n:
+            moves.append(('R', i, j + 1))
+        if i + 1 < n:
+            moves.append(('D', i + 1, j))
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1))
+
+        if next_step % 3 == 0:
+            moves = [m for m in moves if m[0] == 'X'] or moves
+
+        for direction, ni, nj in moves:
+            current_sum, path = dp(ni, nj, next_step)
+            current_sum += grid[i][j]
+            if current_sum > max_sum or (current_sum == max_sum and (len(path) < len(best_path) or path < best_path)):
                 max_sum = current_sum
-                best_path = path
-            continue
-        required_diagonal = (move_count + 1) % 3 == 0
-        for d, di, dj in directions:
-            ni, nj = i + di, j + dj
-            if 0 <= ni < n and 0 <= nj < n:
-                if required_diagonal and d != 'X':
-                    continue
-                new_sum = current_sum + grid[ni][nj]
-                new_path = path + d
-                new_move_count = move_count + 1
-                key = (ni, nj, new_move_count % 3)
-                if key not in visited or visited[key] < new_sum:
-                    visited[key] = new_sum
-                    queue.append((ni, nj, new_sum, new_path, new_move_count))
-    return (max_sum, best_path)
+                best_path = direction + path
+
+        return (max_sum, best_path)
+
+    total_sum, path = dp(0, 0, 0)
+    return (total_sum, path)
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 0:
         return (0, "")
-    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
-    max_sum = -1
-    best_path = ""
 
-    from collections import deque
-    queue = deque()
-    queue.append((0, 0, grid[0][0], "", 0))
-    visited = {}
+    from functools import lru_cache
 
-    while queue:
-        i, j, current_sum, path, move_count = queue.popleft()
+    @lru_cache(maxsize=None)
+    def dp(i, j, step):
         if i == n - 1 and j == n - 1:
-            if current_sum > max_sum:
+            return (grid[i][j], "")
+        max_sum = -1
+        best_path = ""
+        next_step = step + 1
+        moves = []
+        if j + 1 < n:
+            moves.append(('R', i, j + 1))
+        if i + 1 < n:
+            moves.append(('D', i + 1, j))
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1))
+
+        if next_step % 3 == 0:
+            moves = [m for m in moves if m[0] == 'X'] or moves
+
+        for direction, ni, nj in moves:
+            current_sum, path = dp(ni, nj, next_step)
+            current_sum += grid[i][j]
+            if current_sum > max_sum or (current_sum == max_sum and (len(path) < len(best_path) or path < best_path)):
                 max_sum = current_sum
-                best_path = path
-            continue
-        required_diagonal = (move_count + 1) % 3 == 0
-        for d, di, dj in directions:
-            ni, nj = i + di, j + dj
-            if 0 <= ni < n and 0 <= nj < n:
-                if required_diagonal and d != 'X':
-                    continue
-                new_sum = current_sum + grid[ni][nj]
-                new_path = path + d
-                new_move_count = move_count + 1
-                key = (ni, nj, new_move_count % 3)
-                if key not in visited or visited[key] < new_sum:
-                    visited[key] = new_sum
-                    queue.append((ni, nj, new_sum, new_path, new_move_count))
-    return (max_sum, best_path)
+                best_path = direction + path
+
+        return (max_sum, best_path)
+
+    total_sum, path = dp(0, 0, 0)
+    return (total_sum, path)

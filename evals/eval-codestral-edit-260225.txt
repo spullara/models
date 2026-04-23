@@ -1,0 +1,82 @@
+Model: codestral-edit-260225
+Provider: mistral
+Evaluated: 2026-04-23T14:41:05.990197+00:00
+
+=== TIMING ===
+Response time: 1.23s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    moves = ['R', 'D', 'X']
+    max_sum = -1
+    best_path = ""
+
+    def backtrack(x, y, path, move_count, current_sum):
+        nonlocal max_sum, best_path
+        if x == n - 1 and y == n - 1:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
+            return
+        for i, move in enumerate(moves):
+            nx, ny = x, y
+            if move == 'R':
+                nx += 1
+            elif move == 'D':
+                ny += 1
+            elif move == 'X':
+                nx += 1
+                ny += 1
+            if 0 <= nx < n and 0 <= ny < n:
+                new_path = path + move
+                new_sum = current_sum + grid[ny][nx]
+                if move_count % 3 == 2 and move != 'X':
+                    continue
+                backtrack(nx, ny, new_path, move_count + 1, new_sum)
+
+    backtrack(0, 0, "", 0, grid[0][0])
+    return (max_sum, best_path)
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    moves = ['R', 'D', 'X']
+    max_sum = -1
+    best_path = ""
+
+    def backtrack(x, y, path, move_count, current_sum):
+        nonlocal max_sum, best_path
+        if x == n - 1 and y == n - 1:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
+            return
+        for i, move in enumerate(moves):
+            nx, ny = x, y
+            if move == 'R':
+                nx += 1
+            elif move == 'D':
+                ny += 1
+            elif move == 'X':
+                nx += 1
+                ny += 1
+            if 0 <= nx < n and 0 <= ny < n:
+                new_path = path + move
+                new_sum = current_sum + grid[ny][nx]
+                if move_count % 3 == 2 and move != 'X':
+                    continue
+                backtrack(nx, ny, new_path, move_count + 1, new_sum)
+
+    backtrack(0, 0, "", 0, grid[0][0])
+    return (max_sum, best_path)
