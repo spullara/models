@@ -1,20 +1,16 @@
 Model: codestral-edit-260225
 Provider: mistral
-Evaluated: 2026-04-23T15:51:06.698254+00:00
+Evaluated: 2026-04-23T15:53:06.028749+00:00
 
 === TIMING ===
-Response time: 1.44s
+Response time: 1.49s
 
 === CODE EXTRACTION ===
 Method: direct
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 43
-Calculated sum: 7
-Sum matches: NO
-Path valid: NO
-Path error: Path ended at (1, 1) instead of (3, 3)
+Execution Error: can only concatenate str (not "int") to str
 
 === RAW RESPONSE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
@@ -36,22 +32,18 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
                 moves.append(('X', dp[i-1][j-1]))
 
             if (i + j) % 3 == 0:
-                if 'X' in [m[0] for m in moves]:
-                    moves = [(m[0], m[1]) for m in moves if m[0] == 'X']
-                else:
-                    moves = [(m[0], m[1]) for m in moves if m[0] in ['R', 'D']]
+                moves = [(m, v) for m, v in moves if m == 'X']
+                if not moves:
+                    moves = [(m, v) for m, v in moves if m in ('R', 'D')]
 
             if moves:
-                max_val = max(m[1] for m in moves)
+                max_val, best_move = max(moves, key=lambda x: x[1])
                 dp[i][j] = max_val + grid[i][j]
-                for m in moves:
-                    if m[1] == max_val:
-                        path[i][j].append(m[0])
+                path[i][j] = path[i-1][j-1] if best_move == 'X' else (path[i-1][j] if best_move == 'D' else path[i][j-1])
+                path[i][j].append(best_move)
 
     max_sum = dp[-1][-1]
-    current_path = path[-1][-1]
-    path_str = ''.join(current_path)
-
+    path_str = ''.join(path[-1][-1])
     return (max_sum, path_str)
 
 === EXTRACTED CODE ===
@@ -74,20 +66,16 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
                 moves.append(('X', dp[i-1][j-1]))
 
             if (i + j) % 3 == 0:
-                if 'X' in [m[0] for m in moves]:
-                    moves = [(m[0], m[1]) for m in moves if m[0] == 'X']
-                else:
-                    moves = [(m[0], m[1]) for m in moves if m[0] in ['R', 'D']]
+                moves = [(m, v) for m, v in moves if m == 'X']
+                if not moves:
+                    moves = [(m, v) for m, v in moves if m in ('R', 'D')]
 
             if moves:
-                max_val = max(m[1] for m in moves)
+                max_val, best_move = max(moves, key=lambda x: x[1])
                 dp[i][j] = max_val + grid[i][j]
-                for m in moves:
-                    if m[1] == max_val:
-                        path[i][j].append(m[0])
+                path[i][j] = path[i-1][j-1] if best_move == 'X' else (path[i-1][j] if best_move == 'D' else path[i][j-1])
+                path[i][j].append(best_move)
 
     max_sum = dp[-1][-1]
-    current_path = path[-1][-1]
-    path_str = ''.join(current_path)
-
+    path_str = ''.join(path[-1][-1])
     return (max_sum, path_str)
