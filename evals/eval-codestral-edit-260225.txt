@@ -1,82 +1,93 @@
 Model: codestral-edit-260225
 Provider: mistral
-Evaluated: 2026-04-23T14:41:05.990197+00:00
+Evaluated: 2026-04-23T15:51:06.698254+00:00
 
 === TIMING ===
-Response time: 1.23s
+Response time: 1.44s
 
 === CODE EXTRACTION ===
 Method: direct
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Returned sum: 43
+Calculated sum: 7
+Sum matches: NO
+Path valid: NO
+Path error: Path ended at (1, 1) instead of (3, 3)
 
 === RAW RESPONSE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
-    moves = ['R', 'D', 'X']
-    max_sum = -1
-    best_path = ""
+    dp = [[-1 for _ in range(n)] for _ in range(n)]
+    path = [[[] for _ in range(n)] for _ in range(n)]
+    dp[0][0] = grid[0][0]
 
-    def backtrack(x, y, path, move_count, current_sum):
-        nonlocal max_sum, best_path
-        if x == n - 1 and y == n - 1:
-            if current_sum > max_sum:
-                max_sum = current_sum
-                best_path = path
-            return
-        for i, move in enumerate(moves):
-            nx, ny = x, y
-            if move == 'R':
-                nx += 1
-            elif move == 'D':
-                ny += 1
-            elif move == 'X':
-                nx += 1
-                ny += 1
-            if 0 <= nx < n and 0 <= ny < n:
-                new_path = path + move
-                new_sum = current_sum + grid[ny][nx]
-                if move_count % 3 == 2 and move != 'X':
-                    continue
-                backtrack(nx, ny, new_path, move_count + 1, new_sum)
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            moves = []
+            if i > 0:
+                moves.append(('D', dp[i-1][j]))
+            if j > 0:
+                moves.append(('R', dp[i][j-1]))
+            if i > 0 and j > 0:
+                moves.append(('X', dp[i-1][j-1]))
 
-    backtrack(0, 0, "", 0, grid[0][0])
-    return (max_sum, best_path)
+            if (i + j) % 3 == 0:
+                if 'X' in [m[0] for m in moves]:
+                    moves = [(m[0], m[1]) for m in moves if m[0] == 'X']
+                else:
+                    moves = [(m[0], m[1]) for m in moves if m[0] in ['R', 'D']]
+
+            if moves:
+                max_val = max(m[1] for m in moves)
+                dp[i][j] = max_val + grid[i][j]
+                for m in moves:
+                    if m[1] == max_val:
+                        path[i][j].append(m[0])
+
+    max_sum = dp[-1][-1]
+    current_path = path[-1][-1]
+    path_str = ''.join(current_path)
+
+    return (max_sum, path_str)
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
-    moves = ['R', 'D', 'X']
-    max_sum = -1
-    best_path = ""
+    dp = [[-1 for _ in range(n)] for _ in range(n)]
+    path = [[[] for _ in range(n)] for _ in range(n)]
+    dp[0][0] = grid[0][0]
 
-    def backtrack(x, y, path, move_count, current_sum):
-        nonlocal max_sum, best_path
-        if x == n - 1 and y == n - 1:
-            if current_sum > max_sum:
-                max_sum = current_sum
-                best_path = path
-            return
-        for i, move in enumerate(moves):
-            nx, ny = x, y
-            if move == 'R':
-                nx += 1
-            elif move == 'D':
-                ny += 1
-            elif move == 'X':
-                nx += 1
-                ny += 1
-            if 0 <= nx < n and 0 <= ny < n:
-                new_path = path + move
-                new_sum = current_sum + grid[ny][nx]
-                if move_count % 3 == 2 and move != 'X':
-                    continue
-                backtrack(nx, ny, new_path, move_count + 1, new_sum)
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            moves = []
+            if i > 0:
+                moves.append(('D', dp[i-1][j]))
+            if j > 0:
+                moves.append(('R', dp[i][j-1]))
+            if i > 0 and j > 0:
+                moves.append(('X', dp[i-1][j-1]))
 
-    backtrack(0, 0, "", 0, grid[0][0])
-    return (max_sum, best_path)
+            if (i + j) % 3 == 0:
+                if 'X' in [m[0] for m in moves]:
+                    moves = [(m[0], m[1]) for m in moves if m[0] == 'X']
+                else:
+                    moves = [(m[0], m[1]) for m in moves if m[0] in ['R', 'D']]
+
+            if moves:
+                max_val = max(m[1] for m in moves)
+                dp[i][j] = max_val + grid[i][j]
+                for m in moves:
+                    if m[1] == max_val:
+                        path[i][j].append(m[0])
+
+    max_sum = dp[-1][-1]
+    current_path = path[-1][-1]
+    path_str = ''.join(current_path)
+
+    return (max_sum, path_str)

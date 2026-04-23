@@ -1,9 +1,9 @@
 Model: mistral-medium-c21211-r0-75
 Provider: mistral
-Evaluated: 2026-04-23T14:41:18.416542+00:00
+Evaluated: 2026-04-23T15:51:22.168827+00:00
 
 === TIMING ===
-Response time: 2.26s
+Response time: 2.68s
 
 === CODE EXTRACTION ===
 Method: direct
@@ -24,7 +24,7 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     from functools import lru_cache
 
     @lru_cache(maxsize=None)
-    def dp(i, j, step):
+    def dfs(i, j, step):
         if i == n - 1 and j == n - 1:
             return (grid[i][j], "")
         max_sum = -1
@@ -37,21 +37,22 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
             moves.append(('D', i + 1, j))
         if i + 1 < n and j + 1 < n:
             moves.append(('X', i + 1, j + 1))
-
         if next_step % 3 == 0:
-            moves = [m for m in moves if m[0] == 'X'] or moves
-
-        for direction, ni, nj in moves:
-            current_sum, path = dp(ni, nj, next_step)
+            diag_moves = [m for m in moves if m[0] == 'X']
+            if diag_moves:
+                moves = diag_moves
+        for move, ni, nj in moves:
+            current_sum, path = dfs(ni, nj, next_step)
             current_sum += grid[i][j]
-            if current_sum > max_sum or (current_sum == max_sum and (len(path) < len(best_path) or path < best_path)):
+            if current_sum > max_sum:
                 max_sum = current_sum
-                best_path = direction + path
-
+                best_path = move + path
+            elif current_sum == max_sum and len(move + path) < len(best_path):
+                best_path = move + path
         return (max_sum, best_path)
 
-    total_sum, path = dp(0, 0, 0)
-    return (total_sum, path)
+    max_sum, path = dfs(0, 0, 0)
+    return (max_sum, path)
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
@@ -62,7 +63,7 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     from functools import lru_cache
 
     @lru_cache(maxsize=None)
-    def dp(i, j, step):
+    def dfs(i, j, step):
         if i == n - 1 and j == n - 1:
             return (grid[i][j], "")
         max_sum = -1
@@ -75,18 +76,19 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
             moves.append(('D', i + 1, j))
         if i + 1 < n and j + 1 < n:
             moves.append(('X', i + 1, j + 1))
-
         if next_step % 3 == 0:
-            moves = [m for m in moves if m[0] == 'X'] or moves
-
-        for direction, ni, nj in moves:
-            current_sum, path = dp(ni, nj, next_step)
+            diag_moves = [m for m in moves if m[0] == 'X']
+            if diag_moves:
+                moves = diag_moves
+        for move, ni, nj in moves:
+            current_sum, path = dfs(ni, nj, next_step)
             current_sum += grid[i][j]
-            if current_sum > max_sum or (current_sum == max_sum and (len(path) < len(best_path) or path < best_path)):
+            if current_sum > max_sum:
                 max_sum = current_sum
-                best_path = direction + path
-
+                best_path = move + path
+            elif current_sum == max_sum and len(move + path) < len(best_path):
+                best_path = move + path
         return (max_sum, best_path)
 
-    total_sum, path = dp(0, 0, 0)
-    return (total_sum, path)
+    max_sum, path = dfs(0, 0, 0)
+    return (max_sum, path)
