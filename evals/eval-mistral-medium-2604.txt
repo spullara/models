@@ -1,80 +1,99 @@
 Model: mistral-medium-2604
 Provider: mistral
-Evaluated: 2026-04-23T15:53:08.184802+00:00
+Evaluated: 2026-04-23T15:56:09.197864+00:00
 
 === TIMING ===
-Response time: 2.32s
+Response time: 2.45s
 
 === CODE EXTRACTION ===
 Method: direct
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Returned sum: 73
+Calculated sum: 15
+Sum matches: NO
+Path valid: NO
+Path error: Move 3 must be diagonal (X) but was D
 
 === RAW RESPONSE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
-    from functools import lru_cache
+    memo = {}
 
-    @lru_cache(maxsize=None)
-    def dp(i, j, step):
+    def dfs(i, j, step, path):
         if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
+            return (grid[i][j], path)
+        key = (i, j, step % 3)
+        if key in memo:
+            return memo[key]
         max_sum = -1
         best_path = ""
-        step_mod = step % 3
+        move = step % 3
         moves = []
-        if step_mod == 2:
+        if move == 2:
             if i + 1 < n and j + 1 < n:
-                moves.append((i + 1, j + 1, 'X'))
-        if moves or step_mod != 2:
+                moves.append(('X', i + 1, j + 1))
             if i + 1 < n:
-                moves.append((i + 1, j, 'D'))
+                moves.append(('D', i + 1, j))
             if j + 1 < n:
-                moves.append((i, j + 1, 'R'))
-        for ni, nj, move in moves:
-            current_sum, current_path = dp(ni, nj, step + 1)
+                moves.append(('R', i, j + 1))
+        else:
+            if i + 1 < n and j + 1 < n:
+                moves.append(('X', i + 1, j + 1))
+            if i + 1 < n:
+                moves.append(('D', i + 1, j))
+            if j + 1 < n:
+                moves.append(('R', i, j + 1))
+        for m, ni, nj in moves:
+            current_sum, current_path = dfs(ni, nj, step + 1, path + m)
             current_sum += grid[i][j]
-            if current_sum > max_sum or (current_sum == max_sum and current_path < best_path):
+            if current_sum > max_sum:
                 max_sum = current_sum
-                best_path = move + current_path
-        return (max_sum, best_path)
+                best_path = current_path
+        memo[key] = (max_sum, best_path)
+        return memo[key]
 
-    total_sum, path = dp(0, 0, 0)
+    total_sum, path = dfs(0, 0, 0, "")
     return (total_sum, path)
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
-    from functools import lru_cache
+    memo = {}
 
-    @lru_cache(maxsize=None)
-    def dp(i, j, step):
+    def dfs(i, j, step, path):
         if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
+            return (grid[i][j], path)
+        key = (i, j, step % 3)
+        if key in memo:
+            return memo[key]
         max_sum = -1
         best_path = ""
-        step_mod = step % 3
+        move = step % 3
         moves = []
-        if step_mod == 2:
+        if move == 2:
             if i + 1 < n and j + 1 < n:
-                moves.append((i + 1, j + 1, 'X'))
-        if moves or step_mod != 2:
+                moves.append(('X', i + 1, j + 1))
             if i + 1 < n:
-                moves.append((i + 1, j, 'D'))
+                moves.append(('D', i + 1, j))
             if j + 1 < n:
-                moves.append((i, j + 1, 'R'))
-        for ni, nj, move in moves:
-            current_sum, current_path = dp(ni, nj, step + 1)
+                moves.append(('R', i, j + 1))
+        else:
+            if i + 1 < n and j + 1 < n:
+                moves.append(('X', i + 1, j + 1))
+            if i + 1 < n:
+                moves.append(('D', i + 1, j))
+            if j + 1 < n:
+                moves.append(('R', i, j + 1))
+        for m, ni, nj in moves:
+            current_sum, current_path = dfs(ni, nj, step + 1, path + m)
             current_sum += grid[i][j]
-            if current_sum > max_sum or (current_sum == max_sum and current_path < best_path):
+            if current_sum > max_sum:
                 max_sum = current_sum
-                best_path = move + current_path
-        return (max_sum, best_path)
+                best_path = current_path
+        memo[key] = (max_sum, best_path)
+        return memo[key]
 
-    total_sum, path = dp(0, 0, 0)
+    total_sum, path = dfs(0, 0, 0, "")
     return (total_sum, path)

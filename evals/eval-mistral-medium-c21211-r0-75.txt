@@ -1,9 +1,9 @@
 Model: mistral-medium-c21211-r0-75
 Provider: mistral
-Evaluated: 2026-04-23T15:53:20.311116+00:00
+Evaluated: 2026-04-23T15:56:19.404527+00:00
 
 === TIMING ===
-Response time: 2.75s
+Response time: 2.84s
 
 === CODE EXTRACTION ===
 Method: direct
@@ -18,85 +18,97 @@ Path valid: YES
 === RAW RESPONSE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
-    if n == 0:
-        return (0, "")
+    max_sum = -1
+    best_path = ""
 
-    from functools import lru_cache
+    from collections import deque
+    q = deque()
+    q.append((0, 0, grid[0][0], "", 0))
 
-    @lru_cache(maxsize=None)
-    def dp(i, j, step):
-        if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
-        max_sum = -1
-        best_path = ""
-        move_num = step + 1
-        is_diagonal_required = (move_num % 3 == 0)
+    directions = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
 
-        directions = []
-        if is_diagonal_required:
-            if i + 1 < n and j + 1 < n:
-                directions = [('X', i + 1, j + 1)]
+    while q:
+        x, y, current_sum, path, move_count = q.popleft()
+
+        if x == n - 1 and y == n - 1:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
+            continue
+
+        next_move_num = move_count + 1
+        required_diagonal = (next_move_num % 3 == 0)
+
+        possible_moves = []
+        if required_diagonal:
+            dx, dy = directions['X']
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < n and 0 <= ny < n:
+                possible_moves.append(('X', nx, ny))
             else:
-                directions = [('R', i, j + 1), ('D', i + 1, j)]
+                for move, (dx, dy) in directions.items():
+                    if move != 'X':
+                        nx, ny = x + dx, y + dy
+                        if 0 <= nx < n and 0 <= ny < n:
+                            possible_moves.append((move, nx, ny))
         else:
-            if j + 1 < n:
-                directions.append(('R', i, j + 1))
-            if i + 1 < n:
-                directions.append(('D', i + 1, j))
-            if i + 1 < n and j + 1 < n:
-                directions.append(('X', i + 1, j + 1))
+            for move, (dx, dy) in directions.items():
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < n and 0 <= ny < n:
+                    possible_moves.append((move, nx, ny))
 
-        for move, ni, nj in directions:
-            if 0 <= ni < n and 0 <= nj < n:
-                current_sum, current_path = dp(ni, nj, move_num)
-                total_sum = grid[i][j] + current_sum
-                if total_sum > max_sum or (total_sum == max_sum and (len(current_path) < len(best_path) or current_path < best_path)):
-                    max_sum = total_sum
-                    best_path = move + current_path
-        return (max_sum, best_path)
+        for move, nx, ny in possible_moves:
+            new_sum = current_sum + grid[nx][ny]
+            new_path = path + move
+            q.append((nx, ny, new_sum, new_path, next_move_num))
 
-    total_sum, path = dp(0, 0, 0)
-    return (total_sum, path)
+    return (max_sum, best_path)
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
-    if n == 0:
-        return (0, "")
+    max_sum = -1
+    best_path = ""
 
-    from functools import lru_cache
+    from collections import deque
+    q = deque()
+    q.append((0, 0, grid[0][0], "", 0))
 
-    @lru_cache(maxsize=None)
-    def dp(i, j, step):
-        if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
-        max_sum = -1
-        best_path = ""
-        move_num = step + 1
-        is_diagonal_required = (move_num % 3 == 0)
+    directions = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
 
-        directions = []
-        if is_diagonal_required:
-            if i + 1 < n and j + 1 < n:
-                directions = [('X', i + 1, j + 1)]
+    while q:
+        x, y, current_sum, path, move_count = q.popleft()
+
+        if x == n - 1 and y == n - 1:
+            if current_sum > max_sum:
+                max_sum = current_sum
+                best_path = path
+            continue
+
+        next_move_num = move_count + 1
+        required_diagonal = (next_move_num % 3 == 0)
+
+        possible_moves = []
+        if required_diagonal:
+            dx, dy = directions['X']
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < n and 0 <= ny < n:
+                possible_moves.append(('X', nx, ny))
             else:
-                directions = [('R', i, j + 1), ('D', i + 1, j)]
+                for move, (dx, dy) in directions.items():
+                    if move != 'X':
+                        nx, ny = x + dx, y + dy
+                        if 0 <= nx < n and 0 <= ny < n:
+                            possible_moves.append((move, nx, ny))
         else:
-            if j + 1 < n:
-                directions.append(('R', i, j + 1))
-            if i + 1 < n:
-                directions.append(('D', i + 1, j))
-            if i + 1 < n and j + 1 < n:
-                directions.append(('X', i + 1, j + 1))
+            for move, (dx, dy) in directions.items():
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < n and 0 <= ny < n:
+                    possible_moves.append((move, nx, ny))
 
-        for move, ni, nj in directions:
-            if 0 <= ni < n and 0 <= nj < n:
-                current_sum, current_path = dp(ni, nj, move_num)
-                total_sum = grid[i][j] + current_sum
-                if total_sum > max_sum or (total_sum == max_sum and (len(current_path) < len(best_path) or current_path < best_path)):
-                    max_sum = total_sum
-                    best_path = move + current_path
-        return (max_sum, best_path)
+        for move, nx, ny in possible_moves:
+            new_sum = current_sum + grid[nx][ny]
+            new_path = path + move
+            q.append((nx, ny, new_sum, new_path, next_move_num))
 
-    total_sum, path = dp(0, 0, 0)
-    return (total_sum, path)
+    return (max_sum, best_path)
