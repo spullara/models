@@ -1,4 +1,5 @@
 codestral-2508
+codestral-edit-260225
 codestral-embed
 codestral-embed-2505
 codestral-latest
@@ -21,6 +22,8 @@ ministral-8b-2512
 ministral-8b-latest
 mistral-embed
 mistral-embed-2312
+mistral-embed-dim128-2510
+mistral-embed-dim256-2510
 mistral-large-2411
 mistral-large-2512
 mistral-large-latest
@@ -28,6 +31,11 @@ mistral-large-pixtral-2411
 mistral-medium
 mistral-medium-2505
 mistral-medium-2508
+mistral-medium-2604
+mistral-medium-3
+mistral-medium-3-5
+mistral-medium-3.5
+mistral-medium-c21211-r0-75
 mistral-medium-latest
 mistral-moderation-2411
 mistral-moderation-2603
