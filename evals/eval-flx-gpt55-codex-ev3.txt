@@ -1,0 +1,27 @@
+Model: flx-gpt55-codex-ev3
+Provider: openai
+Evaluated: 2026-04-24T14:35:05.702095+00:00
+
+=== TIMING ===
+Response time: 1.93s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 503: {
+    "error": {
+        "message": "No available capacity was found for the model",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
