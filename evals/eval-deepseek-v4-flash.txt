@@ -1,0 +1,178 @@
+Model: deepseek-v4-flash
+Provider: deepseek
+Evaluated: 2026-04-24T03:03:11.167676+00:00
+
+=== TIMING ===
+Response time: 77.4s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    INF = -10**9
+    dp_sum = [[[INF]*3 for _ in range(N)] for __ in range(N)]
+    dp_prev = [[[None]*3 for _ in range(N)] for __ in range(N)]
+    dp_sum[0][0][0] = grid[0][0]
+    
+    for r in range(N):
+        for c in range(N):
+            for mod in range(3):
+                cur_sum = dp_sum[r][c][mod]
+                if cur_sum == INF:
+                    continue
+                forced_diag = (mod == 2)
+                if forced_diag:
+                    if r+1 < N and c+1 < N:
+                        nr, nc = r+1, c+1
+                        new_sum = cur_sum + grid[nr][nc]
+                        new_mod = (mod+1) % 3
+                        if new_sum > dp_sum[nr][nc][new_mod]:
+                            dp_sum[nr][nc][new_mod] = new_sum
+                            dp_prev[nr][nc][new_mod] = (r, c, mod, 'X')
+                    else:
+                        if c+1 < N:
+                            nr, nc = r, c+1
+                            new_sum = cur_sum + grid[nr][nc]
+                            new_mod = (mod+1) % 3
+                            if new_sum > dp_sum[nr][nc][new_mod]:
+                                dp_sum[nr][nc][new_mod] = new_sum
+                                dp_prev[nr][nc][new_mod] = (r, c, mod, 'R')
+                        if r+1 < N:
+                            nr, nc = r+1, c
+                            new_sum = cur_sum + grid[nr][nc]
+                            new_mod = (mod+1) % 3
+                            if new_sum > dp_sum[nr][nc][new_mod]:
+                                dp_sum[nr][nc][new_mod] = new_sum
+                                dp_prev[nr][nc][new_mod] = (r, c, mod, 'D')
+                else:
+                    if c+1 < N:
+                        nr, nc = r, c+1
+                        new_sum = cur_sum + grid[nr][nc]
+                        new_mod = (mod+1) % 3
+                        if new_sum > dp_sum[nr][nc][new_mod]:
+                            dp_sum[nr][nc][new_mod] = new_sum
+                            dp_prev[nr][nc][new_mod] = (r, c, mod, 'R')
+                    if r+1 < N:
+                        nr, nc = r+1, c
+                        new_sum = cur_sum + grid[nr][nc]
+                        new_mod = (mod+1) % 3
+                        if new_sum > dp_sum[nr][nc][new_mod]:
+                            dp_sum[nr][nc][new_mod] = new_sum
+                            dp_prev[nr][nc][new_mod] = (r, c, mod, 'D')
+                    if r+1 < N and c+1 < N:
+                        nr, nc = r+1, c+1
+                        new_sum = cur_sum + grid[nr][nc]
+                        new_mod = (mod+1) % 3
+                        if new_sum > dp_sum[nr][nc][new_mod]:
+                            dp_sum[nr][nc][new_mod] = new_sum
+                            dp_prev[nr][nc][new_mod] = (r, c, mod, 'X')
+    
+    tr, tc = N-1, N-1
+    best_sum = INF
+    best_mod = -1
+    for mod in range(3):
+        if dp_sum[tr][tc][mod] > best_sum:
+            best_sum = dp_sum[tr][tc][mod]
+            best_mod = mod
+    
+    path = []
+    r, c, mod = tr, tc, best_mod
+    while not (r == 0 and c == 0 and mod == 0):
+        pr, pc, pmod, move = dp_prev[r][c][mod]
+        path.append(move)
+        r, c, mod = pr, pc, pmod
+    path.reverse()
+    return (best_sum, ''.join(path))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    INF = -10**9
+    dp_sum = [[[INF]*3 for _ in range(N)] for __ in range(N)]
+    dp_prev = [[[None]*3 for _ in range(N)] for __ in range(N)]
+    dp_sum[0][0][0] = grid[0][0]
+    
+    for r in range(N):
+        for c in range(N):
+            for mod in range(3):
+                cur_sum = dp_sum[r][c][mod]
+                if cur_sum == INF:
+                    continue
+                forced_diag = (mod == 2)
+                if forced_diag:
+                    if r+1 < N and c+1 < N:
+                        nr, nc = r+1, c+1
+                        new_sum = cur_sum + grid[nr][nc]
+                        new_mod = (mod+1) % 3
+                        if new_sum > dp_sum[nr][nc][new_mod]:
+                            dp_sum[nr][nc][new_mod] = new_sum
+                            dp_prev[nr][nc][new_mod] = (r, c, mod, 'X')
+                    else:
+                        if c+1 < N:
+                            nr, nc = r, c+1
+                            new_sum = cur_sum + grid[nr][nc]
+                            new_mod = (mod+1) % 3
+                            if new_sum > dp_sum[nr][nc][new_mod]:
+                                dp_sum[nr][nc][new_mod] = new_sum
+                                dp_prev[nr][nc][new_mod] = (r, c, mod, 'R')
+                        if r+1 < N:
+                            nr, nc = r+1, c
+                            new_sum = cur_sum + grid[nr][nc]
+                            new_mod = (mod+1) % 3
+                            if new_sum > dp_sum[nr][nc][new_mod]:
+                                dp_sum[nr][nc][new_mod] = new_sum
+                                dp_prev[nr][nc][new_mod] = (r, c, mod, 'D')
+                else:
+                    if c+1 < N:
+                        nr, nc = r, c+1
+                        new_sum = cur_sum + grid[nr][nc]
+                        new_mod = (mod+1) % 3
+                        if new_sum > dp_sum[nr][nc][new_mod]:
+                            dp_sum[nr][nc][new_mod] = new_sum
+                            dp_prev[nr][nc][new_mod] = (r, c, mod, 'R')
+                    if r+1 < N:
+                        nr, nc = r+1, c
+                        new_sum = cur_sum + grid[nr][nc]
+                        new_mod = (mod+1) % 3
+                        if new_sum > dp_sum[nr][nc][new_mod]:
+                            dp_sum[nr][nc][new_mod] = new_sum
+                            dp_prev[nr][nc][new_mod] = (r, c, mod, 'D')
+                    if r+1 < N and c+1 < N:
+                        nr, nc = r+1, c+1
+                        new_sum = cur_sum + grid[nr][nc]
+                        new_mod = (mod+1) % 3
+                        if new_sum > dp_sum[nr][nc][new_mod]:
+                            dp_sum[nr][nc][new_mod] = new_sum
+                            dp_prev[nr][nc][new_mod] = (r, c, mod, 'X')
+    
+    tr, tc = N-1, N-1
+    best_sum = INF
+    best_mod = -1
+    for mod in range(3):
+        if dp_sum[tr][tc][mod] > best_sum:
+            best_sum = dp_sum[tr][tc][mod]
+            best_mod = mod
+    
+    path = []
+    r, c, mod = tr, tc, best_mod
+    while not (r == 0 and c == 0 and mod == 0):
+        pr, pc, pmod, move = dp_prev[r][c][mod]
+        path.append(move)
+        r, c, mod = pr, pc, pmod
+    path.reverse()
+    return (best_sum, ''.join(path))
