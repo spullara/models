@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-04-23 15:57:17
+Last updated: 2026-04-24 03:04:18
 
 ## Summary
 
@@ -17,7 +17,7 @@ Model counts shown as: **Available/Deleted**
 
 **Mistral**: 60/37
 
-**DeepSeek**: 2/0
+**DeepSeek**: 2/2
 
 **Kimi**: 9/6
 
@@ -499,8 +499,13 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- deepseek-reasoner (added: 2025-12-18)
-- deepseek-chat (added: 2025-12-18)
+- deepseek-v4-pro (added: 2026-04-24)
+- deepseek-v4-flash (added: 2026-04-24)
+
+### Deleted Models
+
+- deepseek-reasoner (deleted: 2026-04-24)
+- deepseek-chat (deleted: 2026-04-24)
 
 ## Kimi
 
