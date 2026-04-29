@@ -1,20 +1,19 @@
 Model: mistral-medium-3.5
 Provider: mistral
-Evaluated: 2026-04-23T15:56:16.725819+00:00
+Evaluated: 2026-04-29T17:39:14.453219+00:00
 
 === TIMING ===
-Response time: 2.65s
+Response time: 2.4s
 
 === CODE EXTRACTION ===
 Method: direct
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 73
-Calculated sum: 15
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
@@ -25,38 +24,33 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     from functools import lru_cache
 
     @lru_cache(maxsize=None)
-    def dfs(i, j, step):
+    def dp(i, j, step):
         if i == n - 1 and j == n - 1:
             return (grid[i][j], "")
         max_sum = -1
         best_path = ""
-        next_step = step + 1
-        is_third = (next_step % 3 == 0)
+        current_step = step + 1
         moves = []
-        if is_third:
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-        else:
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
+        if j + 1 < n:
+            moves.append(('R', i, j + 1))
+        if i + 1 < n:
+            moves.append(('D', i + 1, j))
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1))
+        if current_step % 3 == 0:
+            diag_moves = [m for m in moves if m[0] == 'X']
+            if diag_moves:
+                moves = diag_moves
         for move, ni, nj in moves:
-            current_sum, current_path = dfs(ni, nj, next_step)
-            current_sum += grid[i][j]
-            if current_sum > max_sum or (current_sum == max_sum and len(current_path) < len(best_path)):
-                max_sum = current_sum
-                best_path = move + current_path
+            s, p = dp(ni, nj, current_step)
+            total = grid[i][j] + s
+            if total > max_sum or (total == max_sum and len(p) < len(best_path)):
+                max_sum = total
+                best_path = move + p
         return (max_sum, best_path)
 
-    total_sum, path = dfs(0, 0, 0)
-    return (total_sum, path)
+    total, path = dp(0, 0, 0)
+    return (total, path)
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
@@ -67,35 +61,30 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     from functools import lru_cache
 
     @lru_cache(maxsize=None)
-    def dfs(i, j, step):
+    def dp(i, j, step):
         if i == n - 1 and j == n - 1:
             return (grid[i][j], "")
         max_sum = -1
         best_path = ""
-        next_step = step + 1
-        is_third = (next_step % 3 == 0)
+        current_step = step + 1
         moves = []
-        if is_third:
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-        else:
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
+        if j + 1 < n:
+            moves.append(('R', i, j + 1))
+        if i + 1 < n:
+            moves.append(('D', i + 1, j))
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1))
+        if current_step % 3 == 0:
+            diag_moves = [m for m in moves if m[0] == 'X']
+            if diag_moves:
+                moves = diag_moves
         for move, ni, nj in moves:
-            current_sum, current_path = dfs(ni, nj, next_step)
-            current_sum += grid[i][j]
-            if current_sum > max_sum or (current_sum == max_sum and len(current_path) < len(best_path)):
-                max_sum = current_sum
-                best_path = move + current_path
+            s, p = dp(ni, nj, current_step)
+            total = grid[i][j] + s
+            if total > max_sum or (total == max_sum and len(p) < len(best_path)):
+                max_sum = total
+                best_path = move + p
         return (max_sum, best_path)
 
-    total_sum, path = dfs(0, 0, 0)
-    return (total_sum, path)
+    total, path = dp(0, 0, 0)
+    return (total, path)

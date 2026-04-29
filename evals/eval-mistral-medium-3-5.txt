@@ -1,88 +1,114 @@
 Model: mistral-medium-3-5
 Provider: mistral
-Evaluated: 2026-04-23T15:56:14.231526+00:00
+Evaluated: 2026-04-29T17:39:10.798424+00:00
 
 === TIMING ===
-Response time: 2.46s
+Response time: 3.62s
 
 === CODE EXTRACTION ===
 Method: direct
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 59
+Returned sum: 60
 Calculated sum: 60
-Sum matches: NO
+Sum matches: YES
 Path valid: YES
 
 === RAW RESPONSE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
-    max_sum = -1
-    best_path = ""
+    if n == 0:
+        return (0, "")
 
-    from collections import deque
-    queue = deque()
-    queue.append((0, 0, 0, 0, ""))
+    from functools import lru_cache
 
-    while queue:
-        i, j, step, current_sum, path = queue.popleft()
+    @lru_cache(maxsize=None)
+    def dfs(i, j, step):
         if i == n - 1 and j == n - 1:
-            if current_sum > max_sum:
-                max_sum = current_sum
-                best_path = path
-            continue
-        next_step = step + 1
-        if next_step % 3 == 0:
-            if i + 1 < n and j + 1 < n:
-                queue.append((i + 1, j + 1, next_step, current_sum + grid[i + 1][j + 1], path + "X"))
-            else:
-                if i + 1 < n:
-                    queue.append((i + 1, j, next_step, current_sum + grid[i + 1][j], path + "D"))
-                if j + 1 < n:
-                    queue.append((i, j + 1, next_step, current_sum + grid[i][j + 1], path + "R"))
-        else:
-            if i + 1 < n:
-                queue.append((i + 1, j, next_step, current_sum + grid[i + 1][j], path + "D"))
-            if j + 1 < n:
-                queue.append((i, j + 1, next_step, current_sum + grid[i][j + 1], path + "R"))
-            if i + 1 < n and j + 1 < n:
-                queue.append((i + 1, j + 1, next_step, current_sum + grid[i + 1][j + 1], path + "X"))
+            return (grid[i][j], "")
+        current_val = grid[i][j]
+        max_sum = -1
+        best_path = ""
 
-    return (max_sum, best_path)
+        moves = []
+        if j + 1 < n:
+            moves.append(('R', i, j + 1))
+        if i + 1 < n:
+            moves.append(('D', i + 1, j))
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1))
+
+        for move, ni, nj in moves:
+            next_step = step + 1
+            is_third = (next_step % 3 == 0)
+            if is_third and move != 'X':
+                continue
+            if not is_third or (is_third and move == 'X'):
+                s, p = dfs(ni, nj, next_step)
+                total = current_val + s
+                if total > max_sum or (total == max_sum and len(p) < len(best_path)):
+                    max_sum = total
+                    best_path = move + p
+
+        if max_sum == -1:
+            for move, ni, nj in moves:
+                s, p = dfs(ni, nj, next_step)
+                total = current_val + s
+                if total > max_sum or (total == max_sum and len(p) < len(best_path)):
+                    max_sum = total
+                    best_path = move + p
+
+        return (max_sum, best_path)
+
+    total_sum, path = dfs(0, 0, 0)
+    return (total_sum, path)
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
-    max_sum = -1
-    best_path = ""
+    if n == 0:
+        return (0, "")
 
-    from collections import deque
-    queue = deque()
-    queue.append((0, 0, 0, 0, ""))
+    from functools import lru_cache
 
-    while queue:
-        i, j, step, current_sum, path = queue.popleft()
+    @lru_cache(maxsize=None)
+    def dfs(i, j, step):
         if i == n - 1 and j == n - 1:
-            if current_sum > max_sum:
-                max_sum = current_sum
-                best_path = path
-            continue
-        next_step = step + 1
-        if next_step % 3 == 0:
-            if i + 1 < n and j + 1 < n:
-                queue.append((i + 1, j + 1, next_step, current_sum + grid[i + 1][j + 1], path + "X"))
-            else:
-                if i + 1 < n:
-                    queue.append((i + 1, j, next_step, current_sum + grid[i + 1][j], path + "D"))
-                if j + 1 < n:
-                    queue.append((i, j + 1, next_step, current_sum + grid[i][j + 1], path + "R"))
-        else:
-            if i + 1 < n:
-                queue.append((i + 1, j, next_step, current_sum + grid[i + 1][j], path + "D"))
-            if j + 1 < n:
-                queue.append((i, j + 1, next_step, current_sum + grid[i][j + 1], path + "R"))
-            if i + 1 < n and j + 1 < n:
-                queue.append((i + 1, j + 1, next_step, current_sum + grid[i + 1][j + 1], path + "X"))
+            return (grid[i][j], "")
+        current_val = grid[i][j]
+        max_sum = -1
+        best_path = ""
 
-    return (max_sum, best_path)
+        moves = []
+        if j + 1 < n:
+            moves.append(('R', i, j + 1))
+        if i + 1 < n:
+            moves.append(('D', i + 1, j))
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1))
+
+        for move, ni, nj in moves:
+            next_step = step + 1
+            is_third = (next_step % 3 == 0)
+            if is_third and move != 'X':
+                continue
+            if not is_third or (is_third and move == 'X'):
+                s, p = dfs(ni, nj, next_step)
+                total = current_val + s
+                if total > max_sum or (total == max_sum and len(p) < len(best_path)):
+                    max_sum = total
+                    best_path = move + p
+
+        if max_sum == -1:
+            for move, ni, nj in moves:
+                s, p = dfs(ni, nj, next_step)
+                total = current_val + s
+                if total > max_sum or (total == max_sum and len(p) < len(best_path)):
+                    max_sum = total
+                    best_path = move + p
+
+        return (max_sum, best_path)
+
+    total_sum, path = dfs(0, 0, 0)
+    return (total_sum, path)

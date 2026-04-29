@@ -1,97 +1,86 @@
 Model: mistral-medium-3
 Provider: mistral
-Evaluated: 2026-04-23T15:56:11.681565+00:00
+Evaluated: 2026-04-29T17:39:08.541123+00:00
 
 === TIMING ===
-Response time: 2.52s
+Response time: 2.23s
 
 === CODE EXTRACTION ===
 Method: direct
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 72
-Calculated sum: 15
+Returned sum: 59
+Calculated sum: 60
 Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+Path valid: YES
 
 === RAW RESPONSE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    moves = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
     max_sum = -1
     best_path = ""
 
     from collections import deque
     queue = deque()
-    queue.append((0, 0, 0, 0, ""))
+    queue.append((0, 0, 0, "", 0))
 
     while queue:
-        i, j, sum_val, move_count, path = queue.popleft()
+        i, j, total, path, move_count = queue.popleft()
         if i == n - 1 and j == n - 1:
-            if sum_val > max_sum:
-                max_sum = sum_val
+            if total > max_sum:
+                max_sum = total
                 best_path = path
             continue
-        moves = []
-        if j + 1 < n:
-            moves.append(('R', i, j + 1))
-        if i + 1 < n:
-            moves.append(('D', i + 1, j))
-        if i + 1 < n and j + 1 < n:
-            moves.append(('X', i + 1, j + 1))
-        for move, ni, nj in moves:
-            new_move_count = move_count + 1
-            new_path = path + move
-            new_sum = sum_val + grid[ni][nj]
-            if new_move_count % 3 == 0:
-                if move == 'X':
-                    queue.append((ni, nj, new_sum, new_move_count, new_path))
-                elif ('X', ni, nj) in [(m, x, y) for m, x, y in moves]:
-                    pass
-                else:
-                    queue.append((ni, nj, new_sum, new_move_count, new_path))
-            else:
-                queue.append((ni, nj, new_sum, new_move_count, new_path))
+        next_move_count = move_count + 1
+        for move, di, dj in moves:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < n and 0 <= nj < n:
+                if next_move_count % 3 == 0 and move != 'X':
+                    continue
+                if next_move_count % 3 != 0 and move == 'X':
+                    continue
+                new_total = total + grid[ni][nj]
+                new_path = path + move
+                queue.append((ni, nj, new_total, new_path, next_move_count))
 
     return (max_sum, best_path)
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    moves = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
     max_sum = -1
     best_path = ""
 
     from collections import deque
     queue = deque()
-    queue.append((0, 0, 0, 0, ""))
+    queue.append((0, 0, 0, "", 0))
 
     while queue:
-        i, j, sum_val, move_count, path = queue.popleft()
+        i, j, total, path, move_count = queue.popleft()
         if i == n - 1 and j == n - 1:
-            if sum_val > max_sum:
-                max_sum = sum_val
+            if total > max_sum:
+                max_sum = total
                 best_path = path
             continue
-        moves = []
-        if j + 1 < n:
-            moves.append(('R', i, j + 1))
-        if i + 1 < n:
-            moves.append(('D', i + 1, j))
-        if i + 1 < n and j + 1 < n:
-            moves.append(('X', i + 1, j + 1))
-        for move, ni, nj in moves:
-            new_move_count = move_count + 1
-            new_path = path + move
-            new_sum = sum_val + grid[ni][nj]
-            if new_move_count % 3 == 0:
-                if move == 'X':
-                    queue.append((ni, nj, new_sum, new_move_count, new_path))
-                elif ('X', ni, nj) in [(m, x, y) for m, x, y in moves]:
-                    pass
-                else:
-                    queue.append((ni, nj, new_sum, new_move_count, new_path))
-            else:
-                queue.append((ni, nj, new_sum, new_move_count, new_path))
+        next_move_count = move_count + 1
+        for move, di, dj in moves:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < n and 0 <= nj < n:
+                if next_move_count % 3 == 0 and move != 'X':
+                    continue
+                if next_move_count % 3 != 0 and move == 'X':
+                    continue
+                new_total = total + grid[ni][nj]
+                new_path = path + move
+                queue.append((ni, nj, new_total, new_path, next_move_count))
 
     return (max_sum, best_path)
