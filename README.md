@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-04-29 16:52:24
+Last updated: 2026-04-29 17:39:32
 
 ## Summary
 
@@ -15,7 +15,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 14/9
 
-**Mistral**: 59/38
+**Mistral**: 65/32
 
 **DeepSeek**: 2/2
 
@@ -399,6 +399,11 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- mistral-medium-3-5 (added: 2026-04-21)
+- mistral-medium-c21211-r0-75 (added: 2026-04-09)
+- mistral-medium-3.5 (added: 2026-04-09)
+- mistral-medium-3 (added: 2026-04-09)
+- mistral-medium-2604 (added: 2026-04-09)
 - mistral-moderation-2603 (added: 2026-04-07)
 - voxtral-mini-tts-latest (added: 2026-03-23)
 - voxtral-mini-tts-2603 (added: 2026-03-23)
@@ -413,6 +418,7 @@ Model counts shown as: **Available/Deleted**
 - labs-mistral-small-creative (added: 2025-12-16)
 - mistral-ocr-2512 (added: 2025-12-15)
 - devstral-latest (added: 2025-12-15)
+- mistral-vibe-cli-latest (added: 2025-12-09)
 - devstral-2512 (added: 2025-12-09)
 - mistral-large-2512 (added: 2025-12-02)
 - ministral-8b-2512 (added: 2025-12-02)
@@ -461,12 +467,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- mistral-vibe-cli-latest (deleted: 2026-04-29)
-- mistral-medium-c21211-r0-75 (deleted: 2026-04-23)
-- mistral-medium-3.5 (deleted: 2026-04-23)
-- mistral-medium-3-5 (deleted: 2026-04-23)
-- mistral-medium-3 (deleted: 2026-04-23)
-- mistral-medium-2604 (deleted: 2026-04-23)
 - mistral-embed-dim256-2510 (deleted: 2026-04-23)
 - mistral-embed-dim128-2510 (deleted: 2026-04-23)
 - codestral-edit-260225 (deleted: 2026-04-23)
