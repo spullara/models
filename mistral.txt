@@ -8,7 +8,6 @@ devstral-medium-2507
 devstral-medium-latest
 devstral-small-2507
 labs-leanstral-2603
-labs-mistral-small-creative
 magistral-medium-2509
 magistral-medium-latest
 magistral-small-2509
