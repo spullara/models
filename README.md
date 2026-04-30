@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-04-30 22:28:24
+Last updated: 2026-04-30 22:29:39
 
 ## Summary
 
@@ -13,7 +13,7 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 50/76
 
-**Grok**: 14/10
+**Grok**: 15/9
 
 **Mistral**: 64/33
 
@@ -368,6 +368,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- grok-4.3 (added: 2026-04-30)
 - grok-4.20-multi-agent-0309 (added: 2026-03-19)
 - grok-4.20-0309-reasoning (added: 2026-03-19)
 - grok-4.20-0309-non-reasoning (added: 2026-03-19)
@@ -385,7 +386,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- grok-4.3 (deleted: 2026-04-30)
 - grok-4.20-multi-agent-beta-0309 (deleted: 2026-03-19)
 - grok-4.20-beta-0309-reasoning (deleted: 2026-03-19)
 - grok-4.20-beta-0309-non-reasoning (deleted: 2026-03-19)
