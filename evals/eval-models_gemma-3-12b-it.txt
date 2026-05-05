@@ -1,6 +1,6 @@
 Model: models/gemma-3-12b-it
 Provider: gemini
-Evaluated: 2026-05-05T20:18:05.905985+00:00
+Evaluated: 2026-05-05T20:25:06.403010+00:00
 
 === TIMING ===
 Response time: 0.14s
