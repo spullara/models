@@ -10,6 +10,9 @@ models/gemini-2.5-computer-use-preview-10-2025
 models/gemini-2.5-flash
 models/gemini-2.5-flash-image
 models/gemini-2.5-flash-lite
+models/gemini-2.5-flash-native-audio-latest
+models/gemini-2.5-flash-native-audio-preview-09-2025
+models/gemini-2.5-flash-native-audio-preview-12-2025
 models/gemini-2.5-flash-preview-tts
 models/gemini-2.5-pro
 models/gemini-2.5-pro-preview-tts
@@ -18,6 +21,7 @@ models/gemini-3-pro-image-preview
 models/gemini-3-pro-preview
 models/gemini-3.1-flash-image-preview
 models/gemini-3.1-flash-lite-preview
+models/gemini-3.1-flash-live-preview
 models/gemini-3.1-flash-tts-preview
 models/gemini-3.1-pro-preview
 models/gemini-3.1-pro-preview-customtools
@@ -29,12 +33,6 @@ models/gemini-flash-lite-latest
 models/gemini-pro-latest
 models/gemini-robotics-er-1.5-preview
 models/gemini-robotics-er-1.6-preview
-models/gemma-3-12b-it
-models/gemma-3-1b-it
-models/gemma-3-27b-it
-models/gemma-3-4b-it
-models/gemma-3n-e2b-it
-models/gemma-3n-e4b-it
 models/gemma-4-26b-a4b-it
 models/gemma-4-31b-it
 models/imagen-4.0-fast-generate-001
@@ -48,3 +46,4 @@ models/veo-3.0-fast-generate-001
 models/veo-3.0-generate-001
 models/veo-3.1-fast-generate-preview
 models/veo-3.1-generate-preview
+models/veo-3.1-lite-generate-preview
