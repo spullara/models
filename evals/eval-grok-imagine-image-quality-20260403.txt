@@ -1,0 +1,19 @@
+Model: grok-imagine-image-quality-20260403
+Provider: grok
+Evaluated: 2026-05-05T22:29:11.510539+00:00
+
+=== TIMING ===
+Response time: 0.16s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"code":"Client specified an invalid argument","error":"Model not found: grok-imagine-image-quality-20260403"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
