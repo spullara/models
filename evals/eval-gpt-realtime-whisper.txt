@@ -1,0 +1,26 @@
+Model: gpt-realtime-whisper
+Provider: openai_responses
+Evaluated: 2026-05-07T17:14:08.461833+00:00
+
+=== TIMING ===
+Response time: 1.35s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 500: {
+  "error": {
+    "message": "An error occurred while processing your request. You can retry your request, or contact us through our help center at help.openai.com if the error persists. Please include the request ID req_f1539d2ad62f494cb52a1204e953827c in your message.",
+    "type": "server_error",
+    "param": null,
+    "code": "server_error"
+  }
+}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)

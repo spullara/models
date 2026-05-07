@@ -1,9 +1,9 @@
 Model: gpt-realtime-translate
 Provider: openai_responses
-Evaluated: 2026-05-07T17:02:07.149311+00:00
+Evaluated: 2026-05-07T17:14:07.030648+00:00
 
 === TIMING ===
-Response time: 2.54s
+Response time: 1.43s
 
 === CODE EXTRACTION ===
 Method: None
@@ -12,7 +12,7 @@ Syntax valid: NO
 === EXECUTION ===
 API Error: HTTP 500: {
   "error": {
-    "message": "An error occurred while processing your request. You can retry your request, or contact us through our help center at help.openai.com if the error persists. Please include the request ID req_2f1c82f0192741418322a5156eb638a7 in your message.",
+    "message": "An error occurred while processing your request. You can retry your request, or contact us through our help center at help.openai.com if the error persists. Please include the request ID req_bd1c2595b706481a98fa2347ef169d8c in your message.",
     "type": "server_error",
     "param": null,
     "code": "server_error"
