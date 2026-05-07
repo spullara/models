@@ -105,7 +105,6 @@ gpt-realtime-2025-08-28
 gpt-realtime-mini
 gpt-realtime-mini-2025-10-06
 gpt-realtime-mini-2025-12-15
-gpt-realtime-translate
 o1
 o1-2024-12-17
 o1-pro
