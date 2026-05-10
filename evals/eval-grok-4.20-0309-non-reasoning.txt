@@ -1,26 +1,16 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-05-10T08:32:38.022230+00:00
+Evaluated: 2026-05-10T08:37:51.982434+00:00
 
 === TIMING ===
-Response time: 0.46s
+Response time: 15.75s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 502: <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en-US"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]-->
-<head>
-
-<title>x.ai | 502: Bad gateway</title>
-<meta charset="UTF-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta http-equiv="X-UA-Compatible" content=
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection termination
 
 === RAW RESPONSE ===
 (no response)
