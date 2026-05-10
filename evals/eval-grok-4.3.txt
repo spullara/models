@@ -1,9 +1,9 @@
 Model: grok-4.3
 Provider: grok
-Evaluated: 2026-04-30T22:29:05.962825+00:00
+Evaluated: 2026-05-10T08:33:12.618750+00:00
 
 === TIMING ===
-Response time: 17.5s
+Response time: 18.39s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,82 +17,96 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    n = len(grid)
-    if n == 1:
-        return grid[0][0], ""
-    max_sum = float('-inf')
-    best_path = ""
-    def dfs(i, j, move_count, curr_sum, path):
-        nonlocal max_sum, best_path
-        if i == n-1 and j == n-1:
-            if curr_sum > max_sum:
-                max_sum = curr_sum
-                best_path = path
-            return
-        next_move = move_count + 1
-        is_diag_required = (next_move % 3 == 0)
-        moves = []
-        if is_diag_required:
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i+1, j+1))
+def solve_grid(grid):
+    if not grid or not grid[0]: return (0, "")
+    N = len(grid)
+    from functools import lru_cache
+    @lru_cache(None)
+    def dp(r, c, m):
+        if r == N-1 and c == N-1: return grid[r][c]
+        if r >= N or c >= N: return float('-inf')
+        s = grid[r][c]
+        res = float('-inf')
+        must = (m % 3 == 2)
+        poss = []
+        if must:
+            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
             else:
-                if j + 1 < n:
-                    moves.append(('R', i, j+1))
-                if i + 1 < n:
-                    moves.append(('D', i+1, j))
+                if c+1 < N: poss.append(('R', 0, 1))
+                if r+1 < N: poss.append(('D', 1, 0))
         else:
-            if j + 1 < n:
-                moves.append(('R', i, j+1))
-            if i + 1 < n:
-                moves.append(('D', i+1, j))
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i+1, j+1))
-        for m, ni, nj in moves:
-            new_sum = curr_sum + grid[ni][nj]
-            dfs(ni, nj, move_count + 1, new_sum, path + m)
-    dfs(0, 0, 0, grid[0][0], "")
-    return max_sum, best_path
+            if c+1 < N: poss.append(('R', 0, 1))
+            if r+1 < N: poss.append(('D', 1, 0))
+            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
+        for mv, dr, dc in poss:
+            val = dp(r+dr, c+dc, m+1)
+            if val != float('-inf'): res = max(res, s + val)
+        return res
+    max_sum = dp(0, 0, 0)
+    def reconstruct(r, c, m, target):
+        if r == N-1 and c == N-1: return ""
+        must = (m % 3 == 2)
+        poss = []
+        if must:
+            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
+            else:
+                if c+1 < N: poss.append(('R', 0, 1))
+                if r+1 < N: poss.append(('D', 1, 0))
+        else:
+            if c+1 < N: poss.append(('R', 0, 1))
+            if r+1 < N: poss.append(('D', 1, 0))
+            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
+        for mv, dr, dc in poss:
+            if dp(r+dr, c+dc, m+1) + grid[r][c] == target:
+                return mv + reconstruct(r+dr, c+dc, m+1, target - grid[r][c])
+        return ""
+    path = reconstruct(0, 0, 0, max_sum)
+    return (max_sum, path)
 ```
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    n = len(grid)
-    if n == 1:
-        return grid[0][0], ""
-    max_sum = float('-inf')
-    best_path = ""
-    def dfs(i, j, move_count, curr_sum, path):
-        nonlocal max_sum, best_path
-        if i == n-1 and j == n-1:
-            if curr_sum > max_sum:
-                max_sum = curr_sum
-                best_path = path
-            return
-        next_move = move_count + 1
-        is_diag_required = (next_move % 3 == 0)
-        moves = []
-        if is_diag_required:
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i+1, j+1))
+def solve_grid(grid):
+    if not grid or not grid[0]: return (0, "")
+    N = len(grid)
+    from functools import lru_cache
+    @lru_cache(None)
+    def dp(r, c, m):
+        if r == N-1 and c == N-1: return grid[r][c]
+        if r >= N or c >= N: return float('-inf')
+        s = grid[r][c]
+        res = float('-inf')
+        must = (m % 3 == 2)
+        poss = []
+        if must:
+            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
             else:
-                if j + 1 < n:
-                    moves.append(('R', i, j+1))
-                if i + 1 < n:
-                    moves.append(('D', i+1, j))
+                if c+1 < N: poss.append(('R', 0, 1))
+                if r+1 < N: poss.append(('D', 1, 0))
         else:
-            if j + 1 < n:
-                moves.append(('R', i, j+1))
-            if i + 1 < n:
-                moves.append(('D', i+1, j))
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i+1, j+1))
-        for m, ni, nj in moves:
-            new_sum = curr_sum + grid[ni][nj]
-            dfs(ni, nj, move_count + 1, new_sum, path + m)
-    dfs(0, 0, 0, grid[0][0], "")
-    return max_sum, best_path
+            if c+1 < N: poss.append(('R', 0, 1))
+            if r+1 < N: poss.append(('D', 1, 0))
+            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
+        for mv, dr, dc in poss:
+            val = dp(r+dr, c+dc, m+1)
+            if val != float('-inf'): res = max(res, s + val)
+        return res
+    max_sum = dp(0, 0, 0)
+    def reconstruct(r, c, m, target):
+        if r == N-1 and c == N-1: return ""
+        must = (m % 3 == 2)
+        poss = []
+        if must:
+            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
+            else:
+                if c+1 < N: poss.append(('R', 0, 1))
+                if r+1 < N: poss.append(('D', 1, 0))
+        else:
+            if c+1 < N: poss.append(('R', 0, 1))
+            if r+1 < N: poss.append(('D', 1, 0))
+            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
+        for mv, dr, dc in poss:
+            if dp(r+dr, c+dc, m+1) + grid[r][c] == target:
+                return mv + reconstruct(r+dr, c+dc, m+1, target - grid[r][c])
+        return ""
+    path = reconstruct(0, 0, 0, max_sum)
+    return (max_sum, path)
