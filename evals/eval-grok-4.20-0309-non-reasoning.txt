@@ -1,105 +1,29 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-04-21T23:07:44.710850+00:00
+Evaluated: 2026-05-10T08:32:38.022230+00:00
 
 === TIMING ===
-Response time: 4.82s
+Response time: 0.46s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Execution Error: 'float' object is not subscriptable
+API Error: HTTP 502: <!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en-US"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en-US"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en-US"> <!--<![endif]-->
+<head>
+
+<title>x.ai | 502: Bad gateway</title>
+<meta charset="UTF-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="X-UA-Compatible" content=
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    n = len(grid)
-    if n == 1:
-        return (grid[0][0], "")
-    
-    INF = float('-inf')
-    dp = [[[INF, INF, ""] for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = grid[0][0]
-    dp[0][0][1] = grid[0][0]
-    
-    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
-    
-    for i in range(n):
-        for j in range(n):
-            for k in range(2):
-                if dp[i][j][k] == INF:
-                    continue
-                move_num = 0
-                if i + j > 0:
-                    move_num = (i + j) if k == 0 else (i + j - 1)
-                is_diag_mandatory = (move_num % 3 == 0)
-                
-                for di, dj, let in dirs:
-                    ni, nj = i + di, j + dj
-                    if ni >= n or nj >= n:
-                        continue
-                    if is_diag_mandatory and let != 'X' and (i+1 < n and j+1 < n):
-                        continue
-                    new_sum = dp[i][j][k] + grid[ni][nj]
-                    new_k = 1 if let == 'X' else 0
-                    if new_sum > dp[ni][nj][new_k][0]:
-                        path = dp[i][j][k][2] + let if isinstance(dp[i][j][k][2], str) else let
-                        dp[ni][nj][new_k] = [new_sum, new_sum, path]
-    
-    best = max(dp[n-1][n-1][0][0], dp[n-1][n-1][1][0])
-    if best == INF:
-        return (0, "")
-    for k in range(2):
-        if dp[n-1][n-1][k][0] == best:
-            return (int(best), dp[n-1][n-1][k][2])
-    return (int(best), "")
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    n = len(grid)
-    if n == 1:
-        return (grid[0][0], "")
-    
-    INF = float('-inf')
-    dp = [[[INF, INF, ""] for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = grid[0][0]
-    dp[0][0][1] = grid[0][0]
-    
-    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
-    
-    for i in range(n):
-        for j in range(n):
-            for k in range(2):
-                if dp[i][j][k] == INF:
-                    continue
-                move_num = 0
-                if i + j > 0:
-                    move_num = (i + j) if k == 0 else (i + j - 1)
-                is_diag_mandatory = (move_num % 3 == 0)
-                
-                for di, dj, let in dirs:
-                    ni, nj = i + di, j + dj
-                    if ni >= n or nj >= n:
-                        continue
-                    if is_diag_mandatory and let != 'X' and (i+1 < n and j+1 < n):
-                        continue
-                    new_sum = dp[i][j][k] + grid[ni][nj]
-                    new_k = 1 if let == 'X' else 0
-                    if new_sum > dp[ni][nj][new_k][0]:
-                        path = dp[i][j][k][2] + let if isinstance(dp[i][j][k][2], str) else let
-                        dp[ni][nj][new_k] = [new_sum, new_sum, path]
-    
-    best = max(dp[n-1][n-1][0][0], dp[n-1][n-1][1][0])
-    if best == INF:
-        return (0, "")
-    for k in range(2):
-        if dp[n-1][n-1][k][0] == best:
-            return (int(best), dp[n-1][n-1][k][2])
-    return (int(best), "")
+(no code extracted)

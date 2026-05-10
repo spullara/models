@@ -1,106 +1,19 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-04-21T23:07:49.565487+00:00
+Evaluated: 2026-05-10T08:32:38.479392+00:00
 
 === TIMING ===
-Response time: 47.49s
+Response time: 0.15s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    n = len(grid)
-    memo = {}
-    def dfs(i, j, moves):
-        if i == n - 1 and j == n - 1:
-            return grid[i][j], ""
-        key = (i, j, moves)
-        if key in memo:
-            return memo[key]
-        next_move_num = moves + 1
-        must_diagonal = (next_move_num % 3 == 0)
-        directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
-        possible = []
-        for char, di, dj in directions:
-            ni, nj = i + di, j + dj
-            if 0 <= ni < n and 0 <= nj < n:
-                possible.append((char, ni, nj))
-        if must_diagonal:
-            x_moves = [p for p in possible if p[0] == 'X']
-            candidates = x_moves if x_moves else possible
-        else:
-            candidates = possible
-        best_sum = -float('inf')
-        best_path = ""
-        for char, ni, nj in candidates:
-            future_sum, future_path = dfs(ni, nj, moves + 1)
-            if future_sum == -float('inf'):
-                continue
-            total = grid[i][j] + future_sum
-            this_path = char + future_path
-            if total > best_sum:
-                best_sum = total
-                best_path = this_path
-        if best_sum == -float('inf'):
-            best_sum = -float('inf')
-            best_path = ""
-        memo[key] = (best_sum, best_path)
-        return memo[key]
-    max_sum, path = dfs(0, 0, 0)
-    return (max_sum, path)
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    n = len(grid)
-    memo = {}
-    def dfs(i, j, moves):
-        if i == n - 1 and j == n - 1:
-            return grid[i][j], ""
-        key = (i, j, moves)
-        if key in memo:
-            return memo[key]
-        next_move_num = moves + 1
-        must_diagonal = (next_move_num % 3 == 0)
-        directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
-        possible = []
-        for char, di, dj in directions:
-            ni, nj = i + di, j + dj
-            if 0 <= ni < n and 0 <= nj < n:
-                possible.append((char, ni, nj))
-        if must_diagonal:
-            x_moves = [p for p in possible if p[0] == 'X']
-            candidates = x_moves if x_moves else possible
-        else:
-            candidates = possible
-        best_sum = -float('inf')
-        best_path = ""
-        for char, ni, nj in candidates:
-            future_sum, future_path = dfs(ni, nj, moves + 1)
-            if future_sum == -float('inf'):
-                continue
-            total = grid[i][j] + future_sum
-            this_path = char + future_path
-            if total > best_sum:
-                best_sum = total
-                best_path = this_path
-        if best_sum == -float('inf'):
-            best_sum = -float('inf')
-            best_path = ""
-        memo[key] = (best_sum, best_path)
-        return memo[key]
-    max_sum, path = dfs(0, 0, 0)
-    return (max_sum, path)
+(no code extracted)
