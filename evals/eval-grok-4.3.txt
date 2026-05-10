@@ -1,112 +1,19 @@
 Model: grok-4.3
 Provider: grok
-Evaluated: 2026-05-10T08:33:12.618750+00:00
+Evaluated: 2026-05-10T08:38:26.574216+00:00
 
 === TIMING ===
-Response time: 18.39s
+Response time: 116.12s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection termination
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid):
-    if not grid or not grid[0]: return (0, "")
-    N = len(grid)
-    from functools import lru_cache
-    @lru_cache(None)
-    def dp(r, c, m):
-        if r == N-1 and c == N-1: return grid[r][c]
-        if r >= N or c >= N: return float('-inf')
-        s = grid[r][c]
-        res = float('-inf')
-        must = (m % 3 == 2)
-        poss = []
-        if must:
-            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
-            else:
-                if c+1 < N: poss.append(('R', 0, 1))
-                if r+1 < N: poss.append(('D', 1, 0))
-        else:
-            if c+1 < N: poss.append(('R', 0, 1))
-            if r+1 < N: poss.append(('D', 1, 0))
-            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
-        for mv, dr, dc in poss:
-            val = dp(r+dr, c+dc, m+1)
-            if val != float('-inf'): res = max(res, s + val)
-        return res
-    max_sum = dp(0, 0, 0)
-    def reconstruct(r, c, m, target):
-        if r == N-1 and c == N-1: return ""
-        must = (m % 3 == 2)
-        poss = []
-        if must:
-            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
-            else:
-                if c+1 < N: poss.append(('R', 0, 1))
-                if r+1 < N: poss.append(('D', 1, 0))
-        else:
-            if c+1 < N: poss.append(('R', 0, 1))
-            if r+1 < N: poss.append(('D', 1, 0))
-            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
-        for mv, dr, dc in poss:
-            if dp(r+dr, c+dc, m+1) + grid[r][c] == target:
-                return mv + reconstruct(r+dr, c+dc, m+1, target - grid[r][c])
-        return ""
-    path = reconstruct(0, 0, 0, max_sum)
-    return (max_sum, path)
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid):
-    if not grid or not grid[0]: return (0, "")
-    N = len(grid)
-    from functools import lru_cache
-    @lru_cache(None)
-    def dp(r, c, m):
-        if r == N-1 and c == N-1: return grid[r][c]
-        if r >= N or c >= N: return float('-inf')
-        s = grid[r][c]
-        res = float('-inf')
-        must = (m % 3 == 2)
-        poss = []
-        if must:
-            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
-            else:
-                if c+1 < N: poss.append(('R', 0, 1))
-                if r+1 < N: poss.append(('D', 1, 0))
-        else:
-            if c+1 < N: poss.append(('R', 0, 1))
-            if r+1 < N: poss.append(('D', 1, 0))
-            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
-        for mv, dr, dc in poss:
-            val = dp(r+dr, c+dc, m+1)
-            if val != float('-inf'): res = max(res, s + val)
-        return res
-    max_sum = dp(0, 0, 0)
-    def reconstruct(r, c, m, target):
-        if r == N-1 and c == N-1: return ""
-        must = (m % 3 == 2)
-        poss = []
-        if must:
-            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
-            else:
-                if c+1 < N: poss.append(('R', 0, 1))
-                if r+1 < N: poss.append(('D', 1, 0))
-        else:
-            if c+1 < N: poss.append(('R', 0, 1))
-            if r+1 < N: poss.append(('D', 1, 0))
-            if r+1 < N and c+1 < N: poss.append(('X', 1, 1))
-        for mv, dr, dc in poss:
-            if dp(r+dr, c+dc, m+1) + grid[r][c] == target:
-                return mv + reconstruct(r+dr, c+dc, m+1, target - grid[r][c])
-        return ""
-    path = reconstruct(0, 0, 0, max_sum)
-    return (max_sum, path)
+(no code extracted)
