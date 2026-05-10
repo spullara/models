@@ -1,132 +1,19 @@
 Model: grok-3-mini
 Provider: grok
-Evaluated: 2026-05-10T08:34:20.655062+00:00
+Evaluated: 2026-05-10T08:50:16.105046+00:00
 
 === TIMING ===
-Response time: 52.08s
+Response time: 71.98s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection termination
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0:
-        return (0, "")
-    
-    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    
-    def dp(i, j, mod):
-        if memo[i][j][mod] is not None:
-            return memo[i][j][mod]
-        
-        if i == N-1 and j == N-1:
-            memo[i][j][mod] = (grid[i][j], "")
-            return memo[i][j][mod]
-        
-        next_mod = (mod + 1) % 3
-        
-        if (mod + 1) % 3 == 0:  # Next move must be X if possible
-            if i+1 < N and j+1 < N:
-                next_sum, next_path = dp(i+1, j+1, next_mod)
-                total_sum = grid[i][j] + next_sum
-                path = "X" + next_path
-                memo[i][j][mod] = (total_sum, path)
-            else:
-                options = []
-                if j+1 < N:
-                    next_sum, next_path = dp(i, j+1, next_mod)
-                    options.append((grid[i][j] + next_sum, "R" + next_path))
-                if i+1 < N:
-                    next_sum, next_path = dp(i+1, j, next_mod)
-                    options.append((grid[i][j] + next_sum, "D" + next_path))
-                if options:
-                    memo[i][j][mod] = max(options, key=lambda x: x[0])
-                else:
-                    memo[i][j][mod] = (grid[i][j], "")
-        else:
-            options = []
-            if j+1 < N:
-                next_sum, next_path = dp(i, j+1, next_mod)
-                options.append((grid[i][j] + next_sum, "R" + next_path))
-            if i+1 < N:
-                next_sum, next_path = dp(i+1, j, next_mod)
-                options.append((grid[i][j] + next_sum, "D" + next_path))
-            if i+1 < N and j+1 < N:
-                next_sum, next_path = dp(i+1, j+1, next_mod)
-                options.append((grid[i][j] + next_sum, "X" + next_path))
-            if options:
-                memo[i][j][mod] = max(options, key=lambda x: x[0])
-            else:
-                memo[i][j][mod] = (grid[i][j], "")
-        
-        return memo[i][j][mod]
-    
-    max_sum, path = dp(0, 0, 0)
-    return (max_sum, path)
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0:
-        return (0, "")
-    
-    memo = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
-    
-    def dp(i, j, mod):
-        if memo[i][j][mod] is not None:
-            return memo[i][j][mod]
-        
-        if i == N-1 and j == N-1:
-            memo[i][j][mod] = (grid[i][j], "")
-            return memo[i][j][mod]
-        
-        next_mod = (mod + 1) % 3
-        
-        if (mod + 1) % 3 == 0:  # Next move must be X if possible
-            if i+1 < N and j+1 < N:
-                next_sum, next_path = dp(i+1, j+1, next_mod)
-                total_sum = grid[i][j] + next_sum
-                path = "X" + next_path
-                memo[i][j][mod] = (total_sum, path)
-            else:
-                options = []
-                if j+1 < N:
-                    next_sum, next_path = dp(i, j+1, next_mod)
-                    options.append((grid[i][j] + next_sum, "R" + next_path))
-                if i+1 < N:
-                    next_sum, next_path = dp(i+1, j, next_mod)
-                    options.append((grid[i][j] + next_sum, "D" + next_path))
-                if options:
-                    memo[i][j][mod] = max(options, key=lambda x: x[0])
-                else:
-                    memo[i][j][mod] = (grid[i][j], "")
-        else:
-            options = []
-            if j+1 < N:
-                next_sum, next_path = dp(i, j+1, next_mod)
-                options.append((grid[i][j] + next_sum, "R" + next_path))
-            if i+1 < N:
-                next_sum, next_path = dp(i+1, j, next_mod)
-                options.append((grid[i][j] + next_sum, "D" + next_path))
-            if i+1 < N and j+1 < N:
-                next_sum, next_path = dp(i+1, j+1, next_mod)
-                options.append((grid[i][j] + next_sum, "X" + next_path))
-            if options:
-                memo[i][j][mod] = max(options, key=lambda x: x[0])
-            else:
-                memo[i][j][mod] = (grid[i][j], "")
-        
-        return memo[i][j][mod]
-    
-    max_sum, path = dp(0, 0, 0)
-    return (max_sum, path)
+(no code extracted)
