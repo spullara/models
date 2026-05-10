@@ -1,9 +1,9 @@
 Model: grok-4-1-fast-reasoning
 Provider: grok
-Evaluated: 2026-05-10T08:36:41.828000+00:00
+Evaluated: 2026-05-10T08:52:58.079651+00:00
 
 === TIMING ===
-Response time: 49.03s
+Response time: 14.65s
 
 === CODE EXTRACTION ===
 Method: None

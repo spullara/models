@@ -1,121 +1,19 @@
 Model: grok-4-fast-non-reasoning
 Provider: grok
-Evaluated: 2026-05-10T08:37:30.860687+00:00
+Evaluated: 2026-05-10T08:53:12.729379+00:00
 
 === TIMING ===
-Response time: 4.07s
+Response time: 0.18s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 49
-Calculated sum: 18
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    n = len(grid)
-    INF = float('-inf')
-    dp = [[INF] * n for _ in range(n)]
-    dp[0][0] = grid[0][0]
-    
-    for i in range(n):
-        for j in range(n):
-            if dp[i][j] == INF:
-                continue
-            moves = []
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            
-            for move, ni, nj in moves:
-                is_diag_required = (i + j) % 3 == 0 and move != 'X'
-                if is_diag_required and not any(m[0] == 'X' for m in moves):
-                    is_diag_required = False
-                if not is_diag_required:
-                    new_val = dp[i][j] + grid[ni][nj]
-                    if new_val > dp[ni][nj]:
-                        dp[ni][nj] = new_val
-    
-    max_sum = dp[n-1][n-1]
-    if max_sum == INF:
-        return 0, ""
-    
-    path = []
-    i, j = n-1, n-1
-    while i > 0 or j > 0:
-        if i > 0 and j > 0 and dp[i][j] == dp[i-1][j-1] + grid[i][j]:
-            path.append('X')
-            i -= 1
-            j -= 1
-        elif i > 0 and dp[i][j] == dp[i-1][j] + grid[i][j]:
-            path.append('D')
-            i -= 1
-        else:
-            path.append('R')
-            j -= 1
-    
-    path.reverse()
-    return max_sum, ''.join(path)
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    n = len(grid)
-    INF = float('-inf')
-    dp = [[INF] * n for _ in range(n)]
-    dp[0][0] = grid[0][0]
-    
-    for i in range(n):
-        for j in range(n):
-            if dp[i][j] == INF:
-                continue
-            moves = []
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            
-            for move, ni, nj in moves:
-                is_diag_required = (i + j) % 3 == 0 and move != 'X'
-                if is_diag_required and not any(m[0] == 'X' for m in moves):
-                    is_diag_required = False
-                if not is_diag_required:
-                    new_val = dp[i][j] + grid[ni][nj]
-                    if new_val > dp[ni][nj]:
-                        dp[ni][nj] = new_val
-    
-    max_sum = dp[n-1][n-1]
-    if max_sum == INF:
-        return 0, ""
-    
-    path = []
-    i, j = n-1, n-1
-    while i > 0 or j > 0:
-        if i > 0 and j > 0 and dp[i][j] == dp[i-1][j-1] + grid[i][j]:
-            path.append('X')
-            i -= 1
-            j -= 1
-        elif i > 0 and dp[i][j] == dp[i-1][j] + grid[i][j]:
-            path.append('D')
-            i -= 1
-        else:
-            path.append('R')
-            j -= 1
-    
-    path.reverse()
-    return max_sum, ''.join(path)
+(no code extracted)

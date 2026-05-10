@@ -1,16 +1,16 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-05-10T08:37:51.982434+00:00
+Evaluated: 2026-05-10T08:53:13.091420+00:00
 
 === TIMING ===
-Response time: 15.75s
+Response time: 0.15s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection termination
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
 (no response)
