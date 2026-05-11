@@ -1,6 +1,6 @@
 Model: models/gemini-2.5-flash-native-audio-latest
 Provider: gemini
-Evaluated: 2026-05-11T21:24:06.739161+00:00
+Evaluated: 2026-05-11T21:29:05.690619+00:00
 
 === TIMING ===
 Response time: 0.14s
