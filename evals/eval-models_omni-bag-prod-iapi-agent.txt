@@ -1,9 +1,9 @@
 Model: models/omni-bag-prod-iapi-agent
 Provider: gemini
-Evaluated: 2026-05-11T19:21:07.667443+00:00
+Evaluated: 2026-05-11T19:26:06.829110+00:00
 
 === TIMING ===
-Response time: 0.14s
+Response time: 0.13s
 
 === CODE EXTRACTION ===
 Method: None
