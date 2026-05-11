@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-11 02:56:16
+Last updated: 2026-05-11 19:19:20
 
 ## Summary
 
@@ -11,7 +11,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/10
 
-**Gemini**: 50/77
+**Gemini**: 50/88
 
 **Grok**: 17/10
 
@@ -238,6 +238,17 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/omni-bag-staging-iapi-agent (added: 2026-05-11)
+- models/omni-bag-prod-iapi-agent (added: 2026-05-11)
+- models/omni-bag-autopush-iapi-agent (added: 2026-05-11)
+- models/lyria-3-pro-preview-agent (added: 2026-05-11)
+- models/lyria-3-clip-preview-agent (added: 2026-05-11)
+- models/gemini-3.1-pro-preview-agent (added: 2026-05-11)
+- models/gemini-3.1-flash-tts-preview-agent (added: 2026-05-11)
+- models/gemini-3.1-flash-lite-preview-agent (added: 2026-05-11)
+- models/gemini-3.1-flash-image-preview-agent (added: 2026-05-11)
+- models/gemini-3-pro-image-preview-agent (added: 2026-05-11)
+- models/gemini-3-flash-preview-agent (added: 2026-05-11)
 - models/gemini-3.1-flash-lite (added: 2026-05-07)
 - models/gemini-embedding-2 (added: 2026-04-22)
 - models/deep-research-preview-04-2026 (added: 2026-04-21)
@@ -246,8 +257,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-robotics-er-1.6-preview (added: 2026-04-14)
 - models/gemma-4-31b-it (added: 2026-04-02)
 - models/gemma-4-26b-a4b-it (added: 2026-04-02)
-- models/veo-3.1-lite-generate-preview (added: 2026-03-31)
-- models/gemini-3.1-flash-live-preview (added: 2026-03-26)
 - models/lyria-3-pro-preview (added: 2026-03-25)
 - models/lyria-3-clip-preview (added: 2026-03-25)
 - models/gemini-embedding-2-preview (added: 2026-03-10)
@@ -255,16 +264,8 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
-- models/gemini-2.5-flash-native-audio-preview-12-2025 (added: 2026-01-27)
-- models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
-- models/gemini-2.5-flash-native-audio-latest (added: 2025-12-10)
-- models/veo-3.1-fast-generate-preview (added: 2025-12-09)
-- models/veo-3.1-generate-preview (added: 2025-12-05)
-- models/veo-3.0-generate-001 (added: 2025-12-05)
-- models/veo-3.0-fast-generate-001 (added: 2025-12-05)
-- models/imagen-4.0-fast-generate-001 (added: 2025-12-05)
 - models/nano-banana-pro-preview (added: 2025-11-20)
 - models/gemini-3-pro-image-preview (added: 2025-11-20)
 - models/imagen-4.0-ultra-generate-001 (added: 2025-11-18)
@@ -282,7 +283,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-2.5-flash (added: 2025-06-17)
 - models/gemini-2.5-pro-preview-tts (added: 2025-05-21)
 - models/gemini-2.5-flash-preview-tts (added: 2025-05-21)
-- models/veo-2.0-generate-001 (added: 2025-04-09)
 - models/gemini-2.0-flash-lite-001 (added: 2025-02-25)
 - models/gemini-2.0-flash-lite (added: 2025-02-25)
 - models/gemini-2.0-flash-001 (added: 2025-02-05)
@@ -291,6 +291,17 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/veo-3.1-lite-generate-preview (deleted: 2026-05-11)
+- models/veo-3.1-generate-preview (deleted: 2026-05-11)
+- models/veo-3.1-fast-generate-preview (deleted: 2026-05-11)
+- models/veo-3.0-generate-001 (deleted: 2026-05-11)
+- models/veo-3.0-fast-generate-001 (deleted: 2026-05-11)
+- models/veo-2.0-generate-001 (deleted: 2026-05-11)
+- models/imagen-4.0-fast-generate-001 (deleted: 2026-05-11)
+- models/gemini-3.1-flash-live-preview (deleted: 2026-05-11)
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-05-11)
+- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-05-11)
+- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-05-11)
 - models/gemma-3n-e4b-it (deleted: 2026-05-05)
 - models/gemma-3n-e2b-it (deleted: 2026-05-05)
 - models/gemma-3-4b-it (deleted: 2026-05-05)
