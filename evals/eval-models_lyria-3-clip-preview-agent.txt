@@ -1,6 +1,6 @@
 Model: models/lyria-3-clip-preview-agent
 Provider: gemini
-Evaluated: 2026-05-11T19:26:06.424479+00:00
+Evaluated: 2026-05-11T21:23:06.547843+00:00
 
 === TIMING ===
 Response time: 0.14s
