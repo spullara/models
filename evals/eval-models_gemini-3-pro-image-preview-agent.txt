@@ -1,6 +1,6 @@
 Model: models/gemini-3-pro-image-preview-agent
 Provider: gemini
-Evaluated: 2026-05-11T21:27:06.374689+00:00
+Evaluated: 2026-05-11T21:33:06.451647+00:00
 
 === TIMING ===
 Response time: 0.13s
