@@ -1,174 +1,19 @@
 Model: deepseek-v4-pro
-Provider: deepseek
-Evaluated: 2026-04-24T03:04:28.606338+00:00
+Provider: qwen
+Evaluated: 2026-05-11T02:55:05.661316+00:00
 
 === TIMING ===
-Response time: 286.13s
+Response time: 0.84s
 
 === CODE EXTRACTION ===
-Method: direct
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-391edd2b-9c21-9a5a-be43-861c13e5ab73","request_id":"391edd2b-9c21-9a5a-be43-861c13e5ab73"}
 
 === RAW RESPONSE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0:
-        return (0, "")
-    INF_NEG = -10**18
-    dp = [[[INF_NEG] * 3 for _ in range(N)] for __ in range(N)]
-    prev = [[[None] * 3 for _ in range(N)] for __ in range(N)]
-    dp[0][0][0] = grid[0][0]
-
-    for r in range(N):
-        for c in range(N):
-            for m in range(3):
-                val = dp[r][c][m]
-                if val == INF_NEG:
-                    continue
-                next_m = (m + 1) % 3
-                forced = (next_m == 0)
-
-                if forced:
-                    diag_possible = (r + 1 < N) and (c + 1 < N)
-                    if diag_possible:
-                        nr, nc = r + 1, c + 1
-                        new_val = val + grid[nr][nc]
-                        if new_val > dp[nr][nc][next_m]:
-                            dp[nr][nc][next_m] = new_val
-                            prev[nr][nc][next_m] = (r, c, m, 'X')
-                    else:
-                        if c + 1 < N:
-                            nr, nc = r, c + 1
-                            new_val = val + grid[nr][nc]
-                            if new_val > dp[nr][nc][next_m]:
-                                dp[nr][nc][next_m] = new_val
-                                prev[nr][nc][next_m] = (r, c, m, 'R')
-                        if r + 1 < N:
-                            nr, nc = r + 1, c
-                            new_val = val + grid[nr][nc]
-                            if new_val > dp[nr][nc][next_m]:
-                                dp[nr][nc][next_m] = new_val
-                                prev[nr][nc][next_m] = (r, c, m, 'D')
-                else:
-                    if c + 1 < N:
-                        nr, nc = r, c + 1
-                        new_val = val + grid[nr][nc]
-                        if new_val > dp[nr][nc][next_m]:
-                            dp[nr][nc][next_m] = new_val
-                            prev[nr][nc][next_m] = (r, c, m, 'R')
-                    if r + 1 < N:
-                        nr, nc = r + 1, c
-                        new_val = val + grid[nr][nc]
-                        if new_val > dp[nr][nc][next_m]:
-                            dp[nr][nc][next_m] = new_val
-                            prev[nr][nc][next_m] = (r, c, m, 'D')
-                    if r + 1 < N and c + 1 < N:
-                        nr, nc = r + 1, c + 1
-                        new_val = val + grid[nr][nc]
-                        if new_val > dp[nr][nc][next_m]:
-                            dp[nr][nc][next_m] = new_val
-                            prev[nr][nc][next_m] = (r, c, m, 'X')
-
-    best_m = 0
-    best_val = dp[N-1][N-1][0]
-    for m in (1, 2):
-        if dp[N-1][N-1][m] > best_val:
-            best_val = dp[N-1][N-1][m]
-            best_m = m
-
-    if best_val == INF_NEG:
-        return (0, "")
-
-    path = []
-    r, c, m = N-1, N-1, best_m
-    while prev[r][c][m] is not None:
-        pr, pc, pm, move = prev[r][c][m]
-        path.append(move)
-        r, c, m = pr, pc, pm
-    path.reverse()
-    return (best_val, "".join(path))
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    if N == 0:
-        return (0, "")
-    INF_NEG = -10**18
-    dp = [[[INF_NEG] * 3 for _ in range(N)] for __ in range(N)]
-    prev = [[[None] * 3 for _ in range(N)] for __ in range(N)]
-    dp[0][0][0] = grid[0][0]
-
-    for r in range(N):
-        for c in range(N):
-            for m in range(3):
-                val = dp[r][c][m]
-                if val == INF_NEG:
-                    continue
-                next_m = (m + 1) % 3
-                forced = (next_m == 0)
-
-                if forced:
-                    diag_possible = (r + 1 < N) and (c + 1 < N)
-                    if diag_possible:
-                        nr, nc = r + 1, c + 1
-                        new_val = val + grid[nr][nc]
-                        if new_val > dp[nr][nc][next_m]:
-                            dp[nr][nc][next_m] = new_val
-                            prev[nr][nc][next_m] = (r, c, m, 'X')
-                    else:
-                        if c + 1 < N:
-                            nr, nc = r, c + 1
-                            new_val = val + grid[nr][nc]
-                            if new_val > dp[nr][nc][next_m]:
-                                dp[nr][nc][next_m] = new_val
-                                prev[nr][nc][next_m] = (r, c, m, 'R')
-                        if r + 1 < N:
-                            nr, nc = r + 1, c
-                            new_val = val + grid[nr][nc]
-                            if new_val > dp[nr][nc][next_m]:
-                                dp[nr][nc][next_m] = new_val
-                                prev[nr][nc][next_m] = (r, c, m, 'D')
-                else:
-                    if c + 1 < N:
-                        nr, nc = r, c + 1
-                        new_val = val + grid[nr][nc]
-                        if new_val > dp[nr][nc][next_m]:
-                            dp[nr][nc][next_m] = new_val
-                            prev[nr][nc][next_m] = (r, c, m, 'R')
-                    if r + 1 < N:
-                        nr, nc = r + 1, c
-                        new_val = val + grid[nr][nc]
-                        if new_val > dp[nr][nc][next_m]:
-                            dp[nr][nc][next_m] = new_val
-                            prev[nr][nc][next_m] = (r, c, m, 'D')
-                    if r + 1 < N and c + 1 < N:
-                        nr, nc = r + 1, c + 1
-                        new_val = val + grid[nr][nc]
-                        if new_val > dp[nr][nc][next_m]:
-                            dp[nr][nc][next_m] = new_val
-                            prev[nr][nc][next_m] = (r, c, m, 'X')
-
-    best_m = 0
-    best_val = dp[N-1][N-1][0]
-    for m in (1, 2):
-        if dp[N-1][N-1][m] > best_val:
-            best_val = dp[N-1][N-1][m]
-            best_m = m
-
-    if best_val == INF_NEG:
-        return (0, "")
-
-    path = []
-    r, c, m = N-1, N-1, best_m
-    while prev[r][c][m] is not None:
-        pr, pc, pm, move = prev[r][c][m]
-        path.append(move)
-        r, c, m = pr, pc, pm
-    path.reverse()
-    return (best_val, "".join(path))
+(no code extracted)
