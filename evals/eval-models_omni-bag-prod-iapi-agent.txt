@@ -1,0 +1,19 @@
+Model: models/omni-bag-prod-iapi-agent
+Provider: gemini
+Evaluated: 2026-05-11T19:19:07.328260+00:00
+
+=== TIMING ===
+Response time: 0.15s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: 
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)

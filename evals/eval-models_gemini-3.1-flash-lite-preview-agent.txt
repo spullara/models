@@ -1,0 +1,19 @@
+Model: models/gemini-3.1-flash-lite-preview-agent
+Provider: gemini
+Evaluated: 2026-05-11T19:19:06.467774+00:00
+
+=== TIMING ===
+Response time: 0.14s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: 
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
