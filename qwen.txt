@@ -1,5 +1,6 @@
 ccai-pro
 deepseek-v3.2
+deepseek-v4-pro
 qvq-max
 qwen-coder-plus
 qwen-flash
