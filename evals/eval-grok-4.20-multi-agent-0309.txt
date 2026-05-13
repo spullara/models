@@ -1,24 +1,104 @@
 Model: grok-4.20-multi-agent-0309
 Provider: grok
-Evaluated: 2026-05-13T13:24:23.988956+00:00
+Evaluated: 2026-05-13T13:29:11.247114+00:00
 
 === TIMING ===
-Response time: 0.12s
+Response time: 38.71s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: <html>
-<head><title>404 Not Found</title></head>
-<body>
-<center><h1>404 Not Found</h1></center>
-<hr><center>nginx</center>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fb1fbb26a8b1fb9',t:'MTc3ODY3ODY2NA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagN
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    N = len(grid)
+    memo = {}
+    def dfs(r, c, moves):
+        if r == N - 1 and c == N - 1:
+            return grid[r][c], ""
+        key = (r, c, moves)
+        if key in memo:
+            return memo[key]
+        best_sum = float('-inf')
+        best_path = ""
+        next_moves = moves + 1
+        must_diag = (next_moves % 3 == 0)
+        dirs = []
+        if must_diag:
+            if r + 1 < N and c + 1 < N:
+                dirs.append(('X', r + 1, c + 1))
+            else:
+                if c + 1 < N:
+                    dirs.append(('R', r, c + 1))
+                if r + 1 < N:
+                    dirs.append(('D', r + 1, c))
+        else:
+            if c + 1 < N:
+                dirs.append(('R', r, c + 1))
+            if r + 1 < N:
+                dirs.append(('D', r + 1, c))
+            if r + 1 < N and c + 1 < N:
+                dirs.append(('X', r + 1, c + 1))
+        for char, nr, nc in dirs:
+            sub_sum, sub_path = dfs(nr, nc, next_moves)
+            this_sum = grid[r][c] + sub_sum
+            if this_sum > best_sum:
+                best_sum = this_sum
+                best_path = char + sub_path
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+    total, path = dfs(0, 0, 0)
+    return total, path
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    N = len(grid)
+    memo = {}
+    def dfs(r, c, moves):
+        if r == N - 1 and c == N - 1:
+            return grid[r][c], ""
+        key = (r, c, moves)
+        if key in memo:
+            return memo[key]
+        best_sum = float('-inf')
+        best_path = ""
+        next_moves = moves + 1
+        must_diag = (next_moves % 3 == 0)
+        dirs = []
+        if must_diag:
+            if r + 1 < N and c + 1 < N:
+                dirs.append(('X', r + 1, c + 1))
+            else:
+                if c + 1 < N:
+                    dirs.append(('R', r, c + 1))
+                if r + 1 < N:
+                    dirs.append(('D', r + 1, c))
+        else:
+            if c + 1 < N:
+                dirs.append(('R', r, c + 1))
+            if r + 1 < N:
+                dirs.append(('D', r + 1, c))
+            if r + 1 < N and c + 1 < N:
+                dirs.append(('X', r + 1, c + 1))
+        for char, nr, nc in dirs:
+            sub_sum, sub_path = dfs(nr, nc, next_moves)
+            this_sum = grid[r][c] + sub_sum
+            if this_sum > best_sum:
+                best_sum = this_sum
+                best_path = char + sub_path
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+    total, path = dfs(0, 0, 0)
+    return total, path
