@@ -1,16 +1,21 @@
 Model: grok-imagine-image-pro
 Provider: grok
-Evaluated: 2026-05-13T13:25:26.992186+00:00
+Evaluated: 2026-05-13T13:26:06.869806+00:00
 
 === TIMING ===
-Response time: 0.15s
+Response time: 0.12s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 400: {"code":"Client specified an invalid argument","error":"Model not found: grok-imagine-image-pro"}
+API Error: HTTP 404: <html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fb1fe356a2aff0a',t:'MTc3ODY3ODc2Ng=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagN
 
 === RAW RESPONSE ===
 (no response)

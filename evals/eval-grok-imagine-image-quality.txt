@@ -1,6 +1,6 @@
 Model: grok-imagine-image-quality
 Provider: grok
-Evaluated: 2026-05-13T13:25:27.147065+00:00
+Evaluated: 2026-05-13T13:26:06.987148+00:00
 
 === TIMING ===
 Response time: 0.12s
@@ -15,7 +15,7 @@ API Error: HTTP 404: <html>
 <body>
 <center><h1>404 Not Found</h1></center>
 <hr><center>nginx</center>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fb1fd3d28cd1571',t:'MTc3ODY3ODcyNw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagN
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fb1fe362bf56192',t:'MTc3ODY3ODc2Nw=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagN
 
 === RAW RESPONSE ===
 (no response)
