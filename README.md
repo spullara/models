@@ -1,13 +1,13 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-12 15:14:19
+Last updated: 2026-05-13 00:07:22
 
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 138/37
+**OpenAI**: 136/39
 
 **Anthropic**: 9/10
 
@@ -163,12 +163,12 @@ Model counts shown as: **Available/Deleted**
 - gpt-3.5-turbo-0125 (added: 2024-10-14)
 - gpt-3.5-turbo (added: 2024-10-14)
 - davinci-002 (added: 2024-10-14)
-- dall-e-3 (added: 2024-10-14)
-- dall-e-2 (added: 2024-10-14)
 - babbage-002 (added: 2024-10-14)
 
 ### Deleted Models
 
+- dall-e-3 (deleted: 2026-05-13)
+- dall-e-2 (deleted: 2026-05-13)
 - flx-gpt55-codex-ev3 (deleted: 2026-04-24)
 - gpt-4-turbo-preview (deleted: 2026-03-26)
 - gpt-4-1106-preview (deleted: 2026-03-26)
