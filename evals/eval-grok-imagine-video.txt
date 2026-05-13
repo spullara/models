@@ -1,9 +1,9 @@
 Model: grok-imagine-video
 Provider: grok
-Evaluated: 2026-05-13T13:25:06.176194+00:00
+Evaluated: 2026-05-13T13:29:05.424828+00:00
 
 === TIMING ===
-Response time: 0.12s
+Response time: 0.11s
 
 === CODE EXTRACTION ===
 Method: None
@@ -15,7 +15,7 @@ API Error: HTTP 404: <html>
 <body>
 <center><h1>404 Not Found</h1></center>
 <hr><center>nginx</center>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fb1fcba1c0a148b',t:'MTc3ODY3ODcwNg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagN
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fb202915aecb8b9',t:'MTc3ODY3ODk0NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagN
 
 === RAW RESPONSE ===
 (no response)

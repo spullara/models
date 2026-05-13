@@ -1,21 +1,16 @@
 Model: grok-imagine-video-0428
 Provider: grok
-Evaluated: 2026-05-13T13:25:06.293035+00:00
+Evaluated: 2026-05-13T13:29:05.540009+00:00
 
 === TIMING ===
-Response time: 0.11s
+Response time: 0.15s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 404: <html>
-<head><title>404 Not Found</title></head>
-<body>
-<center><h1>404 Not Found</h1></center>
-<hr><center>nginx</center>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fb1fcbacf80b7b9',t:'MTc3ODY3ODcwNg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagN
+API Error: HTTP 400: {"code":"Client specified an invalid argument","error":"Model not found: grok-imagine-video-0428"}
 
 === RAW RESPONSE ===
 (no response)
