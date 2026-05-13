@@ -1,19 +1,122 @@
 Model: grok-4-0709
 Provider: grok
-Evaluated: 2026-05-10T08:51:28.081715+00:00
+Evaluated: 2026-05-13T13:22:06.935025+00:00
 
 === TIMING ===
-Response time: 78.36s
+Response time: 103.48s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection termination
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    n = len(grid)
+    memo = {}
+    MIN = -(10 ** 18)
+
+    def dp(i, j, moves):
+        key = (i, j, moves)
+        if key in memo:
+            return memo[key]
+        if i == n - 1 and j == n - 1:
+            res = grid[i][j], ""
+            memo[key] = res
+            return res
+        next_num = moves + 1
+        is_forced = (next_num % 3 == 0)
+        candidates = []
+        can_diag = (i + 1 < n and j + 1 < n)
+        can_right = (j + 1 < n)
+        can_down = (i + 1 < n)
+        if is_forced:
+            if can_diag:
+                candidates.append(('X', i + 1, j + 1))
+            else:
+                if can_right:
+                    candidates.append(('R', i, j + 1))
+                if can_down:
+                    candidates.append(('D', i + 1, j))
+        else:
+            if can_right:
+                candidates.append(('R', i, j + 1))
+            if can_down:
+                candidates.append(('D', i + 1, j))
+            if can_diag:
+                candidates.append(('X', i + 1, j + 1))
+        max_sum = MIN
+        best_path = ""
+        for char, ni, nj in candidates:
+            sub_sum, sub_path = dp(ni, nj, moves + 1)
+            total = grid[i][j] + sub_sum
+            if total > max_sum:
+                max_sum = total
+                best_path = char + sub_path
+        res = max_sum, best_path
+        memo[key] = res
+        return res
+
+    maxs, path = dp(0, 0, 0)
+    return maxs, path
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    n = len(grid)
+    memo = {}
+    MIN = -(10 ** 18)
+
+    def dp(i, j, moves):
+        key = (i, j, moves)
+        if key in memo:
+            return memo[key]
+        if i == n - 1 and j == n - 1:
+            res = grid[i][j], ""
+            memo[key] = res
+            return res
+        next_num = moves + 1
+        is_forced = (next_num % 3 == 0)
+        candidates = []
+        can_diag = (i + 1 < n and j + 1 < n)
+        can_right = (j + 1 < n)
+        can_down = (i + 1 < n)
+        if is_forced:
+            if can_diag:
+                candidates.append(('X', i + 1, j + 1))
+            else:
+                if can_right:
+                    candidates.append(('R', i, j + 1))
+                if can_down:
+                    candidates.append(('D', i + 1, j))
+        else:
+            if can_right:
+                candidates.append(('R', i, j + 1))
+            if can_down:
+                candidates.append(('D', i + 1, j))
+            if can_diag:
+                candidates.append(('X', i + 1, j + 1))
+        max_sum = MIN
+        best_path = ""
+        for char, ni, nj in candidates:
+            sub_sum, sub_path = dp(ni, nj, moves + 1)
+            total = grid[i][j] + sub_sum
+            if total > max_sum:
+                max_sum = total
+                best_path = char + sub_path
+        res = max_sum, best_path
+        memo[key] = res
+        return res
+
+    maxs, path = dp(0, 0, 0)
+    return maxs, path
