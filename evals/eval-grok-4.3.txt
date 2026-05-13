@@ -1,19 +1,94 @@
 Model: grok-4.3
 Provider: grok
-Evaluated: 2026-05-10T08:53:31.203419+00:00
+Evaluated: 2026-05-13T13:24:24.105970+00:00
 
 === TIMING ===
-Response time: 1.48s
+Response time: 19.26s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: connection termination
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+import functools
+def solve_grid(grid):
+    if not grid or not grid[0]: return (0, "")
+    N = len(grid)
+    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
+    @functools.lru_cache(None)
+    def dp(r, c, moves):
+        if r == N-1 and c == N-1:
+            return grid[r][c], ""
+        maxs = float('-inf')
+        best = ""
+        mnum = moves + 1
+        must = (mnum % 3 == 0)
+        cands = dirs if not must else [(1,1,'X')]
+        for dr,dc,ch in cands:
+            nr,nc = r+dr, c+dc
+            if 0 <= nr < N and 0 <= nc < N:
+                s,p = dp(nr,nc,moves+1)
+                if s > float('-inf'):
+                    tot = grid[r][c] + s
+                    if tot > maxs:
+                        maxs = tot
+                        best = ch + p
+        if must and maxs == float('-inf'):
+            for dr,dc,ch in [(0,1,'R'),(1,0,'D')]:
+                nr,nc = r+dr, c+dc
+                if 0 <= nr < N and 0 <= nc < N:
+                    s,p = dp(nr,nc,moves+1)
+                    if s > float('-inf'):
+                        tot = grid[r][c] + s
+                        if tot > maxs:
+                            maxs = tot
+                            best = ch + p
+        return maxs, best
+    res,p = dp(0,0,0)
+    return res, p
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+import functools
+def solve_grid(grid):
+    if not grid or not grid[0]: return (0, "")
+    N = len(grid)
+    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
+    @functools.lru_cache(None)
+    def dp(r, c, moves):
+        if r == N-1 and c == N-1:
+            return grid[r][c], ""
+        maxs = float('-inf')
+        best = ""
+        mnum = moves + 1
+        must = (mnum % 3 == 0)
+        cands = dirs if not must else [(1,1,'X')]
+        for dr,dc,ch in cands:
+            nr,nc = r+dr, c+dc
+            if 0 <= nr < N and 0 <= nc < N:
+                s,p = dp(nr,nc,moves+1)
+                if s > float('-inf'):
+                    tot = grid[r][c] + s
+                    if tot > maxs:
+                        maxs = tot
+                        best = ch + p
+        if must and maxs == float('-inf'):
+            for dr,dc,ch in [(0,1,'R'),(1,0,'D')]:
+                nr,nc = r+dr, c+dc
+                if 0 <= nr < N and 0 <= nc < N:
+                    s,p = dp(nr,nc,moves+1)
+                    if s > float('-inf'):
+                        tot = grid[r][c] + s
+                        if tot > maxs:
+                            maxs = tot
+                            best = ch + p
+        return maxs, best
+    res,p = dp(0,0,0)
+    return res, p
