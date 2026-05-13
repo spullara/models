@@ -1,9 +1,9 @@
 Model: grok-4.3
 Provider: grok
-Evaluated: 2026-05-13T13:24:24.105970+00:00
+Evaluated: 2026-05-13T13:29:49.984244+00:00
 
 === TIMING ===
-Response time: 19.26s
+Response time: 15.84s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,78 +17,106 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
-import functools
 def solve_grid(grid):
-    if not grid or not grid[0]: return (0, "")
     N = len(grid)
-    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
-    @functools.lru_cache(None)
-    def dp(r, c, moves):
-        if r == N-1 and c == N-1:
-            return grid[r][c], ""
-        maxs = float('-inf')
-        best = ""
-        mnum = moves + 1
-        must = (mnum % 3 == 0)
-        cands = dirs if not must else [(1,1,'X')]
-        for dr,dc,ch in cands:
-            nr,nc = r+dr, c+dc
+    if N == 0:
+        return (0, "")
+    dirs = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+    memo = {}
+    prev = {}
+
+    def dfs(r, c, m):
+        if r == N - 1 and c == N - 1:
+            return grid[r][c]
+        key = (r, c, m % 3)
+        if key in memo:
+            return memo[key]
+        must_x = (m + 1) % 3 == 0
+        best = float('-inf')
+        best_move = None
+        for dr, dc, ch in dirs:
+            if must_x and ch != 'X':
+                continue
+            nr, nc = r + dr, c + dc
             if 0 <= nr < N and 0 <= nc < N:
-                s,p = dp(nr,nc,moves+1)
-                if s > float('-inf'):
-                    tot = grid[r][c] + s
-                    if tot > maxs:
-                        maxs = tot
-                        best = ch + p
-        if must and maxs == float('-inf'):
-            for dr,dc,ch in [(0,1,'R'),(1,0,'D')]:
-                nr,nc = r+dr, c+dc
+                val = dfs(nr, nc, m + 1)
+                if val > best - grid[r][c]:
+                    best = val + grid[r][c]
+                    best_move = ch
+                    prev[key] = (nr, nc, (m + 1) % 3, ch)
+        if best == float('-inf') and must_x:
+            for dr, dc, ch in [(0, 1, 'R'), (1, 0, 'D')]:
+                nr, nc = r + dr, c + dc
                 if 0 <= nr < N and 0 <= nc < N:
-                    s,p = dp(nr,nc,moves+1)
-                    if s > float('-inf'):
-                        tot = grid[r][c] + s
-                        if tot > maxs:
-                            maxs = tot
-                            best = ch + p
-        return maxs, best
-    res,p = dp(0,0,0)
-    return res, p
+                    val = dfs(nr, nc, m + 1)
+                    if val > best - grid[r][c]:
+                        best = val + grid[r][c]
+                        best_move = ch
+                        prev[key] = (nr, nc, (m + 1) % 3, ch)
+        memo[key] = best
+        return best
+
+    total = dfs(0, 0, 0)
+    path = ""
+    r, c, md = 0, 0, 0
+    while r != N - 1 or c != N - 1:
+        key = (r, c, md)
+        if key not in prev:
+            break
+        nr, nc, nmd, ch = prev[key]
+        path += ch
+        r, c, md = nr, nc, nmd
+    return (total, path)
 ```
 
 === EXTRACTED CODE ===
-import functools
 def solve_grid(grid):
-    if not grid or not grid[0]: return (0, "")
     N = len(grid)
-    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
-    @functools.lru_cache(None)
-    def dp(r, c, moves):
-        if r == N-1 and c == N-1:
-            return grid[r][c], ""
-        maxs = float('-inf')
-        best = ""
-        mnum = moves + 1
-        must = (mnum % 3 == 0)
-        cands = dirs if not must else [(1,1,'X')]
-        for dr,dc,ch in cands:
-            nr,nc = r+dr, c+dc
+    if N == 0:
+        return (0, "")
+    dirs = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+    memo = {}
+    prev = {}
+
+    def dfs(r, c, m):
+        if r == N - 1 and c == N - 1:
+            return grid[r][c]
+        key = (r, c, m % 3)
+        if key in memo:
+            return memo[key]
+        must_x = (m + 1) % 3 == 0
+        best = float('-inf')
+        best_move = None
+        for dr, dc, ch in dirs:
+            if must_x and ch != 'X':
+                continue
+            nr, nc = r + dr, c + dc
             if 0 <= nr < N and 0 <= nc < N:
-                s,p = dp(nr,nc,moves+1)
-                if s > float('-inf'):
-                    tot = grid[r][c] + s
-                    if tot > maxs:
-                        maxs = tot
-                        best = ch + p
-        if must and maxs == float('-inf'):
-            for dr,dc,ch in [(0,1,'R'),(1,0,'D')]:
-                nr,nc = r+dr, c+dc
+                val = dfs(nr, nc, m + 1)
+                if val > best - grid[r][c]:
+                    best = val + grid[r][c]
+                    best_move = ch
+                    prev[key] = (nr, nc, (m + 1) % 3, ch)
+        if best == float('-inf') and must_x:
+            for dr, dc, ch in [(0, 1, 'R'), (1, 0, 'D')]:
+                nr, nc = r + dr, c + dc
                 if 0 <= nr < N and 0 <= nc < N:
-                    s,p = dp(nr,nc,moves+1)
-                    if s > float('-inf'):
-                        tot = grid[r][c] + s
-                        if tot > maxs:
-                            maxs = tot
-                            best = ch + p
-        return maxs, best
-    res,p = dp(0,0,0)
-    return res, p
+                    val = dfs(nr, nc, m + 1)
+                    if val > best - grid[r][c]:
+                        best = val + grid[r][c]
+                        best_move = ch
+                        prev[key] = (nr, nc, (m + 1) % 3, ch)
+        memo[key] = best
+        return best
+
+    total = dfs(0, 0, 0)
+    path = ""
+    r, c, md = 0, 0, 0
+    while r != N - 1 or c != N - 1:
+        key = (r, c, md)
+        if key not in prev:
+            break
+        nr, nc, nmd, ch = prev[key]
+        path += ch
+        r, c, md = nr, nc, nmd
+    return (total, path)
