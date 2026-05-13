@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-13 13:26:28
+Last updated: 2026-05-13 13:27:33
 
 ## Summary
 
@@ -13,7 +13,7 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 50/88
 
-**Grok**: 5/22
+**Grok**: 2/25
 
 **Mistral**: 64/33
 
@@ -385,13 +385,13 @@ Model counts shown as: **Available/Deleted**
 ### Current Models
 
 - grok-imagine-video-0428 (added: 2026-05-06)
-- grok-imagine-image-quality (added: 2026-05-06)
-- grok-imagine-image-pro (added: 2026-02-07)
 - grok-imagine-video (added: 2026-01-29)
-- grok-imagine-image (added: 2026-01-29)
 
 ### Deleted Models
 
+- grok-imagine-image-quality (deleted: 2026-05-13)
+- grok-imagine-image-pro (deleted: 2026-05-13)
+- grok-imagine-image (deleted: 2026-05-13)
 - grok-code-fast-1 (deleted: 2026-05-13)
 - grok-4.3 (deleted: 2026-05-13)
 - grok-4.20-multi-agent-0309 (deleted: 2026-05-13)
