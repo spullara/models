@@ -1,7 +1,53 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-15 22:58:15
+Last updated: 2026-05-16 01:14:12
+
+## Updates This Week (2026-05-10 to 2026-05-16)
+
+### OpenAI
+
+**Deleted**
+
+- dall-e-2 (deleted: 2026-05-13)
+- dall-e-3 (deleted: 2026-05-13)
+
+### Gemini
+
+**Deleted**
+
+- models/gemini-3-flash-preview-agent (deleted: 2026-05-11)
+- models/gemini-3-pro-image-preview-agent (deleted: 2026-05-11)
+- models/gemini-3.1-flash-image-preview-agent (deleted: 2026-05-11)
+- models/gemini-3.1-flash-lite-preview-agent (deleted: 2026-05-11)
+- models/gemini-3.1-flash-tts-preview-agent (deleted: 2026-05-11)
+- models/gemini-3.1-pro-preview-agent (deleted: 2026-05-11)
+- models/lyria-3-clip-preview-agent (deleted: 2026-05-11)
+- models/lyria-3-pro-preview-agent (deleted: 2026-05-11)
+- models/omni-bag-autopush-iapi-agent (deleted: 2026-05-11)
+- models/omni-bag-prod-iapi-agent (deleted: 2026-05-11)
+- models/omni-bag-staging-iapi-agent (deleted: 2026-05-11)
+
+### Grok
+
+**Deleted**
+
+- grok-3 (deleted: 2026-05-15)
+- grok-3-mini (deleted: 2026-05-15)
+- grok-4-0709 (deleted: 2026-05-15)
+- grok-4-1-fast-non-reasoning (deleted: 2026-05-15)
+- grok-4-1-fast-reasoning (deleted: 2026-05-15)
+- grok-4-fast-non-reasoning (deleted: 2026-05-15)
+- grok-4-fast-reasoning (deleted: 2026-05-15)
+- grok-code-fast-1 (deleted: 2026-05-15)
+- grok-imagine-image-pro (deleted: 2026-05-15)
+
+### Qwen
+
+**Added**
+
+- deepseek-v4-flash (added: 2026-05-11)
+- deepseek-v4-pro (added: 2026-05-11)
 
 ## Summary
 

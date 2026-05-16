@@ -6,7 +6,7 @@ This script is meant to be run by GitHub Actions when txt files change.
 
 import os
 import subprocess
-from datetime import datetime
+from datetime import datetime, timedelta
 
 # Map of file names to provider names
 PROVIDER_MAP = {
@@ -19,6 +19,8 @@ PROVIDER_MAP = {
     'kimi.txt': 'Kimi',
     'qwen.txt': 'Qwen'
 }
+
+UPDATE_WINDOW_DAYS = 7
 
 def get_current_models(file_path):
     """Get current models from a file."""
@@ -111,6 +113,66 @@ def get_model_history(file_path):
         'deleted': model_deleted
     }
 
+def get_updates_for_date_range(all_provider_data, start_date, end_date):
+    """Get models added or deleted between two dates, inclusive."""
+    updates = {}
+
+    for provider in PROVIDER_MAP.values():
+        data = all_provider_data.get(provider)
+        if not data:
+            continue
+
+        current_models = data['current']
+        added = [
+            (model, date) for model, date in data['added'].items()
+            if start_date <= date <= end_date and model in current_models
+        ]
+        deleted = [
+            (model, date) for model, date in data['deleted'].items()
+            if start_date <= date <= end_date
+        ]
+        added.sort(key=lambda item: item[0])
+        added.sort(key=lambda item: item[1], reverse=True)
+        deleted.sort(key=lambda item: item[0])
+        deleted.sort(key=lambda item: item[1], reverse=True)
+
+        if added or deleted:
+            updates[provider] = {
+                'added': added,
+                'deleted': deleted
+            }
+
+    return updates
+
+def format_updates_section(updates, start_date, end_date):
+    """Format the top-of-README section for recent model updates."""
+    section = f"## Updates This Week ({start_date} to {end_date})\n\n"
+
+    if not updates:
+        section += "No model changes detected this week.\n\n"
+        return section
+
+    for provider in PROVIDER_MAP.values():
+        provider_updates = updates.get(provider)
+        if not provider_updates:
+            continue
+
+        section += f"### {provider}\n\n"
+
+        if provider_updates['added']:
+            section += "**Added**\n\n"
+            for model, date in provider_updates['added']:
+                section += f"- {model} (added: {date})\n"
+            section += "\n"
+
+        if provider_updates['deleted']:
+            section += "**Deleted**\n\n"
+            for model, date in provider_updates['deleted']:
+                section += f"- {model} (deleted: {date})\n"
+            section += "\n"
+
+    return section
+
 def update_readme(all_provider_data):
     """Update README.md with current and deleted models.
 
@@ -124,9 +186,17 @@ def update_readme(all_provider_data):
     lines = content.split('\n')
     header = lines[:2] if len(lines) >= 2 else lines
 
+    now = datetime.now()
+    end_date = now.strftime('%Y-%m-%d')
+    start_date = (now - timedelta(days=UPDATE_WINDOW_DAYS - 1)).strftime('%Y-%m-%d')
+
     # Create new content
     new_content = header[0] + '\n' + header[1] + '\n\n'
-    new_content += f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+    new_content += f"Last updated: {now.strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+
+    # Add recent model changes at the top
+    recent_updates = get_updates_for_date_range(all_provider_data, start_date, end_date)
+    new_content += format_updates_section(recent_updates, start_date, end_date)
 
     # Add summary of models per provider
     new_content += "## Summary\n\n"
