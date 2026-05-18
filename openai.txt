@@ -39,8 +39,6 @@ gpt-4o-mini-transcribe-2025-12-15
 gpt-4o-mini-tts
 gpt-4o-mini-tts-2025-03-20
 gpt-4o-mini-tts-2025-12-15
-gpt-4o-realtime-preview
-gpt-4o-realtime-preview-2025-06-03
 gpt-4o-search-preview
 gpt-4o-search-preview-2025-03-11
 gpt-4o-transcribe
