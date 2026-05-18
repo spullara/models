@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-18 21:46:17
+Last updated: 2026-05-18 21:47:16
 
 ## Updates This Week (2026-05-12 to 2026-05-18)
 
@@ -11,7 +11,9 @@ Last updated: 2026-05-18 21:46:17
 
 - gpt-4o-mini-realtime-preview (deleted: 2026-05-18)
 - gpt-4o-mini-realtime-preview-2024-12-17 (deleted: 2026-05-18)
+- gpt-4o-realtime-preview (deleted: 2026-05-18)
 - gpt-4o-realtime-preview-2024-12-17 (deleted: 2026-05-18)
+- gpt-4o-realtime-preview-2025-06-03 (deleted: 2026-05-18)
 - dall-e-2 (deleted: 2026-05-13)
 - dall-e-3 (deleted: 2026-05-13)
 
@@ -33,7 +35,7 @@ Last updated: 2026-05-18 21:46:17
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 133/42
+**OpenAI**: 131/44
 
 **Anthropic**: 9/10
 
@@ -126,7 +128,6 @@ Model counts shown as: **Available/Deleted**
 - o3-deep-research (added: 2025-06-26)
 - o3-pro-2025-06-10 (added: 2025-06-10)
 - o3-pro (added: 2025-06-10)
-- gpt-4o-realtime-preview-2025-06-03 (added: 2025-06-03)
 - gpt-4o-audio-preview-2025-06-03 (added: 2025-06-03)
 - gpt-image-1 (added: 2025-04-25)
 - o4-mini-2025-04-16 (added: 2025-04-16)
@@ -169,7 +170,6 @@ Model counts shown as: **Available/Deleted**
 - text-embedding-ada-002 (added: 2024-10-14)
 - text-embedding-3-small (added: 2024-10-14)
 - text-embedding-3-large (added: 2024-10-14)
-- gpt-4o-realtime-preview (added: 2024-10-14)
 - gpt-4o-mini-2024-07-18 (added: 2024-10-14)
 - gpt-4o-mini (added: 2024-10-14)
 - gpt-4o-2024-08-06 (added: 2024-10-14)
@@ -190,7 +190,9 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- gpt-4o-realtime-preview-2025-06-03 (deleted: 2026-05-18)
 - gpt-4o-realtime-preview-2024-12-17 (deleted: 2026-05-18)
+- gpt-4o-realtime-preview (deleted: 2026-05-18)
 - gpt-4o-mini-realtime-preview-2024-12-17 (deleted: 2026-05-18)
 - gpt-4o-mini-realtime-preview (deleted: 2026-05-18)
 - dall-e-3 (deleted: 2026-05-13)
