@@ -1,32 +1,17 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-16 23:48:30
+Last updated: 2026-05-18 18:59:22
 
-## Updates This Week (2026-05-10 to 2026-05-16)
+## Updates This Week (2026-05-12 to 2026-05-18)
 
 ### OpenAI
 
 **Deleted**
 
+- gpt-4o-realtime-preview-2024-12-17 (deleted: 2026-05-18)
 - dall-e-2 (deleted: 2026-05-13)
 - dall-e-3 (deleted: 2026-05-13)
-
-### Gemini
-
-**Deleted**
-
-- models/gemini-3-flash-preview-agent (deleted: 2026-05-11)
-- models/gemini-3-pro-image-preview-agent (deleted: 2026-05-11)
-- models/gemini-3.1-flash-image-preview-agent (deleted: 2026-05-11)
-- models/gemini-3.1-flash-lite-preview-agent (deleted: 2026-05-11)
-- models/gemini-3.1-flash-tts-preview-agent (deleted: 2026-05-11)
-- models/gemini-3.1-pro-preview-agent (deleted: 2026-05-11)
-- models/lyria-3-clip-preview-agent (deleted: 2026-05-11)
-- models/lyria-3-pro-preview-agent (deleted: 2026-05-11)
-- models/omni-bag-autopush-iapi-agent (deleted: 2026-05-11)
-- models/omni-bag-prod-iapi-agent (deleted: 2026-05-11)
-- models/omni-bag-staging-iapi-agent (deleted: 2026-05-11)
 
 ### Grok
 
@@ -42,18 +27,11 @@ Last updated: 2026-05-16 23:48:30
 - grok-code-fast-1 (deleted: 2026-05-15)
 - grok-imagine-image-pro (deleted: 2026-05-15)
 
-### Qwen
-
-**Added**
-
-- deepseek-v4-flash (added: 2026-05-11)
-- deepseek-v4-pro (added: 2026-05-11)
-
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 136/39
+**OpenAI**: 135/40
 
 **Anthropic**: 9/10
 
@@ -176,7 +154,6 @@ Model counts shown as: **Available/Deleted**
 - o1 (added: 2024-12-19)
 - gpt-4o-mini-audio-preview-2024-12-17 (added: 2024-12-19)
 - gpt-4o-mini-audio-preview (added: 2024-12-19)
-- gpt-4o-realtime-preview-2024-12-17 (added: 2024-12-17)
 - gpt-4o-mini-realtime-preview-2024-12-17 (added: 2024-12-17)
 - gpt-4o-mini-realtime-preview (added: 2024-12-17)
 - gpt-4o-audio-preview-2024-12-17 (added: 2024-12-17)
@@ -213,6 +190,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- gpt-4o-realtime-preview-2024-12-17 (deleted: 2026-05-18)
 - dall-e-3 (deleted: 2026-05-13)
 - dall-e-2 (deleted: 2026-05-13)
 - flx-gpt55-codex-ev3 (deleted: 2026-04-24)
