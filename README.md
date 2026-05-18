@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-18 18:59:22
+Last updated: 2026-05-18 21:44:16
 
 ## Updates This Week (2026-05-12 to 2026-05-18)
 
@@ -9,6 +9,7 @@ Last updated: 2026-05-18 18:59:22
 
 **Deleted**
 
+- gpt-4o-mini-realtime-preview-2024-12-17 (deleted: 2026-05-18)
 - gpt-4o-realtime-preview-2024-12-17 (deleted: 2026-05-18)
 - dall-e-2 (deleted: 2026-05-13)
 - dall-e-3 (deleted: 2026-05-13)
@@ -31,7 +32,7 @@ Last updated: 2026-05-18 18:59:22
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 135/40
+**OpenAI**: 134/41
 
 **Anthropic**: 9/10
 
@@ -154,7 +155,6 @@ Model counts shown as: **Available/Deleted**
 - o1 (added: 2024-12-19)
 - gpt-4o-mini-audio-preview-2024-12-17 (added: 2024-12-19)
 - gpt-4o-mini-audio-preview (added: 2024-12-19)
-- gpt-4o-mini-realtime-preview-2024-12-17 (added: 2024-12-17)
 - gpt-4o-mini-realtime-preview (added: 2024-12-17)
 - gpt-4o-audio-preview-2024-12-17 (added: 2024-12-17)
 - omni-moderation-latest (added: 2024-12-04)
@@ -191,6 +191,7 @@ Model counts shown as: **Available/Deleted**
 ### Deleted Models
 
 - gpt-4o-realtime-preview-2024-12-17 (deleted: 2026-05-18)
+- gpt-4o-mini-realtime-preview-2024-12-17 (deleted: 2026-05-18)
 - dall-e-3 (deleted: 2026-05-13)
 - dall-e-2 (deleted: 2026-05-13)
 - flx-gpt55-codex-ev3 (deleted: 2026-04-24)
