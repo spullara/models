@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-18 21:48:17
+Last updated: 2026-05-18 21:49:17
 
 ## Updates This Week (2026-05-12 to 2026-05-18)
 
@@ -10,6 +10,7 @@ Last updated: 2026-05-18 21:48:17
 **Deleted**
 
 - gpt-4o-audio-preview-2024-12-17 (deleted: 2026-05-18)
+- gpt-4o-mini-audio-preview-2024-12-17 (deleted: 2026-05-18)
 - gpt-4o-mini-realtime-preview (deleted: 2026-05-18)
 - gpt-4o-mini-realtime-preview-2024-12-17 (deleted: 2026-05-18)
 - gpt-4o-realtime-preview (deleted: 2026-05-18)
@@ -36,7 +37,7 @@ Last updated: 2026-05-18 21:48:17
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 130/45
+**OpenAI**: 129/46
 
 **Anthropic**: 9/10
 
@@ -156,7 +157,6 @@ Model counts shown as: **Available/Deleted**
 - o3-mini (added: 2025-01-31)
 - o1-2024-12-17 (added: 2024-12-19)
 - o1 (added: 2024-12-19)
-- gpt-4o-mini-audio-preview-2024-12-17 (added: 2024-12-19)
 - gpt-4o-mini-audio-preview (added: 2024-12-19)
 - omni-moderation-latest (added: 2024-12-04)
 - omni-moderation-2024-09-26 (added: 2024-12-04)
@@ -195,6 +195,7 @@ Model counts shown as: **Available/Deleted**
 - gpt-4o-realtime-preview (deleted: 2026-05-18)
 - gpt-4o-mini-realtime-preview-2024-12-17 (deleted: 2026-05-18)
 - gpt-4o-mini-realtime-preview (deleted: 2026-05-18)
+- gpt-4o-mini-audio-preview-2024-12-17 (deleted: 2026-05-18)
 - gpt-4o-audio-preview-2024-12-17 (deleted: 2026-05-18)
 - dall-e-3 (deleted: 2026-05-13)
 - dall-e-2 (deleted: 2026-05-13)
