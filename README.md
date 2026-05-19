@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-19 18:01:08
+Last updated: 2026-05-19 21:30:17
 
 ## Updates This Week (2026-05-13 to 2026-05-19)
 
@@ -26,10 +26,12 @@ Last updated: 2026-05-19 18:01:08
 
 **Added**
 
+- models/antigravity-preview-05-2026 (added: 2026-05-19)
 - models/gemini-3.5-flash (added: 2026-05-19)
 
 **Deleted**
 
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-05-19)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-05-19)
 
 ### Grok
@@ -61,7 +63,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/10
 
-**Gemini**: 50/89
+**Gemini**: 50/90
 
 **Grok**: 8/19
 
@@ -289,6 +291,7 @@ Model counts shown as: **Available/Deleted**
 ### Current Models
 
 - models/gemini-3.5-flash (added: 2026-05-19)
+- models/antigravity-preview-05-2026 (added: 2026-05-19)
 - models/gemini-3.1-flash-lite (added: 2026-05-07)
 - models/gemini-embedding-2 (added: 2026-04-22)
 - models/deep-research-preview-04-2026 (added: 2026-04-21)
@@ -305,7 +308,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
-- models/gemini-2.5-flash-native-audio-preview-12-2025 (added: 2026-01-27)
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
@@ -342,6 +344,7 @@ Model counts shown as: **Available/Deleted**
 ### Deleted Models
 
 - models/gemini-3.1-flash-live-preview (deleted: 2026-05-19)
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-05-19)
 - models/omni-bag-staging-iapi-agent (deleted: 2026-05-11)
 - models/omni-bag-prod-iapi-agent (deleted: 2026-05-11)
 - models/omni-bag-autopush-iapi-agent (deleted: 2026-05-11)
