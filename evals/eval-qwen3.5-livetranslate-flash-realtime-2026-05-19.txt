@@ -1,0 +1,19 @@
+Model: qwen3.5-livetranslate-flash-realtime-2026-05-19
+Provider: qwen
+Evaluated: 2026-05-19T08:22:07.312097+00:00
+
+=== TIMING ===
+Response time: 0.85s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-4f7c0090-9be9-97de-bf5d-26fd78230a9e","request_id":"4f7c0090-9be9-97de-bf5d-26fd78230a9e"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
