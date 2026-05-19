@@ -79,7 +79,7 @@ def get_chat_endpoint(provider: str) -> dict:
             'format': 'anthropic'
         },
         'gemini': {
-            'url': lambda model: f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={os.getenv('GEMINI_API_KEY')}",
+            'url': lambda model: f"https://generativelanguage.googleapis.com/v1beta/models/{model.removeprefix('models/')}:generateContent?key={os.getenv('GEMINI_API_KEY')}",
             'headers': lambda: {'Content-Type': 'application/json'},
             'format': 'gemini'
         },

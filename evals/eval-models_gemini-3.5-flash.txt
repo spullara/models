@@ -1,19 +1,120 @@
 Model: models/gemini-3.5-flash
 Provider: gemini
-Evaluated: 2026-05-19T17:00:06.250931+00:00
+Evaluated: 2026-05-19T17:41:12.542474+00:00
 
 === TIMING ===
-Response time: 0.14s
+Response time: 23.23s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: direct
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: 
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    
+    dp = [[[(0, "")] * 3 for _ in range(N)] for _ in range(N)]
+    
+    for m in range(3):
+        dp[N - 1][N - 1][m] = (grid[N - 1][N - 1], "")
+        
+    for r in range(N - 1, -1, -1):
+        for c in range(N - 1, -1, -1):
+            if r == N - 1 and c == N - 1:
+                continue
+            for m in range(3):
+                best_val = -float('inf')
+                best_path = ""
+                req_diag = (m == 2)
+                next_m = (m + 1) % 3
+                
+                if req_diag:
+                    if r + 1 < N and c + 1 < N:
+                        val, path = dp[r + 1][c + 1][0]
+                        best_val, best_path = grid[r][c] + val, 'X' + path
+                    else:
+                        if c + 1 < N:
+                            val, path = dp[r][c + 1][0]
+                            if grid[r][c] + val > best_val:
+                                best_val, best_path = grid[r][c] + val, 'R' + path
+                        if r + 1 < N:
+                            val, path = dp[r + 1][c][0]
+                            if grid[r][c] + val > best_val:
+                                best_val, best_path = grid[r][c] + val, 'D' + path
+                else:
+                    if c + 1 < N:
+                        val, path = dp[r][c + 1][next_m]
+                        if grid[r][c] + val > best_val:
+                            best_val, best_path = grid[r][c] + val, 'R' + path
+                    if r + 1 < N:
+                        val, path = dp[r + 1][c][next_m]
+                        if grid[r][c] + val > best_val:
+                            best_val, best_path = grid[r][c] + val, 'D' + path
+                    if r + 1 < N and c + 1 < N:
+                        val, path = dp[r + 1][c + 1][next_m]
+                        if grid[r][c] + val > best_val:
+                            best_val, best_path = grid[r][c] + val, 'X' + path
+                            
+                dp[r][c][m] = (best_val, best_path)
+                
+    return dp[0][0][0]
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    
+    dp = [[[(0, "")] * 3 for _ in range(N)] for _ in range(N)]
+    
+    for m in range(3):
+        dp[N - 1][N - 1][m] = (grid[N - 1][N - 1], "")
+        
+    for r in range(N - 1, -1, -1):
+        for c in range(N - 1, -1, -1):
+            if r == N - 1 and c == N - 1:
+                continue
+            for m in range(3):
+                best_val = -float('inf')
+                best_path = ""
+                req_diag = (m == 2)
+                next_m = (m + 1) % 3
+                
+                if req_diag:
+                    if r + 1 < N and c + 1 < N:
+                        val, path = dp[r + 1][c + 1][0]
+                        best_val, best_path = grid[r][c] + val, 'X' + path
+                    else:
+                        if c + 1 < N:
+                            val, path = dp[r][c + 1][0]
+                            if grid[r][c] + val > best_val:
+                                best_val, best_path = grid[r][c] + val, 'R' + path
+                        if r + 1 < N:
+                            val, path = dp[r + 1][c][0]
+                            if grid[r][c] + val > best_val:
+                                best_val, best_path = grid[r][c] + val, 'D' + path
+                else:
+                    if c + 1 < N:
+                        val, path = dp[r][c + 1][next_m]
+                        if grid[r][c] + val > best_val:
+                            best_val, best_path = grid[r][c] + val, 'R' + path
+                    if r + 1 < N:
+                        val, path = dp[r + 1][c][next_m]
+                        if grid[r][c] + val > best_val:
+                            best_val, best_path = grid[r][c] + val, 'D' + path
+                    if r + 1 < N and c + 1 < N:
+                        val, path = dp[r + 1][c + 1][next_m]
+                        if grid[r][c] + val > best_val:
+                            best_val, best_path = grid[r][c] + val, 'X' + path
+                            
+                dp[r][c][m] = (best_val, best_path)
+                
+    return dp[0][0][0]
