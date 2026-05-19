@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-19 08:22:21
+Last updated: 2026-05-19 17:00:19
 
 ## Updates This Week (2026-05-13 to 2026-05-19)
 
@@ -21,6 +21,16 @@ Last updated: 2026-05-19 08:22:21
 - gpt-4o-realtime-preview-2025-06-03 (deleted: 2026-05-18)
 - dall-e-2 (deleted: 2026-05-13)
 - dall-e-3 (deleted: 2026-05-13)
+
+### Gemini
+
+**Added**
+
+- models/gemini-3.5-flash (added: 2026-05-19)
+
+**Deleted**
+
+- models/gemini-3.1-flash-live-preview (deleted: 2026-05-19)
 
 ### Grok
 
@@ -51,7 +61,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/10
 
-**Gemini**: 50/88
+**Gemini**: 50/89
 
 **Grok**: 8/19
 
@@ -278,6 +288,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-3.5-flash (added: 2026-05-19)
 - models/gemini-3.1-flash-lite (added: 2026-05-07)
 - models/gemini-embedding-2 (added: 2026-04-22)
 - models/deep-research-preview-04-2026 (added: 2026-04-21)
@@ -287,7 +298,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemma-4-31b-it (added: 2026-04-02)
 - models/gemma-4-26b-a4b-it (added: 2026-04-02)
 - models/veo-3.1-lite-generate-preview (added: 2026-03-31)
-- models/gemini-3.1-flash-live-preview (added: 2026-03-26)
 - models/lyria-3-pro-preview (added: 2026-03-25)
 - models/lyria-3-clip-preview (added: 2026-03-25)
 - models/gemini-embedding-2-preview (added: 2026-03-10)
@@ -331,6 +341,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/gemini-3.1-flash-live-preview (deleted: 2026-05-19)
 - models/omni-bag-staging-iapi-agent (deleted: 2026-05-11)
 - models/omni-bag-prod-iapi-agent (deleted: 2026-05-11)
 - models/omni-bag-autopush-iapi-agent (deleted: 2026-05-11)
