@@ -1,0 +1,26 @@
+Model: models/antigravity-preview-05-2026
+Provider: gemini
+Evaluated: 2026-05-19T21:30:05.649209+00:00
+
+=== TIMING ===
+Response time: 0.38s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "This model only supports Interactions API.",
+    "status": "INVALID_ARGUMENT"
+  }
+}
+
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
