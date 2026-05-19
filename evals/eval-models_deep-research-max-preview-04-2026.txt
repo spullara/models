@@ -1,16 +1,23 @@
 Model: models/deep-research-max-preview-04-2026
 Provider: gemini
-Evaluated: 2026-04-21T16:20:06.592620+00:00
+Evaluated: 2026-05-19T17:45:05.754377+00:00
 
 === TIMING ===
-Response time: 0.15s
+Response time: 0.21s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 404: 
+API Error: HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "This model only supports Interactions API.",
+    "status": "INVALID_ARGUMENT"
+  }
+}
+
 
 === RAW RESPONSE ===
 (no response)

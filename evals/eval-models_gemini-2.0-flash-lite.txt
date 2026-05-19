@@ -1,0 +1,104 @@
+Model: models/gemini-2.0-flash-lite
+Provider: gemini
+Evaluated: 2026-05-19T17:45:16.979814+00:00
+
+=== TIMING ===
+Response time: 2.88s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 70
+Calculated sum: 15
+Sum matches: NO
+Path valid: NO
+Path error: Move 3 must be diagonal (X) but was R
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    dp = [[(float('-inf'), "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+
+    for i in range(n):
+        for j in range(n):
+            if dp[i][j][0] == float('-inf'):
+                continue
+
+            moves = []
+            if j + 1 < n:
+                moves.append(('R', i, j + 1))
+            if i + 1 < n:
+                moves.append(('D', i + 1, j))
+            if i + 1 < n and j + 1 < n:
+                moves.append(('X', i + 1, j + 1))
+
+            for move_type, r, c in moves:
+                next_sum = grid[r][c]
+                next_path = dp[i][j][1] + move_type
+
+                move_count = len(next_path)
+                if move_count % 3 == 0 and move_type != 'X' and (r+1 >= n or c+1 >=n):
+
+                    if 'X' in [x[0] for x in [(x[0], x[1], x[2]) for x in moves]]:
+                      continue
+                    else:
+                      if move_type == 'R':
+                        next_sum += dp[i][j][0]
+                      else:
+                        next_sum += dp[i][j][0]
+                else:
+                    next_sum += dp[i][j][0]
+
+
+                if dp[r][c][0] < next_sum:
+                    dp[r][c] = (next_sum, next_path)
+
+    return dp[n - 1][n - 1]
+```
+
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    dp = [[(float('-inf'), "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+
+    for i in range(n):
+        for j in range(n):
+            if dp[i][j][0] == float('-inf'):
+                continue
+
+            moves = []
+            if j + 1 < n:
+                moves.append(('R', i, j + 1))
+            if i + 1 < n:
+                moves.append(('D', i + 1, j))
+            if i + 1 < n and j + 1 < n:
+                moves.append(('X', i + 1, j + 1))
+
+            for move_type, r, c in moves:
+                next_sum = grid[r][c]
+                next_path = dp[i][j][1] + move_type
+
+                move_count = len(next_path)
+                if move_count % 3 == 0 and move_type != 'X' and (r+1 >= n or c+1 >=n):
+
+                    if 'X' in [x[0] for x in [(x[0], x[1], x[2]) for x in moves]]:
+                      continue
+                    else:
+                      if move_type == 'R':
+                        next_sum += dp[i][j][0]
+                      else:
+                        next_sum += dp[i][j][0]
+                else:
+                    next_sum += dp[i][j][0]
+
+
+                if dp[r][c][0] < next_sum:
+                    dp[r][c] = (next_sum, next_path)
+
+    return dp[n - 1][n - 1]

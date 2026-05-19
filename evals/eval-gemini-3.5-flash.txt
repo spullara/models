@@ -1,0 +1,96 @@
+Model: gemini-3.5-flash
+Provider: gemini
+Evaluated: 2026-05-19T17:39:11.888006+00:00
+
+=== TIMING ===
+Response time: 24.17s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    dp = [[[(-float('inf'), "")] * 3 for _ in range(n)] for _ in range(n)]
+    
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            for m in range(3):
+                if r == n - 1 and c == n - 1:
+                    dp[r][c][m] = (grid[r][c], "")
+                    continue
+                
+                next_m = (m + 1) % 3
+                is_required_diag = (next_m == 0)
+                diag_possible = (r + 1 < n and c + 1 < n)
+                
+                moves = []
+                if is_required_diag and diag_possible:
+                    moves.append(('X', r + 1, c + 1))
+                else:
+                    if c + 1 < n:
+                        moves.append(('R', r, c + 1))
+                    if r + 1 < n:
+                        moves.append(('D', r + 1, c))
+                    if not is_required_diag and diag_possible:
+                        moves.append(('X', r + 1, c + 1))
+                        
+                best_val = -float('inf')
+                best_path = ""
+                for char, nr, nc in moves:
+                    val, path = dp[nr][nc][next_m]
+                    if val != -float('inf'):
+                        total = grid[r][c] + val
+                        if total > best_val:
+                            best_val = total
+                            best_path = char + path
+                dp[r][c][m] = (best_val, best_path)
+                
+    return dp[0][0][0]
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    dp = [[[(-float('inf'), "")] * 3 for _ in range(n)] for _ in range(n)]
+    
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            for m in range(3):
+                if r == n - 1 and c == n - 1:
+                    dp[r][c][m] = (grid[r][c], "")
+                    continue
+                
+                next_m = (m + 1) % 3
+                is_required_diag = (next_m == 0)
+                diag_possible = (r + 1 < n and c + 1 < n)
+                
+                moves = []
+                if is_required_diag and diag_possible:
+                    moves.append(('X', r + 1, c + 1))
+                else:
+                    if c + 1 < n:
+                        moves.append(('R', r, c + 1))
+                    if r + 1 < n:
+                        moves.append(('D', r + 1, c))
+                    if not is_required_diag and diag_possible:
+                        moves.append(('X', r + 1, c + 1))
+                        
+                best_val = -float('inf')
+                best_path = ""
+                for char, nr, nc in moves:
+                    val, path = dp[nr][nc][next_m]
+                    if val != -float('inf'):
+                        total = grid[r][c] + val
+                        if total > best_val:
+                            best_val = total
+                            best_path = char + path
+                dp[r][c][m] = (best_val, best_path)
+                
+    return dp[0][0][0]

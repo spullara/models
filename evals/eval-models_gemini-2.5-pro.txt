@@ -1,0 +1,136 @@
+Model: models/gemini-2.5-pro
+Provider: gemini
+Evaluated: 2026-05-19T17:46:11.338934+00:00
+
+=== TIMING ===
+Response time: 104.09s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return 0, ""
+
+    memo = {}
+
+    def find_max_path(r: int, c: int, moves_made: int) -> tuple[float, str]:
+        if r == N - 1 and c == N - 1:
+            return float(grid[r][c]), ""
+
+        k = moves_made % 3
+        if (r, c, k) in memo:
+            return memo[(r, c, k)]
+
+        is_next_move_special = (moves_made + 1) % 3 == 0
+
+        can_go_R = c + 1 < N
+        can_go_D = r + 1 < N
+        can_go_X = r + 1 < N and c + 1 < N
+
+        options = []
+
+        if is_next_move_special and can_go_X:
+            sum_future, path_future = find_max_path(r + 1, c + 1, moves_made + 1)
+            if sum_future != -float('inf'):
+                options.append((grid[r][c] + sum_future, "X" + path_future))
+        else:
+            if can_go_R:
+                sum_future, path_future = find_max_path(r, c + 1, moves_made + 1)
+                if sum_future != -float('inf'):
+                    options.append((grid[r][c] + sum_future, "R" + path_future))
+            
+            if can_go_D:
+                sum_future, path_future = find_max_path(r + 1, c, moves_made + 1)
+                if sum_future != -float('inf'):
+                    options.append((grid[r][c] + sum_future, "D" + path_future))
+
+            if can_go_X:
+                sum_future, path_future = find_max_path(r + 1, c + 1, moves_made + 1)
+                if sum_future != -float('inf'):
+                    options.append((grid[r][c] + sum_future, "X" + path_future))
+        
+        if not options:
+            result = (-float('inf'), "")
+        else:
+            result = max(options, key=lambda item: item[0])
+        
+        memo[(r, c, k)] = result
+        return result
+
+    max_sum, path = find_max_path(0, 0, 0)
+
+    if max_sum == -float('inf'):
+        return 0, ""
+
+    return int(max_sum), path
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return 0, ""
+
+    memo = {}
+
+    def find_max_path(r: int, c: int, moves_made: int) -> tuple[float, str]:
+        if r == N - 1 and c == N - 1:
+            return float(grid[r][c]), ""
+
+        k = moves_made % 3
+        if (r, c, k) in memo:
+            return memo[(r, c, k)]
+
+        is_next_move_special = (moves_made + 1) % 3 == 0
+
+        can_go_R = c + 1 < N
+        can_go_D = r + 1 < N
+        can_go_X = r + 1 < N and c + 1 < N
+
+        options = []
+
+        if is_next_move_special and can_go_X:
+            sum_future, path_future = find_max_path(r + 1, c + 1, moves_made + 1)
+            if sum_future != -float('inf'):
+                options.append((grid[r][c] + sum_future, "X" + path_future))
+        else:
+            if can_go_R:
+                sum_future, path_future = find_max_path(r, c + 1, moves_made + 1)
+                if sum_future != -float('inf'):
+                    options.append((grid[r][c] + sum_future, "R" + path_future))
+            
+            if can_go_D:
+                sum_future, path_future = find_max_path(r + 1, c, moves_made + 1)
+                if sum_future != -float('inf'):
+                    options.append((grid[r][c] + sum_future, "D" + path_future))
+
+            if can_go_X:
+                sum_future, path_future = find_max_path(r + 1, c + 1, moves_made + 1)
+                if sum_future != -float('inf'):
+                    options.append((grid[r][c] + sum_future, "X" + path_future))
+        
+        if not options:
+            result = (-float('inf'), "")
+        else:
+            result = max(options, key=lambda item: item[0])
+        
+        memo[(r, c, k)] = result
+        return result
+
+    max_sum, path = find_max_path(0, 0, 0)
+
+    if max_sum == -float('inf'):
+        return 0, ""
+
+    return int(max_sum), path

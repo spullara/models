@@ -1,19 +1,112 @@
 Model: models/gemini-3.1-flash-lite
 Provider: gemini
-Evaluated: 2026-05-07T14:00:08.173831+00:00
+Evaluated: 2026-05-19T17:49:56.086523+00:00
 
 === TIMING ===
-Response time: 0.18s
+Response time: 2.28s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: direct
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: 
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    memo = {}
+
+    def get_max(r, c, moves_made):
+        if r == n - 1 and c == n - 1:
+            return grid[r][c], ""
+        
+        state = (r, c, moves_made)
+        if state in memo:
+            return memo[state]
+        
+        next_move_num = moves_made + 1
+        must_diag = (next_move_num % 3 == 0)
+        
+        possible_moves = []
+        if r + 1 < n and c + 1 < n:
+            possible_moves.append((r + 1, c + 1, 'X'))
+        if r + 1 < n:
+            possible_moves.append((r + 1, c, 'D'))
+        if c + 1 < n:
+            possible_moves.append((r, c + 1, 'R'))
+            
+        best_val = -float('inf')
+        best_path = ""
+        
+        if must_diag:
+            diag_move = next((m for m in possible_moves if m[2] == 'X'), None)
+            if diag_move:
+                val, path = get_max(diag_move[0], diag_move[1], next_move_num)
+                best_val, best_path = grid[r][c] + val, 'X' + path
+            else:
+                for nr, nc, move in possible_moves:
+                    val, path = get_max(nr, nc, next_move_num)
+                    if grid[r][c] + val > best_val:
+                        best_val, best_path = grid[r][c] + val, move + path
+        else:
+            for nr, nc, move in possible_moves:
+                val, path = get_max(nr, nc, next_move_num)
+                if grid[r][c] + val > best_val:
+                    best_val, best_path = grid[r][c] + val, move + path
+                    
+        memo[state] = (best_val, best_path)
+        return memo[state]
+
+    return get_max(0, 0, 0)
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    memo = {}
+
+    def get_max(r, c, moves_made):
+        if r == n - 1 and c == n - 1:
+            return grid[r][c], ""
+        
+        state = (r, c, moves_made)
+        if state in memo:
+            return memo[state]
+        
+        next_move_num = moves_made + 1
+        must_diag = (next_move_num % 3 == 0)
+        
+        possible_moves = []
+        if r + 1 < n and c + 1 < n:
+            possible_moves.append((r + 1, c + 1, 'X'))
+        if r + 1 < n:
+            possible_moves.append((r + 1, c, 'D'))
+        if c + 1 < n:
+            possible_moves.append((r, c + 1, 'R'))
+            
+        best_val = -float('inf')
+        best_path = ""
+        
+        if must_diag:
+            diag_move = next((m for m in possible_moves if m[2] == 'X'), None)
+            if diag_move:
+                val, path = get_max(diag_move[0], diag_move[1], next_move_num)
+                best_val, best_path = grid[r][c] + val, 'X' + path
+            else:
+                for nr, nc, move in possible_moves:
+                    val, path = get_max(nr, nc, next_move_num)
+                    if grid[r][c] + val > best_val:
+                        best_val, best_path = grid[r][c] + val, move + path
+        else:
+            for nr, nc, move in possible_moves:
+                val, path = get_max(nr, nc, next_move_num)
+                if grid[r][c] + val > best_val:
+                    best_val, best_path = grid[r][c] + val, move + path
+                    
+        memo[state] = (best_val, best_path)
+        return memo[state]
+
+    return get_max(0, 0, 0)

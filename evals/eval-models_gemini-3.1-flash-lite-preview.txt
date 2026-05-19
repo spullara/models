@@ -1,19 +1,102 @@
 Model: models/gemini-3.1-flash-lite-preview
 Provider: gemini
-Evaluated: 2026-03-03T15:00:07.330429+00:00
+Evaluated: 2026-05-19T17:49:58.416189+00:00
 
 === TIMING ===
-Response time: 0.13s
+Response time: 1.99s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: direct
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: 
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    memo = {}
+
+    def get_max(r, c, move_idx):
+        if r == n - 1 and c == n - 1:
+            return 0, ""
+        state = (r, c, move_idx)
+        if state in memo:
+            return memo[state]
+
+        best_val = float('-inf')
+        best_path = ""
+        
+        is_diag_required = (move_idx % 3 == 0)
+        
+        moves = []
+        if is_diag_required:
+            if r + 1 < n and c + 1 < n:
+                moves.append((r + 1, c + 1, "X"))
+            else:
+                if r + 1 < n: moves.append((r + 1, c, "D"))
+                if c + 1 < n: moves.append((r, c + 1, "R"))
+        else:
+            if r + 1 < n: moves.append((r + 1, c, "D"))
+            if c + 1 < n: moves.append((r, c + 1, "R"))
+            if r + 1 < n and c + 1 < n: moves.append((r + 1, c + 1, "X"))
+
+        for nr, nc, m_char in moves:
+            val, path = get_max(nr, nc, move_idx + 1)
+            if val != float('-inf'):
+                total = grid[nr][nc] + val
+                if total > best_val:
+                    best_val = total
+                    best_path = m_char + path
+        
+        memo[state] = (best_val, best_path)
+        return memo[state]
+
+    res_sum, res_path = get_max(0, 0, 1)
+    return (grid[0][0] + res_sum, res_path)
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    memo = {}
+
+    def get_max(r, c, move_idx):
+        if r == n - 1 and c == n - 1:
+            return 0, ""
+        state = (r, c, move_idx)
+        if state in memo:
+            return memo[state]
+
+        best_val = float('-inf')
+        best_path = ""
+        
+        is_diag_required = (move_idx % 3 == 0)
+        
+        moves = []
+        if is_diag_required:
+            if r + 1 < n and c + 1 < n:
+                moves.append((r + 1, c + 1, "X"))
+            else:
+                if r + 1 < n: moves.append((r + 1, c, "D"))
+                if c + 1 < n: moves.append((r, c + 1, "R"))
+        else:
+            if r + 1 < n: moves.append((r + 1, c, "D"))
+            if c + 1 < n: moves.append((r, c + 1, "R"))
+            if r + 1 < n and c + 1 < n: moves.append((r + 1, c + 1, "X"))
+
+        for nr, nc, m_char in moves:
+            val, path = get_max(nr, nc, move_idx + 1)
+            if val != float('-inf'):
+                total = grid[nr][nc] + val
+                if total > best_val:
+                    best_val = total
+                    best_path = m_char + path
+        
+        memo[state] = (best_val, best_path)
+        return memo[state]
+
+    res_sum, res_path = get_max(0, 0, 1)
+    return (grid[0][0] + res_sum, res_path)

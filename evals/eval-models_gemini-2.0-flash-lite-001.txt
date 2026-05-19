@@ -1,0 +1,26 @@
+Model: models/gemini-2.0-flash-lite-001
+Provider: gemini
+Evaluated: 2026-05-19T17:45:19.897290+00:00
+
+=== TIMING ===
+Response time: 0.29s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: {
+  "error": {
+    "code": 404,
+    "message": "This model models/gemini-2.0-flash-lite-001 is no longer available to new users. Please update your code to use a newer model for the latest features and improvements.",
+    "status": "NOT_FOUND"
+  }
+}
+
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)

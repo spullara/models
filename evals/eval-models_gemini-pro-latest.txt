@@ -1,0 +1,142 @@
+Model: models/gemini-pro-latest
+Provider: gemini
+Evaluated: 2026-05-19T17:53:00.978386+00:00
+
+=== TIMING ===
+Response time: 80.96s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+import sys
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    
+    N = len(grid)
+    if N == 1:
+        return grid[0][0], ""
+
+    sys.setrecursionlimit(20000)
+    memo = {}
+
+    def dfs(r, c, m):
+        if r == N - 1 and c == N - 1:
+            return grid[r][c], None
+        
+        state = (r, c, m)
+        if state in memo:
+            return memo[state]
+        
+        max_val = -float('inf')
+        best_next = None
+        best_char = ""
+        
+        next_m = m + 1
+        must_x = (next_m % 3 == 0)
+        can_x = (r + 1 < N and c + 1 < N)
+        
+        moves = []
+        if must_x and can_x:
+            moves.append(('X', r + 1, c + 1))
+        else:
+            if c + 1 < N:
+                moves.append(('R', r, c + 1))
+            if r + 1 < N:
+                moves.append(('D', r + 1, c))
+            if can_x:
+                moves.append(('X', r + 1, c + 1))
+                
+        for move_char, nr, nc in moves:
+            val, _ = dfs(nr, nc, next_m)
+            if val > max_val:
+                max_val = val
+                best_next = (nr, nc, next_m)
+                best_char = move_char
+                    
+        res = (max_val + grid[r][c] if max_val != -float('inf') else -float('inf'), (best_char, best_next))
+        memo[state] = res
+        return res
+
+    ans_val, _ = dfs(0, 0, 0)
+    
+    path = []
+    curr = (0, 0, 0)
+    while curr[0] != N - 1 or curr[1] != N - 1:
+        _, (char, next_state) = memo[curr]
+        path.append(char)
+        curr = next_state
+        
+    return ans_val, "".join(path)
+
+=== EXTRACTED CODE ===
+import sys
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    
+    N = len(grid)
+    if N == 1:
+        return grid[0][0], ""
+
+    sys.setrecursionlimit(20000)
+    memo = {}
+
+    def dfs(r, c, m):
+        if r == N - 1 and c == N - 1:
+            return grid[r][c], None
+        
+        state = (r, c, m)
+        if state in memo:
+            return memo[state]
+        
+        max_val = -float('inf')
+        best_next = None
+        best_char = ""
+        
+        next_m = m + 1
+        must_x = (next_m % 3 == 0)
+        can_x = (r + 1 < N and c + 1 < N)
+        
+        moves = []
+        if must_x and can_x:
+            moves.append(('X', r + 1, c + 1))
+        else:
+            if c + 1 < N:
+                moves.append(('R', r, c + 1))
+            if r + 1 < N:
+                moves.append(('D', r + 1, c))
+            if can_x:
+                moves.append(('X', r + 1, c + 1))
+                
+        for move_char, nr, nc in moves:
+            val, _ = dfs(nr, nc, next_m)
+            if val > max_val:
+                max_val = val
+                best_next = (nr, nc, next_m)
+                best_char = move_char
+                    
+        res = (max_val + grid[r][c] if max_val != -float('inf') else -float('inf'), (best_char, best_next))
+        memo[state] = res
+        return res
+
+    ans_val, _ = dfs(0, 0, 0)
+    
+    path = []
+    curr = (0, 0, 0)
+    while curr[0] != N - 1 or curr[1] != N - 1:
+        _, (char, next_state) = memo[curr]
+        path.append(char)
+        curr = next_state
+        
+    return ans_val, "".join(path)

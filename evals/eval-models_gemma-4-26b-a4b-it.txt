@@ -1,19 +1,502 @@
 Model: models/gemma-4-26b-a4b-it
 Provider: gemini
-Evaluated: 2026-04-02T16:00:07.205384+00:00
+Evaluated: 2026-05-19T17:54:21.981954+00:00
 
 === TIMING ===
-Response time: 0.14s
+Response time: 181.92s
 
 === CODE EXTRACTION ===
-Method: None
+Method: extraction_failed
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 404: 
+Returned sum: None
+Calculated sum: None
+Sum matches: NO
+Path valid: NO
 
 === RAW RESPONSE ===
-(no response)
+*   Function signature: `def solve_grid(grid: list[list[int]]) -> tuple[int, str]:`
+    *   Goal: Find a path from top-left `(0, 0)` to bottom-right `(N-1, N-1)` that maximizes the sum.
+    *   Moves: Right (R), Down (D), Diagonal (X).
+    *   Constraint: Every 3rd move (3rd, 6th, 9th...) *must* be a diagonal move (X) if possible. If not possible (out of bounds), use R or D.
+    *   Output: `(max_sum, path_string)`.
+    *   $N \times N$ grid.
+    *   Output format: ONLY Python code.
+
+    *   Since we need the maximum sum and the path depends on the number of moves made so far, we can use dynamic programming or recursion with memoization.
+    *   State: `(row, col, move_count)`.
+    *   $N$ is the size of the grid.
+    *   Maximum possible moves: $2N - 2$ (if only R and D) or roughly $N$ (if mostly X).
+    *   The constraint "Every 3rd move" depends on the current number of moves taken.
+
+    *   `memo = {}`
+    *   `def dp(r, c, move_count):`
+    *   Base Case: `if r == N-1 and c == N-1: return grid[r][c], ""`
+    *   Recursive Step:
+        *   Check if `(move_count + 1) % 3 == 0`.
+        *   If yes (must be X):
+            *   Try X (if valid).
+            *   If X is not valid, try R and D (if valid).
+        *   If no:
+            *   Try R, D, and X (if valid).
+    *   Wait, the rule says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position. If diagonal is not possible... you may use R or D".
+    *   This implies:
+        *   If `(move_count + 1) % 3 == 0`:
+            *   Target move is X.
+            *   If X is valid: `result = X + dp(r+1, c+1, move_count+1)`
+            *   Else: `result = max(R + dp(r, c+1, move_count+1), D + dp(r+1, c, move_count+1))`
+        *   Else:
+            *   `result = max(R + dp(r, c+1, move_count+1), D + dp(r+1, c, move_count+1), X + dp(r+1, c+1, move_count+1))`
+
+    *   Important Detail: When choosing the "max", we need to compare both the sum and the path.
+    *   Actually, standard DP usually returns the max value. To get the path, we can return `(max_val, path_str)`.
+
+    *   Grid size $N$.
+    *   `r` in `[0, N-1]`, `c` in `[0, N-1]`.
+    *   `move_count` can go up to $2N$.
+    *   Total states: $N \times N \times 2N \approx 2N^3$. For $N=100$, $2 \times 10^6$ states. This is manageable in Python.
+
+    *   "Every 3rd move (3, 6, 9...)"
+    *   If move 1 is (0,0) -> (0,1), move 2 is (0,1) -> (0,2), move 3 is (0,2) -> (1,3)? No, diagonal is (r+1, c+1).
+    *   The move index starts at 1.
+    *   `move_count` in my `dp(r, c, move_count)` logic:
+        *   Start at `(0, 0)` with `move_count = 0`.
+        *   The first move will be the 1st move. So when deciding the move from `(0,0)`, we check if `(0+1) % 3 == 0`.
+
+    *   Example:
+        Move 1: `move_count` becomes 1.
+        Move 2: `move_count` becomes 2.
+        Move 3: `move_count` becomes 3.
+    *   Wait, the rule says "Every 3rd move...". If the *next* move is the 3rd move, it's a diagonal.
+    *   Let `k` be the number of moves already taken. The next move is the `(k+1)`-th move.
+    *   If `(k+1) % 3 == 0`, check if X is possible.
+
+    *   If we are at `(r, c)` and we have already made `k` moves, the next move is the `k+1`-th move.
+    *   If `(k+1) % 3 == 0`:
+        *   Try X: `(r+1, c+1)`. If in bounds, this is the *mandatory* choice.
+        *   Wait, "If diagonal is not possible... you may use R or D". This means if X is out of bounds, we *must* try R or D. If R and D are also out of bounds, we are stuck (but that shouldn't happen if we are not at the target).
+    *   Wait, does "if possible" mean "if it's within the grid" or "if it leads to the destination"? Usually, in these problems, "possible" means "within grid boundaries".
+
+    *   If `(k+1) % 3 == 0`:
+        1.  If `(r+1, c+1)` is valid:
+            `res = X + dp(r+1, c+1, k+1)`
+        2.  Else:
+            `res = max(R + dp(r, c+1, k+1), D + dp(r+1, c, k+1))`
+    *   Else:
+        `res = max(R + dp(r, c+1, k+1), D + dp(r+1, c, k+1), X + dp(r+1, c+1, k+1))`
+
+    *   Handle the `max` logic carefully to return both sum and string.
+    *   Handle the end condition: `if r == N-1 and c == N-1: return grid[r][c], ""`
+
+    *   If X is not possible, can R and D both be impossible?
+    *   If $r=N-1$ and $c=N-1$, we are at the target.
+    *   If we are not at the target, we need to reach $(N-1, N-1)$.
+    *   If we are at $(N-1, c)$ where $c < N-1$, we can only go R.
+    *   If we are at $(r, N-1)$ where $r < N-1$, we can only go D.
+    *   If X is out of bounds, we try R or D.
+
+    ```python
+    import sys
+    sys.setrecursionlimit(2000)
+
+    def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+        N = len(grid)
+        memo = {}
+
+        def dp(r, c, k):
+            if r == N - 1 and c == N - 1:
+                return grid[r][c], ""
+            if (r, c, k) in memo:
+                return memo[(r, c, k)]
+
+            best_sum = -float('inf')
+            best_path = ""
+
+            moves = []
+            # Determine allowed moves
+            is_third = (k + 1) % 3 == 0
+            
+            # Potential moves: (dr, dc, char)
+            candidates = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+            
+            if is_third:
+                # Must be X if possible
+                if r + 1 < N and c + 1 < N:
+                    candidates = [(1, 1, 'X')]
+                else:
+                    # If X is not possible, use R or D
+                    candidates = [(0, 1, 'R'), (1, 0, 'D')]
+            else:
+                # Any move is possible
+                candidates = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+
+            for dr, dc, char in candidates:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < N and 0 <= nc < N:
+                    s, p = dp(nr, nc, k + 1)
+                    if s != -float('inf'):
+                        current_sum = grid[r][c] + s
+                        current_path = char + p
+                        if current_sum > best_sum:
+                            best_sum = current_sum
+                            best_path = current_path
+                        elif current_sum == best_sum:
+                            # Tie-breaker? The prompt doesn't specify.
+                            # Usually, lexicographical or any is fine.
+                            # Let's just keep the first one found.
+                            pass
+            
+            memo[(r, c, k)] = (best_sum, best_path)
+            return best_sum, best_path
+
+        ans_sum, ans_path = dp(0, 0, 0)
+        return ans_sum, ans_path
+    ```
+
+    *   What if `best_sum` is 0? Use a very small number for `-inf`.
+    *   The problem says `max_sum` can be found. Let's assume the grid contains non-negative or even negative integers. The initialization `-float('inf')` is safe.
+    *   Check if $N=1$. If $N=1$, `r == N-1 and c == N-1` is true immediately. Returns `(grid[0][0], "")`.
+
+    *   Grid:
+        1 1 1
+        1 1 1
+        1 1 1
+    *   `dp(0,0,0)`: `k+1=1` (not 3rd). Candidates: R, D, X.
+    *   If move 1 is R: `dp(0,1,1)`. `k+1=2` (not 3rd). Candidates: R, D, X.
+    *   If move 2 is R: `dp(0,2,2)`. `k+1=3` (is 3rd). Candidates: X is (1,3) -> Out. R is (0,3) -> Out. D is (1,2) -> OK.
+    *   So at `(0,2)`, the only valid move for the 3rd move is D.
+
+    *   `grid = [[1, 2], [3, 4]]`
+    *   `N=2`.
+    *   `dp(0,0,0)`:
+        *   `k=0`. `k+1=1` (not 3rd).
+        *   `candidates = R, D, X`.
+        *   R: `nr=0, nc=1`. `dp(0,1,1)`.
+            *   `k=1`. `k+1=2` (not 3rd).
+            *   `candidates = R, D, X`.
+            *   R: `(0,2)` Out.
+            *   D: `(1,1)` In. `dp(1,1,2)` returns `(4, "")`.
+            *   X: `(1,2)` Out.
+            *   `dp(0,1,1)` returns `(2+4, "D")` = `(6, "D")`.
+        *   D: `nr=1, nc=0`. `dp(1,0,1)`.
+            *   `k=1`. `k+1=2` (not 3rd).
+            *   `candidates = R, D, X`.
+            *   R: `(1,1)` In. `dp(1,1,2)` returns `(4, "")`.
+            *   D: `(2,0)` Out.
+            *   X: `(2,1)` Out.
+            *   `dp(1,0,1)` returns `(3+4, "R")` = `(7, "R")`.
+        *   X: `nr=1, nc=1`. `dp(1,1,2)` returns `(4, "")`.
+            *   `dp(0,0,0)` returns `(1+4, "X")` = `(5, "X")`.
+    *   `dp(0,0,0)` compares `(1+6, "RD")`, `(1+7, "DR")`, and `(1+4, "X")`.
+    *   Max is `(8, "DR")`.
+
+    Wait, if $N=2$, the 3rd move would be at `k=2`. But the path ends at `k=1` (if X) or `k=2` (if R/D).
+    If $N=2$, the path length is 1 (if X) or 2 (if R or D).
+    A 3rd move only occurs if the path length is at least 3.
+
+    If $N=3$:
+    Path length could be 2 (if X, X), 4 (if R, R, D, D), etc.
+    A 3rd move is possible if the path is length 3 or more.
+
+    *   "Every 3rd move (3, 6, 9...) MUST be diagonal if possible"
+    *   My logic: `is_third = (k + 1) % 3 == 0`.
+    *   If `k=0`, `k+1=1` (1st move).
+    *   If `k=1`, `k+1=2` (2nd move).
+    *   If `k=2`, `k+1=3` (3rd move).
+    *   This matches.
+
+    *   The problem says "If diagonal is not possible on a required diagonal move, you may use R or D".
+    *   This implies if `(k+1)%3 == 0` AND X is out of bounds, you check R and D.
+    *   What if R or D is also out of bounds? The only way that's possible is if you are already at the target, but the `dp` returns early if `r == N-1 and c == N-1`.
+    *   Wait, if you are at `(N-1, N-2)`, and it's a 3rd move, X is `(N, N-1)` (out), so you *must* use R (which is `(N-1, N-1)`). If $N-1, N-1$ is the target, then $R$ is the only option.
+    *   My code handles this: `candidates = [(0, 1, 'R'), (1, 0, 'D')]` if X is out of bounds. Then it filters `if 0 <= nr < N and 0 <= nc < N`.
+
+    *   One minor detail: `current_sum == best_sum`. The problem doesn't specify what to do in case of a tie. Standard practice is to return any or the lexicographically smallest/largest. I'll stick to the first one found.
+
+    *   $N \times N$ grid.
+    *   Memory: `memo` dictionary.
+    *   Recursion: `sys.setrecursionlimit`.
+    *   Complexity: $O(N^3)$ states. For $N=100$, $10^6$ states. In Python, a dictionary of $10^6$ tuples might be slow/memory-intensive. Using a 3D array `memo[N][N][2*N]` might be faster.
+
+    Let's refine the 3D array approach for safety.
+    `memo = [[[-1] * (2 * N) for _ in range(N)] for _ in range(N)]`
+    But we need to store both `sum` and `path`.
+    `memo_sum = [[[-1] * (2 * N) for _ in range(N)] for _ in range(N)]`
+    `memo_path = [[[""] * (2 * N) for _ in range(N)] for _ in range(N)]`
+
+    Actually, the max move count is $2N-2$. Let's use $2N$.
+
+    Wait, if $N$ is large, $N^3$ is indeed a lot for Python.
+    Let's check the constraints. The problem doesn't specify $N$.
+    If $N=500$, $N^3 = 125,000,000$. That's too big.
+    However, `k` is not just any number. `k` is the number of moves, which is related to `r` and `c`.
+    Wait, the number of moves `k` is *not* uniquely determined by `r` and `c`.
+    Example: $(0,0) \to (1,1)$ is 1 move (X). $(0,0) \to (0,1) \to (1,1)$ is 2 moves (RD).
+    So `(r, c, k)` is the correct state.
+
+    Let's reconsider the constraints on `k`.
+    `r + c` is the number of steps if we only use R and D.
+    `k` can range from `max(r, c)` (all X) to `r + c` (all R and D).
+    So `k` is roughly between $N$ and $2N$.
+    The number of states is more like $N \times N \times N = N^3$.
+
+    Wait, if `is_third` is true, the rule says "If diagonal is not possible... you may use R or D".
+    This means we don't *have* to go to the destination in 3rd moves.
+    If $N=100$, $N^3 = 1,000,000$. Python can handle $10^6$ states if we are careful.
+
+    ```python
+    import sys
+
+    def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+        sys.setrecursionlimit(10000)
+        N = len(grid)
+        memo = {}
+
+        def dp(r, c, k):
+            if r == N - 1 and c == N - 1:
+                return grid[r][c], ""
+            if (r, c, k) in memo:
+                return memo[(r, c, k)]
+
+            best_sum = -float('inf')
+            best_path = ""
+
+            is_third = (k + 1) % 3 == 0
+            
+            if is_third:
+                # Try X first
+                if r + 1 < N and c + 1 < N:
+                    candidates = [(1, 1, 'X')]
+                else:
+                    candidates = [(0, 1, 'R'), (1, 0, 'D')]
+            else:
+                candidates = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+
+            for dr, dc, char in candidates:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < N and 0 <= nc < N:
+                    s, p = dp(nr, nc, k + 1)
+                    if s != -float('inf'):
+                        cur_s = grid[r][c] + s
+                        cur_p = char + p
+                        if cur_s > best_sum:
+                            best_sum = cur_s
+                            best_path = cur_p
+                        elif cur_s == best_sum:
+                            # Optional: tie-breaker
+                            if cur_p < best_path:
+                                best_path = cur_p
+
+            memo[(r, c, k)] = (best_sum, best_path)
+            return best_sum, best_path
+
+        res_sum, res_path = dp(0, 0, 0)
+        return res_sum, res_path
+    ```
+
+    Wait, one detail: "If diagonal is not possible on a required diagonal move, you may use R or D".
+    What if X is not possible, but only R is possible? My code handles that (`if 0 <= nr < N and 0 <= nc < N`).
+    What if both R and D are possible? My code tries both.
+
+    One more thing: If $N=1$, the loop `for dr, dc, char in candidates` won't run and `best_sum` will be `-inf`.
+    But the base case `if r == N-1 and c == N-1` handles $N=1$ correctly.
+
+    Let's double check the 3rd move requirement:
+    "Every 3rd move (3, 6, 9...) MUST be diagonal if possible"
+    If $k=2$, the next move is the 3rd move.
+    My code: `k=0` (1st move), `k=1` (2nd move), `k=2` (3rd move).
+    `is_third = (2 + 1) % 3 == 0` is `True`.
+    This is correct.
+
+    Wait, the rule is "If diagonal is not possible... you may use R or D".
+    My code:
+    ```python
+    if is_third:
+        if r + 1 < N and c + 1 < N:
+            candidates = [(1, 1, 'X')]
+        else:
+            candidates = [(0, 1, 'R'), (1, 0, 'D')]
+    ```
+    This means if X is available, I *only* consider X. If X is not available, I consider R and D.
+    This matches "MUST be diagonal if possible".
+
+    Final check on `max_sum` and `path_string`.
+    If $N=1$, `grid = [[5]]`, `solve_grid` returns `(5, "")`.
+    If $N=2$, `grid = [[1, 2], [3, 4]]`, `solve_grid` returns `(8, "DR")`. (Wait, let me re-calculate).
+    `dp(0,0,0)` -> `k=0`, `is_third=False`.
+    `candidates = R, D, X`.
+    - R: `(0,1)`, `k=1`, `is_third=False`. `candidates = R, D, X`.
+        - `R`: (0,2) out.
+        - `D`: (1,1) in, `dp(1,1,2)` returns (4, ""). Result: (2+4, "D") = (6, "D").
+        - `X`: (1,2) out.
+    - D: `(1,0)`, `k=1`, `is_third=False`. `candidates = R, D, X`.
+        - `R`: (1,1) in, `dp(1,1,2)` returns (4, ""). Result: (3+4, "R") = (7, "R").
+        - `D`: (2,0) out.
+        - `X`: (2,1) out.
+    - X: `(1,1)`, `k=1`, `is_third=False`. `dp(1,1,2)` returns (4, ""). Result: (1+4, "X") = (5, "X").
+
+    Wait, my manual trace for `(0,0,0)`:
+    `R` path: `grid[0][0] + 6 = 1+6 = 7`. Path `RD`.
+    `D` path: `grid[0][0] + 7 = 1+7 = 8`. Path `DR`.
+    `X` path: `grid[0][0] + 4 = 1+4 = 5`. Path `X`.
+    Max is `(8, "DR")`. Correct.
+
+    Wait, one small thing. The `sys.setrecursionlimit` might be needed.
+    For $N=100$, the depth is at most 200. For $N=1000$, it's 2000.
+    Setting it to 10000 is safe.
+
+    One final thought: the `if cur_s == best_sum` tie-breaker.
+    The problem doesn't specify. Let's use a simple one.
+    The most important part is that the result is a `tuple[int, str]`.
+
+    ```python
+    import sys
+
+    def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+        sys.setrecursionlimit(10000)
+        N = len(grid)
+        memo = {}
+
+        def dp(r, c, k):
+            if r == N - 1 and c == N - 1:
+                return grid[r][c], ""
+            state = (r, c, k)
+            if state in memo:
+                return memo[state]
+
+            best_sum = -float('inf')
+            best_path = ""
+
+            is_third = (k + 1) % 3 == 0
+            
+            if is_third:
+                if r + 1 < N and c + 1 < N:
+                    candidates = [(1, 1, 'X')]
+                else:
+                    candidates = [(0, 1, 'R'), (1, 0, 'D')]
+            else:
+                candidates = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+
+            for dr, dc, char in candidates:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < N and 0 <= nc < N:
+                    s, p = dp(nr, nc, k + 1)
+                    if s != -float('inf'):
+                        cur_s = grid[r][c] + s
+                        cur_p = char + p
+                        if cur_s > best_sum:
+                            best_sum = cur_s
+                            best_path = cur_p
+                        elif cur_s == best_sum:
+                            if cur_p < best_path: # Lexicographical tie-breaker
+                                best_path = cur_p
+            
+            memo[state] = (best_sum, best_path)
+            return best_sum, best_path
+
+        return dp(0, 0, 0)
+    ```
+    Wait, if $N=1$, the loop `for dr, dc, char in candidates` doesn't run.
+    `best_sum` stays `-float('inf')`.
+    Then it returns `(-float('inf'), "")`.
+    But the base case `if r == N - 1 and c == N - 1` *is* triggered if `N=1`.
+    `dp(0, 0, 0)` will hit `if 0 == 0 and 0 == 0` and return `grid[0][0], ""`.
+    So `(grid[0][0], "")` is returned. Correct.
+
+    The `sys` import must be inside or at the top. I'll put it at the top.
+    The function signature must be exact.
+
+    ```python
+    import sys
+
+    def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+        sys.setrecursionlimit(10000)
+        n = len(grid)
+        memo = {}
+
+        def dp(r, c, k):
+            if r == n - 1 and c == n - 1:
+                return grid[r][c], ""
+            if (r, c, k) in memo:
+                return memo[(r, c, k)]
+            
+            best_sum = -float('inf')
+            best_path = ""
+            
+            is_third = (k + 1) % 3 == 0
+            if is_third:
+                if r + 1 < n and c + 1 < n:
+                    candidates = [(1, 1, 'X')]
+                else:
+                    candidates = [(0, 1, 'R'), (1, 0, 'D')]
+            else:
+                candidates = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+            
+            for dr, dc, move in candidates:
+                nr, nc = r + dr, c + dc
+                if 0 <= nr < n and 0 <= nc < n:
+                    s, p = dp(nr, nc, k + 1)
+                    if s != -float('inf'):
+                        cur_sum = grid[r][c] + s
+                        cur_path = move + p
+                        if cur_sum > best_sum:
+                            best_sum = cur_sum
+                            best_path = cur_path
+                        elif cur_sum == best_sum:
+                            if cur_path < best_path:
+                                best_path = cur_path
+            
+            memo[(r, c, k)] = (best_sum, best_path)
+            return best_sum, best_path
+
+        return dp(0, 0, 0)
+    ```
+
+    Wait, there's one tiny thing. If $N$ is very large, `sys.setrecursionlimit(10000)` might still not be enough, and `memo` with tuples might be slow. However, without knowing $N$, this is the most standard approach for this type of problem. The constraint "Every 3rd move" is the key.
+
+    Wait, I just realized `best_path` is initially `""`.
+    When `cur_sum == best_sum`, `if cur_path < best_path` will be `if "R" < ""`, which is `False`.
+    So the first path found will always be kept. This is fine.
+    To fix the tie-breaker for the very first assignment:
+    `if best_sum == -float('inf') or cur_sum > best_sum:`
+    or
+    `if cur_sum > best_sum or (cur_sum == best_sum and cur_path < best_path):`
+    But actually, `if cur_sum > best_sum:` will be true for the first valid path since `best_sum` is `-inf`.
+
+    Wait, if `best_sum` is `-inf`, then `cur_sum > best_sum` will be `True`.
+    So `best_sum` becomes `cur_sum` and `best_path` becomes `cur_path`.
+    The `elif cur_sum == best_sum` will only be triggered for subsequent paths with the same sum.
+    So the tie-breaker *will* work.
+
+    `grid = [[1, 1, 1], [1, 1, 1], [1, 1, 1]]`
+    $N=3$.
+    `dp(0,0,0)`: $k=0$. `is_third=False`. `cand=[R,D,X]`.
+    - `R`: `(0,1,1)`. $k=1$. `is_third=False`. `cand=[R,D,X]`.
+        - `R`: `(0,2,2)`. $k=2$. `is_third=True`. `X` out. `cand=[R,D]`.
+            - `R`: out.
+            - `D`: `(1,2,3)`. $k=3$. `is_third=False`. `cand=[R,D,X]`.
+                - `R`: out.
+                - `D`: `(2,2,4)`. Returns `(1, "")`.
+                - `X`: out.
+                Result for `(1,2,3)`: `(2, "D")`.
+            Result for `(0,2,2)`: `(1+2, "DD")`? No, `grid[0][2]` is 1. So `(1+2, "DD")` is `(3, "DD")`.
+        - `D`: `(1,1,2)`. $k=2$. `is_third=True`. `X` is `(2,2)`. `X` in.
+            - `X`: `(2,2,3)`. Returns `(1, "")`.
+            Result for `(1,1,2)`: `(1+1, "X") = (2, "X")`.
+        - `X`: `(1,2,2)`. $k=2$. `is_third=True`. `X` out. `cand=[R,D]`.
+            - `R`: out.
+            - `D`: `(2,2,3)`. Returns `(1, "")`.
+            Result for `(1,2,2)`: `(1+1, "D") = (2, "D")`.
+        Result for `(0,1,1)`: max of `(1+3, "RDD")`, `(1+2, "DX")`, `(1+2, "XD")`... (Wait, path logic is slightly different).
+
+    Let me re-check the `(0,1,1)` path for `R` move.
+    `(0,1,1)` R -> `(0,2,2)`.
+    `(0,2,2)` is 3rd move, X is out, so try R or D.
+    `D` is `(1,2,3)`.
+    `(1,2,3)` is not 3rd move. `D` is `(2,2,4)`.
+    Sum: `grid[0][0]+grid[0][1]+grid[0][2]+grid[1][2]+grid[2][2] = 1+1+1+1+1 = 5`.
+    Path: `RDD`.
 
 === EXTRACTED CODE ===
 (no code extracted)

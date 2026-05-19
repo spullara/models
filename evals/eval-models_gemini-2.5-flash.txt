@@ -1,0 +1,166 @@
+Model: models/gemini-2.5-flash
+Provider: gemini
+Evaluated: 2026-05-19T17:45:20.186369+00:00
+
+=== TIMING ===
+Response time: 29.3s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    import math
+
+    N = len(grid)
+    memo = {}  # (r, c, moves_made) -> (max_sum, path_string)
+
+    def is_valid(r, c):
+        return 0 <= r < N and 0 <= c < N
+
+    def find_max_path(r, c, moves_made):
+        # Base case: Reached the destination
+        if r == N - 1 and c == N - 1:
+            return grid[r][c], ""
+
+        # Check memoization
+        if (r, c, moves_made) in memo:
+            return memo[(r, c, moves_made)]
+
+        current_val = grid[r][c]
+        candidates = []  # List of (total_sum, current_move_char + sub_path)
+
+        # Helper function to evaluate a potential move and add to candidates
+        def evaluate_move(move_char, nr, nc):
+            if is_valid(nr, nc):
+                sub_sum, sub_path = find_max_path(nr, nc, moves_made + 1)
+                # Only consider paths that can reach the end (sum is not -inf)
+                if sub_sum != -math.inf:
+                    total_sum = current_val + sub_sum
+                    candidates.append((total_sum, move_char + sub_path))
+
+        # Determine if the next move (moves_made + 1) must be diagonal
+        must_be_diagonal = (moves_made + 1) % 3 == 0
+
+        if must_be_diagonal:
+            # Try 'X' first
+            nr_x, nc_x = r + 1, c + 1
+            if is_valid(nr_x, nc_x):
+                # If diagonal is possible, it MUST be used
+                evaluate_move('X', nr_x, nc_x)
+            else:
+                # If diagonal is not possible, fall back to 'R' or 'D'
+                # Prioritize 'R' over 'D' for path string tie-breaking
+                evaluate_move('R', r, c + 1)
+                evaluate_move('D', r + 1, c)
+        else:
+            # All three moves are allowed, prioritize 'R', then 'D', then 'X' for path string tie-breaking
+            evaluate_move('R', r, c + 1)
+            evaluate_move('D', r + 1, c)
+            evaluate_move('X', r + 1, c + 1)
+
+        if not candidates:
+            # No valid path from this cell to the destination
+            memo[(r, c, moves_made)] = (-math.inf, "")
+            return -math.inf, ""
+
+        # Find the best candidate: maximize sum, then lexicographically smallest path string
+        best_candidate_sum = -math.inf
+        best_candidate_path = "~"  # A string lexicographically larger than any valid path
+
+        for current_sum, current_path in candidates:
+            if current_sum > best_candidate_sum:
+                best_candidate_sum = current_sum
+                best_candidate_path = current_path
+            elif current_sum == best_candidate_sum:
+                if current_path < best_candidate_path:
+                    best_candidate_path = current_path
+
+        memo[(r, c, moves_made)] = (best_candidate_sum, best_candidate_path)
+        return best_candidate_sum, best_candidate_path
+
+    # Start the recursion from (0, 0) with 0 moves made
+    final_sum, final_path = find_max_path(0, 0, 0)
+    return final_sum, final_path
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    import math
+
+    N = len(grid)
+    memo = {}  # (r, c, moves_made) -> (max_sum, path_string)
+
+    def is_valid(r, c):
+        return 0 <= r < N and 0 <= c < N
+
+    def find_max_path(r, c, moves_made):
+        # Base case: Reached the destination
+        if r == N - 1 and c == N - 1:
+            return grid[r][c], ""
+
+        # Check memoization
+        if (r, c, moves_made) in memo:
+            return memo[(r, c, moves_made)]
+
+        current_val = grid[r][c]
+        candidates = []  # List of (total_sum, current_move_char + sub_path)
+
+        # Helper function to evaluate a potential move and add to candidates
+        def evaluate_move(move_char, nr, nc):
+            if is_valid(nr, nc):
+                sub_sum, sub_path = find_max_path(nr, nc, moves_made + 1)
+                # Only consider paths that can reach the end (sum is not -inf)
+                if sub_sum != -math.inf:
+                    total_sum = current_val + sub_sum
+                    candidates.append((total_sum, move_char + sub_path))
+
+        # Determine if the next move (moves_made + 1) must be diagonal
+        must_be_diagonal = (moves_made + 1) % 3 == 0
+
+        if must_be_diagonal:
+            # Try 'X' first
+            nr_x, nc_x = r + 1, c + 1
+            if is_valid(nr_x, nc_x):
+                # If diagonal is possible, it MUST be used
+                evaluate_move('X', nr_x, nc_x)
+            else:
+                # If diagonal is not possible, fall back to 'R' or 'D'
+                # Prioritize 'R' over 'D' for path string tie-breaking
+                evaluate_move('R', r, c + 1)
+                evaluate_move('D', r + 1, c)
+        else:
+            # All three moves are allowed, prioritize 'R', then 'D', then 'X' for path string tie-breaking
+            evaluate_move('R', r, c + 1)
+            evaluate_move('D', r + 1, c)
+            evaluate_move('X', r + 1, c + 1)
+
+        if not candidates:
+            # No valid path from this cell to the destination
+            memo[(r, c, moves_made)] = (-math.inf, "")
+            return -math.inf, ""
+
+        # Find the best candidate: maximize sum, then lexicographically smallest path string
+        best_candidate_sum = -math.inf
+        best_candidate_path = "~"  # A string lexicographically larger than any valid path
+
+        for current_sum, current_path in candidates:
+            if current_sum > best_candidate_sum:
+                best_candidate_sum = current_sum
+                best_candidate_path = current_path
+            elif current_sum == best_candidate_sum:
+                if current_path < best_candidate_path:
+                    best_candidate_path = current_path
+
+        memo[(r, c, moves_made)] = (best_candidate_sum, best_candidate_path)
+        return best_candidate_sum, best_candidate_path
+
+    # Start the recursion from (0, 0) with 0 moves made
+    final_sum, final_path = find_max_path(0, 0, 0)
+    return final_sum, final_path

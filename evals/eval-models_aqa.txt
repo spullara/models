@@ -1,0 +1,26 @@
+Model: models/aqa
+Provider: gemini
+Evaluated: 2026-05-19T17:45:05.609959+00:00
+
+=== TIMING ===
+Response time: 0.14s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: {
+  "error": {
+    "code": 404,
+    "message": "models/aqa is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)

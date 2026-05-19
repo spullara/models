@@ -1,0 +1,122 @@
+Model: models/gemini-flash-latest
+Provider: gemini
+Evaluated: 2026-05-19T17:51:49.088227+00:00
+
+=== TIMING ===
+Response time: 69.57s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+import sys
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    
+    memo = {}
+    sys.setrecursionlimit(200000)
+
+    def solve(r, c, m):
+        state = (r, c, m)
+        if state in memo:
+            return memo[state]
+        
+        if r == N - 1 and c == N - 1:
+            return grid[r][c], ""
+        
+        best_sum = -float('inf')
+        best_path = ""
+        nm = m + 1
+        
+        can_x = (r + 1 < N and c + 1 < N)
+        can_r = (c + 1 < N)
+        can_d = (r + 1 < N)
+        
+        choices = []
+        if nm % 3 == 0:
+            if can_x:
+                choices = [(1, 1, 'X')]
+            else:
+                if can_r: choices.append((0, 1, 'R'))
+                if can_d: choices.append((1, 0, 'D'))
+        else:
+            if can_r: choices.append((0, 1, 'R'))
+            if can_d: choices.append((1, 0, 'D'))
+            if can_x: choices.append((1, 1, 'X'))
+            
+        for dr, dc, char in choices:
+            s, p = solve(r + dr, c + dc, nm)
+            if s != -float('inf'):
+                current_sum = grid[r][c] + s
+                if current_sum > best_sum:
+                    best_sum = current_sum
+                    best_path = char + p
+        
+        memo[state] = (best_sum, best_path)
+        return best_sum, best_path
+
+    max_sum, path_string = solve(0, 0, 0)
+    return (int(max_sum), path_string)
+
+=== EXTRACTED CODE ===
+import sys
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    
+    memo = {}
+    sys.setrecursionlimit(200000)
+
+    def solve(r, c, m):
+        state = (r, c, m)
+        if state in memo:
+            return memo[state]
+        
+        if r == N - 1 and c == N - 1:
+            return grid[r][c], ""
+        
+        best_sum = -float('inf')
+        best_path = ""
+        nm = m + 1
+        
+        can_x = (r + 1 < N and c + 1 < N)
+        can_r = (c + 1 < N)
+        can_d = (r + 1 < N)
+        
+        choices = []
+        if nm % 3 == 0:
+            if can_x:
+                choices = [(1, 1, 'X')]
+            else:
+                if can_r: choices.append((0, 1, 'R'))
+                if can_d: choices.append((1, 0, 'D'))
+        else:
+            if can_r: choices.append((0, 1, 'R'))
+            if can_d: choices.append((1, 0, 'D'))
+            if can_x: choices.append((1, 1, 'X'))
+            
+        for dr, dc, char in choices:
+            s, p = solve(r + dr, c + dc, nm)
+            if s != -float('inf'):
+                current_sum = grid[r][c] + s
+                if current_sum > best_sum:
+                    best_sum = current_sum
+                    best_path = char + p
+        
+        memo[state] = (best_sum, best_path)
+        return best_sum, best_path
+
+    max_sum, path_string = solve(0, 0, 0)
+    return (int(max_sum), path_string)
