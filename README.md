@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-19 21:30:17
+Last updated: 2026-05-20 17:14:59
 
-## Updates This Week (2026-05-13 to 2026-05-19)
+## Updates This Week (2026-05-14 to 2026-05-20)
 
 ### OpenAI
 
@@ -19,8 +19,6 @@ Last updated: 2026-05-19 21:30:17
 - gpt-4o-realtime-preview (deleted: 2026-05-18)
 - gpt-4o-realtime-preview-2024-12-17 (deleted: 2026-05-18)
 - gpt-4o-realtime-preview-2025-06-03 (deleted: 2026-05-18)
-- dall-e-2 (deleted: 2026-05-13)
-- dall-e-3 (deleted: 2026-05-13)
 
 ### Gemini
 
@@ -35,6 +33,10 @@ Last updated: 2026-05-19 21:30:17
 - models/gemini-3.1-flash-live-preview (deleted: 2026-05-19)
 
 ### Grok
+
+**Added**
+
+- grok-build-0.1 (added: 2026-05-20)
 
 **Deleted**
 
@@ -65,7 +67,7 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 50/90
 
-**Grok**: 8/19
+**Grok**: 9/19
 
 **Mistral**: 64/33
 
@@ -438,6 +440,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- grok-build-0.1 (added: 2026-05-20)
 - grok-imagine-video-0428 (added: 2026-05-06)
 - grok-imagine-image-quality (added: 2026-05-06)
 - grok-4.3 (added: 2026-04-30)
