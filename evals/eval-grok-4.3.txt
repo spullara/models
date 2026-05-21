@@ -1,122 +1,77 @@
 Model: grok-4.3
 Provider: grok
-Evaluated: 2026-05-13T13:29:49.984244+00:00
+Evaluated: 2026-05-21T17:35:49.688621+00:00
 
 === TIMING ===
-Response time: 15.84s
+Response time: 32.9s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+Returned sum: 73
+Calculated sum: 15
+Sum matches: NO
+Path valid: NO
+Path error: Move 3 must be diagonal (X) but was D
 
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid):
-    N = len(grid)
-    if N == 0:
+    if not grid or not grid[0]:
         return (0, "")
+    N = len(grid)
+    max_sum = float('-inf')
+    best_path = ""
     dirs = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
-    memo = {}
-    prev = {}
 
-    def dfs(r, c, m):
-        if r == N - 1 and c == N - 1:
-            return grid[r][c]
-        key = (r, c, m % 3)
-        if key in memo:
-            return memo[key]
-        must_x = (m + 1) % 3 == 0
-        best = float('-inf')
-        best_move = None
-        for dr, dc, ch in dirs:
-            if must_x and ch != 'X':
-                continue
-            nr, nc = r + dr, c + dc
-            if 0 <= nr < N and 0 <= nc < N:
-                val = dfs(nr, nc, m + 1)
-                if val > best - grid[r][c]:
-                    best = val + grid[r][c]
-                    best_move = ch
-                    prev[key] = (nr, nc, (m + 1) % 3, ch)
-        if best == float('-inf') and must_x:
-            for dr, dc, ch in [(0, 1, 'R'), (1, 0, 'D')]:
-                nr, nc = r + dr, c + dc
-                if 0 <= nr < N and 0 <= nc < N:
-                    val = dfs(nr, nc, m + 1)
-                    if val > best - grid[r][c]:
-                        best = val + grid[r][c]
-                        best_move = ch
-                        prev[key] = (nr, nc, (m + 1) % 3, ch)
-        memo[key] = best
-        return best
+    def dfs(i, j, moves, path, total):
+        nonlocal max_sum, best_path
+        if i == N - 1 and j == N - 1:
+            if total > max_sum:
+                max_sum = total
+                best_path = path
+            return
+        must_diag = (moves + 1) % 3 == 0
+        order = [2] if must_diag else [0, 1, 2]
+        if must_diag:
+            order = [2, 0, 1]
+        for d in order:
+            di, dj, move = dirs[d]
+            ni, nj = i + di, j + dj
+            if 0 <= ni < N and 0 <= nj < N:
+                dfs(ni, nj, moves + 1, path + move, total + grid[ni][nj])
 
-    total = dfs(0, 0, 0)
-    path = ""
-    r, c, md = 0, 0, 0
-    while r != N - 1 or c != N - 1:
-        key = (r, c, md)
-        if key not in prev:
-            break
-        nr, nc, nmd, ch = prev[key]
-        path += ch
-        r, c, md = nr, nc, nmd
-    return (total, path)
+    dfs(0, 0, 0, "", grid[0][0])
+    return (max_sum, best_path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid):
-    N = len(grid)
-    if N == 0:
+    if not grid or not grid[0]:
         return (0, "")
+    N = len(grid)
+    max_sum = float('-inf')
+    best_path = ""
     dirs = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
-    memo = {}
-    prev = {}
 
-    def dfs(r, c, m):
-        if r == N - 1 and c == N - 1:
-            return grid[r][c]
-        key = (r, c, m % 3)
-        if key in memo:
-            return memo[key]
-        must_x = (m + 1) % 3 == 0
-        best = float('-inf')
-        best_move = None
-        for dr, dc, ch in dirs:
-            if must_x and ch != 'X':
-                continue
-            nr, nc = r + dr, c + dc
-            if 0 <= nr < N and 0 <= nc < N:
-                val = dfs(nr, nc, m + 1)
-                if val > best - grid[r][c]:
-                    best = val + grid[r][c]
-                    best_move = ch
-                    prev[key] = (nr, nc, (m + 1) % 3, ch)
-        if best == float('-inf') and must_x:
-            for dr, dc, ch in [(0, 1, 'R'), (1, 0, 'D')]:
-                nr, nc = r + dr, c + dc
-                if 0 <= nr < N and 0 <= nc < N:
-                    val = dfs(nr, nc, m + 1)
-                    if val > best - grid[r][c]:
-                        best = val + grid[r][c]
-                        best_move = ch
-                        prev[key] = (nr, nc, (m + 1) % 3, ch)
-        memo[key] = best
-        return best
+    def dfs(i, j, moves, path, total):
+        nonlocal max_sum, best_path
+        if i == N - 1 and j == N - 1:
+            if total > max_sum:
+                max_sum = total
+                best_path = path
+            return
+        must_diag = (moves + 1) % 3 == 0
+        order = [2] if must_diag else [0, 1, 2]
+        if must_diag:
+            order = [2, 0, 1]
+        for d in order:
+            di, dj, move = dirs[d]
+            ni, nj = i + di, j + dj
+            if 0 <= ni < N and 0 <= nj < N:
+                dfs(ni, nj, moves + 1, path + move, total + grid[ni][nj])
 
-    total = dfs(0, 0, 0)
-    path = ""
-    r, c, md = 0, 0, 0
-    while r != N - 1 or c != N - 1:
-        key = (r, c, md)
-        if key not in prev:
-            break
-        nr, nc, nmd, ch = prev[key]
-        path += ch
-        r, c, md = nr, nc, nmd
-    return (total, path)
+    dfs(0, 0, 0, "", grid[0][0])
+    return (max_sum, best_path)
