@@ -1,24 +1,99 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-05-13T13:28:10.007916+00:00
+Evaluated: 2026-05-21T17:34:19.275068+00:00
 
 === TIMING ===
-Response time: 0.12s
+Response time: 4.74s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: <html>
-<head><title>404 Not Found</title></head>
-<body>
-<center><h1>404 Not Found</h1></center>
-<hr><center>nginx</center>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fb20137093b70b9',t:'MTc3ODY3ODg5MA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagN
+Execution Error: cannot convert float infinity to integer
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+    
+    INF = float('-inf')
+    dp = [[{} for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
+    
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            for moves in range(1, n*2):
+                if moves not in dp[i][j]:
+                    continue
+                val, path = dp[i][j][moves]
+                must_diag = (moves % 3 == 0)
+                
+                for dname, di, dj in [('D', 1, 0), ('R', 0, 1), ('X', 1, 1)]:
+                    ni, nj = i + di, j + dj
+                    if 0 <= ni < n and 0 <= nj < n:
+                        if must_diag and dname != 'X' and (i + 1 < n and j + 1 < n):
+                            continue
+                        new_val = val + grid[ni][nj]
+                        new_path = path + dname
+                        new_moves = moves + 1
+                        target = dp[ni][nj]
+                        if new_moves not in target or new_val > target[new_moves][0]:
+                            target[new_moves] = (new_val, new_path)
+    
+    max_sum = INF
+    best_path = ""
+    for moves, (val, path) in dp[n-1][n-1].items():
+        if val > max_sum:
+            max_sum = val
+            best_path = path
+    return (int(max_sum), best_path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+    
+    INF = float('-inf')
+    dp = [[{} for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
+    
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            for moves in range(1, n*2):
+                if moves not in dp[i][j]:
+                    continue
+                val, path = dp[i][j][moves]
+                must_diag = (moves % 3 == 0)
+                
+                for dname, di, dj in [('D', 1, 0), ('R', 0, 1), ('X', 1, 1)]:
+                    ni, nj = i + di, j + dj
+                    if 0 <= ni < n and 0 <= nj < n:
+                        if must_diag and dname != 'X' and (i + 1 < n and j + 1 < n):
+                            continue
+                        new_val = val + grid[ni][nj]
+                        new_path = path + dname
+                        new_moves = moves + 1
+                        target = dp[ni][nj]
+                        if new_moves not in target or new_val > target[new_moves][0]:
+                            target[new_moves] = (new_val, new_path)
+    
+    max_sum = INF
+    best_path = ""
+    for moves, (val, path) in dp[n-1][n-1].items():
+        if val > max_sum:
+            max_sum = val
+            best_path = path
+    return (int(max_sum), best_path)
