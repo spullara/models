@@ -1,9 +1,9 @@
 Model: grok-build-0.1
 Provider: grok
-Evaluated: 2026-05-20T17:14:05.897283+00:00
+Evaluated: 2026-05-21T17:36:22.614911+00:00
 
 === TIMING ===
-Response time: 36.49s
+Response time: 49.72s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,132 +17,104 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
+import functools
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
     N = len(grid)
-    if N == 1:
-        return (grid[0][0], "")
-    max_moves = 2 * (N - 1)
-    sum_dp = [[[float('-inf')] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
-    prev = [[[None] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
-    sum_dp[0][0][0] = grid[0][0]
-    for m in range(max_moves):
-        for r in range(N):
-            for c in range(N):
-                if sum_dp[r][c][m] == float('-inf'):
-                    continue
-                must_x = ((m + 1) % 3 == 0)
-                moves = []
-                if must_x:
-                    if r + 1 < N and c + 1 < N:
-                        moves = ['X']
-                    else:
-                        if c + 1 < N:
-                            moves.append('R')
-                        if r + 1 < N:
-                            moves.append('D')
-                else:
-                    if c + 1 < N:
-                        moves.append('R')
-                    if r + 1 < N:
-                        moves.append('D')
-                    if r + 1 < N and c + 1 < N:
-                        moves.append('X')
-                for move in moves:
-                    if move == 'R':
-                        nr, nc = r, c + 1
-                    elif move == 'D':
-                        nr, nc = r + 1, c
-                    elif move == 'X':
-                        nr, nc = r + 1, c + 1
-                    if nr >= N or nc >= N:
-                        continue
-                    new_sum = sum_dp[r][c][m] + grid[nr][nc]
-                    new_m = m + 1
-                    if new_sum > sum_dp[nr][nc][new_m]:
-                        sum_dp[nr][nc][new_m] = new_sum
-                        prev[nr][nc][new_m] = (r, c, m, move)
-    max_sum = float('-inf')
-    best_m = -1
-    for m in range(max_moves + 1):
-        if sum_dp[N-1][N-1][m] > max_sum:
-            max_sum = sum_dp[N-1][N-1][m]
-            best_m = m
-    if best_m == -1:
-        return (0, "")
-    path = []
-    cr, cc, cm = N - 1, N - 1, best_m
-    while cm > 0:
-        pr, pc, pm, move = prev[cr][cc][cm]
-        path.append(move)
-        cr, cc, cm = pr, pc, pm
-    path.reverse()
-    path_str = ''.join(path)
-    return (max_sum, path_str)
+    @functools.lru_cache(None)
+    def dfs(r: int, c: int, moves: int) -> tuple[int, str]:
+        if r == N - 1 and c == N - 1:
+            return (0, "")
+        next_move_num = moves + 1
+        must_diagonal = (next_move_num % 3 == 0)
+        dirs = []
+        if must_diagonal:
+            if r + 1 < N and c + 1 < N:
+                dirs.append(('X', 1, 1))
+            else:
+                if c + 1 < N:
+                    dirs.append(('R', 0, 1))
+                if r + 1 < N:
+                    dirs.append(('D', 1, 0))
+        else:
+            if c + 1 < N:
+                dirs.append(('R', 0, 1))
+            if r + 1 < N:
+                dirs.append(('D', 1, 0))
+            if r + 1 < N and c + 1 < N:
+                dirs.append(('X', 1, 1))
+        best_additional = float('-inf')
+        best_path = ""
+        for move_char, dr, dc in dirs:
+            nr = r + dr
+            nc = c + dc
+            add_sum, sub_path = dfs(nr, nc, moves + 1)
+            if add_sum == float('-inf'):
+                continue
+            total_add = grid[nr][nc] + add_sum
+            if total_add > best_additional:
+                best_additional = total_add
+                best_path = move_char + sub_path
+        if best_additional == float('-inf'):
+            return (float('-inf'), "")
+        return (best_additional, best_path)
+    initial_sum = grid[0][0]
+    add_sum, path = dfs(0, 0, 0)
+    if add_sum == float('-inf'):
+        return (initial_sum, "")
+    total = initial_sum + add_sum
+    return (total, path)
 ```
 
 === EXTRACTED CODE ===
+import functools
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
     N = len(grid)
-    if N == 1:
-        return (grid[0][0], "")
-    max_moves = 2 * (N - 1)
-    sum_dp = [[[float('-inf')] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
-    prev = [[[None] * (max_moves + 1) for _ in range(N)] for _ in range(N)]
-    sum_dp[0][0][0] = grid[0][0]
-    for m in range(max_moves):
-        for r in range(N):
-            for c in range(N):
-                if sum_dp[r][c][m] == float('-inf'):
-                    continue
-                must_x = ((m + 1) % 3 == 0)
-                moves = []
-                if must_x:
-                    if r + 1 < N and c + 1 < N:
-                        moves = ['X']
-                    else:
-                        if c + 1 < N:
-                            moves.append('R')
-                        if r + 1 < N:
-                            moves.append('D')
-                else:
-                    if c + 1 < N:
-                        moves.append('R')
-                    if r + 1 < N:
-                        moves.append('D')
-                    if r + 1 < N and c + 1 < N:
-                        moves.append('X')
-                for move in moves:
-                    if move == 'R':
-                        nr, nc = r, c + 1
-                    elif move == 'D':
-                        nr, nc = r + 1, c
-                    elif move == 'X':
-                        nr, nc = r + 1, c + 1
-                    if nr >= N or nc >= N:
-                        continue
-                    new_sum = sum_dp[r][c][m] + grid[nr][nc]
-                    new_m = m + 1
-                    if new_sum > sum_dp[nr][nc][new_m]:
-                        sum_dp[nr][nc][new_m] = new_sum
-                        prev[nr][nc][new_m] = (r, c, m, move)
-    max_sum = float('-inf')
-    best_m = -1
-    for m in range(max_moves + 1):
-        if sum_dp[N-1][N-1][m] > max_sum:
-            max_sum = sum_dp[N-1][N-1][m]
-            best_m = m
-    if best_m == -1:
-        return (0, "")
-    path = []
-    cr, cc, cm = N - 1, N - 1, best_m
-    while cm > 0:
-        pr, pc, pm, move = prev[cr][cc][cm]
-        path.append(move)
-        cr, cc, cm = pr, pc, pm
-    path.reverse()
-    path_str = ''.join(path)
-    return (max_sum, path_str)
+    @functools.lru_cache(None)
+    def dfs(r: int, c: int, moves: int) -> tuple[int, str]:
+        if r == N - 1 and c == N - 1:
+            return (0, "")
+        next_move_num = moves + 1
+        must_diagonal = (next_move_num % 3 == 0)
+        dirs = []
+        if must_diagonal:
+            if r + 1 < N and c + 1 < N:
+                dirs.append(('X', 1, 1))
+            else:
+                if c + 1 < N:
+                    dirs.append(('R', 0, 1))
+                if r + 1 < N:
+                    dirs.append(('D', 1, 0))
+        else:
+            if c + 1 < N:
+                dirs.append(('R', 0, 1))
+            if r + 1 < N:
+                dirs.append(('D', 1, 0))
+            if r + 1 < N and c + 1 < N:
+                dirs.append(('X', 1, 1))
+        best_additional = float('-inf')
+        best_path = ""
+        for move_char, dr, dc in dirs:
+            nr = r + dr
+            nc = c + dc
+            add_sum, sub_path = dfs(nr, nc, moves + 1)
+            if add_sum == float('-inf'):
+                continue
+            total_add = grid[nr][nc] + add_sum
+            if total_add > best_additional:
+                best_additional = total_add
+                best_path = move_char + sub_path
+        if best_additional == float('-inf'):
+            return (float('-inf'), "")
+        return (best_additional, best_path)
+    initial_sum = grid[0][0]
+    add_sum, path = dfs(0, 0, 0)
+    if add_sum == float('-inf'):
+        return (initial_sum, "")
+    total = initial_sum + add_sum
+    return (total, path)
