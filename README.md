@@ -1,24 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-24 05:26:17
+Last updated: 2026-05-25 09:47:19
 
-## Updates This Week (2026-05-18 to 2026-05-24)
-
-### OpenAI
-
-**Deleted**
-
-- gpt-4o-audio-preview (deleted: 2026-05-18)
-- gpt-4o-audio-preview-2024-12-17 (deleted: 2026-05-18)
-- gpt-4o-audio-preview-2025-06-03 (deleted: 2026-05-18)
-- gpt-4o-mini-audio-preview (deleted: 2026-05-18)
-- gpt-4o-mini-audio-preview-2024-12-17 (deleted: 2026-05-18)
-- gpt-4o-mini-realtime-preview (deleted: 2026-05-18)
-- gpt-4o-mini-realtime-preview-2024-12-17 (deleted: 2026-05-18)
-- gpt-4o-realtime-preview (deleted: 2026-05-18)
-- gpt-4o-realtime-preview-2024-12-17 (deleted: 2026-05-18)
-- gpt-4o-realtime-preview-2025-06-03 (deleted: 2026-05-18)
+## Updates This Week (2026-05-19 to 2026-05-25)
 
 ### Gemini
 
@@ -42,6 +27,7 @@ Last updated: 2026-05-24 05:26:17
 
 **Added**
 
+- qwen3.7-max-preview (added: 2026-05-25)
 - qwen3.7-max (added: 2026-05-21)
 - qwen3.7-max-2026-05-20 (added: 2026-05-21)
 - qwen3.5-livetranslate-flash-realtime (added: 2026-05-19)
@@ -65,7 +51,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 9/6
 
-**Qwen**: 160/2
+**Qwen**: 161/2
 
 
 ## OpenAI
@@ -606,6 +592,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- qwen3.7-max-preview (added: 2026-05-25)
 - qwen3.7-max-2026-05-20 (added: 2026-05-21)
 - qwen3.7-max (added: 2026-05-21)
 - qwen3.5-livetranslate-flash-realtime-2026-05-19 (added: 2026-05-19)
