@@ -1,0 +1,19 @@
+Model: qwen3.7-max-preview
+Provider: qwen
+Evaluated: 2026-05-25T09:47:06.298042+00:00
+
+=== TIMING ===
+Response time: 0.85s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-d1bfdadd-0923-9e45-8568-5c0fa0aede60","request_id":"d1bfdadd-0923-9e45-8568-5c0fa0aede60"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
