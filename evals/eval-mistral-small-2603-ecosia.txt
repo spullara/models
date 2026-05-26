@@ -1,16 +1,16 @@
 Model: mistral-small-2603-ecosia
 Provider: mistral
-Evaluated: 2026-05-26T11:36:06.863971+00:00
+Evaluated: 2026-05-26T11:39:06.924002+00:00
 
 === TIMING ===
-Response time: 0.43s
+Response time: 0.32s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 404: {"object":"error","message":"The model `mistral-small-2603-ecosia` does not exist for router `completion`.","type":"model_not_found","param":null,"code":"3040","raw_status_code":404}
+API Error: HTTP 400: {"object":"error","message":"Invalid model: mistral-small-2603-ecosia","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
 
 === RAW RESPONSE ===
 (no response)
