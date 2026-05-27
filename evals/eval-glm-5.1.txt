@@ -1,0 +1,19 @@
+Model: glm-5.1
+Provider: qwen
+Evaluated: 2026-05-27T06:04:05.831282+00:00
+
+=== TIMING ===
+Response time: 0.86s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-b52270f6-1b2b-9d62-86fd-6ae2051a8b04","request_id":"b52270f6-1b2b-9d62-86fd-6ae2051a8b04"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
