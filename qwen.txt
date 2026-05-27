@@ -3,6 +3,7 @@ deepseek-v3.2
 deepseek-v4-flash
 deepseek-v4-pro
 glm-5.1
+kimi-k2.6
 qvq-max
 qwen-coder-plus
 qwen-flash
