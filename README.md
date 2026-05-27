@@ -1,38 +1,25 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-25 13:00:20
+Last updated: 2026-05-27 06:04:18
 
-## Updates This Week (2026-05-19 to 2026-05-25)
+## Updates This Week (2026-05-21 to 2026-05-27)
 
-### Gemini
-
-**Added**
-
-- models/antigravity-preview-05-2026 (added: 2026-05-19)
-- models/gemini-3.5-flash (added: 2026-05-19)
+### Mistral
 
 **Deleted**
 
-- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-05-19)
-- models/gemini-3.1-flash-live-preview (deleted: 2026-05-19)
-
-### Grok
-
-**Added**
-
-- grok-build-0.1 (added: 2026-05-20)
+- mistral-small-2603-ecosia (deleted: 2026-05-26)
 
 ### Qwen
 
 **Added**
 
+- glm-5.1 (added: 2026-05-27)
 - qwen3.7-max-2026-05-17 (added: 2026-05-25)
 - qwen3.7-max-preview (added: 2026-05-25)
 - qwen3.7-max (added: 2026-05-21)
 - qwen3.7-max-2026-05-20 (added: 2026-05-21)
-- qwen3.5-livetranslate-flash-realtime (added: 2026-05-19)
-- qwen3.5-livetranslate-flash-realtime-2026-05-19 (added: 2026-05-19)
 
 ## Summary
 
@@ -46,13 +33,13 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 9/19
 
-**Mistral**: 64/33
+**Mistral**: 64/34
 
 **DeepSeek**: 2/2
 
 **Kimi**: 9/6
 
-**Qwen**: 162/2
+**Qwen**: 163/2
 
 
 ## OpenAI
@@ -520,6 +507,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- mistral-small-2603-ecosia (deleted: 2026-05-26)
 - labs-mistral-small-creative (deleted: 2026-04-30)
 - mistral-embed-dim256-2510 (deleted: 2026-04-23)
 - mistral-embed-dim128-2510 (deleted: 2026-04-23)
@@ -593,6 +581,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- glm-5.1 (added: 2026-05-27)
 - qwen3.7-max-preview (added: 2026-05-25)
 - qwen3.7-max-2026-05-17 (added: 2026-05-25)
 - qwen3.7-max-2026-05-20 (added: 2026-05-21)
