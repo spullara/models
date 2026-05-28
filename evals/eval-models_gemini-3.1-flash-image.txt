@@ -1,0 +1,121 @@
+Model: models/gemini-3.1-flash-image
+Provider: gemini
+Evaluated: 2026-05-28T15:00:47.331595+00:00
+
+=== TIMING ===
+Response time: 3.27s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Execution Error: 0
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    
+    n = len(grid)
+    if n == 1:
+        return grid[0][0], ""
+
+    dp = [{}, {}]
+
+    if (0, 0) == (n - 1, n - 1):
+        return grid[0][0], ""
+        
+    for r in range(n):
+        for c in range(n):
+            if r == 0 and c == 0:
+                continue
+            for length in range(r + c + 1):
+                best_prev = -1
+                best_move = None
+
+                moves = []
+                must_diag = (length > 0 and length % 3 == 0)
+                diag_possible = (r > 0 and c > 0)
+                
+                if must_diag and diag_possible:
+                    moves = [((r - 1, c - 1), 'X')]
+                else:
+                    if r > 0:
+                        moves.append(((r - 1, c), 'D'))
+                    if c > 0:
+                        moves.append(((r, c - 1), 'R'))
+                    if diag_possible:
+                        moves.append(((r - 1, c - 1), 'X'))
+
+                for (pr, pc), move in moves:
+                    if length - 1 in dp[pr][pc]:
+                        prev_sum, prev_path = dp[pr][pc][length - 1]
+                        if prev_sum > best_prev:
+                            best_prev = prev_sum
+                            best_move = move
+
+                if best_prev != -1:
+                    dp[r][c][length] = (best_prev + grid[r][c], dp[pr][pc][length - 1][1] + best_move)
+    
+    end_dp = dp[n - 1][n - 1]
+    if not end_dp:
+        return -1, ""
+    
+    max_k = max(end_dp.keys())
+    return end_dp[max_k]
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    
+    n = len(grid)
+    if n == 1:
+        return grid[0][0], ""
+
+    dp = [{}, {}]
+
+    if (0, 0) == (n - 1, n - 1):
+        return grid[0][0], ""
+        
+    for r in range(n):
+        for c in range(n):
+            if r == 0 and c == 0:
+                continue
+            for length in range(r + c + 1):
+                best_prev = -1
+                best_move = None
+
+                moves = []
+                must_diag = (length > 0 and length % 3 == 0)
+                diag_possible = (r > 0 and c > 0)
+                
+                if must_diag and diag_possible:
+                    moves = [((r - 1, c - 1), 'X')]
+                else:
+                    if r > 0:
+                        moves.append(((r - 1, c), 'D'))
+                    if c > 0:
+                        moves.append(((r, c - 1), 'R'))
+                    if diag_possible:
+                        moves.append(((r - 1, c - 1), 'X'))
+
+                for (pr, pc), move in moves:
+                    if length - 1 in dp[pr][pc]:
+                        prev_sum, prev_path = dp[pr][pc][length - 1]
+                        if prev_sum > best_prev:
+                            best_prev = prev_sum
+                            best_move = move
+
+                if best_prev != -1:
+                    dp[r][c][length] = (best_prev + grid[r][c], dp[pr][pc][length - 1][1] + best_move)
+    
+    end_dp = dp[n - 1][n - 1]
+    if not end_dp:
+        return -1, ""
+    
+    max_k = max(end_dp.keys())
+    return end_dp[max_k]

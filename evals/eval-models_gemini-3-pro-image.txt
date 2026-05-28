@@ -1,0 +1,144 @@
+Model: models/gemini-3-pro-image
+Provider: gemini
+Evaluated: 2026-05-28T15:00:06.899896+00:00
+
+=== TIMING ===
+Response time: 40.4s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return 0, ""
+    if N == 1:
+        return grid[0][0], ""
+
+    max_possible_moves = 2 * N - 2
+    dp_depth = max_possible_moves + 1
+    
+    MIN_VAL = -float('inf')
+    memo_sum = [[[MIN_VAL for _ in range(N)] for _ in range(N)] for _ in range(dp_depth)]
+    memo_path = [[["" for _ in range(N)] for _ in range(N)] for _ in range(dp_depth)]
+
+    memo_sum[0][0][0] = grid[0][0]
+    
+    for k in range(max_possible_moves):
+        next_move_num = k + 1
+        force_diag = (next_move_num % 3 == 0)
+        
+        for r in range(N):
+            for c in range(N):
+                if memo_sum[k][r][c] == MIN_VAL:
+                    continue
+                
+                current_sum = memo_sum[k][r][c]
+                current_path = memo_path[k][r][c]
+                
+                possible_steps = []
+                can_diag = (r + 1 < N and c + 1 < N)
+                
+                if force_diag:
+                    if can_diag:
+                        possible_steps.append((1, 1, 'X'))
+                    else:
+                        if r + 1 < N: possible_steps.append((1, 0, 'D'))
+                        if c + 1 < N: possible_steps.append((0, 1, 'R'))
+                else:
+                    if r + 1 < N: possible_steps.append((1, 0, 'D'))
+                    if c + 1 < N: possible_steps.append((0, 1, 'R'))
+                    if can_diag: possible_steps.append((1, 1, 'X'))
+                    
+                for dr, dc, char in possible_steps:
+                    nr, nc = r + dr, c + dc
+                    new_sum = current_sum + grid[nr][nc]
+                    new_path = current_path + char
+                    
+                    if new_sum > memo_sum[next_move_num][nr][nc]:
+                        memo_sum[next_move_num][nr][nc] = new_sum
+                        memo_path[next_move_num][nr][nc] = new_path
+                        
+    final_max_sum = MIN_VAL
+    final_path = ""
+    target_r, target_c = N - 1, N - 1
+    
+    for k in range(dp_depth):
+        if memo_sum[k][target_r][target_c] > final_max_sum:
+            final_max_sum = memo_sum[k][target_r][target_c]
+            final_path = memo_path[k][target_r][target_c]
+            
+    return final_max_sum, final_path
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return 0, ""
+    if N == 1:
+        return grid[0][0], ""
+
+    max_possible_moves = 2 * N - 2
+    dp_depth = max_possible_moves + 1
+    
+    MIN_VAL = -float('inf')
+    memo_sum = [[[MIN_VAL for _ in range(N)] for _ in range(N)] for _ in range(dp_depth)]
+    memo_path = [[["" for _ in range(N)] for _ in range(N)] for _ in range(dp_depth)]
+
+    memo_sum[0][0][0] = grid[0][0]
+    
+    for k in range(max_possible_moves):
+        next_move_num = k + 1
+        force_diag = (next_move_num % 3 == 0)
+        
+        for r in range(N):
+            for c in range(N):
+                if memo_sum[k][r][c] == MIN_VAL:
+                    continue
+                
+                current_sum = memo_sum[k][r][c]
+                current_path = memo_path[k][r][c]
+                
+                possible_steps = []
+                can_diag = (r + 1 < N and c + 1 < N)
+                
+                if force_diag:
+                    if can_diag:
+                        possible_steps.append((1, 1, 'X'))
+                    else:
+                        if r + 1 < N: possible_steps.append((1, 0, 'D'))
+                        if c + 1 < N: possible_steps.append((0, 1, 'R'))
+                else:
+                    if r + 1 < N: possible_steps.append((1, 0, 'D'))
+                    if c + 1 < N: possible_steps.append((0, 1, 'R'))
+                    if can_diag: possible_steps.append((1, 1, 'X'))
+                    
+                for dr, dc, char in possible_steps:
+                    nr, nc = r + dr, c + dc
+                    new_sum = current_sum + grid[nr][nc]
+                    new_path = current_path + char
+                    
+                    if new_sum > memo_sum[next_move_num][nr][nc]:
+                        memo_sum[next_move_num][nr][nc] = new_sum
+                        memo_path[next_move_num][nr][nc] = new_path
+                        
+    final_max_sum = MIN_VAL
+    final_path = ""
+    target_r, target_c = N - 1, N - 1
+    
+    for k in range(dp_depth):
+        if memo_sum[k][target_r][target_c] > final_max_sum:
+            final_max_sum = memo_sum[k][target_r][target_c]
+            final_path = memo_path[k][target_r][target_c]
+            
+    return final_max_sum, final_path
