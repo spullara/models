@@ -1,0 +1,164 @@
+Model: claude-opus-4-8
+Provider: anthropic
+Evaluated: 2026-05-28T16:43:06.982617+00:00
+
+=== TIMING ===
+Response time: 7.31s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    
+    from functools import lru_cache
+    
+    NEG = float('-inf')
+    
+    # state: (r, c, move_count) -> best (sum, path)
+    # move_count is number of moves already made
+    
+    memo = {}
+    
+    def can_diag(r, c):
+        return r + 1 < n and c + 1 < n
+    
+    def dp(r, c, move_count):
+        if r == n - 1 and c == n - 1:
+            return (0, "")
+        
+        key = (r, c, move_count)
+        if key in memo:
+            return memo[key]
+        
+        next_move_num = move_count + 1
+        must_diag = (next_move_num % 3 == 0)
+        
+        candidates = []
+        
+        diag_possible = can_diag(r, c)
+        
+        if must_diag and diag_possible:
+            allowed = ['X']
+        elif must_diag and not diag_possible:
+            allowed = ['R', 'D']
+        else:
+            allowed = ['R', 'D', 'X']
+        
+        best = (NEG, "")
+        
+        for mv in allowed:
+            if mv == 'R':
+                nr, nc = r, c + 1
+            elif mv == 'D':
+                nr, nc = r + 1, c
+            else:
+                nr, nc = r + 1, c + 1
+            
+            if nr >= n or nc >= n:
+                continue
+            
+            sub_sum, sub_path = dp(nr, nc, move_count + 1)
+            if sub_sum == NEG:
+                continue
+            
+            total = grid[nr][nc] + sub_sum
+            path = mv + sub_path
+            
+            if total > best[0]:
+                best = (total, path)
+        
+        memo[key] = best
+        return best
+    
+    result_sum, result_path = dp(0, 0, 0)
+    
+    if result_sum == NEG:
+        return (NEG, "")
+    
+    return (grid[0][0] + result_sum, result_path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    
+    from functools import lru_cache
+    
+    NEG = float('-inf')
+    
+    # state: (r, c, move_count) -> best (sum, path)
+    # move_count is number of moves already made
+    
+    memo = {}
+    
+    def can_diag(r, c):
+        return r + 1 < n and c + 1 < n
+    
+    def dp(r, c, move_count):
+        if r == n - 1 and c == n - 1:
+            return (0, "")
+        
+        key = (r, c, move_count)
+        if key in memo:
+            return memo[key]
+        
+        next_move_num = move_count + 1
+        must_diag = (next_move_num % 3 == 0)
+        
+        candidates = []
+        
+        diag_possible = can_diag(r, c)
+        
+        if must_diag and diag_possible:
+            allowed = ['X']
+        elif must_diag and not diag_possible:
+            allowed = ['R', 'D']
+        else:
+            allowed = ['R', 'D', 'X']
+        
+        best = (NEG, "")
+        
+        for mv in allowed:
+            if mv == 'R':
+                nr, nc = r, c + 1
+            elif mv == 'D':
+                nr, nc = r + 1, c
+            else:
+                nr, nc = r + 1, c + 1
+            
+            if nr >= n or nc >= n:
+                continue
+            
+            sub_sum, sub_path = dp(nr, nc, move_count + 1)
+            if sub_sum == NEG:
+                continue
+            
+            total = grid[nr][nc] + sub_sum
+            path = mv + sub_path
+            
+            if total > best[0]:
+                best = (total, path)
+        
+        memo[key] = best
+        return best
+    
+    result_sum, result_path = dp(0, 0, 0)
+    
+    if result_sum == NEG:
+        return (NEG, "")
+    
+    return (grid[0][0] + result_sum, result_path)
