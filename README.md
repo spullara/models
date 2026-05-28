@@ -1,9 +1,21 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-27 14:57:22
+Last updated: 2026-05-28 15:01:07
 
-## Updates This Week (2026-05-21 to 2026-05-27)
+## Updates This Week (2026-05-22 to 2026-05-28)
+
+### Gemini
+
+**Added**
+
+- models/gemini-3-pro-image (added: 2026-05-28)
+- models/gemini-3.1-flash-image (added: 2026-05-28)
+
+**Deleted**
+
+- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-05-28)
+- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-05-28)
 
 ### Mistral
 
@@ -19,8 +31,6 @@ Last updated: 2026-05-27 14:57:22
 - kimi-k2.6 (added: 2026-05-27)
 - qwen3.7-max-2026-05-17 (added: 2026-05-25)
 - qwen3.7-max-preview (added: 2026-05-25)
-- qwen3.7-max (added: 2026-05-21)
-- qwen3.7-max-2026-05-20 (added: 2026-05-21)
 
 ## Summary
 
@@ -30,7 +40,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 9/10
 
-**Gemini**: 50/90
+**Gemini**: 50/92
 
 **Grok**: 9/19
 
@@ -257,6 +267,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-3.1-flash-image (added: 2026-05-28)
+- models/gemini-3-pro-image (added: 2026-05-28)
 - models/gemini-3.5-flash (added: 2026-05-19)
 - models/antigravity-preview-05-2026 (added: 2026-05-19)
 - models/gemini-3.1-flash-lite (added: 2026-05-07)
@@ -275,10 +287,8 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
-- models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
-- models/gemini-2.5-flash-native-audio-latest (added: 2025-12-10)
 - models/veo-3.1-fast-generate-preview (added: 2025-12-09)
 - models/veo-3.1-generate-preview (added: 2025-12-05)
 - models/veo-3.0-generate-001 (added: 2025-12-05)
@@ -310,6 +320,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-05-28)
+- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-05-28)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-05-19)
 - models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-05-19)
 - models/omni-bag-staging-iapi-agent (deleted: 2026-05-11)
