@@ -51,8 +51,6 @@ qwen2.5-72b-instruct
 qwen2.5-7b-instruct
 qwen2.5-7b-instruct-1m
 qwen2.5-vl-32b-instruct
-qwen3-0.6b
-qwen3-1.7b
 qwen3-14b
 qwen3-235b-a22b
 qwen3-235b-a22b-instruct-2507
