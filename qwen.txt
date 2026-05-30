@@ -42,10 +42,6 @@ qwen-vl-max
 qwen-vl-ocr-2025-11-20
 qwen-vl-plus
 qwen2-7b-instruct
-qwen2.5-14b-instruct-1m
-qwen2.5-72b-instruct
-qwen2.5-7b-instruct-1m
-qwen2.5-vl-32b-instruct
 qwen3-14b
 qwen3-235b-a22b
 qwen3-235b-a22b-instruct-2507
