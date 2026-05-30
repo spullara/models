@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-30 17:20:20
+Last updated: 2026-05-30 17:21:15
 
 ## Updates This Week (2026-05-24 to 2026-05-30)
 
@@ -42,6 +42,9 @@ Last updated: 2026-05-30 17:20:20
 
 - qwen-max-2025-01-25 (deleted: 2026-05-30)
 - qwen-max-latest (deleted: 2026-05-30)
+- qwen-turbo-2025-04-28 (deleted: 2026-05-30)
+- qwen-turbo-latest (deleted: 2026-05-30)
+- qwen-vl-max-latest (deleted: 2026-05-30)
 
 ## Summary
 
@@ -61,7 +64,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 9/6
 
-**Qwen**: 162/4
+**Qwen**: 159/7
 
 
 ## OpenAI
@@ -739,12 +742,9 @@ Model counts shown as: **Available/Deleted**
 - qwen-vl-plus-2025-01-25 (added: 2025-12-18)
 - qwen-vl-plus (added: 2025-12-18)
 - qwen-vl-ocr-2025-11-20 (added: 2025-12-18)
-- qwen-vl-max-latest (added: 2025-12-18)
 - qwen-vl-max-2025-08-13 (added: 2025-12-18)
 - qwen-vl-max-2025-04-08 (added: 2025-12-18)
 - qwen-vl-max (added: 2025-12-18)
-- qwen-turbo-latest (added: 2025-12-18)
-- qwen-turbo-2025-04-28 (added: 2025-12-18)
 - qwen-turbo-2024-11-01 (added: 2025-12-18)
 - qwen-turbo (added: 2025-12-18)
 - qwen-plus-latest (added: 2025-12-18)
@@ -771,6 +771,9 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- qwen-vl-max-latest (deleted: 2026-05-30)
+- qwen-turbo-latest (deleted: 2026-05-30)
+- qwen-turbo-2025-04-28 (deleted: 2026-05-30)
 - qwen-max-latest (deleted: 2026-05-30)
 - qwen-max-2025-01-25 (deleted: 2026-05-30)
 - tongyi-skynet-llm-cm-2511 (deleted: 2026-01-15)
