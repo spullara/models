@@ -25,7 +25,6 @@ qwen-image-plus
 qwen-image-plus-2026-01-09
 qwen-max
 qwen-max-2025-01-25
-qwen-max-latest
 qwen-mt-flash
 qwen-mt-lite
 qwen-mt-plus
