@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-30 17:24:16
+Last updated: 2026-05-30 17:25:16
 
 ## Updates This Week (2026-05-24 to 2026-05-30)
 
@@ -52,8 +52,12 @@ Last updated: 2026-05-30 17:24:16
 - qwen-vl-plus-2025-05-07 (deleted: 2026-05-30)
 - qwen-vl-plus-latest (deleted: 2026-05-30)
 - qwen2.5-14b-instruct (deleted: 2026-05-30)
+- qwen2.5-14b-instruct-1m (deleted: 2026-05-30)
 - qwen2.5-32b-instruct (deleted: 2026-05-30)
+- qwen2.5-72b-instruct (deleted: 2026-05-30)
 - qwen2.5-7b-instruct (deleted: 2026-05-30)
+- qwen2.5-7b-instruct-1m (deleted: 2026-05-30)
+- qwen2.5-vl-32b-instruct (deleted: 2026-05-30)
 - qwen3-0.6b (deleted: 2026-05-30)
 - qwen3-1.7b (deleted: 2026-05-30)
 - qwen3-4b (deleted: 2026-05-30)
@@ -76,7 +80,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 9/6
 
-**Qwen**: 147/19
+**Qwen**: 143/23
 
 
 ## OpenAI
@@ -738,10 +742,6 @@ Model counts shown as: **Available/Deleted**
 - qwen3-235b-a22b-instruct-2507 (added: 2025-12-18)
 - qwen3-235b-a22b (added: 2025-12-18)
 - qwen3-14b (added: 2025-12-18)
-- qwen2.5-vl-32b-instruct (added: 2025-12-18)
-- qwen2.5-7b-instruct-1m (added: 2025-12-18)
-- qwen2.5-72b-instruct (added: 2025-12-18)
-- qwen2.5-14b-instruct-1m (added: 2025-12-18)
 - qwen2-7b-instruct (added: 2025-12-18)
 - qwen-vl-plus (added: 2025-12-18)
 - qwen-vl-ocr-2025-11-20 (added: 2025-12-18)
@@ -774,8 +774,12 @@ Model counts shown as: **Available/Deleted**
 - qwen3-4b (deleted: 2026-05-30)
 - qwen3-1.7b (deleted: 2026-05-30)
 - qwen3-0.6b (deleted: 2026-05-30)
+- qwen2.5-vl-32b-instruct (deleted: 2026-05-30)
+- qwen2.5-7b-instruct-1m (deleted: 2026-05-30)
 - qwen2.5-7b-instruct (deleted: 2026-05-30)
+- qwen2.5-72b-instruct (deleted: 2026-05-30)
 - qwen2.5-32b-instruct (deleted: 2026-05-30)
+- qwen2.5-14b-instruct-1m (deleted: 2026-05-30)
 - qwen2.5-14b-instruct (deleted: 2026-05-30)
 - qwen-vl-plus-latest (deleted: 2026-05-30)
 - qwen-vl-plus-2025-05-07 (deleted: 2026-05-30)
