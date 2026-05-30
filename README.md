@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-30 17:25:16
+Last updated: 2026-05-30 22:31:17
 
 ## Updates This Week (2026-05-24 to 2026-05-30)
 
@@ -22,6 +22,12 @@ Last updated: 2026-05-30 17:25:16
 
 - models/gemini-2.5-flash-native-audio-latest (deleted: 2026-05-28)
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-05-28)
+
+### Grok
+
+**Added**
+
+- grok-imagine-video-1.5-preview (added: 2026-05-30)
 
 ### Mistral
 
@@ -72,7 +78,7 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 50/92
 
-**Grok**: 9/19
+**Grok**: 10/19
 
 **Mistral**: 64/34
 
@@ -448,6 +454,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- grok-imagine-video-1.5-preview (added: 2026-05-30)
 - grok-build-0.1 (added: 2026-05-20)
 - grok-imagine-video-0428 (added: 2026-05-06)
 - grok-imagine-image-quality (added: 2026-05-06)
