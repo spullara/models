@@ -39,12 +39,9 @@ qwen-plus-character
 qwen-plus-latest
 qwen-turbo
 qwen-turbo-2024-11-01
-qwen-turbo-2025-04-28
-qwen-turbo-latest
 qwen-vl-max
 qwen-vl-max-2025-04-08
 qwen-vl-max-2025-08-13
-qwen-vl-max-latest
 qwen-vl-ocr-2025-11-20
 qwen-vl-plus
 qwen-vl-plus-2025-01-25
