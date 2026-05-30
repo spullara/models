@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-30 17:21:15
+Last updated: 2026-05-30 17:22:17
 
 ## Updates This Week (2026-05-24 to 2026-05-30)
 
@@ -42,9 +42,14 @@ Last updated: 2026-05-30 17:21:15
 
 - qwen-max-2025-01-25 (deleted: 2026-05-30)
 - qwen-max-latest (deleted: 2026-05-30)
+- qwen-turbo-2024-11-01 (deleted: 2026-05-30)
 - qwen-turbo-2025-04-28 (deleted: 2026-05-30)
 - qwen-turbo-latest (deleted: 2026-05-30)
+- qwen-vl-max-2025-04-08 (deleted: 2026-05-30)
+- qwen-vl-max-2025-08-13 (deleted: 2026-05-30)
 - qwen-vl-max-latest (deleted: 2026-05-30)
+- qwen-vl-plus-latest (deleted: 2026-05-30)
+- qwen3-4b (deleted: 2026-05-30)
 
 ## Summary
 
@@ -64,7 +69,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 9/6
 
-**Qwen**: 159/7
+**Qwen**: 154/12
 
 
 ## OpenAI
@@ -718,7 +723,6 @@ Model counts shown as: **Available/Deleted**
 - qwen3-asr-flash-realtime-2025-10-27 (added: 2025-12-18)
 - qwen3-asr-flash-realtime (added: 2025-12-18)
 - qwen3-8b (added: 2025-12-18)
-- qwen3-4b (added: 2025-12-18)
 - qwen3-32b (added: 2025-12-18)
 - qwen3-30b-a3b-thinking-2507 (added: 2025-12-18)
 - qwen3-30b-a3b-instruct-2507 (added: 2025-12-18)
@@ -737,15 +741,11 @@ Model counts shown as: **Available/Deleted**
 - qwen2.5-14b-instruct-1m (added: 2025-12-18)
 - qwen2.5-14b-instruct (added: 2025-12-18)
 - qwen2-7b-instruct (added: 2025-12-18)
-- qwen-vl-plus-latest (added: 2025-12-18)
 - qwen-vl-plus-2025-05-07 (added: 2025-12-18)
 - qwen-vl-plus-2025-01-25 (added: 2025-12-18)
 - qwen-vl-plus (added: 2025-12-18)
 - qwen-vl-ocr-2025-11-20 (added: 2025-12-18)
-- qwen-vl-max-2025-08-13 (added: 2025-12-18)
-- qwen-vl-max-2025-04-08 (added: 2025-12-18)
 - qwen-vl-max (added: 2025-12-18)
-- qwen-turbo-2024-11-01 (added: 2025-12-18)
 - qwen-turbo (added: 2025-12-18)
 - qwen-plus-latest (added: 2025-12-18)
 - qwen-plus-2025-12-01 (added: 2025-12-18)
@@ -771,9 +771,14 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- qwen3-4b (deleted: 2026-05-30)
+- qwen-vl-plus-latest (deleted: 2026-05-30)
 - qwen-vl-max-latest (deleted: 2026-05-30)
+- qwen-vl-max-2025-08-13 (deleted: 2026-05-30)
+- qwen-vl-max-2025-04-08 (deleted: 2026-05-30)
 - qwen-turbo-latest (deleted: 2026-05-30)
 - qwen-turbo-2025-04-28 (deleted: 2026-05-30)
+- qwen-turbo-2024-11-01 (deleted: 2026-05-30)
 - qwen-max-latest (deleted: 2026-05-30)
 - qwen-max-2025-01-25 (deleted: 2026-05-30)
 - tongyi-skynet-llm-cm-2511 (deleted: 2026-01-15)
