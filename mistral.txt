@@ -4,9 +4,7 @@ codestral-embed-2505
 codestral-latest
 devstral-2512
 devstral-latest
-devstral-medium-2507
 devstral-medium-latest
-devstral-small-2507
 labs-leanstral-2603
 magistral-medium-2509
 magistral-medium-latest
@@ -20,10 +18,8 @@ ministral-8b-2512
 ministral-8b-latest
 mistral-embed
 mistral-embed-2312
-mistral-large-2411
 mistral-large-2512
 mistral-large-latest
-mistral-large-pixtral-2411
 mistral-medium
 mistral-medium-2505
 mistral-medium-2508
@@ -36,7 +32,6 @@ mistral-medium-latest
 mistral-moderation-2411
 mistral-moderation-2603
 mistral-moderation-latest
-mistral-ocr-2505
 mistral-ocr-2512
 mistral-ocr-latest
 mistral-small-2506
@@ -49,14 +44,10 @@ mistral-vibe-cli-latest
 mistral-vibe-cli-with-tools
 open-mistral-nemo
 open-mistral-nemo-2407
-pixtral-large-2411
-pixtral-large-latest
-voxtral-mini-2507
 voxtral-mini-2602
 voxtral-mini-latest
 voxtral-mini-realtime-2602
 voxtral-mini-realtime-latest
-voxtral-mini-transcribe-2507
 voxtral-mini-transcribe-realtime-2602
 voxtral-mini-tts-2603
 voxtral-mini-tts-latest
