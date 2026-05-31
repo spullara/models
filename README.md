@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-30 22:33:15
+Last updated: 2026-05-31 12:00:18
 
-## Updates This Week (2026-05-24 to 2026-05-30)
+## Updates This Week (2026-05-25 to 2026-05-31)
 
 ### Anthropic
 
@@ -33,6 +33,15 @@ Last updated: 2026-05-30 22:33:15
 
 **Deleted**
 
+- devstral-medium-2507 (deleted: 2026-05-31)
+- devstral-small-2507 (deleted: 2026-05-31)
+- mistral-large-2411 (deleted: 2026-05-31)
+- mistral-large-pixtral-2411 (deleted: 2026-05-31)
+- mistral-ocr-2505 (deleted: 2026-05-31)
+- pixtral-large-2411 (deleted: 2026-05-31)
+- pixtral-large-latest (deleted: 2026-05-31)
+- voxtral-mini-2507 (deleted: 2026-05-31)
+- voxtral-mini-transcribe-2507 (deleted: 2026-05-31)
 - mistral-small-2603-ecosia (deleted: 2026-05-26)
 
 ### Qwen
@@ -80,7 +89,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/19
 
-**Mistral**: 64/34
+**Mistral**: 55/43
 
 **DeepSeek**: 2/2
 
@@ -518,11 +527,7 @@ Model counts shown as: **Available/Deleted**
 - ministral-14b-2512 (added: 2025-12-02)
 - voxtral-small-latest (added: 2025-11-24)
 - voxtral-small-2507 (added: 2025-11-24)
-- voxtral-mini-transcribe-2507 (added: 2025-11-24)
 - voxtral-mini-latest (added: 2025-11-24)
-- voxtral-mini-2507 (added: 2025-11-24)
-- pixtral-large-latest (added: 2025-11-24)
-- pixtral-large-2411 (added: 2025-11-24)
 - open-mistral-nemo-2407 (added: 2025-11-24)
 - open-mistral-nemo (added: 2025-11-24)
 - mistral-tiny-latest (added: 2025-11-24)
@@ -530,16 +535,13 @@ Model counts shown as: **Available/Deleted**
 - mistral-small-latest (added: 2025-11-24)
 - mistral-small-2506 (added: 2025-11-24)
 - mistral-ocr-latest (added: 2025-11-24)
-- mistral-ocr-2505 (added: 2025-11-24)
 - mistral-moderation-latest (added: 2025-11-24)
 - mistral-moderation-2411 (added: 2025-11-24)
 - mistral-medium-latest (added: 2025-11-24)
 - mistral-medium-2508 (added: 2025-11-24)
 - mistral-medium-2505 (added: 2025-11-24)
 - mistral-medium (added: 2025-11-24)
-- mistral-large-pixtral-2411 (added: 2025-11-24)
 - mistral-large-latest (added: 2025-11-24)
-- mistral-large-2411 (added: 2025-11-24)
 - mistral-embed-2312 (added: 2025-11-24)
 - mistral-embed (added: 2025-11-24)
 - ministral-8b-latest (added: 2025-11-24)
@@ -548,9 +550,7 @@ Model counts shown as: **Available/Deleted**
 - magistral-small-2509 (added: 2025-11-24)
 - magistral-medium-latest (added: 2025-11-24)
 - magistral-medium-2509 (added: 2025-11-24)
-- devstral-small-2507 (added: 2025-11-24)
 - devstral-medium-latest (added: 2025-11-24)
-- devstral-medium-2507 (added: 2025-11-24)
 - codestral-latest (added: 2025-11-24)
 - codestral-embed-2505 (added: 2025-11-24)
 - codestral-embed (added: 2025-11-24)
@@ -558,6 +558,15 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- voxtral-mini-transcribe-2507 (deleted: 2026-05-31)
+- voxtral-mini-2507 (deleted: 2026-05-31)
+- pixtral-large-latest (deleted: 2026-05-31)
+- pixtral-large-2411 (deleted: 2026-05-31)
+- mistral-ocr-2505 (deleted: 2026-05-31)
+- mistral-large-pixtral-2411 (deleted: 2026-05-31)
+- mistral-large-2411 (deleted: 2026-05-31)
+- devstral-small-2507 (deleted: 2026-05-31)
+- devstral-medium-2507 (deleted: 2026-05-31)
 - mistral-small-2603-ecosia (deleted: 2026-05-26)
 - labs-mistral-small-creative (deleted: 2026-04-30)
 - mistral-embed-dim256-2510 (deleted: 2026-04-23)
