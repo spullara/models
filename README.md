@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-06-01 07:18:17
+Last updated: 2026-06-01 09:07:21
 
 ## Updates This Week (2026-05-26 to 2026-06-01)
 
@@ -31,12 +31,9 @@ Last updated: 2026-06-01 07:18:17
 
 ### Mistral
 
-**Added**
-
-- voxtral-mini-transcribe-2602 (added: 2026-06-01)
-
 **Deleted**
 
+- voxtral-mini-transcribe-2602 (deleted: 2026-06-01)
 - devstral-medium-2507 (deleted: 2026-05-31)
 - devstral-small-2507 (deleted: 2026-05-31)
 - mistral-large-2411 (deleted: 2026-05-31)
@@ -44,7 +41,6 @@ Last updated: 2026-06-01 07:18:17
 - mistral-ocr-2505 (deleted: 2026-05-31)
 - pixtral-large-2411 (deleted: 2026-05-31)
 - pixtral-large-latest (deleted: 2026-05-31)
-- voxtral-mini-2507 (deleted: 2026-05-31)
 - voxtral-mini-transcribe-2507 (deleted: 2026-05-31)
 - mistral-small-2603-ecosia (deleted: 2026-05-26)
 
@@ -502,7 +498,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- voxtral-mini-transcribe-2602 (added: 2026-06-01)
 - mistral-medium-3-5 (added: 2026-04-21)
 - mistral-medium-c21211-r0-75 (added: 2026-04-09)
 - mistral-medium-3.5 (added: 2026-04-09)
@@ -531,6 +526,7 @@ Model counts shown as: **Available/Deleted**
 - voxtral-small-latest (added: 2025-11-24)
 - voxtral-small-2507 (added: 2025-11-24)
 - voxtral-mini-latest (added: 2025-11-24)
+- voxtral-mini-2507 (added: 2025-11-24)
 - open-mistral-nemo-2407 (added: 2025-11-24)
 - open-mistral-nemo (added: 2025-11-24)
 - mistral-tiny-latest (added: 2025-11-24)
@@ -561,8 +557,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- voxtral-mini-transcribe-2602 (deleted: 2026-06-01)
 - voxtral-mini-transcribe-2507 (deleted: 2026-05-31)
-- voxtral-mini-2507 (deleted: 2026-05-31)
 - pixtral-large-latest (deleted: 2026-05-31)
 - pixtral-large-2411 (deleted: 2026-05-31)
 - mistral-ocr-2505 (deleted: 2026-05-31)
