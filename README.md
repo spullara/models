@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-05-31 12:00:18
+Last updated: 2026-06-01 07:18:17
 
-## Updates This Week (2026-05-25 to 2026-05-31)
+## Updates This Week (2026-05-26 to 2026-06-01)
 
 ### Anthropic
 
@@ -31,6 +31,10 @@ Last updated: 2026-05-31 12:00:18
 
 ### Mistral
 
+**Added**
+
+- voxtral-mini-transcribe-2602 (added: 2026-06-01)
+
 **Deleted**
 
 - devstral-medium-2507 (deleted: 2026-05-31)
@@ -50,8 +54,6 @@ Last updated: 2026-05-31 12:00:18
 
 - glm-5.1 (added: 2026-05-27)
 - kimi-k2.6 (added: 2026-05-27)
-- qwen3.7-max-2026-05-17 (added: 2026-05-25)
-- qwen3.7-max-preview (added: 2026-05-25)
 
 **Deleted**
 
@@ -89,7 +91,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/19
 
-**Mistral**: 55/43
+**Mistral**: 56/43
 
 **DeepSeek**: 2/2
 
@@ -500,6 +502,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- voxtral-mini-transcribe-2602 (added: 2026-06-01)
 - mistral-medium-3-5 (added: 2026-04-21)
 - mistral-medium-c21211-r0-75 (added: 2026-04-09)
 - mistral-medium-3.5 (added: 2026-04-09)
