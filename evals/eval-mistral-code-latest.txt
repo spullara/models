@@ -1,0 +1,109 @@
+Model: mistral-code-latest
+Provider: mistral
+Evaluated: 2026-06-02T10:17:24.047403+00:00
+
+=== TIMING ===
+Response time: 3.15s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 73
+Calculated sum: 15
+Sum matches: NO
+Path valid: NO
+Path error: Move 3 must be diagonal (X) but was D
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+
+    dp = [[(0, "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            max_val = -1
+            best_path = ""
+            if i > 0:
+                val, path = dp[i-1][j]
+                if val > max_val:
+                    max_val = val
+                    best_path = path + "D"
+            if j > 0:
+                val, path = dp[i][j-1]
+                if val > max_val:
+                    max_val = val
+                    best_path = path + "R"
+            if i > 0 and j > 0:
+                val, path = dp[i-1][j-1]
+                if val > max_val:
+                    max_val = val
+                    best_path = path + "X"
+            dp[i][j] = (max_val + grid[i][j], best_path)
+
+    max_sum, path = dp[n-1][n-1]
+    path_list = list(path)
+
+    for k in range(2, len(path_list), 3):
+        if path_list[k] != 'X':
+            if k+1 < len(path_list) and path_list[k+1] == 'X':
+                path_list[k], path_list[k+1] = path_list[k+1], path_list[k]
+            elif k-1 >= 0 and path_list[k-1] == 'X':
+                path_list[k], path_list[k-1] = path_list[k-1], path_list[k]
+
+    corrected_path = ''.join(path_list)
+    return (max_sum, corrected_path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+
+    dp = [[(0, "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            max_val = -1
+            best_path = ""
+            if i > 0:
+                val, path = dp[i-1][j]
+                if val > max_val:
+                    max_val = val
+                    best_path = path + "D"
+            if j > 0:
+                val, path = dp[i][j-1]
+                if val > max_val:
+                    max_val = val
+                    best_path = path + "R"
+            if i > 0 and j > 0:
+                val, path = dp[i-1][j-1]
+                if val > max_val:
+                    max_val = val
+                    best_path = path + "X"
+            dp[i][j] = (max_val + grid[i][j], best_path)
+
+    max_sum, path = dp[n-1][n-1]
+    path_list = list(path)
+
+    for k in range(2, len(path_list), 3):
+        if path_list[k] != 'X':
+            if k+1 < len(path_list) and path_list[k+1] == 'X':
+                path_list[k], path_list[k+1] = path_list[k+1], path_list[k]
+            elif k-1 >= 0 and path_list[k-1] == 'X':
+                path_list[k], path_list[k-1] = path_list[k-1], path_list[k]
+
+    corrected_path = ''.join(path_list)
+    return (max_sum, corrected_path)

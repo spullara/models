@@ -1,0 +1,106 @@
+Model: mistral-code-fim-latest
+Provider: mistral
+Evaluated: 2026-06-02T10:17:21.011271+00:00
+
+=== TIMING ===
+Response time: 3.0s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
+    def dfs(i, j, move_count):
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+
+        max_sum = -float('inf')
+        best_path = ""
+
+        if move_count % 3 == 0:
+            if i + 1 < n and j + 1 < n:
+                sum_val, path = dfs(i + 1, j + 1, move_count + 1)
+                total = grid[i][j] + sum_val
+                if total > max_sum:
+                    max_sum = total
+                    best_path = "X" + path
+
+        if max_sum == -float('inf') or move_count % 3 != 0:
+            if i + 1 < n:
+                sum_val, path = dfs(i + 1, j, move_count + 1)
+                total = grid[i][j] + sum_val
+                if total > max_sum:
+                    max_sum = total
+                    best_path = "D" + path
+
+            if j + 1 < n:
+                sum_val, path = dfs(i, j + 1, move_count + 1)
+                total = grid[i][j] + sum_val
+                if total > max_sum:
+                    max_sum = total
+                    best_path = "R" + path
+
+        return (max_sum, best_path)
+
+    max_sum, path = dfs(0, 0, 1)
+    return (max_sum, path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
+    def dfs(i, j, move_count):
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+
+        max_sum = -float('inf')
+        best_path = ""
+
+        if move_count % 3 == 0:
+            if i + 1 < n and j + 1 < n:
+                sum_val, path = dfs(i + 1, j + 1, move_count + 1)
+                total = grid[i][j] + sum_val
+                if total > max_sum:
+                    max_sum = total
+                    best_path = "X" + path
+
+        if max_sum == -float('inf') or move_count % 3 != 0:
+            if i + 1 < n:
+                sum_val, path = dfs(i + 1, j, move_count + 1)
+                total = grid[i][j] + sum_val
+                if total > max_sum:
+                    max_sum = total
+                    best_path = "D" + path
+
+            if j + 1 < n:
+                sum_val, path = dfs(i, j + 1, move_count + 1)
+                total = grid[i][j] + sum_val
+                if total > max_sum:
+                    max_sum = total
+                    best_path = "R" + path
+
+        return (max_sum, best_path)
+
+    max_sum, path = dfs(0, 0, 1)
+    return (max_sum, path)

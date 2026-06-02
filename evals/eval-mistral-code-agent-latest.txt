@@ -1,0 +1,122 @@
+Model: mistral-code-agent-latest
+Provider: mistral
+Evaluated: 2026-06-02T10:17:06.988601+00:00
+
+=== TIMING ===
+Response time: 13.99s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 34
+Calculated sum: 34
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    from heapq import heappop, heappush
+
+    heap = []
+    heappush(heap, (-grid[0][0], 0, 0, 0, ""))
+
+    visited = {}
+
+    while heap:
+        neg_sum, x, y, moves, path = heappop(heap)
+        current_sum = -neg_sum
+
+        if (x, y, moves) in visited and visited[(x, y, moves)] >= current_sum:
+            continue
+
+        visited[(x, y, moves)] = current_sum
+
+        if x == n - 1 and y == n - 1:
+            return (current_sum, path)
+
+        next_moves = moves + 1
+        is_diagonal_required = (next_moves % 3 == 0)
+
+        directions = []
+        if is_diagonal_required:
+            if x + 1 < n and y + 1 < n:
+                directions.append(('X', x + 1, y + 1))
+            if not directions:
+                if x + 1 < n:
+                    directions.append(('D', x + 1, y))
+                if y + 1 < n:
+                    directions.append(('R', x, y + 1))
+        else:
+            if x + 1 < n and y + 1 < n:
+                directions.append(('X', x + 1, y + 1))
+            if x + 1 < n:
+                directions.append(('D', x + 1, y))
+            if y + 1 < n:
+                directions.append(('R', x, y + 1))
+
+        for move, nx, ny in directions:
+            new_sum = current_sum + grid[nx][ny]
+            new_path = path + move
+            heappush(heap, (-new_sum, nx, ny, next_moves, new_path))
+
+    return (0, "")
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    from heapq import heappop, heappush
+
+    heap = []
+    heappush(heap, (-grid[0][0], 0, 0, 0, ""))
+
+    visited = {}
+
+    while heap:
+        neg_sum, x, y, moves, path = heappop(heap)
+        current_sum = -neg_sum
+
+        if (x, y, moves) in visited and visited[(x, y, moves)] >= current_sum:
+            continue
+
+        visited[(x, y, moves)] = current_sum
+
+        if x == n - 1 and y == n - 1:
+            return (current_sum, path)
+
+        next_moves = moves + 1
+        is_diagonal_required = (next_moves % 3 == 0)
+
+        directions = []
+        if is_diagonal_required:
+            if x + 1 < n and y + 1 < n:
+                directions.append(('X', x + 1, y + 1))
+            if not directions:
+                if x + 1 < n:
+                    directions.append(('D', x + 1, y))
+                if y + 1 < n:
+                    directions.append(('R', x, y + 1))
+        else:
+            if x + 1 < n and y + 1 < n:
+                directions.append(('X', x + 1, y + 1))
+            if x + 1 < n:
+                directions.append(('D', x + 1, y))
+            if y + 1 < n:
+                directions.append(('R', x, y + 1))
+
+        for move, nx, ny in directions:
+            new_sum = current_sum + grid[nx][ny]
+            new_path = path + move
+            heappush(heap, (-new_sum, nx, ny, next_moves, new_path))
+
+    return (0, "")
