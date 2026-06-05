@@ -1,27 +1,15 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-06-02 10:17:41
+Last updated: 2026-06-05 23:20:18
 
-## Updates This Week (2026-05-27 to 2026-06-02)
+## Updates This Week (2026-05-30 to 2026-06-05)
 
-### Anthropic
-
-**Added**
-
-- claude-opus-4-8 (added: 2026-05-28)
-
-### Gemini
+### OpenAI
 
 **Added**
 
-- models/gemini-3-pro-image (added: 2026-05-28)
-- models/gemini-3.1-flash-image (added: 2026-05-28)
-
-**Deleted**
-
-- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-05-28)
-- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-05-28)
+- gpt-5.5-pagi-local-ev3 (added: 2026-06-05)
 
 ### Grok
 
@@ -55,8 +43,6 @@ Last updated: 2026-06-02 10:17:41
 
 - qwen3.7-plus (added: 2026-06-01)
 - qwen3.7-plus-2026-05-26 (added: 2026-06-01)
-- glm-5.1 (added: 2026-05-27)
-- kimi-k2.6 (added: 2026-05-27)
 
 **Deleted**
 
@@ -86,7 +72,7 @@ Last updated: 2026-06-02 10:17:41
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 126/49
+**OpenAI**: 127/49
 
 **Anthropic**: 10/10
 
@@ -107,6 +93,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- gpt-5.5-pagi-local-ev3 (added: 2026-06-05)
 - gpt-realtime-whisper (added: 2026-05-07)
 - gpt-realtime-translate (added: 2026-05-07)
 - gpt-realtime-2 (added: 2026-05-07)
