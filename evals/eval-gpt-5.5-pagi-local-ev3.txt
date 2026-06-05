@@ -1,0 +1,26 @@
+Model: gpt-5.5-pagi-local-ev3
+Provider: openai_responses
+Evaluated: 2026-06-05T23:20:06.753196+00:00
+
+=== TIMING ===
+Response time: 1.22s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 500: {
+  "error": {
+    "message": "An error occurred while processing your request. You can retry your request, or contact us through our help center at help.openai.com if the error persists. Please include the request ID req_63da26c1ced54cea8a8efa122b792019 in your message.",
+    "type": "server_error",
+    "param": null,
+    "code": "server_error"
+  }
+}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
