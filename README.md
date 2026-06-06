@@ -1,21 +1,15 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-06-05 23:20:18
+Last updated: 2026-06-06 00:03:18
 
-## Updates This Week (2026-05-30 to 2026-06-05)
+## Updates This Week (2026-05-31 to 2026-06-06)
 
 ### OpenAI
 
-**Added**
+**Deleted**
 
-- gpt-5.5-pagi-local-ev3 (added: 2026-06-05)
-
-### Grok
-
-**Added**
-
-- grok-imagine-video-1.5-preview (added: 2026-05-30)
+- gpt-5.5-pagi-local-ev3 (deleted: 2026-06-06)
 
 ### Mistral
 
@@ -44,35 +38,11 @@ Last updated: 2026-06-05 23:20:18
 - qwen3.7-plus (added: 2026-06-01)
 - qwen3.7-plus-2026-05-26 (added: 2026-06-01)
 
-**Deleted**
-
-- qwen-max-2025-01-25 (deleted: 2026-05-30)
-- qwen-max-latest (deleted: 2026-05-30)
-- qwen-turbo-2024-11-01 (deleted: 2026-05-30)
-- qwen-turbo-2025-04-28 (deleted: 2026-05-30)
-- qwen-turbo-latest (deleted: 2026-05-30)
-- qwen-vl-max-2025-04-08 (deleted: 2026-05-30)
-- qwen-vl-max-2025-08-13 (deleted: 2026-05-30)
-- qwen-vl-max-latest (deleted: 2026-05-30)
-- qwen-vl-plus-2025-01-25 (deleted: 2026-05-30)
-- qwen-vl-plus-2025-05-07 (deleted: 2026-05-30)
-- qwen-vl-plus-latest (deleted: 2026-05-30)
-- qwen2.5-14b-instruct (deleted: 2026-05-30)
-- qwen2.5-14b-instruct-1m (deleted: 2026-05-30)
-- qwen2.5-32b-instruct (deleted: 2026-05-30)
-- qwen2.5-72b-instruct (deleted: 2026-05-30)
-- qwen2.5-7b-instruct (deleted: 2026-05-30)
-- qwen2.5-7b-instruct-1m (deleted: 2026-05-30)
-- qwen2.5-vl-32b-instruct (deleted: 2026-05-30)
-- qwen3-0.6b (deleted: 2026-05-30)
-- qwen3-1.7b (deleted: 2026-05-30)
-- qwen3-4b (deleted: 2026-05-30)
-
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 127/49
+**OpenAI**: 126/50
 
 **Anthropic**: 10/10
 
@@ -93,7 +63,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- gpt-5.5-pagi-local-ev3 (added: 2026-06-05)
 - gpt-realtime-whisper (added: 2026-05-07)
 - gpt-realtime-translate (added: 2026-05-07)
 - gpt-realtime-2 (added: 2026-05-07)
@@ -223,6 +192,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- gpt-5.5-pagi-local-ev3 (deleted: 2026-06-06)
 - gpt-4o-realtime-preview-2025-06-03 (deleted: 2026-05-18)
 - gpt-4o-realtime-preview-2024-12-17 (deleted: 2026-05-18)
 - gpt-4o-realtime-preview (deleted: 2026-05-18)
