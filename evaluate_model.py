@@ -208,7 +208,11 @@ def extract_response_text(provider: str, response_json: dict) -> str:
                             return content[0].get('text', '')
             return None
         elif fmt == 'anthropic':
-            return response_json['content'][0]['text']
+            # Content may include thinking blocks before the text block
+            for block in response_json.get('content', []):
+                if block.get('type') == 'text':
+                    return block.get('text')
+            return None
         elif fmt == 'gemini':
             return response_json['candidates'][0]['content']['parts'][0]['text']
     except (KeyError, IndexError) as e:

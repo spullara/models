@@ -1,19 +1,102 @@
 Model: claude-fable-5
 Provider: anthropic
-Evaluated: 2026-06-09T16:52:06.298418+00:00
+Evaluated: 2026-06-09T17:24:30.349873+00:00
 
 === TIMING ===
-Response time: 13.8s
+Response time: 18.05s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: direct
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: Failed to extract response text
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    import sys
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    sys.setrecursionlimit(10000 + 4 * n * n)
+    NEG = float('-inf')
+    memo = {}
+
+    def dp(r, c, m):
+        if r == n - 1 and c == n - 1:
+            return (grid[r][c], "")
+        key = (r, c, m)
+        if key in memo:
+            return memo[key]
+        next_move = m + 1
+        forced = (next_move % 3 == 0)
+        can_diag = (r + 1 < n) and (c + 1 < n)
+        moves = []
+        if forced and can_diag:
+            moves = [('X', r + 1, c + 1)]
+        else:
+            if c + 1 < n:
+                moves.append(('R', r, c + 1))
+            if r + 1 < n:
+                moves.append(('D', r + 1, c))
+            if can_diag:
+                moves.append(('X', r + 1, c + 1))
+        best_sum = NEG
+        best_path = ""
+        for mv, nr, nc in moves:
+            s, p = dp(nr, nc, next_move % 3)
+            if s != NEG:
+                total = grid[r][c] + s
+                if total > best_sum:
+                    best_sum = total
+                    best_path = mv + p
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+
+    return dp(0, 0, 0)
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    import sys
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    sys.setrecursionlimit(10000 + 4 * n * n)
+    NEG = float('-inf')
+    memo = {}
+
+    def dp(r, c, m):
+        if r == n - 1 and c == n - 1:
+            return (grid[r][c], "")
+        key = (r, c, m)
+        if key in memo:
+            return memo[key]
+        next_move = m + 1
+        forced = (next_move % 3 == 0)
+        can_diag = (r + 1 < n) and (c + 1 < n)
+        moves = []
+        if forced and can_diag:
+            moves = [('X', r + 1, c + 1)]
+        else:
+            if c + 1 < n:
+                moves.append(('R', r, c + 1))
+            if r + 1 < n:
+                moves.append(('D', r + 1, c))
+            if can_diag:
+                moves.append(('X', r + 1, c + 1))
+        best_sum = NEG
+        best_path = ""
+        for mv, nr, nc in moves:
+            s, p = dp(nr, nc, next_move % 3)
+            if s != NEG:
+                total = grid[r][c] + s
+                if total > best_sum:
+                    best_sum = total
+                    best_path = mv + p
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+
+    return dp(0, 0, 0)
