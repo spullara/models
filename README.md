@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-06-06 00:03:18
+Last updated: 2026-06-09 16:52:35
 
-## Updates This Week (2026-05-31 to 2026-06-06)
+## Updates This Week (2026-06-03 to 2026-06-09)
 
 ### OpenAI
 
@@ -11,32 +11,11 @@ Last updated: 2026-06-06 00:03:18
 
 - gpt-5.5-pagi-local-ev3 (deleted: 2026-06-06)
 
-### Mistral
+### Anthropic
 
 **Added**
 
-- mistral-code-agent-latest (added: 2026-06-02)
-- mistral-code-fim-latest (added: 2026-06-02)
-- mistral-code-latest (added: 2026-06-02)
-
-**Deleted**
-
-- voxtral-mini-transcribe-2602 (deleted: 2026-06-01)
-- devstral-medium-2507 (deleted: 2026-05-31)
-- devstral-small-2507 (deleted: 2026-05-31)
-- mistral-large-2411 (deleted: 2026-05-31)
-- mistral-large-pixtral-2411 (deleted: 2026-05-31)
-- mistral-ocr-2505 (deleted: 2026-05-31)
-- pixtral-large-2411 (deleted: 2026-05-31)
-- pixtral-large-latest (deleted: 2026-05-31)
-- voxtral-mini-transcribe-2507 (deleted: 2026-05-31)
-
-### Qwen
-
-**Added**
-
-- qwen3.7-plus (added: 2026-06-01)
-- qwen3.7-plus-2026-05-26 (added: 2026-06-01)
+- claude-fable-5 (added: 2026-06-09)
 
 ## Summary
 
@@ -44,7 +23,7 @@ Model counts shown as: **Available/Deleted**
 
 **OpenAI**: 126/50
 
-**Anthropic**: 10/10
+**Anthropic**: 11/10
 
 **Gemini**: 50/92
 
@@ -247,6 +226,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- claude-fable-5 (added: 2026-06-09)
 - claude-opus-4-8 (added: 2026-05-28)
 - claude-opus-4-7 (added: 2026-04-16)
 - claude-sonnet-4-6 (added: 2026-02-17)
