@@ -1,0 +1,19 @@
+Model: claude-fable-5
+Provider: anthropic
+Evaluated: 2026-06-09T16:52:06.298418+00:00
+
+=== TIMING ===
+Response time: 13.8s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: Failed to extract response text
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
