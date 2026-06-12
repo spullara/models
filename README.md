@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-06-10 11:19:20
+Last updated: 2026-06-12 09:48:17
 
-## Updates This Week (2026-06-04 to 2026-06-10)
+## Updates This Week (2026-06-06 to 2026-06-12)
 
 ### OpenAI
 
@@ -22,6 +22,12 @@ Last updated: 2026-06-10 11:19:20
 **Deleted**
 
 - mistral-medium-c21211-r0-75 (deleted: 2026-06-10)
+
+### Kimi
+
+**Added**
+
+- kimi-k2.7-code (added: 2026-06-12)
 
 ### Qwen
 
@@ -49,7 +55,7 @@ Model counts shown as: **Available/Deleted**
 
 **DeepSeek**: 2/2
 
-**Kimi**: 9/6
+**Kimi**: 10/6
 
 **Qwen**: 145/24
 
@@ -580,6 +586,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- kimi-k2.7-code (added: 2026-06-12)
 - kimi-k2.6 (added: 2026-04-20)
 - kimi-k2.5 (added: 2026-01-27)
 - moonshot-v1-auto (added: 2025-12-18)
