@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-06-15 10:17:40
+Last updated: 2026-06-15 17:52:32
 
 ## Updates This Week (2026-06-09 to 2026-06-15)
 
@@ -10,6 +10,10 @@ Last updated: 2026-06-15 10:17:40
 **Added**
 
 - claude-fable-5 (added: 2026-06-09)
+
+**Deleted**
+
+- claude-opus-4-20250514 (deleted: 2026-06-15)
 
 ### Mistral
 
@@ -40,7 +44,7 @@ Model counts shown as: **Available/Deleted**
 
 **OpenAI**: 126/50
 
-**Anthropic**: 11/10
+**Anthropic**: 10/11
 
 **Gemini**: 50/92
 
@@ -253,10 +257,10 @@ Model counts shown as: **Available/Deleted**
 - claude-sonnet-4-5-20250929 (added: 2025-09-29)
 - claude-opus-4-1-20250805 (added: 2025-08-05)
 - claude-sonnet-4-20250514 (added: 2025-05-22)
-- claude-opus-4-20250514 (added: 2025-05-22)
 
 ### Deleted Models
 
+- claude-opus-4-20250514 (deleted: 2026-06-15)
 - claude-3-haiku-20240307 (deleted: 2026-04-20)
 - claude-3-7-sonnet-20250219 (deleted: 2026-02-19)
 - claude-3-5-haiku-20241022 (deleted: 2026-02-19)
