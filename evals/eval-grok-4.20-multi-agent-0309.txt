@@ -1,82 +1,19 @@
 Model: grok-4.20-multi-agent-0309
 Provider: grok
-Evaluated: 2026-05-25T11:54:46.470609+00:00
+Evaluated: 2026-06-22T01:28:14.726135+00:00
 
 === TIMING ===
-Response time: 31.78s
+Response time: 0.11s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    best = [-float('inf'), ""]
-    def backtrack(r, c, moves, path, total):
-        if r == N - 1 and c == N - 1:
-            if total > best[0]:
-                best[0] = total
-                best[1] = path
-            return
-        is_forced = (moves % 3 == 2)
-        moves_list = []
-        if is_forced:
-            if r + 1 < N and c + 1 < N:
-                moves_list.append(('X', r + 1, c + 1))
-            else:
-                if c + 1 < N:
-                    moves_list.append(('R', r, c + 1))
-                if r + 1 < N:
-                    moves_list.append(('D', r + 1, c))
-        else:
-            if c + 1 < N:
-                moves_list.append(('R', r, c + 1))
-            if r + 1 < N:
-                moves_list.append(('D', r + 1, c))
-            if r + 1 < N and c + 1 < N:
-                moves_list.append(('X', r + 1, c + 1))
-        for move_char, nr, nc in moves_list:
-            backtrack(nr, nc, moves + 1, path + move_char, total + grid[nr][nc])
-    backtrack(0, 0, 0, "", grid[0][0])
-    return (best[0], best[1])
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    N = len(grid)
-    best = [-float('inf'), ""]
-    def backtrack(r, c, moves, path, total):
-        if r == N - 1 and c == N - 1:
-            if total > best[0]:
-                best[0] = total
-                best[1] = path
-            return
-        is_forced = (moves % 3 == 2)
-        moves_list = []
-        if is_forced:
-            if r + 1 < N and c + 1 < N:
-                moves_list.append(('X', r + 1, c + 1))
-            else:
-                if c + 1 < N:
-                    moves_list.append(('R', r, c + 1))
-                if r + 1 < N:
-                    moves_list.append(('D', r + 1, c))
-        else:
-            if c + 1 < N:
-                moves_list.append(('R', r, c + 1))
-            if r + 1 < N:
-                moves_list.append(('D', r + 1, c))
-            if r + 1 < N and c + 1 < N:
-                moves_list.append(('X', r + 1, c + 1))
-        for move_char, nr, nc in moves_list:
-            backtrack(nr, nc, moves + 1, path + move_char, total + grid[nr][nc])
-    backtrack(0, 0, 0, "", grid[0][0])
-    return (best[0], best[1])
+(no code extracted)

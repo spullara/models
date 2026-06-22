@@ -1,140 +1,19 @@
 Model: grok-build-0.1
 Provider: grok
-Evaluated: 2026-05-25T11:55:33.677101+00:00
+Evaluated: 2026-06-22T01:28:14.950318+00:00
 
 === TIMING ===
-Response time: 33.9s
+Response time: 0.11s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 51
-Calculated sum: 51
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-import sys
-
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    N = len(grid)
-    memo = {}
-    def dfs(i: int, j: int, moves: int, current_sum: int, current_path: str) -> tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return (current_sum, current_path)
-        key = (i, j, moves)
-        if key in memo:
-            return memo[key]
-        best_sum = -sys.maxsize
-        best_path = ""
-        next_move_num = moves + 1
-        mandatory_diagonal = (next_move_num % 3 == 0)
-        candidates = []
-        if mandatory_diagonal:
-            if i + 1 < N and j + 1 < N:
-                candidates = ['X']
-            else:
-                if j + 1 < N:
-                    candidates.append('R')
-                if i + 1 < N:
-                    candidates.append('D')
-        else:
-            if j + 1 < N:
-                candidates.append('R')
-            if i + 1 < N:
-                candidates.append('D')
-            if i + 1 < N and j + 1 < N:
-                candidates.append('X')
-        for move in candidates:
-            if move == 'R':
-                ni, nj = i, j + 1
-            elif move == 'D':
-                ni, nj = i + 1, j
-            elif move == 'X':
-                ni, nj = i + 1, j + 1
-            else:
-                continue
-            new_sum = current_sum + grid[ni][nj]
-            new_path = current_path + move
-            res_sum, res_path = dfs(ni, nj, moves + 1, new_sum, new_path)
-            if res_sum > best_sum:
-                best_sum = res_sum
-                best_path = res_path
-        if best_sum == -sys.maxsize:
-            result = (-sys.maxsize, "")
-        else:
-            result = (best_sum, best_path)
-        memo[key] = result
-        return result
-    start_sum = grid[0][0]
-    max_sum, path = dfs(0, 0, 0, start_sum, "")
-    if max_sum == -sys.maxsize:
-        return (0, "")
-    return (max_sum, path)
-```
+(no response)
 
 === EXTRACTED CODE ===
-import sys
-
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    N = len(grid)
-    memo = {}
-    def dfs(i: int, j: int, moves: int, current_sum: int, current_path: str) -> tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return (current_sum, current_path)
-        key = (i, j, moves)
-        if key in memo:
-            return memo[key]
-        best_sum = -sys.maxsize
-        best_path = ""
-        next_move_num = moves + 1
-        mandatory_diagonal = (next_move_num % 3 == 0)
-        candidates = []
-        if mandatory_diagonal:
-            if i + 1 < N and j + 1 < N:
-                candidates = ['X']
-            else:
-                if j + 1 < N:
-                    candidates.append('R')
-                if i + 1 < N:
-                    candidates.append('D')
-        else:
-            if j + 1 < N:
-                candidates.append('R')
-            if i + 1 < N:
-                candidates.append('D')
-            if i + 1 < N and j + 1 < N:
-                candidates.append('X')
-        for move in candidates:
-            if move == 'R':
-                ni, nj = i, j + 1
-            elif move == 'D':
-                ni, nj = i + 1, j
-            elif move == 'X':
-                ni, nj = i + 1, j + 1
-            else:
-                continue
-            new_sum = current_sum + grid[ni][nj]
-            new_path = current_path + move
-            res_sum, res_path = dfs(ni, nj, moves + 1, new_sum, new_path)
-            if res_sum > best_sum:
-                best_sum = res_sum
-                best_path = res_path
-        if best_sum == -sys.maxsize:
-            result = (-sys.maxsize, "")
-        else:
-            result = (best_sum, best_path)
-        memo[key] = result
-        return result
-    start_sum = grid[0][0]
-    max_sum, path = dfs(0, 0, 0, start_sum, "")
-    if max_sum == -sys.maxsize:
-        return (0, "")
-    return (max_sum, path)
+(no code extracted)
