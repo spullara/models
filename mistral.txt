@@ -35,8 +35,6 @@ mistral-moderation-2411
 mistral-moderation-2603
 mistral-moderation-latest
 mistral-ocr-2512
-mistral-ocr-3
-mistral-ocr-3-0
 mistral-ocr-latest
 mistral-small-2506
 mistral-small-2603
