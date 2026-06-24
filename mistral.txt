@@ -58,5 +58,6 @@ voxtral-mini-realtime-latest
 voxtral-mini-transcribe-realtime-2602
 voxtral-mini-tts-2603
 voxtral-mini-tts-latest
+voxtral-mini-tts-mellon-greek-2606-solutions
 voxtral-small-2507
 voxtral-small-latest
