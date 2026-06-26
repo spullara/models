@@ -6,5 +6,4 @@ grok-build-0.1
 grok-imagine-image
 grok-imagine-image-quality
 grok-imagine-video
-grok-imagine-video-0428
 grok-imagine-video-1.5
