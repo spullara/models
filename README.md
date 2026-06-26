@@ -1,43 +1,25 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-06-15 17:53:26
+Last updated: 2026-06-26 18:22:18
 
-## Updates This Week (2026-06-09 to 2026-06-15)
-
-### Anthropic
-
-**Added**
-
-- claude-fable-5 (added: 2026-06-09)
-
-**Deleted**
-
-- claude-opus-4-20250514 (deleted: 2026-06-15)
-- claude-sonnet-4-20250514 (deleted: 2026-06-15)
+## Updates This Week (2026-06-20 to 2026-06-26)
 
 ### Mistral
 
-**Deleted**
-
-- mistral-medium-c21211-r0-75 (deleted: 2026-06-10)
-
-### Kimi
-
 **Added**
 
-- kimi-k2.7-code-highspeed (added: 2026-06-15)
-- kimi-k2.7-code (added: 2026-06-12)
+- voxtral-mini-tts-mellon-greek-2606-solutions (added: 2026-06-24)
+- mistral-ocr-4 (added: 2026-06-23)
+- mistral-ocr-4-0 (added: 2026-06-23)
 
 ### Qwen
 
 **Added**
 
-- qwen3.7-max-2026-06-08 (added: 2026-06-10)
-
-**Deleted**
-
-- kimi-k2.6 (deleted: 2026-06-10)
+- kimi-k2.7-code (added: 2026-06-26)
+- glm-5.2 (added: 2026-06-25)
+- qwen-image-2.0-pro-2026-06-22 (added: 2026-06-25)
 
 ## Summary
 
@@ -49,15 +31,15 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 50/92
 
-**Grok**: 10/19
+**Grok**: 10/20
 
-**Mistral**: 58/44
+**Mistral**: 63/44
 
 **DeepSeek**: 2/2
 
 **Kimi**: 11/6
 
-**Qwen**: 145/24
+**Qwen**: 148/24
 
 
 ## OpenAI
@@ -427,7 +409,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- grok-imagine-video-1.5-preview (added: 2026-05-30)
+- grok-imagine-video-1.5 (added: 2026-06-17)
 - grok-build-0.1 (added: 2026-05-20)
 - grok-imagine-video-0428 (added: 2026-05-06)
 - grok-imagine-image-quality (added: 2026-05-06)
@@ -440,6 +422,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- grok-imagine-video-1.5-preview (deleted: 2026-06-17)
 - grok-imagine-image-pro (deleted: 2026-05-15)
 - grok-code-fast-1 (deleted: 2026-05-15)
 - grok-4-fast-reasoning (deleted: 2026-05-15)
@@ -464,6 +447,11 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- voxtral-mini-tts-mellon-greek-2606-solutions (added: 2026-06-24)
+- mistral-ocr-4-0 (added: 2026-06-23)
+- mistral-ocr-4 (added: 2026-06-23)
+- mistral-ocr-3-0 (added: 2026-06-16)
+- mistral-ocr-3 (added: 2026-06-16)
 - mistral-code-latest (added: 2026-06-02)
 - mistral-code-fim-latest (added: 2026-06-02)
 - mistral-code-agent-latest (added: 2026-06-02)
@@ -611,6 +599,9 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- kimi-k2.7-code (added: 2026-06-26)
+- qwen-image-2.0-pro-2026-06-22 (added: 2026-06-25)
+- glm-5.2 (added: 2026-06-25)
 - qwen3.7-max-2026-06-08 (added: 2026-06-10)
 - qwen3.7-plus-2026-05-26 (added: 2026-06-01)
 - qwen3.7-plus (added: 2026-06-01)
