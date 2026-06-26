@@ -1,114 +1,19 @@
 Model: kimi-k2.7-code
-Provider: kimi
-Evaluated: 2026-06-12T09:47:05.420746+00:00
+Provider: qwen
+Evaluated: 2026-06-26T09:24:05.813401+00:00
 
 === TIMING ===
-Response time: 118.8s
+Response time: 0.83s
 
 === CODE EXTRACTION ===
-Method: direct
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-3f31873e-21f4-95e5-9d70-4e379e49505b","request_id":"3f31873e-21f4-95e5-9d70-4e379e49505b"}
 
 === RAW RESPONSE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
-        return (0, "")
-    neg = float('-inf')
-    dp = [[[neg] * 3 for _ in range(n)] for _ in range(n)]
-    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = grid[0][0]
-    for r in range(n):
-        for c in range(n):
-            for k in range(3):
-                cur = dp[r][c][k]
-                if cur == neg:
-                    continue
-                nxt = k + 1
-                req_diag = (nxt % 3 == 0)
-                if req_diag and r + 1 < n and c + 1 < n:
-                    allowed = [('X', 1, 1)]
-                else:
-                    allowed = []
-                    if c + 1 < n:
-                        allowed.append(('R', 0, 1))
-                    if r + 1 < n:
-                        allowed.append(('D', 1, 0))
-                    if not req_diag and r + 1 < n and c + 1 < n:
-                        allowed.append(('X', 1, 1))
-                for ch, dr, dc in allowed:
-                    nr, nc = r + dr, c + dc
-                    nk = nxt % 3
-                    val = cur + grid[nr][nc]
-                    if val > dp[nr][nc][nk]:
-                        dp[nr][nc][nk] = val
-                        parent[nr][nc][nk] = (r, c, k, ch)
-    best_k = 0
-    best_val = neg
-    for k in range(3):
-        if dp[n - 1][n - 1][k] > best_val:
-            best_val = dp[n - 1][n - 1][k]
-            best_k = k
-    r, c, k = n - 1, n - 1, best_k
-    path: list[str] = []
-    while r or c or k:
-        pr, pc, pk, ch = parent[r][c][k]
-        path.append(ch)
-        r, c, k = pr, pc, pk
-    path.reverse()
-    return (int(best_val), "".join(path))
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
-        return (0, "")
-    neg = float('-inf')
-    dp = [[[neg] * 3 for _ in range(n)] for _ in range(n)]
-    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = grid[0][0]
-    for r in range(n):
-        for c in range(n):
-            for k in range(3):
-                cur = dp[r][c][k]
-                if cur == neg:
-                    continue
-                nxt = k + 1
-                req_diag = (nxt % 3 == 0)
-                if req_diag and r + 1 < n and c + 1 < n:
-                    allowed = [('X', 1, 1)]
-                else:
-                    allowed = []
-                    if c + 1 < n:
-                        allowed.append(('R', 0, 1))
-                    if r + 1 < n:
-                        allowed.append(('D', 1, 0))
-                    if not req_diag and r + 1 < n and c + 1 < n:
-                        allowed.append(('X', 1, 1))
-                for ch, dr, dc in allowed:
-                    nr, nc = r + dr, c + dc
-                    nk = nxt % 3
-                    val = cur + grid[nr][nc]
-                    if val > dp[nr][nc][nk]:
-                        dp[nr][nc][nk] = val
-                        parent[nr][nc][nk] = (r, c, k, ch)
-    best_k = 0
-    best_val = neg
-    for k in range(3):
-        if dp[n - 1][n - 1][k] > best_val:
-            best_val = dp[n - 1][n - 1][k]
-            best_k = k
-    r, c, k = n - 1, n - 1, best_k
-    path: list[str] = []
-    while r or c or k:
-        pr, pc, pk, ch = parent[r][c][k]
-        path.append(ch)
-        r, c, k = pr, pc, pk
-    path.reverse()
-    return (int(best_val), "".join(path))
+(no code extracted)
