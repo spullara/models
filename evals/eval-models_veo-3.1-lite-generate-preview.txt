@@ -1,6 +1,6 @@
 Model: models/veo-3.1-lite-generate-preview
 Provider: gemini
-Evaluated: 2026-06-30T21:42:06.923283+00:00
+Evaluated: 2026-06-30T21:44:05.641111+00:00
 
 === TIMING ===
 Response time: 0.16s
