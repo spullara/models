@@ -1,0 +1,19 @@
+Model: labs-leanstral-1-5
+Provider: mistral
+Evaluated: 2026-06-30T09:31:05.176348+00:00
+
+=== TIMING ===
+Response time: 0.27s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"object":"error","message":"Model labs-leanstral-1-5 is a Labs model. To use Labs models, an admin must enable them in your organization settings at https://admin.mistral.ai/plateforme/privacy.","type":"labs_not_enabled","param":null,"code":"1913","raw_status_code":403}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
