@@ -1,9 +1,9 @@
 Model: models/veo-3.0-fast-generate-001
 Provider: gemini
-Evaluated: 2026-06-30T21:26:06.090161+00:00
+Evaluated: 2026-06-30T21:28:05.822688+00:00
 
 === TIMING ===
-Response time: 0.19s
+Response time: 0.17s
 
 === CODE EXTRACTION ===
 Method: None
