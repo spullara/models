@@ -1,0 +1,26 @@
+Model: models/gemini-omni-flash-preview
+Provider: gemini
+Evaluated: 2026-06-30T14:00:07.763167+00:00
+
+=== TIMING ===
+Response time: 0.23s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {
+  "error": {
+    "code": 400,
+    "message": "This model only supports Interactions API.",
+    "status": "INVALID_ARGUMENT"
+  }
+}
+
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)

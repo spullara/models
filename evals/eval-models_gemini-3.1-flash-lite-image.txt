@@ -1,0 +1,194 @@
+Model: models/gemini-3.1-flash-lite-image
+Provider: gemini
+Evaluated: 2026-06-30T14:00:05.948165+00:00
+
+=== TIMING ===
+Response time: 1.78s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+import functools
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Solves the grid problem using memoized recursion.
+    
+    Args:
+        grid: N x N list of lists of integers.
+        
+    Returns:
+        A tuple containing the maximum sum and the path string.
+    """
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+
+    @functools.lru_cache(None)
+    def get_max_path(r, c, moves_made):
+        """
+        Recursive function with memoization to find the best path
+        from (r, c) to (N-1, N-1).
+        
+        Args:
+            r: Current row index.
+            c: Current column index.
+            moves_made: Number of moves made to reach (r, c).
+            
+        Returns:
+            A tuple (max_sum, path_string).
+        """
+        # Base case: destination reached
+        if r == N - 1 and c == N - 1:
+            return grid[N-1][N-1], ""
+
+        current_move_num = moves_made + 1
+        is_diagonal_required = (current_move_num % 3 == 0)
+        
+        can_move_right = (c + 1 < N)
+        can_move_down = (r + 1 < N)
+        can_move_diag = (can_move_right and can_move_down)
+        
+        best_sum = -float('inf')
+        best_path = ""
+        
+        # Determine allowed moves based on the rule
+        moves_to_try = []
+        if is_diagonal_required:
+            if can_move_diag:
+                moves_to_try.append(('X', r + 1, c + 1))
+            else:
+                # Diagonal required but not possible, allow R or D
+                if can_move_right:
+                    moves_to_try.append(('R', r, c + 1))
+                if can_move_down:
+                    moves_to_try.append(('D', r + 1, c))
+        else:
+            # Diagonal not required, allow all available moves
+            if can_move_right:
+                moves_to_try.append(('R', r, c + 1))
+            if can_move_down:
+                moves_to_try.append(('D', r + 1, c))
+            if can_move_diag:
+                moves_to_try.append(('X', r + 1, c + 1))
+        
+        # Explore allowed moves
+        for move_char, next_r, next_c in moves_to_try:
+            res_sum, res_path = get_max_path(next_r, next_c, current_move_num)
+            total_sum = grid[r][c] + res_sum
+            
+            if total_sum > best_sum:
+                best_sum = total_sum
+                best_path = move_char + res_path
+            elif total_sum == best_sum:
+                # Tie-breaking: prioritize lexicographically smaller path string
+                if move_char + res_path < best_path:
+                     best_path = move_char + res_path
+                     
+        return best_sum, best_path
+
+    # Start recursion from top-left (0, 0) with 0 moves made
+    max_sum, path = get_max_path(0, 0, 0)
+    
+    # Clear memoization cache to free memory
+    get_max_path.cache_clear()
+    
+    return max_sum, path
+```
+
+=== EXTRACTED CODE ===
+import functools
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Solves the grid problem using memoized recursion.
+    
+    Args:
+        grid: N x N list of lists of integers.
+        
+    Returns:
+        A tuple containing the maximum sum and the path string.
+    """
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+
+    @functools.lru_cache(None)
+    def get_max_path(r, c, moves_made):
+        """
+        Recursive function with memoization to find the best path
+        from (r, c) to (N-1, N-1).
+        
+        Args:
+            r: Current row index.
+            c: Current column index.
+            moves_made: Number of moves made to reach (r, c).
+            
+        Returns:
+            A tuple (max_sum, path_string).
+        """
+        # Base case: destination reached
+        if r == N - 1 and c == N - 1:
+            return grid[N-1][N-1], ""
+
+        current_move_num = moves_made + 1
+        is_diagonal_required = (current_move_num % 3 == 0)
+        
+        can_move_right = (c + 1 < N)
+        can_move_down = (r + 1 < N)
+        can_move_diag = (can_move_right and can_move_down)
+        
+        best_sum = -float('inf')
+        best_path = ""
+        
+        # Determine allowed moves based on the rule
+        moves_to_try = []
+        if is_diagonal_required:
+            if can_move_diag:
+                moves_to_try.append(('X', r + 1, c + 1))
+            else:
+                # Diagonal required but not possible, allow R or D
+                if can_move_right:
+                    moves_to_try.append(('R', r, c + 1))
+                if can_move_down:
+                    moves_to_try.append(('D', r + 1, c))
+        else:
+            # Diagonal not required, allow all available moves
+            if can_move_right:
+                moves_to_try.append(('R', r, c + 1))
+            if can_move_down:
+                moves_to_try.append(('D', r + 1, c))
+            if can_move_diag:
+                moves_to_try.append(('X', r + 1, c + 1))
+        
+        # Explore allowed moves
+        for move_char, next_r, next_c in moves_to_try:
+            res_sum, res_path = get_max_path(next_r, next_c, current_move_num)
+            total_sum = grid[r][c] + res_sum
+            
+            if total_sum > best_sum:
+                best_sum = total_sum
+                best_path = move_char + res_path
+            elif total_sum == best_sum:
+                # Tie-breaking: prioritize lexicographically smaller path string
+                if move_char + res_path < best_path:
+                     best_path = move_char + res_path
+                     
+        return best_sum, best_path
+
+    # Start recursion from top-left (0, 0) with 0 moves made
+    max_sum, path = get_max_path(0, 0, 0)
+    
+    # Clear memoization cache to free memory
+    get_max_path.cache_clear()
+    
+    return max_sum, path
