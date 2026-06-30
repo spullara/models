@@ -7,7 +7,6 @@ devstral-latest
 devstral-medium-latest
 labs-leanstral-1-5
 labs-leanstral-1-5-1
-labs-leanstral-2603
 magistral-medium-2509
 magistral-medium-latest
 magistral-small-2509
@@ -33,9 +32,7 @@ mistral-medium-3
 mistral-medium-3-5
 mistral-medium-3.5
 mistral-medium-latest
-mistral-moderation-2411
 mistral-moderation-2603
-mistral-moderation-latest
 mistral-ocr-2512
 mistral-ocr-3
 mistral-ocr-3-0
