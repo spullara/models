@@ -5,6 +5,8 @@ codestral-latest
 devstral-2512
 devstral-latest
 devstral-medium-latest
+labs-leanstral-1-5
+labs-leanstral-1-5-1
 labs-leanstral-2603
 magistral-medium-2509
 magistral-medium-latest
