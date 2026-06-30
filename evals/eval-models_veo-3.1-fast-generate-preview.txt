@@ -1,16 +1,23 @@
 Model: models/veo-3.1-fast-generate-preview
 Provider: gemini
-Evaluated: 2026-05-11T21:35:06.625568+00:00
+Evaluated: 2026-06-30T21:17:05.243747+00:00
 
 === TIMING ===
-Response time: 0.14s
+Response time: 0.19s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 404: 
+API Error: HTTP 404: {
+  "error": {
+    "code": 404,
+    "message": "models/veo-3.1-fast-generate-preview is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
 
 === RAW RESPONSE ===
 (no response)
