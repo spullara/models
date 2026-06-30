@@ -1,9 +1,9 @@
 Model: models/veo-2.0-generate-001
 Provider: gemini
-Evaluated: 2026-06-30T21:18:05.906500+00:00
+Evaluated: 2026-06-30T21:20:05.617336+00:00
 
 === TIMING ===
-Response time: 0.21s
+Response time: 0.17s
 
 === CODE EXTRACTION ===
 Method: None
