@@ -1,9 +1,28 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-06-26 19:48:17
+Last updated: 2026-07-01 17:15:17
 
-## Updates This Week (2026-06-20 to 2026-06-26)
+## Updates This Week (2026-06-25 to 2026-07-01)
+
+### Anthropic
+
+**Added**
+
+- claude-sonnet-5 (added: 2026-06-30)
+
+### Gemini
+
+**Added**
+
+- models/gemini-3.1-flash-lite-image (added: 2026-06-30)
+- models/gemini-omni-flash-preview (added: 2026-06-30)
+
+**Deleted**
+
+- models/veo-2.0-generate-001 (deleted: 2026-06-30)
+- models/veo-3.0-fast-generate-001 (deleted: 2026-06-30)
+- models/veo-3.0-generate-001 (deleted: 2026-06-30)
 
 ### Grok
 
@@ -15,9 +34,14 @@ Last updated: 2026-06-26 19:48:17
 
 **Added**
 
-- voxtral-mini-tts-mellon-greek-2606-solutions (added: 2026-06-24)
-- mistral-ocr-4 (added: 2026-06-23)
-- mistral-ocr-4-0 (added: 2026-06-23)
+- labs-leanstral-1-5 (added: 2026-06-30)
+- labs-leanstral-1-5-1 (added: 2026-06-30)
+
+**Deleted**
+
+- labs-leanstral-2603 (deleted: 2026-06-30)
+- mistral-moderation-2411 (deleted: 2026-06-30)
+- mistral-moderation-latest (deleted: 2026-06-30)
 
 ### Qwen
 
@@ -33,13 +57,13 @@ Model counts shown as: **Available/Deleted**
 
 **OpenAI**: 126/50
 
-**Anthropic**: 9/12
+**Anthropic**: 10/12
 
-**Gemini**: 50/92
+**Gemini**: 50/94
 
 **Grok**: 9/21
 
-**Mistral**: 63/44
+**Mistral**: 62/47
 
 **DeepSeek**: 2/2
 
@@ -236,6 +260,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- claude-sonnet-5 (added: 2026-06-30)
 - claude-fable-5 (added: 2026-06-09)
 - claude-opus-4-8 (added: 2026-05-28)
 - claude-opus-4-7 (added: 2026-04-16)
@@ -265,6 +290,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-omni-flash-preview (added: 2026-06-30)
+- models/gemini-3.1-flash-lite-image (added: 2026-06-30)
 - models/gemini-3.1-flash-image (added: 2026-05-28)
 - models/gemini-3-pro-image (added: 2026-05-28)
 - models/gemini-3.5-flash (added: 2026-05-19)
@@ -287,10 +314,9 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
+- models/gemini-2.5-flash-native-audio-latest (added: 2025-12-10)
 - models/veo-3.1-fast-generate-preview (added: 2025-12-09)
 - models/veo-3.1-generate-preview (added: 2025-12-05)
-- models/veo-3.0-generate-001 (added: 2025-12-05)
-- models/veo-3.0-fast-generate-001 (added: 2025-12-05)
 - models/imagen-4.0-fast-generate-001 (added: 2025-12-05)
 - models/nano-banana-pro-preview (added: 2025-11-20)
 - models/gemini-3-pro-image-preview (added: 2025-11-20)
@@ -309,7 +335,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-2.5-flash (added: 2025-06-17)
 - models/gemini-2.5-pro-preview-tts (added: 2025-05-21)
 - models/gemini-2.5-flash-preview-tts (added: 2025-05-21)
-- models/veo-2.0-generate-001 (added: 2025-04-09)
 - models/gemini-2.0-flash-lite-001 (added: 2025-02-25)
 - models/gemini-2.0-flash-lite (added: 2025-02-25)
 - models/gemini-2.0-flash-001 (added: 2025-02-05)
@@ -318,8 +343,10 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/veo-3.0-generate-001 (deleted: 2026-06-30)
+- models/veo-3.0-fast-generate-001 (deleted: 2026-06-30)
+- models/veo-2.0-generate-001 (deleted: 2026-06-30)
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-05-28)
-- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-05-28)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-05-19)
 - models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-05-19)
 - models/omni-bag-staging-iapi-agent (deleted: 2026-05-11)
@@ -453,6 +480,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- labs-leanstral-1-5-1 (added: 2026-06-30)
+- labs-leanstral-1-5 (added: 2026-06-30)
 - voxtral-mini-tts-mellon-greek-2606-solutions (added: 2026-06-24)
 - mistral-ocr-4-0 (added: 2026-06-23)
 - mistral-ocr-4 (added: 2026-06-23)
@@ -470,7 +499,6 @@ Model counts shown as: **Available/Deleted**
 - voxtral-mini-tts-2603 (added: 2026-03-23)
 - mistral-vibe-cli-fast (added: 2026-03-17)
 - mistral-small-2603 (added: 2026-03-16)
-- labs-leanstral-2603 (added: 2026-03-16)
 - voxtral-mini-transcribe-realtime-2602 (added: 2026-03-13)
 - voxtral-mini-realtime-latest (added: 2026-03-13)
 - voxtral-mini-realtime-2602 (added: 2026-03-13)
@@ -496,8 +524,6 @@ Model counts shown as: **Available/Deleted**
 - mistral-small-latest (added: 2025-11-24)
 - mistral-small-2506 (added: 2025-11-24)
 - mistral-ocr-latest (added: 2025-11-24)
-- mistral-moderation-latest (added: 2025-11-24)
-- mistral-moderation-2411 (added: 2025-11-24)
 - mistral-medium-latest (added: 2025-11-24)
 - mistral-medium-2508 (added: 2025-11-24)
 - mistral-medium-2505 (added: 2025-11-24)
@@ -519,6 +545,9 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- mistral-moderation-latest (deleted: 2026-06-30)
+- mistral-moderation-2411 (deleted: 2026-06-30)
+- labs-leanstral-2603 (deleted: 2026-06-30)
 - mistral-medium-c21211-r0-75 (deleted: 2026-06-10)
 - voxtral-mini-transcribe-2602 (deleted: 2026-06-01)
 - voxtral-mini-transcribe-2507 (deleted: 2026-05-31)
