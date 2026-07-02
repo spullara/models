@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-01 17:15:17
+Last updated: 2026-07-02 23:13:15
 
-## Updates This Week (2026-06-25 to 2026-07-01)
+## Updates This Week (2026-06-26 to 2026-07-02)
 
 ### Anthropic
 
@@ -39,6 +39,7 @@ Last updated: 2026-07-01 17:15:17
 
 **Deleted**
 
+- voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-02)
 - labs-leanstral-2603 (deleted: 2026-06-30)
 - mistral-moderation-2411 (deleted: 2026-06-30)
 - mistral-moderation-latest (deleted: 2026-06-30)
@@ -48,8 +49,6 @@ Last updated: 2026-07-01 17:15:17
 **Added**
 
 - kimi-k2.7-code (added: 2026-06-26)
-- glm-5.2 (added: 2026-06-25)
-- qwen-image-2.0-pro-2026-06-22 (added: 2026-06-25)
 
 ## Summary
 
@@ -63,7 +62,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 9/21
 
-**Mistral**: 62/47
+**Mistral**: 61/48
 
 **DeepSeek**: 2/2
 
@@ -482,7 +481,6 @@ Model counts shown as: **Available/Deleted**
 
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
-- voxtral-mini-tts-mellon-greek-2606-solutions (added: 2026-06-24)
 - mistral-ocr-4-0 (added: 2026-06-23)
 - mistral-ocr-4 (added: 2026-06-23)
 - mistral-ocr-3-0 (added: 2026-06-16)
@@ -545,6 +543,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-02)
 - mistral-moderation-latest (deleted: 2026-06-30)
 - mistral-moderation-2411 (deleted: 2026-06-30)
 - labs-leanstral-2603 (deleted: 2026-06-30)
