@@ -1,9 +1,15 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-02 23:13:15
+Last updated: 2026-07-06 21:58:18
 
-## Updates This Week (2026-06-26 to 2026-07-02)
+## Updates This Week (2026-06-30 to 2026-07-06)
+
+### OpenAI
+
+**Added**
+
+- gpt-realtime-2.1 (added: 2026-07-06)
 
 ### Anthropic
 
@@ -24,12 +30,6 @@ Last updated: 2026-07-02 23:13:15
 - models/veo-3.0-fast-generate-001 (deleted: 2026-06-30)
 - models/veo-3.0-generate-001 (deleted: 2026-06-30)
 
-### Grok
-
-**Deleted**
-
-- grok-imagine-video-0428 (deleted: 2026-06-26)
-
 ### Mistral
 
 **Added**
@@ -44,17 +44,11 @@ Last updated: 2026-07-02 23:13:15
 - mistral-moderation-2411 (deleted: 2026-06-30)
 - mistral-moderation-latest (deleted: 2026-06-30)
 
-### Qwen
-
-**Added**
-
-- kimi-k2.7-code (added: 2026-06-26)
-
 ## Summary
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 126/50
+**OpenAI**: 127/50
 
 **Anthropic**: 10/12
 
@@ -75,6 +69,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- gpt-realtime-2.1 (added: 2026-07-06)
 - gpt-realtime-whisper (added: 2026-05-07)
 - gpt-realtime-translate (added: 2026-05-07)
 - gpt-realtime-2 (added: 2026-05-07)
