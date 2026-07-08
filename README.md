@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-08 11:37:14
+Last updated: 2026-07-08 16:11:17
 
 ## Updates This Week (2026-07-02 to 2026-07-08)
 
@@ -16,6 +16,7 @@ Last updated: 2026-07-08 11:37:14
 
 **Deleted**
 
+- voxtral-mini-2507 (deleted: 2026-07-08)
 - voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-02)
 
 ## Summary
@@ -30,7 +31,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 9/21
 
-**Mistral**: 61/48
+**Mistral**: 60/49
 
 **DeepSeek**: 2/2
 
@@ -484,7 +485,6 @@ Model counts shown as: **Available/Deleted**
 - voxtral-small-latest (added: 2025-11-24)
 - voxtral-small-2507 (added: 2025-11-24)
 - voxtral-mini-latest (added: 2025-11-24)
-- voxtral-mini-2507 (added: 2025-11-24)
 - open-mistral-nemo-2407 (added: 2025-11-24)
 - open-mistral-nemo (added: 2025-11-24)
 - mistral-tiny-latest (added: 2025-11-24)
@@ -513,6 +513,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- voxtral-mini-2507 (deleted: 2026-07-08)
 - voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-02)
 - mistral-moderation-latest (deleted: 2026-06-30)
 - mistral-moderation-2411 (deleted: 2026-06-30)
