@@ -1,19 +1,74 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-06-22T01:28:14.511039+00:00
+Evaluated: 2026-07-08T11:34:05.572840+00:00
 
 === TIMING ===
-Response time: 0.11s
+Response time: 2.07s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+    INF = float('-inf')
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
+    for i in range(n):
+        for j in range(n):
+            if dp[i][j][0] == INF:
+                continue
+            moves_made = len(dp[i][j][1])
+            must_diag = (moves_made % 3 == 2)
+            for di, dj, let in dirs:
+                ni, nj = i + di, j + dj
+                if 0 <= ni < n and 0 <= nj < n:
+                    if must_diag and let != 'X' and (i+1 < n and j+1 < n):
+                        continue
+                    new_sum = dp[i][j][0] + grid[ni][nj]
+                    new_path = dp[i][j][1] + let
+                    if new_sum > dp[ni][nj][0]:
+                        dp[ni][nj] = (new_sum, new_path)
+    return dp[n-1][n-1]
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+    INF = float('-inf')
+    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "")
+    dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
+    for i in range(n):
+        for j in range(n):
+            if dp[i][j][0] == INF:
+                continue
+            moves_made = len(dp[i][j][1])
+            must_diag = (moves_made % 3 == 2)
+            for di, dj, let in dirs:
+                ni, nj = i + di, j + dj
+                if 0 <= ni < n and 0 <= nj < n:
+                    if must_diag and let != 'X' and (i+1 < n and j+1 < n):
+                        continue
+                    new_sum = dp[i][j][0] + grid[ni][nj]
+                    new_path = dp[i][j][1] + let
+                    if new_sum > dp[ni][nj][0]:
+                        dp[ni][nj] = (new_sum, new_path)
+    return dp[n-1][n-1]
