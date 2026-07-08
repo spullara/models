@@ -1,19 +1,136 @@
 Model: grok-build-0.1
 Provider: grok
-Evaluated: 2026-06-22T01:28:14.950318+00:00
+Evaluated: 2026-07-08T11:35:53.640257+00:00
 
 === TIMING ===
-Response time: 0.11s
+Response time: 34.37s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    MAX_K = 2 * n
+    dp = [[[-float('inf')] * MAX_K for _ in range(n)] for _ in range(n)]
+    prev = [[[None] * MAX_K for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = grid[0][0]
+    for k in range(MAX_K - 1):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][k] == -float('inf'):
+                    continue
+                next_move = k + 1
+                must_x = (next_move % 3 == 0)
+                moves = []
+                if must_x:
+                    if i < n - 1 and j < n - 1:
+                        moves.append((1, 1, 'X'))
+                    else:
+                        if j < n - 1:
+                            moves.append((0, 1, 'R'))
+                        if i < n - 1:
+                            moves.append((1, 0, 'D'))
+                else:
+                    if j < n - 1:
+                        moves.append((0, 1, 'R'))
+                    if i < n - 1:
+                        moves.append((1, 0, 'D'))
+                    if i < n - 1 and j < n - 1:
+                        moves.append((1, 1, 'X'))
+                for di, dj, char in moves:
+                    ni = i + di
+                    nj = j + dj
+                    if ni < n and nj < n:
+                        new_sum = dp[i][j][k] + grid[ni][nj]
+                        nk = k + 1
+                        if new_sum > dp[ni][nj][nk]:
+                            dp[ni][nj][nk] = new_sum
+                            prev[ni][nj][nk] = (i, j, char)
+    max_sum = -float('inf')
+    best_k = -1
+    for k in range(MAX_K):
+        if dp[n-1][n-1][k] > max_sum:
+            max_sum = dp[n-1][n-1][k]
+            best_k = k
+    if best_k == -1:
+        return (grid[0][0] if n == 1 else 0, "")
+    path_list = []
+    ci, cj, ck = n - 1, n - 1, best_k
+    while ck > 0:
+        pi, pj, char = prev[ci][cj][ck]
+        path_list.append(char)
+        ci, cj = pi, pj
+        ck -= 1
+    path = ''.join(reversed(path_list))
+    return (max_sum, path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    MAX_K = 2 * n
+    dp = [[[-float('inf')] * MAX_K for _ in range(n)] for _ in range(n)]
+    prev = [[[None] * MAX_K for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = grid[0][0]
+    for k in range(MAX_K - 1):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][k] == -float('inf'):
+                    continue
+                next_move = k + 1
+                must_x = (next_move % 3 == 0)
+                moves = []
+                if must_x:
+                    if i < n - 1 and j < n - 1:
+                        moves.append((1, 1, 'X'))
+                    else:
+                        if j < n - 1:
+                            moves.append((0, 1, 'R'))
+                        if i < n - 1:
+                            moves.append((1, 0, 'D'))
+                else:
+                    if j < n - 1:
+                        moves.append((0, 1, 'R'))
+                    if i < n - 1:
+                        moves.append((1, 0, 'D'))
+                    if i < n - 1 and j < n - 1:
+                        moves.append((1, 1, 'X'))
+                for di, dj, char in moves:
+                    ni = i + di
+                    nj = j + dj
+                    if ni < n and nj < n:
+                        new_sum = dp[i][j][k] + grid[ni][nj]
+                        nk = k + 1
+                        if new_sum > dp[ni][nj][nk]:
+                            dp[ni][nj][nk] = new_sum
+                            prev[ni][nj][nk] = (i, j, char)
+    max_sum = -float('inf')
+    best_k = -1
+    for k in range(MAX_K):
+        if dp[n-1][n-1][k] > max_sum:
+            max_sum = dp[n-1][n-1][k]
+            best_k = k
+    if best_k == -1:
+        return (grid[0][0] if n == 1 else 0, "")
+    path_list = []
+    ci, cj, ck = n - 1, n - 1, best_k
+    while ck > 0:
+        pi, pj, char = prev[ci][cj][ck]
+        path_list.append(char)
+        ci, cj = pi, pj
+        ck -= 1
+    path = ''.join(reversed(path_list))
+    return (max_sum, path)
