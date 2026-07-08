@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-06 21:59:16
+Last updated: 2026-07-08 11:31:52
 
-## Updates This Week (2026-06-30 to 2026-07-06)
+## Updates This Week (2026-07-02 to 2026-07-08)
 
 ### OpenAI
 
@@ -12,38 +12,18 @@ Last updated: 2026-07-06 21:59:16
 - gpt-realtime-2.1 (added: 2026-07-06)
 - gpt-realtime-2.1-mini (added: 2026-07-06)
 
-### Anthropic
-
-**Added**
-
-- claude-sonnet-5 (added: 2026-06-30)
-
-### Gemini
-
-**Added**
-
-- models/gemini-3.1-flash-lite-image (added: 2026-06-30)
-- models/gemini-omni-flash-preview (added: 2026-06-30)
+### Grok
 
 **Deleted**
 
-- models/veo-2.0-generate-001 (deleted: 2026-06-30)
-- models/veo-3.0-fast-generate-001 (deleted: 2026-06-30)
-- models/veo-3.0-generate-001 (deleted: 2026-06-30)
+- grok-imagine-video (deleted: 2026-07-08)
+- grok-imagine-video-1.5 (deleted: 2026-07-08)
 
 ### Mistral
-
-**Added**
-
-- labs-leanstral-1-5 (added: 2026-06-30)
-- labs-leanstral-1-5-1 (added: 2026-06-30)
 
 **Deleted**
 
 - voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-02)
-- labs-leanstral-2603 (deleted: 2026-06-30)
-- mistral-moderation-2411 (deleted: 2026-06-30)
-- mistral-moderation-latest (deleted: 2026-06-30)
 
 ## Summary
 
@@ -55,7 +35,7 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 50/94
 
-**Grok**: 9/21
+**Grok**: 7/23
 
 **Mistral**: 61/48
 
@@ -438,18 +418,18 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- grok-imagine-video-1.5 (added: 2026-06-17)
 - grok-build-0.1 (added: 2026-05-20)
 - grok-imagine-image-quality (added: 2026-05-06)
 - grok-4.3 (added: 2026-04-30)
 - grok-4.20-multi-agent-0309 (added: 2026-03-19)
 - grok-4.20-0309-reasoning (added: 2026-03-19)
 - grok-4.20-0309-non-reasoning (added: 2026-03-19)
-- grok-imagine-video (added: 2026-01-29)
 - grok-imagine-image (added: 2026-01-29)
 
 ### Deleted Models
 
+- grok-imagine-video-1.5 (deleted: 2026-07-08)
+- grok-imagine-video (deleted: 2026-07-08)
 - grok-imagine-video-0428 (deleted: 2026-06-26)
 - grok-imagine-video-1.5-preview (deleted: 2026-06-17)
 - grok-imagine-image-pro (deleted: 2026-05-15)
