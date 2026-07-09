@@ -70,6 +70,12 @@ PROVIDERS = {
         'json_path': ['data', 'id'],
         'output_file': 'kimi.txt'
     },
+    'meta': {
+        'url': 'https://api.meta.ai/v1/models',
+        'headers': lambda: {'Authorization': f"Bearer {os.getenv('MODEL_API_KEY')}"},
+        'json_path': ['data', 'id'],
+        'output_file': 'meta.txt'
+    },
     'qwen': {
         'url': 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/models',
         'headers': lambda: {'Authorization': f"Bearer {os.getenv('DASHSCOPE_API_KEY')}"},
