@@ -1,4 +1,4 @@
-These are the model lists from OpenAI, Anthropic, Gemini and Grok.
+These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
 Last updated: 2026-07-09 18:07:43

@@ -17,7 +17,8 @@ PROVIDER_MAP = {
     'mistral.txt': 'Mistral',
     'deepseek.txt': 'DeepSeek',
     'kimi.txt': 'Kimi',
-    'qwen.txt': 'Qwen'
+    'qwen.txt': 'Qwen',
+    'meta.txt': 'Meta'
 }
 
 UPDATE_WINDOW_DAYS = 7
