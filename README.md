@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-09 18:06:29
+Last updated: 2026-07-09 18:07:43
 
 ## Updates This Week (2026-07-03 to 2026-07-09)
 
@@ -10,6 +10,7 @@ Last updated: 2026-07-09 18:06:29
 **Added**
 
 - gpt-5.6-luna (added: 2026-07-09)
+- gpt-5.6-sol (added: 2026-07-09)
 - gpt-5.6-terra (added: 2026-07-09)
 - gpt-realtime-2.1 (added: 2026-07-06)
 - gpt-realtime-2.1-mini (added: 2026-07-06)
@@ -30,7 +31,7 @@ Last updated: 2026-07-09 18:06:29
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 130/50
+**OpenAI**: 131/50
 
 **Anthropic**: 10/12
 
@@ -52,6 +53,7 @@ Model counts shown as: **Available/Deleted**
 ### Current Models
 
 - gpt-5.6-terra (added: 2026-07-09)
+- gpt-5.6-sol (added: 2026-07-09)
 - gpt-5.6-luna (added: 2026-07-09)
 - gpt-realtime-2.1-mini (added: 2026-07-06)
 - gpt-realtime-2.1 (added: 2026-07-06)
