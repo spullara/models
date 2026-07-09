@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini and Grok.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-08 17:39:59
+Last updated: 2026-07-09 04:14:16
 
-## Updates This Week (2026-07-02 to 2026-07-08)
+## Updates This Week (2026-07-03 to 2026-07-09)
 
 ### OpenAI
 
@@ -23,7 +23,6 @@ Last updated: 2026-07-08 17:39:59
 **Deleted**
 
 - voxtral-mini-2507 (deleted: 2026-07-08)
-- voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-02)
 
 ## Summary
 
