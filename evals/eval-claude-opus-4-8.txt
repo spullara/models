@@ -1,9 +1,9 @@
 Model: claude-opus-4-8
 Provider: anthropic
-Evaluated: 2026-05-28T16:43:06.982617+00:00
+Evaluated: 2026-06-09T17:19:49.347949+00:00
 
 === TIMING ===
-Response time: 7.31s
+Response time: 8.83s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -21,73 +21,72 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 0:
         return (0, "")
-    
+    if n == 1:
+        return (grid[0][0], "")
+
     from functools import lru_cache
-    
-    NEG = float('-inf')
-    
-    # state: (r, c, move_count) -> best (sum, path)
-    # move_count is number of moves already made
-    
+
+    target = n - 1
+
+    best = None
+
+    # state: (row, col, move_count) -> we do DFS with memo of best result
     memo = {}
-    
-    def can_diag(r, c):
-        return r + 1 < n and c + 1 < n
-    
-    def dp(r, c, move_count):
-        if r == n - 1 and c == n - 1:
+
+    def dfs(r, c, moves):
+        if r == target and c == target:
             return (0, "")
-        
-        key = (r, c, move_count)
+        key = (r, c, moves)
         if key in memo:
             return memo[key]
-        
-        next_move_num = move_count + 1
-        must_diag = (next_move_num % 3 == 0)
-        
+
+        next_move_num = moves + 1
+        must_diagonal = (next_move_num % 3 == 0)
+
         candidates = []
-        
-        diag_possible = can_diag(r, c)
-        
-        if must_diag and diag_possible:
-            allowed = ['X']
-        elif must_diag and not diag_possible:
-            allowed = ['R', 'D']
-        else:
-            allowed = ['R', 'D', 'X']
-        
-        best = (NEG, "")
-        
-        for mv in allowed:
-            if mv == 'R':
-                nr, nc = r, c + 1
-            elif mv == 'D':
-                nr, nc = r + 1, c
+
+        can_right = c + 1 <= target
+        can_down = r + 1 <= target
+        can_diag = (r + 1 <= target) and (c + 1 <= target)
+
+        if must_diagonal:
+            if can_diag:
+                allowed = [('X', r + 1, c + 1)]
             else:
-                nr, nc = r + 1, c + 1
-            
-            if nr >= n or nc >= n:
+                allowed = []
+                if can_right:
+                    allowed.append(('R', r, c + 1))
+                if can_down:
+                    allowed.append(('D', r + 1, c))
+        else:
+            allowed = []
+            if can_right:
+                allowed.append(('R', r, c + 1))
+            if can_down:
+                allowed.append(('D', r + 1, c))
+            if can_diag:
+                allowed.append(('X', r + 1, c + 1))
+
+        result = None
+        for mv, nr, nc in allowed:
+            sub = dfs(nr, nc, moves + 1)
+            if sub is None:
                 continue
-            
-            sub_sum, sub_path = dp(nr, nc, move_count + 1)
-            if sub_sum == NEG:
-                continue
-            
+            sub_sum, sub_path = sub
             total = grid[nr][nc] + sub_sum
             path = mv + sub_path
-            
-            if total > best[0]:
-                best = (total, path)
-        
-        memo[key] = best
-        return best
-    
-    result_sum, result_path = dp(0, 0, 0)
-    
-    if result_sum == NEG:
-        return (NEG, "")
-    
-    return (grid[0][0] + result_sum, result_path)
+            if result is None or total > result[0]:
+                result = (total, path)
+
+        memo[key] = result
+        return result
+
+    res = dfs(0, 0, 0)
+    if res is None:
+        return (grid[0][0], "")
+
+    total_sum = grid[0][0] + res[0]
+    return (total_sum, res[1])
 ```
 
 === EXTRACTED CODE ===
@@ -95,70 +94,69 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 0:
         return (0, "")
-    
+    if n == 1:
+        return (grid[0][0], "")
+
     from functools import lru_cache
-    
-    NEG = float('-inf')
-    
-    # state: (r, c, move_count) -> best (sum, path)
-    # move_count is number of moves already made
-    
+
+    target = n - 1
+
+    best = None
+
+    # state: (row, col, move_count) -> we do DFS with memo of best result
     memo = {}
-    
-    def can_diag(r, c):
-        return r + 1 < n and c + 1 < n
-    
-    def dp(r, c, move_count):
-        if r == n - 1 and c == n - 1:
+
+    def dfs(r, c, moves):
+        if r == target and c == target:
             return (0, "")
-        
-        key = (r, c, move_count)
+        key = (r, c, moves)
         if key in memo:
             return memo[key]
-        
-        next_move_num = move_count + 1
-        must_diag = (next_move_num % 3 == 0)
-        
+
+        next_move_num = moves + 1
+        must_diagonal = (next_move_num % 3 == 0)
+
         candidates = []
-        
-        diag_possible = can_diag(r, c)
-        
-        if must_diag and diag_possible:
-            allowed = ['X']
-        elif must_diag and not diag_possible:
-            allowed = ['R', 'D']
-        else:
-            allowed = ['R', 'D', 'X']
-        
-        best = (NEG, "")
-        
-        for mv in allowed:
-            if mv == 'R':
-                nr, nc = r, c + 1
-            elif mv == 'D':
-                nr, nc = r + 1, c
+
+        can_right = c + 1 <= target
+        can_down = r + 1 <= target
+        can_diag = (r + 1 <= target) and (c + 1 <= target)
+
+        if must_diagonal:
+            if can_diag:
+                allowed = [('X', r + 1, c + 1)]
             else:
-                nr, nc = r + 1, c + 1
-            
-            if nr >= n or nc >= n:
+                allowed = []
+                if can_right:
+                    allowed.append(('R', r, c + 1))
+                if can_down:
+                    allowed.append(('D', r + 1, c))
+        else:
+            allowed = []
+            if can_right:
+                allowed.append(('R', r, c + 1))
+            if can_down:
+                allowed.append(('D', r + 1, c))
+            if can_diag:
+                allowed.append(('X', r + 1, c + 1))
+
+        result = None
+        for mv, nr, nc in allowed:
+            sub = dfs(nr, nc, moves + 1)
+            if sub is None:
                 continue
-            
-            sub_sum, sub_path = dp(nr, nc, move_count + 1)
-            if sub_sum == NEG:
-                continue
-            
+            sub_sum, sub_path = sub
             total = grid[nr][nc] + sub_sum
             path = mv + sub_path
-            
-            if total > best[0]:
-                best = (total, path)
-        
-        memo[key] = best
-        return best
-    
-    result_sum, result_path = dp(0, 0, 0)
-    
-    if result_sum == NEG:
-        return (NEG, "")
-    
-    return (grid[0][0] + result_sum, result_path)
+            if result is None or total > result[0]:
+                result = (total, path)
+
+        memo[key] = result
+        return result
+
+    res = dfs(0, 0, 0)
+    if res is None:
+        return (grid[0][0], "")
+
+    total_sum = grid[0][0] + res[0]
+    return (total_sum, res[1])
