@@ -1,9 +1,9 @@
 Model: grok-4.3
 Provider: grok
-Evaluated: 2026-07-08T11:35:38.944989+00:00
+Evaluated: 2026-07-13T17:19:01.683146+00:00
 
 === TIMING ===
-Response time: 14.66s
+Response time: 34.78s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,91 +18,91 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 import sys
-sys.setrecursionlimit(10000)
+from functools import lru_cache
 
 def solve_grid(grid):
     if not grid or not grid[0]:
         return (0, "")
-    n = len(grid)
-    directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
-    memo = {}
-    def dfs(r, c, moves):
-        if r == n - 1 and c == n - 1:
-            return grid[r][c], ""
-        key = (r, c, moves % 3)
-        if key in memo:
-            return memo[key]
-        must_x = (moves + 1) % 3 == 0
-        best_sum = -float('inf')
+    N = len(grid)
+    @lru_cache(None)
+    def dp(i, j, moves):
+        if i == N-1 and j == N-1:
+            return grid[i][j], ""
+        if i >= N or j >= N:
+            return float('-inf'), ""
+        must_x = ((moves + 1) % 3 == 0)
+        best = float('-inf')
         best_path = ""
-        moves_to_try = directions if not must_x else [(1, 1, 'X')]
-        tried = False
-        for dr, dc, move in moves_to_try:
-            nr, nc = r + dr, c + dc
-            if 0 <= nr < n and 0 <= nc < n:
-                tried = True
-                rec_sum, rec_path = dfs(nr, nc, moves + 1)
-                total = grid[r][c] + rec_sum
-                if total > best_sum:
-                    best_sum = total
-                    best_path = move + rec_path
-        if must_x and not tried:
-            for dr, dc, move in [(0, 1, 'R'), (1, 0, 'D')]:
-                nr, nc = r + dr, c + dc
-                if 0 <= nr < n and 0 <= nc < n:
-                    rec_sum, rec_path = dfs(nr, nc, moves + 1)
-                    total = grid[r][c] + rec_sum
-                    if total > best_sum:
-                        best_sum = total
-                        best_path = move + rec_path
-        res = (best_sum, best_path)
-        memo[key] = res
-        return res
-    maxs, path = dfs(0, 0, 0)
-    return maxs, path
+        candidates = []
+        if must_x:
+            if i + 1 < N and j + 1 < N:
+                candidates.append((i + 1, j + 1, 'X'))
+            else:
+                if j + 1 < N:
+                    candidates.append((i, j + 1, 'R'))
+                if i + 1 < N:
+                    candidates.append((i + 1, j, 'D'))
+        else:
+            if j + 1 < N:
+                candidates.append((i, j + 1, 'R'))
+            if i + 1 < N:
+                candidates.append((i + 1, j, 'D'))
+            if i + 1 < N and j + 1 < N:
+                candidates.append((i + 1, j + 1, 'X'))
+        for ni, nj, move in candidates:
+            val, p = dp(ni, nj, moves + 1)
+            if val > float('-inf'):
+                total = grid[i][j] + val
+                path = move + p
+                if total > best:
+                    best = total
+                    best_path = path
+        return best, best_path
+    total, path = dp(0, 0, 0)
+    return (total, path)
 ```
 
 === EXTRACTED CODE ===
 import sys
-sys.setrecursionlimit(10000)
+from functools import lru_cache
 
 def solve_grid(grid):
     if not grid or not grid[0]:
         return (0, "")
-    n = len(grid)
-    directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
-    memo = {}
-    def dfs(r, c, moves):
-        if r == n - 1 and c == n - 1:
-            return grid[r][c], ""
-        key = (r, c, moves % 3)
-        if key in memo:
-            return memo[key]
-        must_x = (moves + 1) % 3 == 0
-        best_sum = -float('inf')
+    N = len(grid)
+    @lru_cache(None)
+    def dp(i, j, moves):
+        if i == N-1 and j == N-1:
+            return grid[i][j], ""
+        if i >= N or j >= N:
+            return float('-inf'), ""
+        must_x = ((moves + 1) % 3 == 0)
+        best = float('-inf')
         best_path = ""
-        moves_to_try = directions if not must_x else [(1, 1, 'X')]
-        tried = False
-        for dr, dc, move in moves_to_try:
-            nr, nc = r + dr, c + dc
-            if 0 <= nr < n and 0 <= nc < n:
-                tried = True
-                rec_sum, rec_path = dfs(nr, nc, moves + 1)
-                total = grid[r][c] + rec_sum
-                if total > best_sum:
-                    best_sum = total
-                    best_path = move + rec_path
-        if must_x and not tried:
-            for dr, dc, move in [(0, 1, 'R'), (1, 0, 'D')]:
-                nr, nc = r + dr, c + dc
-                if 0 <= nr < n and 0 <= nc < n:
-                    rec_sum, rec_path = dfs(nr, nc, moves + 1)
-                    total = grid[r][c] + rec_sum
-                    if total > best_sum:
-                        best_sum = total
-                        best_path = move + rec_path
-        res = (best_sum, best_path)
-        memo[key] = res
-        return res
-    maxs, path = dfs(0, 0, 0)
-    return maxs, path
+        candidates = []
+        if must_x:
+            if i + 1 < N and j + 1 < N:
+                candidates.append((i + 1, j + 1, 'X'))
+            else:
+                if j + 1 < N:
+                    candidates.append((i, j + 1, 'R'))
+                if i + 1 < N:
+                    candidates.append((i + 1, j, 'D'))
+        else:
+            if j + 1 < N:
+                candidates.append((i, j + 1, 'R'))
+            if i + 1 < N:
+                candidates.append((i + 1, j, 'D'))
+            if i + 1 < N and j + 1 < N:
+                candidates.append((i + 1, j + 1, 'X'))
+        for ni, nj, move in candidates:
+            val, p = dp(ni, nj, moves + 1)
+            if val > float('-inf'):
+                total = grid[i][j] + val
+                path = move + p
+                if total > best:
+                    best = total
+                    best_path = path
+        return best, best_path
+    total, path = dp(0, 0, 0)
+    return (total, path)
