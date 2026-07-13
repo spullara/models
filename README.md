@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-10 06:08:12
+Last updated: 2026-07-13 17:17:53
 
-## Updates This Week (2026-07-04 to 2026-07-10)
+## Updates This Week (2026-07-07 to 2026-07-13)
 
 ### OpenAI
 
@@ -12,8 +12,6 @@ Last updated: 2026-07-10 06:08:12
 - gpt-5.6-luna (added: 2026-07-09)
 - gpt-5.6-sol (added: 2026-07-09)
 - gpt-5.6-terra (added: 2026-07-09)
-- gpt-realtime-2.1 (added: 2026-07-06)
-- gpt-realtime-2.1-mini (added: 2026-07-06)
 
 ### Grok
 
