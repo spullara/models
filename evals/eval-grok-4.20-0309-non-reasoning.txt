@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-07-08T11:34:05.572840+00:00
+Evaluated: 2026-07-13T17:17:37.095269+00:00
 
 === TIMING ===
-Response time: 2.07s
+Response time: 2.97s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -23,16 +23,19 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 1:
         return (grid[0][0], "")
-    INF = float('-inf')
-    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
+    
+    dp = [[(float('-inf'), "") for _ in range(n)] for _ in range(n)]
     dp[0][0] = (grid[0][0], "")
+    
     dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
+    
     for i in range(n):
         for j in range(n):
-            if dp[i][j][0] == INF:
+            if dp[i][j][0] == float('-inf'):
                 continue
             moves_made = len(dp[i][j][1])
             must_diag = (moves_made % 3 == 2)
+            
             for di, dj, let in dirs:
                 ni, nj = i + di, j + dj
                 if 0 <= ni < n and 0 <= nj < n:
@@ -42,6 +45,7 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
                     new_path = dp[i][j][1] + let
                     if new_sum > dp[ni][nj][0]:
                         dp[ni][nj] = (new_sum, new_path)
+    
     return dp[n-1][n-1]
 ```
 
@@ -52,16 +56,19 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 1:
         return (grid[0][0], "")
-    INF = float('-inf')
-    dp = [[(INF, "") for _ in range(n)] for _ in range(n)]
+    
+    dp = [[(float('-inf'), "") for _ in range(n)] for _ in range(n)]
     dp[0][0] = (grid[0][0], "")
+    
     dirs = [(0,1,'R'), (1,0,'D'), (1,1,'X')]
+    
     for i in range(n):
         for j in range(n):
-            if dp[i][j][0] == INF:
+            if dp[i][j][0] == float('-inf'):
                 continue
             moves_made = len(dp[i][j][1])
             must_diag = (moves_made % 3 == 2)
+            
             for di, dj, let in dirs:
                 ni, nj = i + di, j + dj
                 if 0 <= ni < n and 0 <= nj < n:
@@ -71,4 +78,5 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
                     new_path = dp[i][j][1] + let
                     if new_sum > dp[ni][nj][0]:
                         dp[ni][nj] = (new_sum, new_path)
+    
     return dp[n-1][n-1]
