@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-13 17:22:19
+Last updated: 2026-07-15 13:57:19
 
-## Updates This Week (2026-07-07 to 2026-07-13)
+## Updates This Week (2026-07-09 to 2026-07-15)
 
 ### OpenAI
 
@@ -12,18 +12,6 @@ Last updated: 2026-07-13 17:22:19
 - gpt-5.6-luna (added: 2026-07-09)
 - gpt-5.6-sol (added: 2026-07-09)
 - gpt-5.6-terra (added: 2026-07-09)
-
-### Grok
-
-**Added**
-
-- grok-4.5 (added: 2026-07-08)
-
-### Mistral
-
-**Deleted**
-
-- voxtral-mini-2507 (deleted: 2026-07-08)
 
 ### Qwen
 
@@ -49,7 +37,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/21
 
-**Mistral**: 60/49
+**Mistral**: 61/48
 
 **DeepSeek**: 2/2
 
@@ -476,6 +464,7 @@ Model counts shown as: **Available/Deleted**
 
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
+- voxtral-mini-tts-mellon-greek-2606-solutions (added: 2026-06-24)
 - mistral-ocr-4-0 (added: 2026-06-23)
 - mistral-ocr-4 (added: 2026-06-23)
 - mistral-ocr-3-0 (added: 2026-06-16)
@@ -538,7 +527,6 @@ Model counts shown as: **Available/Deleted**
 ### Deleted Models
 
 - voxtral-mini-2507 (deleted: 2026-07-08)
-- voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-02)
 - mistral-moderation-latest (deleted: 2026-06-30)
 - mistral-moderation-2411 (deleted: 2026-06-30)
 - labs-leanstral-2603 (deleted: 2026-06-30)
