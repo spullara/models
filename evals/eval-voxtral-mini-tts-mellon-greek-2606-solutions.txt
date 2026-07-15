@@ -1,9 +1,9 @@
 Model: voxtral-mini-tts-mellon-greek-2606-solutions
 Provider: mistral
-Evaluated: 2026-06-24T16:21:05.737299+00:00
+Evaluated: 2026-07-15T13:57:05.882008+00:00
 
 === TIMING ===
-Response time: 0.4s
+Response time: 0.3s
 
 === CODE EXTRACTION ===
 Method: None
