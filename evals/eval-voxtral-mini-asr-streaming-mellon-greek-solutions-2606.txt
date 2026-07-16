@@ -1,0 +1,19 @@
+Model: voxtral-mini-asr-streaming-mellon-greek-solutions-2606
+Provider: mistral
+Evaluated: 2026-07-16T13:02:06.121287+00:00
+
+=== TIMING ===
+Response time: 0.27s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"object":"error","message":"Invalid model: voxtral-mini-asr-streaming-mellon-greek-solutions-2606","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
