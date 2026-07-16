@@ -50,13 +50,11 @@ mistral-vibe-cli-with-tools
 open-mistral-nemo
 open-mistral-nemo-2407
 voxtral-mini-2602
-voxtral-mini-asr-streaming-mellon-greek-2606-solutions
 voxtral-mini-latest
 voxtral-mini-realtime-2602
 voxtral-mini-realtime-latest
 voxtral-mini-transcribe-realtime-2602
 voxtral-mini-tts-2603
 voxtral-mini-tts-latest
-voxtral-mini-tts-mellon-greek-2606-solutions
 voxtral-small-2507
 voxtral-small-latest
