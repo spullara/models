@@ -1,2 +1,2 @@
-grok-imagine-video
-grok-imagine-video-1.5
+grok-imagine-image
+grok-imagine-image-quality
