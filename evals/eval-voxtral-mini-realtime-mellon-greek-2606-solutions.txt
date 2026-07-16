@@ -1,0 +1,19 @@
+Model: voxtral-mini-realtime-mellon-greek-2606-solutions
+Provider: mistral
+Evaluated: 2026-07-16T14:57:05.944839+00:00
+
+=== TIMING ===
+Response time: 0.3s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"object":"error","message":"Invalid model: voxtral-mini-realtime-mellon-greek-2606-solutions","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
