@@ -1,101 +1,19 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-07-13T17:17:37.394378+00:00
+Evaluated: 2026-07-16T06:30:14.678623+00:00
 
 === TIMING ===
-Response time: 3.62s
+Response time: 0.16s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 73
-Calculated sum: 15
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    n = len(grid)
-    if n == 1:
-        return (grid[0][0], "")
-    
-    dp = [[(0, "") for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], "")
-    
-    for i in range(n):
-        for j in range(n):
-            if i == 0 and j == 0:
-                continue
-            candidates = []
-            moves = []
-            if j > 0:
-                moves.append((0, -1, 'R', False))
-            if i > 0:
-                moves.append((-1, 0, 'D', False))
-            if i > 0 and j > 0:
-                moves.append((-1, -1, 'X', True))
-            
-            for di, dj, ch, is_diag in moves:
-                pi, pj = i + di, j + dj
-                if 0 <= pi < n and 0 <= pj < n:
-                    prev_sum, prev_path = dp[pi][pj]
-                    total = prev_sum + grid[i][j]
-                    path = prev_path + ch
-                    candidates.append((total, path, len(path)))
-            
-            if not candidates:
-                continue
-            
-            best = max(candidates, key=lambda x: (x[0], -x[2]))
-            dp[i][j] = (best[0], best[1])
-    
-    max_sum, full_path = dp[n-1][n-1]
-    return (max_sum, full_path)
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    n = len(grid)
-    if n == 1:
-        return (grid[0][0], "")
-    
-    dp = [[(0, "") for _ in range(n)] for _ in range(n)]
-    dp[0][0] = (grid[0][0], "")
-    
-    for i in range(n):
-        for j in range(n):
-            if i == 0 and j == 0:
-                continue
-            candidates = []
-            moves = []
-            if j > 0:
-                moves.append((0, -1, 'R', False))
-            if i > 0:
-                moves.append((-1, 0, 'D', False))
-            if i > 0 and j > 0:
-                moves.append((-1, -1, 'X', True))
-            
-            for di, dj, ch, is_diag in moves:
-                pi, pj = i + di, j + dj
-                if 0 <= pi < n and 0 <= pj < n:
-                    prev_sum, prev_path = dp[pi][pj]
-                    total = prev_sum + grid[i][j]
-                    path = prev_path + ch
-                    candidates.append((total, path, len(path)))
-            
-            if not candidates:
-                continue
-            
-            best = max(candidates, key=lambda x: (x[0], -x[2]))
-            dp[i][j] = (best[0], best[1])
-    
-    max_sum, full_path = dp[n-1][n-1]
-    return (max_sum, full_path)
+(no code extracted)

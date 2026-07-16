@@ -1,88 +1,19 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-07-13T17:17:41.091089+00:00
+Evaluated: 2026-07-16T06:30:14.834884+00:00
 
 === TIMING ===
-Response time: 30.34s
+Response time: 0.11s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    N = len(grid)
-    best_sum = float('-inf')
-    best_path = ""
-    def backtrack(r, c, moves, path, current_sum):
-        nonlocal best_sum, best_path
-        if r == N - 1 and c == N - 1:
-            if current_sum > best_sum:
-                best_sum = current_sum
-                best_path = "".join(path)
-            return
-        is_forced_diagonal = ((moves + 1) % 3 == 0)
-        can_diagonal = (r + 1 < N and c + 1 < N)
-        if is_forced_diagonal and can_diagonal:
-            possible = [('X', 1, 1)]
-        else:
-            possible = []
-            if c + 1 < N:
-                possible.append(('R', 0, 1))
-            if r + 1 < N:
-                possible.append(('D', 1, 0))
-            if can_diagonal:
-                possible.append(('X', 1, 1))
-        for move, dr, dc in possible:
-            nr, nc = r + dr, c + dc
-            new_sum = current_sum + grid[nr][nc]
-            path.append(move)
-            backtrack(nr, nc, moves + 1, path, new_sum)
-            path.pop()
-    backtrack(0, 0, 0, [], grid[0][0])
-    return int(best_sum), best_path
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    N = len(grid)
-    best_sum = float('-inf')
-    best_path = ""
-    def backtrack(r, c, moves, path, current_sum):
-        nonlocal best_sum, best_path
-        if r == N - 1 and c == N - 1:
-            if current_sum > best_sum:
-                best_sum = current_sum
-                best_path = "".join(path)
-            return
-        is_forced_diagonal = ((moves + 1) % 3 == 0)
-        can_diagonal = (r + 1 < N and c + 1 < N)
-        if is_forced_diagonal and can_diagonal:
-            possible = [('X', 1, 1)]
-        else:
-            possible = []
-            if c + 1 < N:
-                possible.append(('R', 0, 1))
-            if r + 1 < N:
-                possible.append(('D', 1, 0))
-            if can_diagonal:
-                possible.append(('X', 1, 1))
-        for move, dr, dc in possible:
-            nr, nc = r + dr, c + dc
-            new_sum = current_sum + grid[nr][nc]
-            path.append(move)
-            backtrack(nr, nc, moves + 1, path, new_sum)
-            path.pop()
-    backtrack(0, 0, 0, [], grid[0][0])
-    return int(best_sum), best_path
+(no code extracted)
