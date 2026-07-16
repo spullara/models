@@ -1,9 +1,9 @@
 Model: voxtral-mini-asr-streaming-mellon-greek-solutions-2606
 Provider: mistral
-Evaluated: 2026-07-16T13:06:06.870417+00:00
+Evaluated: 2026-07-16T14:13:06.433981+00:00
 
 === TIMING ===
-Response time: 0.32s
+Response time: 0.29s
 
 === CODE EXTRACTION ===
 Method: None
