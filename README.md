@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-16 07:17:16
+Last updated: 2026-07-16 07:19:20
 
 ## Updates This Week (2026-07-10 to 2026-07-16)
 
@@ -9,14 +9,10 @@ Last updated: 2026-07-16 07:17:16
 
 **Deleted**
 
-- grok-4.20-0309-non-reasoning (deleted: 2026-07-16)
-- grok-4.20-0309-reasoning (deleted: 2026-07-16)
-- grok-4.20-multi-agent-0309 (deleted: 2026-07-16)
-- grok-4.3 (deleted: 2026-07-16)
-- grok-4.5 (deleted: 2026-07-16)
-- grok-build-0.1 (deleted: 2026-07-16)
 - grok-imagine-image (deleted: 2026-07-16)
 - grok-imagine-image-quality (deleted: 2026-07-16)
+- grok-imagine-video (deleted: 2026-07-16)
+- grok-imagine-video-1.5 (deleted: 2026-07-16)
 
 ### Qwen
 
@@ -34,7 +30,7 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 50/94
 
-**Grok**: 2/29
+**Grok**: 6/25
 
 **Mistral**: 61/48
 
@@ -422,19 +418,19 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- grok-imagine-video-1.5 (added: 2026-06-17)
-- grok-imagine-video (added: 2026-01-29)
+- grok-4.5 (added: 2026-07-08)
+- grok-build-0.1 (added: 2026-05-20)
+- grok-4.3 (added: 2026-04-30)
+- grok-4.20-multi-agent-0309 (added: 2026-03-19)
+- grok-4.20-0309-reasoning (added: 2026-03-19)
+- grok-4.20-0309-non-reasoning (added: 2026-03-19)
 
 ### Deleted Models
 
+- grok-imagine-video-1.5 (deleted: 2026-07-16)
+- grok-imagine-video (deleted: 2026-07-16)
 - grok-imagine-image-quality (deleted: 2026-07-16)
 - grok-imagine-image (deleted: 2026-07-16)
-- grok-build-0.1 (deleted: 2026-07-16)
-- grok-4.5 (deleted: 2026-07-16)
-- grok-4.3 (deleted: 2026-07-16)
-- grok-4.20-multi-agent-0309 (deleted: 2026-07-16)
-- grok-4.20-0309-reasoning (deleted: 2026-07-16)
-- grok-4.20-0309-non-reasoning (deleted: 2026-07-16)
 - grok-imagine-video-0428 (deleted: 2026-06-26)
 - grok-imagine-video-1.5-preview (deleted: 2026-06-17)
 - grok-imagine-image-pro (deleted: 2026-05-15)
