@@ -1,6 +1,6 @@
 Model: grok-imagine-image-quality
 Provider: grok
-Evaluated: 2026-07-09T04:14:05.482613+00:00
+Evaluated: 2026-07-16T06:32:13.419870+00:00
 
 === TIMING ===
 Response time: 0.11s
@@ -10,7 +10,7 @@ Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 400: {"code":"invalid-argument","error":"Model not found: grok-imagine-image-quality"}
+API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
 
 === RAW RESPONSE ===
 (no response)
