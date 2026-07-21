@@ -1,0 +1,112 @@
+Model: models/gemini-3.5-flash-lite
+Provider: gemini
+Evaluated: 2026-07-21T14:00:06.184857+00:00
+
+=== TIMING ===
+Response time: 1.63s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    memo = {}
+
+    def dp(r, c, move_count):
+        if r == n - 1 and c == n - 1:
+            return grid[r][c], ""
+
+        state = (r, c, move_count)
+        if state in memo:
+            return memo[state]
+
+        must_diag = (move_count % 3 == 0)
+        diag_possible = (r + 1 < n and c + 1 < n)
+
+        best_val = -float('inf')
+        best_path = ""
+
+        if must_diag and diag_possible:
+            val, path = dp(r + 1, c + 1, move_count + 1)
+            best_val = grid[r][c] + val
+            best_path = "X" + path
+        else:
+            if diag_possible:
+                val, path = dp(r + 1, c + 1, move_count + 1)
+                if grid[r][c] + val > best_val:
+                    best_val = grid[r][c] + val
+                    best_path = "X" + path
+
+            if r + 1 < n:
+                val, path = dp(r + 1, c, move_count + 1)
+                if grid[r][c] + val > best_val:
+                    best_val = grid[r][c] + val
+                    best_path = "D" + path
+
+            if c + 1 < n:
+                val, path = dp(r, c + 1, move_count + 1)
+                if grid[r][c] + val > best_val:
+                    best_val = grid[r][c] + val
+                    best_path = "R" + path
+
+        memo[state] = (best_val, best_path)
+        return best_val, best_path
+
+    return dp(0, 0, 1)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    memo = {}
+
+    def dp(r, c, move_count):
+        if r == n - 1 and c == n - 1:
+            return grid[r][c], ""
+
+        state = (r, c, move_count)
+        if state in memo:
+            return memo[state]
+
+        must_diag = (move_count % 3 == 0)
+        diag_possible = (r + 1 < n and c + 1 < n)
+
+        best_val = -float('inf')
+        best_path = ""
+
+        if must_diag and diag_possible:
+            val, path = dp(r + 1, c + 1, move_count + 1)
+            best_val = grid[r][c] + val
+            best_path = "X" + path
+        else:
+            if diag_possible:
+                val, path = dp(r + 1, c + 1, move_count + 1)
+                if grid[r][c] + val > best_val:
+                    best_val = grid[r][c] + val
+                    best_path = "X" + path
+
+            if r + 1 < n:
+                val, path = dp(r + 1, c, move_count + 1)
+                if grid[r][c] + val > best_val:
+                    best_val = grid[r][c] + val
+                    best_path = "D" + path
+
+            if c + 1 < n:
+                val, path = dp(r, c + 1, move_count + 1)
+                if grid[r][c] + val > best_val:
+                    best_val = grid[r][c] + val
+                    best_path = "R" + path
+
+        memo[state] = (best_val, best_path)
+        return best_val, best_path
+
+    return dp(0, 0, 1)
