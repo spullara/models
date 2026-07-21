@@ -11,7 +11,6 @@ models/gemini-2.5-computer-use-preview-10-2025
 models/gemini-2.5-flash
 models/gemini-2.5-flash-image
 models/gemini-2.5-flash-lite
-models/gemini-2.5-flash-native-audio-latest
 models/gemini-2.5-flash-preview-tts
 models/gemini-2.5-pro
 models/gemini-2.5-pro-preview-tts
@@ -28,6 +27,8 @@ models/gemini-3.1-flash-tts-preview
 models/gemini-3.1-pro-preview
 models/gemini-3.1-pro-preview-customtools
 models/gemini-3.5-flash
+models/gemini-3.5-flash-lite
+models/gemini-3.6-flash
 models/gemini-embedding-001
 models/gemini-embedding-2
 models/gemini-embedding-2-preview
@@ -47,4 +48,3 @@ models/lyria-3-pro-preview
 models/nano-banana-pro-preview
 models/veo-3.1-fast-generate-preview
 models/veo-3.1-generate-preview
-models/veo-3.1-lite-generate-preview
