@@ -1,9 +1,21 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-20 15:47:21
+Last updated: 2026-07-21 14:00:54
 
-## Updates This Week (2026-07-14 to 2026-07-20)
+## Updates This Week (2026-07-15 to 2026-07-21)
+
+### Gemini
+
+**Added**
+
+- models/gemini-3.5-flash-lite (added: 2026-07-21)
+- models/gemini-3.6-flash (added: 2026-07-21)
+
+**Deleted**
+
+- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-07-21)
+- models/veo-3.1-lite-generate-preview (deleted: 2026-07-21)
 
 ### Mistral
 
@@ -28,7 +40,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 10/12
 
-**Gemini**: 50/94
+**Gemini**: 50/96
 
 **Grok**: 10/21
 
@@ -266,6 +278,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-3.6-flash (added: 2026-07-21)
+- models/gemini-3.5-flash-lite (added: 2026-07-21)
 - models/gemini-omni-flash-preview (added: 2026-06-30)
 - models/gemini-3.1-flash-lite-image (added: 2026-06-30)
 - models/gemini-3.1-flash-image (added: 2026-05-28)
@@ -280,7 +294,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-robotics-er-1.6-preview (added: 2026-04-14)
 - models/gemma-4-31b-it (added: 2026-04-02)
 - models/gemma-4-26b-a4b-it (added: 2026-04-02)
-- models/veo-3.1-lite-generate-preview (added: 2026-03-31)
 - models/lyria-3-pro-preview (added: 2026-03-25)
 - models/lyria-3-clip-preview (added: 2026-03-25)
 - models/gemini-embedding-2-preview (added: 2026-03-10)
@@ -290,7 +303,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
-- models/gemini-2.5-flash-native-audio-latest (added: 2025-12-10)
 - models/veo-3.1-fast-generate-preview (added: 2025-12-09)
 - models/veo-3.1-generate-preview (added: 2025-12-05)
 - models/imagen-4.0-fast-generate-001 (added: 2025-12-05)
@@ -319,6 +331,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/veo-3.1-lite-generate-preview (deleted: 2026-07-21)
+- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-07-21)
 - models/veo-3.0-generate-001 (deleted: 2026-06-30)
 - models/veo-3.0-fast-generate-001 (deleted: 2026-06-30)
 - models/veo-2.0-generate-001 (deleted: 2026-06-30)
