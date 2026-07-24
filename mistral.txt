@@ -2,6 +2,7 @@ codestral-2508
 codestral-embed
 codestral-embed-2505
 codestral-latest
+deepseek-v4-flash
 devstral-2512
 devstral-latest
 devstral-medium-latest
