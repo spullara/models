@@ -1,0 +1,22 @@
+Model: claude-opus-5
+Provider: anthropic
+Evaluated: 2026-07-24T16:52:06.281785+00:00
+
+=== TIMING ===
+Response time: 4.23s
+
+=== FALLBACK ===
+Fallback used: anthropic_refusal_system
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: Anthropic refusal (stop_reason=refusal, no content)
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
