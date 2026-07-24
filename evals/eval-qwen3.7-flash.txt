@@ -1,0 +1,230 @@
+Model: qwen3.7-flash
+Provider: qwen
+Evaluated: 2026-07-24T11:35:06.114756+00:00
+
+=== TIMING ===
+Response time: 160.45s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    
+    N = len(grid)
+    # dp[r][c][rem] stores max sum reaching (r, c)
+    # rem: 0, 1, 2 corresponding to (moves+1)%3
+    # rem=0 means next move is 3rd, 6th...
+    # rem=1 means next move is 1st, 4th...
+    # rem=2 means next move is 2nd, 5th...
+    
+    NEG_INF = -float('inf')
+    
+    # Initialize DP table
+    dp = [[[NEG_INF] * 3 for _ in range(N)] for _ in range(N)]
+    
+    # Decision table to reconstruct path
+    decisions = [[[None] * 3 for _ in range(N)] for _ in range(N)]
+    
+    # Base case: Start at (0, 0) with 0 moves taken.
+    # Next move number is 1. rem = (0 + 1) % 3 = 1.
+    dp[0][0][1] = grid[0][0]
+    
+    for r in range(N):
+        for c in range(N):
+            # Check all 3 possible states at this cell
+            for rem in range(3):
+                current_val = dp[r][c][rem]
+                if current_val == NEG_INF:
+                    continue
+                
+                # Determine allowed moves based on constraint
+                candidates = []
+                
+                if rem == 0:
+                    # Required diagonal move (3rd, 6th, etc.)
+                    # Check if diagonal (X) is valid
+                    if r + 1 < N and c + 1 < N:
+                        candidates.append(('X', r + 1, c + 1))
+                    else:
+                        # Diagonal not possible, fallback to R or D
+                        if c + 1 < N:
+                            candidates.append(('R', r, c + 1))
+                        if r + 1 < N:
+                            candidates.append(('D', r + 1, c))
+                else:
+                    # rem is 1 or 2, any move allowed
+                    if c + 1 < N:
+                        candidates.append(('R', r, c + 1))
+                    if r + 1 < N:
+                        candidates.append(('D', r + 1, c))
+                    if r + 1 < N and c + 1 < N:
+                        candidates.append(('X', r + 1, c + 1))
+                
+                # Transition
+                # Taking a move increases move count by 1.
+                # new_rem = (rem + 1) % 3
+                new_rem = (rem + 1) % 3
+                
+                for char, nr, nc in candidates:
+                    next_val = current_val + grid[nr][nc]
+                    if next_val > dp[nr][nc][new_rem]:
+                        dp[nr][nc][new_rem] = next_val
+                        decisions[nr][nc][new_rem] = char
+
+    # Find the maximum sum at the bottom-right corner
+    best_sum = NEG_INF
+    best_rem = -1
+    
+    for rem in range(3):
+        if dp[N-1][N-1][rem] > best_sum:
+            best_sum = dp[N-1][N-1][rem]
+            best_rem = rem
+            
+    # If no path found (should not happen for valid grid), return 0 and empty string
+    if best_sum == NEG_INF:
+        return (0, "")
+
+    # Reconstruct path
+    path_chars = []
+    curr_r, curr_c, curr_rem = N-1, N-1, best_rem
+    
+    # Backtrack until we reach (0, 0)
+    while curr_r != 0 or curr_c != 0:
+        char = decisions[curr_r][curr_c][curr_rem]
+        if char is None:
+            break
+        
+        path_chars.append(char)
+        
+        # Move back
+        if char == 'R':
+            curr_r, curr_c = curr_r, curr_c - 1
+        elif char == 'D':
+            curr_r, curr_c = curr_r - 1, curr_c
+        elif char == 'X':
+            curr_r, curr_c = curr_r - 1, curr_c - 1
+        
+        # Update rem
+        # Since new_rem = (old_rem + 1) % 3, old_rem = (new_rem - 1) % 3
+        curr_rem = (curr_rem + 2) % 3
+        
+    path_str = "".join(reversed(path_chars))
+    
+    return (best_sum, path_str)
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    
+    N = len(grid)
+    # dp[r][c][rem] stores max sum reaching (r, c)
+    # rem: 0, 1, 2 corresponding to (moves+1)%3
+    # rem=0 means next move is 3rd, 6th...
+    # rem=1 means next move is 1st, 4th...
+    # rem=2 means next move is 2nd, 5th...
+    
+    NEG_INF = -float('inf')
+    
+    # Initialize DP table
+    dp = [[[NEG_INF] * 3 for _ in range(N)] for _ in range(N)]
+    
+    # Decision table to reconstruct path
+    decisions = [[[None] * 3 for _ in range(N)] for _ in range(N)]
+    
+    # Base case: Start at (0, 0) with 0 moves taken.
+    # Next move number is 1. rem = (0 + 1) % 3 = 1.
+    dp[0][0][1] = grid[0][0]
+    
+    for r in range(N):
+        for c in range(N):
+            # Check all 3 possible states at this cell
+            for rem in range(3):
+                current_val = dp[r][c][rem]
+                if current_val == NEG_INF:
+                    continue
+                
+                # Determine allowed moves based on constraint
+                candidates = []
+                
+                if rem == 0:
+                    # Required diagonal move (3rd, 6th, etc.)
+                    # Check if diagonal (X) is valid
+                    if r + 1 < N and c + 1 < N:
+                        candidates.append(('X', r + 1, c + 1))
+                    else:
+                        # Diagonal not possible, fallback to R or D
+                        if c + 1 < N:
+                            candidates.append(('R', r, c + 1))
+                        if r + 1 < N:
+                            candidates.append(('D', r + 1, c))
+                else:
+                    # rem is 1 or 2, any move allowed
+                    if c + 1 < N:
+                        candidates.append(('R', r, c + 1))
+                    if r + 1 < N:
+                        candidates.append(('D', r + 1, c))
+                    if r + 1 < N and c + 1 < N:
+                        candidates.append(('X', r + 1, c + 1))
+                
+                # Transition
+                # Taking a move increases move count by 1.
+                # new_rem = (rem + 1) % 3
+                new_rem = (rem + 1) % 3
+                
+                for char, nr, nc in candidates:
+                    next_val = current_val + grid[nr][nc]
+                    if next_val > dp[nr][nc][new_rem]:
+                        dp[nr][nc][new_rem] = next_val
+                        decisions[nr][nc][new_rem] = char
+
+    # Find the maximum sum at the bottom-right corner
+    best_sum = NEG_INF
+    best_rem = -1
+    
+    for rem in range(3):
+        if dp[N-1][N-1][rem] > best_sum:
+            best_sum = dp[N-1][N-1][rem]
+            best_rem = rem
+            
+    # If no path found (should not happen for valid grid), return 0 and empty string
+    if best_sum == NEG_INF:
+        return (0, "")
+
+    # Reconstruct path
+    path_chars = []
+    curr_r, curr_c, curr_rem = N-1, N-1, best_rem
+    
+    # Backtrack until we reach (0, 0)
+    while curr_r != 0 or curr_c != 0:
+        char = decisions[curr_r][curr_c][curr_rem]
+        if char is None:
+            break
+        
+        path_chars.append(char)
+        
+        # Move back
+        if char == 'R':
+            curr_r, curr_c = curr_r, curr_c - 1
+        elif char == 'D':
+            curr_r, curr_c = curr_r - 1, curr_c
+        elif char == 'X':
+            curr_r, curr_c = curr_r - 1, curr_c - 1
+        
+        # Update rem
+        # Since new_rem = (old_rem + 1) % 3, old_rem = (new_rem - 1) % 3
+        curr_rem = (curr_rem + 2) % 3
+        
+    path_str = "".join(reversed(path_chars))
+    
+    return (best_sum, path_str)
