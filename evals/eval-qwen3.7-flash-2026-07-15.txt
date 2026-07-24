@@ -1,0 +1,108 @@
+Model: qwen3.7-flash-2026-07-15
+Provider: qwen
+Evaluated: 2026-07-24T11:36:06.404698+00:00
+
+=== TIMING ===
+Response time: 62.72s
+
+=== CODE EXTRACTION ===
+Method: direct
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    dp = [[[None]*4 for _ in range(N)] for _ in range(N)]
+    
+    val_br = grid[N-1][N-1]
+    for t in range(1, 4):
+        dp[N-1][N-1][t] = (val_br, "")
+        
+    for r in range(N-1, -1, -1):
+        for c in range(N-1, -1, -1):
+            if r == N-1 and c == N-1:
+                continue
+            for t in range(1, 4):
+                best_sum = float('-inf')
+                best_path = ""
+                
+                if t == 3:
+                    if r < N - 1 and c < N - 1:
+                        moves = [('X', r + 1, c + 1, 1)]
+                    else:
+                        moves = []
+                        if c + 1 < N:
+                            moves.append(('R', r, c + 1, 1))
+                        if r + 1 < N:
+                            moves.append(('D', r + 1, c, 1))
+                else:
+                    moves = []
+                    if c + 1 < N:
+                        moves.append(('R', r, c + 1, t % 3 + 1))
+                    if r + 1 < N:
+                        moves.append(('D', r + 1, c, t % 3 + 1))
+                    if r + 1 < N and c + 1 < N:
+                        moves.append(('X', r + 1, c + 1, t % 3 + 1))
+                        
+                for char, nr, nc, nt in moves:
+                    ns, np = dp[nr][nc][nt]
+                    current_total = grid[r][c] + ns
+                    if current_total > best_sum:
+                        best_sum = current_total
+                        best_path = char + np
+                    
+                dp[r][c][t] = (best_sum, best_path)
+                
+    return dp[0][0][1]
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    dp = [[[None]*4 for _ in range(N)] for _ in range(N)]
+    
+    val_br = grid[N-1][N-1]
+    for t in range(1, 4):
+        dp[N-1][N-1][t] = (val_br, "")
+        
+    for r in range(N-1, -1, -1):
+        for c in range(N-1, -1, -1):
+            if r == N-1 and c == N-1:
+                continue
+            for t in range(1, 4):
+                best_sum = float('-inf')
+                best_path = ""
+                
+                if t == 3:
+                    if r < N - 1 and c < N - 1:
+                        moves = [('X', r + 1, c + 1, 1)]
+                    else:
+                        moves = []
+                        if c + 1 < N:
+                            moves.append(('R', r, c + 1, 1))
+                        if r + 1 < N:
+                            moves.append(('D', r + 1, c, 1))
+                else:
+                    moves = []
+                    if c + 1 < N:
+                        moves.append(('R', r, c + 1, t % 3 + 1))
+                    if r + 1 < N:
+                        moves.append(('D', r + 1, c, t % 3 + 1))
+                    if r + 1 < N and c + 1 < N:
+                        moves.append(('X', r + 1, c + 1, t % 3 + 1))
+                        
+                for char, nr, nc, nt in moves:
+                    ns, np = dp[nr][nc][nt]
+                    current_total = grid[r][c] + ns
+                    if current_total > best_sum:
+                        best_sum = current_total
+                        best_path = char + np
+                    
+                dp[r][c][t] = (best_sum, best_path)
+                
+    return dp[0][0][1]
