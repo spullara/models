@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-24 11:38:16
+Last updated: 2026-07-24 12:08:27
 
 ## Updates This Week (2026-07-18 to 2026-07-24)
 
@@ -18,6 +18,10 @@ Last updated: 2026-07-24 11:38:16
 - models/veo-3.1-lite-generate-preview (deleted: 2026-07-21)
 
 ### Mistral
+
+**Added**
+
+- deepseek-v4-flash (added: 2026-07-24)
 
 **Deleted**
 
@@ -43,7 +47,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/21
 
-**Mistral**: 60/52
+**Mistral**: 61/52
 
 **DeepSeek**: 2/2
 
@@ -470,6 +474,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- deepseek-v4-flash (added: 2026-07-24)
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
 - mistral-ocr-4-0 (added: 2026-06-23)
