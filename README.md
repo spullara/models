@@ -1,9 +1,15 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-24 15:22:19
+Last updated: 2026-07-24 16:52:24
 
 ## Updates This Week (2026-07-18 to 2026-07-24)
+
+### Anthropic
+
+**Added**
+
+- claude-opus-5 (added: 2026-07-24)
 
 ### Gemini
 
@@ -42,7 +48,7 @@ Model counts shown as: **Available/Deleted**
 
 **OpenAI**: 131/50
 
-**Anthropic**: 10/12
+**Anthropic**: 11/12
 
 **Gemini**: 50/96
 
@@ -252,6 +258,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- claude-opus-5 (added: 2026-07-24)
 - claude-sonnet-5 (added: 2026-06-30)
 - claude-fable-5 (added: 2026-06-09)
 - claude-opus-4-8 (added: 2026-05-28)
