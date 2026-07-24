@@ -132,6 +132,7 @@ qwen3.6-flash-2026-04-16
 qwen3.6-max-preview
 qwen3.6-plus
 qwen3.6-plus-2026-04-02
+qwen3.7-flash
 qwen3.7-max
 qwen3.7-max-2026-05-17
 qwen3.7-max-2026-05-20
