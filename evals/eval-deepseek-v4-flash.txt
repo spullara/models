@@ -1,16 +1,16 @@
 Model: deepseek-v4-flash
-Provider: qwen
-Evaluated: 2026-05-11T02:56:06.120013+00:00
+Provider: mistral
+Evaluated: 2026-07-24T12:08:13.568101+00:00
 
 === TIMING ===
-Response time: 0.87s
+Response time: 0.34s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"id":"chatcmpl-5234d0d4-0495-988f-b44c-42b908f32a8d","request_id":"5234d0d4-0495-988f-b44c-42b908f32a8d"}
+API Error: HTTP 400: {"object":"error","message":"Invalid model: deepseek-v4-flash","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
 
 === RAW RESPONSE ===
 (no response)
