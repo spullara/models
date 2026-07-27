@@ -31,7 +31,7 @@ grid that maximizes the sum. Rules:
 - If diagonal is not possible on a required diagonal move, you may use R or D
 - Return (max_sum, path_string) e.g., (73, "RRXDDX")
 
-Output ONLY the Python code. No explanations, no markdown, no examples."""
+Reply with the complete solution in a single ```python code block."""
 
 # Test grid for verification
 TEST_GRID = [
@@ -139,6 +139,14 @@ def get_chat_endpoint(provider: str) -> dict:
                 'Content-Type': 'application/json'
             },
             'format': 'openai'
+        },
+        'openrouter': {
+            'url': 'https://openrouter.ai/api/v1/chat/completions',
+            'headers': lambda: {
+                'Authorization': f"Bearer {os.getenv('OPENROUTER_API_KEY')}",
+                'Content-Type': 'application/json'
+            },
+            'format': 'openai'
         }
     }
     return endpoints.get(provider)
@@ -156,13 +164,13 @@ def build_request_body(provider: str, model: str, prompt: str) -> dict:
         return {
             'model': model,
             'messages': [{'role': 'user', 'content': prompt}],
-            'max_tokens': 16384  # Higher limit for reasoning models
+            'max_tokens': 32768  # Higher limit for reasoning models
         }
     elif fmt == 'openai_completion':
         return {
             'model': model,
             'prompt': prompt,
-            'max_tokens': 16384
+            'max_tokens': 32768
         }
     elif fmt == 'openai_responses':
         return {
@@ -173,7 +181,7 @@ def build_request_body(provider: str, model: str, prompt: str) -> dict:
         return {
             'model': model,
             'messages': [{'role': 'user', 'content': prompt}],
-            'max_tokens': 16384
+            'max_tokens': 32768
         }
     elif fmt == 'gemini':
         return {
@@ -194,10 +202,16 @@ def extract_response_text(provider: str, response_json: dict) -> str:
         if fmt == 'openai':
             message = response_json['choices'][0]['message']
             content = message.get('content') or ''
-            # Some reasoning models (like kimi-k2.5) put the response in reasoning_content
+            # Reasoning-model fallbacks: some providers put the answer in a
+            # separate field when the visible content is empty. Kimi/DeepSeek
+            # use `reasoning_content`; OpenRouter surfaces upstream chain-of-
+            # thought as `reasoning`.
             reasoning_content = message.get('reasoning_content') or ''
-            # Return content if non-empty, otherwise try reasoning_content
-            return content if content.strip() else reasoning_content
+            reasoning = message.get('reasoning') or ''
+            for candidate in (content, reasoning_content, reasoning):
+                if candidate.strip():
+                    return candidate
+            return None
         elif fmt == 'openai_completion':
             # Legacy completions API returns text directly in choices
             return response_json['choices'][0]['text']
@@ -243,32 +257,51 @@ def _post_and_extract(url: str, headers: dict, body: dict,
     Issue a single POST and extract text. Returns
     (text, elapsed, error, stop_reason). stop_reason is the raw provider
     value when present, else None.
+
+    Retries once on transient JSON-decode failures (some providers
+    occasionally return a truncated body under load).
     """
-    try:
-        start_time = time.time()
-        response = requests.post(url, headers=headers, json=body, timeout=300)
-        elapsed = time.time() - start_time
+    start_time = time.time()
+
+    def _attempt():
+        """Returns (text, error, stop_reason, retryable)."""
+        try:
+            response = requests.post(url, headers=headers, json=body, timeout=300)
+        except requests.exceptions.Timeout:
+            return None, "Request timed out (5 min)", None, False
+        except Exception as e:
+            return None, str(e), None, False
 
         if response.status_code != 200:
-            return None, elapsed, f"HTTP {response.status_code}: {response.text[:500]}", None
+            return None, f"HTTP {response.status_code}: {response.text[:500]}", None, False
 
-        response_json = response.json()
+        try:
+            response_json = response.json()
+        except ValueError as e:
+            # Truncated/malformed body: worth retrying once.
+            return None, f"JSON decode error: {e}", None, True
+
         text = extract_response_text(provider, response_json)
         stop_reason = response_json.get('stop_reason')
+        return text, None, stop_reason, False
 
-        if not text:
-            if stop_reason == 'refusal':
-                return None, elapsed, "Anthropic refusal (stop_reason=refusal, no content)", stop_reason
-            if stop_reason:
-                return None, elapsed, f"No text in response (stop_reason={stop_reason})", stop_reason
-            return None, elapsed, "Failed to extract response text", stop_reason
+    text, err, stop_reason, retryable = _attempt()
+    if err and retryable:
+        text, err, stop_reason, _ = _attempt()
 
-        return text, elapsed, None, stop_reason
+    elapsed = time.time() - start_time
 
-    except requests.exceptions.Timeout:
-        return None, 300, "Request timed out (5 min)", None
-    except Exception as e:
-        return None, 0, str(e), None
+    if err:
+        return None, elapsed, err, stop_reason
+
+    if not text:
+        if stop_reason == 'refusal':
+            return None, elapsed, "Anthropic refusal (stop_reason=refusal, no content)", stop_reason
+        if stop_reason:
+            return None, elapsed, f"No text in response (stop_reason={stop_reason})", stop_reason
+        return None, elapsed, "Failed to extract response text", stop_reason
+
+    return text, elapsed, None, stop_reason
 
 
 def call_model(provider: str, model: str,
@@ -320,20 +353,25 @@ def extract_code(response: str) -> tuple[str, str]:
     """
     Extract Python code from a model response.
     Returns (code, extraction_method).
+
+    Compiling successfully is preferred; when every candidate has a syntax
+    error, we still return the best (last-tried) candidate paired with a
+    ``*_syntax_error`` method suffix so downstream reporting can distinguish
+    "no code block found" from "model emitted broken Python".
     """
     if not response:
         return None, "no_response"
 
+    last_uncompilable = None  # (code, method)
+
     # Method 1: Try direct parse (response is just code)
-    if "def solve_grid" in response:
-        # Check if it looks like pure code (no markdown)
-        if not response.strip().startswith("```"):
-            # Try to compile it
-            try:
-                compile(response, '<string>', 'exec')
-                return response.strip(), "direct"
-            except SyntaxError:
-                pass
+    if "def solve_grid" in response and not response.strip().startswith("```"):
+        code = response.strip()
+        try:
+            compile(code, '<string>', 'exec')
+            return code, "direct"
+        except SyntaxError:
+            last_uncompilable = (code, "direct_syntax_error")
 
     # Method 2: Extract from ```python blocks
     match = re.search(r'```python\s*(.*?)\s*```', response, re.DOTALL)
@@ -343,7 +381,7 @@ def extract_code(response: str) -> tuple[str, str]:
             compile(code, '<string>', 'exec')
             return code, "markdown_python"
         except SyntaxError:
-            pass
+            last_uncompilable = (code, "markdown_python_syntax_error")
 
     # Method 3: Extract from ``` blocks (no language)
     match = re.search(r'```\s*(.*?)\s*```', response, re.DOTALL)
@@ -353,7 +391,7 @@ def extract_code(response: str) -> tuple[str, str]:
             compile(code, '<string>', 'exec')
             return code, "markdown_generic"
         except SyntaxError:
-            pass
+            last_uncompilable = (code, "markdown_generic_syntax_error")
 
     # Method 4: Find function definition and extract
     match = re.search(r'(def solve_grid\s*\([^)]*\)[^:]*:.*?)(?=\n(?:def |class |if __name__|$)|\Z)',
@@ -368,7 +406,10 @@ def extract_code(response: str) -> tuple[str, str]:
             compile(code, '<string>', 'exec')
             return code, "function_extract"
         except SyntaxError:
-            pass
+            last_uncompilable = (code, "function_extract_syntax_error")
+
+    if last_uncompilable is not None:
+        return last_uncompilable
 
     return None, "extraction_failed"
 
@@ -453,14 +494,26 @@ except Exception as e:
             return None, f"Execution error: {result.stderr[:500]}"
 
         import json
-        try:
-            output = json.loads(result.stdout.strip())
-            if output.get('success'):
-                return output['result'], None
-            else:
-                return None, output.get('error', 'Unknown error')
-        except json.JSONDecodeError:
+        # Model code sometimes prints extra lines (examples, debug output)
+        # before our wrapper's JSON line. Scan from the end for the first
+        # valid JSON object with the expected schema.
+        lines = [l for l in result.stdout.splitlines() if l.strip()]
+        output = None
+        for line in reversed(lines):
+            try:
+                candidate = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if isinstance(candidate, dict) and 'success' in candidate:
+                output = candidate
+                break
+
+        if output is None:
             return None, f"Invalid output: {result.stdout[:500]}"
+
+        if output.get('success'):
+            return output['result'], None
+        return None, output.get('error', 'Unknown error')
 
     except subprocess.TimeoutExpired:
         return None, f"Execution timed out ({timeout}s)"
@@ -519,6 +572,14 @@ def evaluate_model(provider: str, model: str) -> dict:
         return results
 
     results['extracted_code'] = code
+    # extract_code now returns code even when compilation fails, tagging the
+    # method with a ``_syntax_error`` suffix. Only mark syntax_valid=True and
+    # attempt execution when the extractor confirmed a clean compile.
+    if method and method.endswith('_syntax_error'):
+        results['syntax_valid'] = False
+        results['execution_error'] = f"Syntax error in extracted code ({method})"
+        return results
+
     results['syntax_valid'] = True
 
     # Step 3: Execute code

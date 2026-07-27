@@ -81,6 +81,24 @@ PROVIDERS = {
         'headers': lambda: {'Authorization': f"Bearer {os.getenv('DASHSCOPE_API_KEY')}"},
         'json_path': ['data', 'id'],
         'output_file': 'qwen.txt'
+    },
+    'nvidia': {
+        'url': 'https://openrouter.ai/api/v1/models',
+        'headers': lambda: {'Authorization': f"Bearer {os.getenv('OPENROUTER_API_KEY')}"},
+        'json_path': ['data', 'id'],
+        'filter_prefix': 'nvidia/',
+        'exclude_variant_suffix': True,
+        'output_file': 'nvidia.txt',
+        'chat_provider': 'openrouter'
+    },
+    'zai': {
+        'url': 'https://openrouter.ai/api/v1/models',
+        'headers': lambda: {'Authorization': f"Bearer {os.getenv('OPENROUTER_API_KEY')}"},
+        'json_path': ['data', 'id'],
+        'filter_prefix': 'z-ai/',
+        'exclude_variant_suffix': True,
+        'output_file': 'zai.txt',
+        'chat_provider': 'openrouter'
     }
 }
 
@@ -136,6 +154,15 @@ def fetch_models(provider_name, config):
             print(f"  Warning: No models found for {provider_name}")
             return []
 
+        # Optional prefix filter (e.g. OpenRouter vendor slug)
+        prefix = config.get('filter_prefix')
+        if prefix:
+            all_models = [m for m in all_models if m and m.startswith(prefix)]
+
+        # Optional variant-suffix filter (drops OpenRouter tags like ":free", ":nitro")
+        if config.get('exclude_variant_suffix'):
+            all_models = [m for m in all_models if m and ':' not in m]
+
         # Filter out fine-tuned models
         original_count = len(all_models)
         all_models = [m for m in all_models if not is_fine_tuned_model(m)]
@@ -180,10 +207,18 @@ def git_commit_if_changed(file_path):
     except Exception as e:
         print(f"  Git error: {e}")
 
-def evaluate_new_models(provider_name, new_models):
-    """Evaluate newly detected models."""
+def evaluate_new_models(provider_name, new_models, chat_provider=None):
+    """Evaluate newly detected models.
+
+    ``chat_provider`` is the key used to look up the chat endpoint in
+    ``evaluate_model.get_chat_endpoint``. Defaults to ``provider_name`` for
+    providers whose model-list and chat endpoints share a name; entries that
+    proxy through OpenRouter set it explicitly (e.g. ``chat_provider='openrouter'``).
+    """
     if not new_models:
         return
+
+    chat_provider = chat_provider or provider_name
 
     print(f"\n  Found {len(new_models)} new model(s) for {provider_name}:")
     for model in sorted(new_models):
@@ -191,7 +226,7 @@ def evaluate_new_models(provider_name, new_models):
 
     for model in sorted(new_models):
         try:
-            run_evaluation(provider_name, model)
+            run_evaluation(chat_provider, model)
         except Exception as e:
             print(f"    Error evaluating {model}: {e}")
 
@@ -232,7 +267,8 @@ def main():
         print("EVALUATING NEW MODELS")
         print("=" * 50)
         for provider_name, new_models in all_new_models.items():
-            evaluate_new_models(provider_name, new_models)
+            chat_provider = PROVIDERS[provider_name].get('chat_provider')
+            evaluate_new_models(provider_name, new_models, chat_provider)
 
         # Commit evaluation results
         print("\nCommitting evaluation results...")

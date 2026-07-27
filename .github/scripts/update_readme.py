@@ -18,7 +18,9 @@ PROVIDER_MAP = {
     'deepseek.txt': 'DeepSeek',
     'kimi.txt': 'Kimi',
     'qwen.txt': 'Qwen',
-    'meta.txt': 'Meta'
+    'meta.txt': 'Meta',
+    'nvidia.txt': 'NVIDIA',
+    'zai.txt': 'Z.AI'
 }
 
 UPDATE_WINDOW_DAYS = 7
