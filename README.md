@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-27 16:05:17
+Last updated: 2026-07-27 21:54:57
 
 ## Updates This Week (2026-07-21 to 2026-07-27)
 
@@ -37,6 +37,31 @@ Last updated: 2026-07-27 16:05:17
 - qwen3.7-flash (added: 2026-07-24)
 - qwen3.7-flash-2026-07-15 (added: 2026-07-24)
 
+### NVIDIA
+
+**Added**
+
+- nvidia/nemotron-3-nano-30b-a3b (added: 2026-07-27)
+- nvidia/nemotron-3-super-120b-a12b (added: 2026-07-27)
+- nvidia/nemotron-3-ultra-550b-a55b (added: 2026-07-27)
+
+### Z.AI
+
+**Added**
+
+- z-ai/glm-4.5 (added: 2026-07-27)
+- z-ai/glm-4.5-air (added: 2026-07-27)
+- z-ai/glm-4.5v (added: 2026-07-27)
+- z-ai/glm-4.6 (added: 2026-07-27)
+- z-ai/glm-4.6v (added: 2026-07-27)
+- z-ai/glm-4.7 (added: 2026-07-27)
+- z-ai/glm-4.7-flash (added: 2026-07-27)
+- z-ai/glm-5 (added: 2026-07-27)
+- z-ai/glm-5-turbo (added: 2026-07-27)
+- z-ai/glm-5.1 (added: 2026-07-27)
+- z-ai/glm-5.2 (added: 2026-07-27)
+- z-ai/glm-5v-turbo (added: 2026-07-27)
+
 ## Summary
 
 Model counts shown as: **Available/Deleted**
@@ -58,6 +83,10 @@ Model counts shown as: **Available/Deleted**
 **Qwen**: 151/24
 
 **Meta**: 1/0
+
+**NVIDIA**: 3/0
+
+**Z.AI**: 12/0
 
 
 ## OpenAI
@@ -821,4 +850,29 @@ Model counts shown as: **Available/Deleted**
 ### Current Models
 
 - muse-spark-1.1 (added: 2026-07-09)
+
+## NVIDIA
+
+### Current Models
+
+- nvidia/nemotron-3-ultra-550b-a55b (added: 2026-07-27)
+- nvidia/nemotron-3-super-120b-a12b (added: 2026-07-27)
+- nvidia/nemotron-3-nano-30b-a3b (added: 2026-07-27)
+
+## Z.AI
+
+### Current Models
+
+- z-ai/glm-5v-turbo (added: 2026-07-27)
+- z-ai/glm-5.2 (added: 2026-07-27)
+- z-ai/glm-5.1 (added: 2026-07-27)
+- z-ai/glm-5-turbo (added: 2026-07-27)
+- z-ai/glm-5 (added: 2026-07-27)
+- z-ai/glm-4.7-flash (added: 2026-07-27)
+- z-ai/glm-4.7 (added: 2026-07-27)
+- z-ai/glm-4.6v (added: 2026-07-27)
+- z-ai/glm-4.6 (added: 2026-07-27)
+- z-ai/glm-4.5v (added: 2026-07-27)
+- z-ai/glm-4.5-air (added: 2026-07-27)
+- z-ai/glm-4.5 (added: 2026-07-27)
 
