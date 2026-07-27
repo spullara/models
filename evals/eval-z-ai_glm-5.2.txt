@@ -1,0 +1,164 @@
+Model: z-ai/glm-5.2
+Provider: openrouter
+Evaluated: 2026-07-27T19:03:02.085634+00:00
+
+=== TIMING ===
+Response time: 177.81s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    
+    INF = -10**18
+    # dp[i][j][m] = max sum to reach (i,j) with m = moves_made % 3
+    dp = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
+    # parent[i][j][m] = (prev_i, prev_j, prev_m, move_char)
+    parent = [[[None] * 3 for _ in range(N)] for _ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    # Process cells by increasing i+j (topological order)
+    for s in range(2 * N - 1):  # s = 0 .. 2N-2
+        for i in range(max(0, s - (N - 1)), min(N, s + 1)):
+            j = s - i
+            if j < 0 or j >= N:
+                continue
+            for m in range(3):
+                cur = dp[i][j][m]
+                if cur == INF:
+                    continue
+                
+                forced_X = (m == 2)  # next move is 3rd, 6th, ... 
+                next_m = (m + 1) % 3
+                moves = []
+                
+                if not forced_X:
+                    # Free choice: R, D, X
+                    if j + 1 < N:
+                        moves.append(('R', i, j + 1, next_m))
+                    if i + 1 < N:
+                        moves.append(('D', i + 1, j, next_m))
+                    if i + 1 < N and j + 1 < N:
+                        moves.append(('X', i + 1, j + 1, next_m))
+                else:
+                    # Must use diagonal if possible
+                    if i + 1 < N and j + 1 < N:
+                        moves.append(('X', i + 1, j + 1, next_m))
+                    else:
+                        # Diagonal not possible, fall back to R or D
+                        if j + 1 < N:
+                            moves.append(('R', i, j + 1, next_m))
+                        if i + 1 < N:
+                            moves.append(('D', i + 1, j, next_m))
+                
+                for move, ni, nj, nm in moves:
+                    new_sum = cur + grid[ni][nj]
+                    if new_sum > dp[ni][nj][nm]:
+                        dp[ni][nj][nm] = new_sum
+                        parent[ni][nj][nm] = (i, j, m, move)
+    
+    # Find best ending state
+    best_sum = INF
+    best_m = -1
+    for m in range(3):
+        if dp[N - 1][N - 1][m] > best_sum:
+            best_sum = dp[N - 1][N - 1][m]
+            best_m = m
+    
+    # Reconstruct path
+    path = []
+    i, j, m = N - 1, N - 1, best_m
+    while parent[i][j][m] is not None:
+        pi, pj, pm, move = parent[i][j][m]
+        path.append(move)
+        i, j, m = pi, pj, pm
+    
+    path.reverse()
+    return (best_sum, "".join(path))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    
+    INF = -10**18
+    # dp[i][j][m] = max sum to reach (i,j) with m = moves_made % 3
+    dp = [[[INF] * 3 for _ in range(N)] for _ in range(N)]
+    # parent[i][j][m] = (prev_i, prev_j, prev_m, move_char)
+    parent = [[[None] * 3 for _ in range(N)] for _ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    # Process cells by increasing i+j (topological order)
+    for s in range(2 * N - 1):  # s = 0 .. 2N-2
+        for i in range(max(0, s - (N - 1)), min(N, s + 1)):
+            j = s - i
+            if j < 0 or j >= N:
+                continue
+            for m in range(3):
+                cur = dp[i][j][m]
+                if cur == INF:
+                    continue
+                
+                forced_X = (m == 2)  # next move is 3rd, 6th, ... 
+                next_m = (m + 1) % 3
+                moves = []
+                
+                if not forced_X:
+                    # Free choice: R, D, X
+                    if j + 1 < N:
+                        moves.append(('R', i, j + 1, next_m))
+                    if i + 1 < N:
+                        moves.append(('D', i + 1, j, next_m))
+                    if i + 1 < N and j + 1 < N:
+                        moves.append(('X', i + 1, j + 1, next_m))
+                else:
+                    # Must use diagonal if possible
+                    if i + 1 < N and j + 1 < N:
+                        moves.append(('X', i + 1, j + 1, next_m))
+                    else:
+                        # Diagonal not possible, fall back to R or D
+                        if j + 1 < N:
+                            moves.append(('R', i, j + 1, next_m))
+                        if i + 1 < N:
+                            moves.append(('D', i + 1, j, next_m))
+                
+                for move, ni, nj, nm in moves:
+                    new_sum = cur + grid[ni][nj]
+                    if new_sum > dp[ni][nj][nm]:
+                        dp[ni][nj][nm] = new_sum
+                        parent[ni][nj][nm] = (i, j, m, move)
+    
+    # Find best ending state
+    best_sum = INF
+    best_m = -1
+    for m in range(3):
+        if dp[N - 1][N - 1][m] > best_sum:
+            best_sum = dp[N - 1][N - 1][m]
+            best_m = m
+    
+    # Reconstruct path
+    path = []
+    i, j, m = N - 1, N - 1, best_m
+    while parent[i][j][m] is not None:
+        pi, pj, pm, move = parent[i][j][m]
+        path.append(move)
+        i, j, m = pi, pj, pm
+    
+    path.reverse()
+    return (best_sum, "".join(path))

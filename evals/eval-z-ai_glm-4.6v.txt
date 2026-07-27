@@ -1,0 +1,200 @@
+Model: z-ai/glm-4.6v
+Provider: openrouter
+Evaluated: 2026-07-27T18:40:57.084627+00:00
+
+=== TIMING ===
+Response time: 263.17s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+from typing import List, Tuple
+
+def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
+    """
+    Finds the path from top-left to bottom-right of an N×N grid that maximizes the sum.
+    Moves: right (R), down (D), diagonal down-right (X).
+    Every 3rd move (1-indexed) must be diagonal if possible; otherwise R or D can be used.
+    Returns (max_sum, path_string).
+    """
+    if not grid or not grid[0]:
+        return (0, "")
+    
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+    
+    # Memoization: (i, j, move_index) -> (max_sum, path)
+    memo = {}
+    
+    def dfs(i: int, j: int, move_index: int) -> Tuple[int, str]:
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+        
+        key = (i, j, move_index)
+        if key in memo:
+            return memo[key]
+        
+        best_sum = -10**18
+        best_path = ""
+        
+        # Determine if the next move (move_index+1) must be diagonal
+        next_move_must_be_diag = (move_index + 1) % 3 == 0
+        
+        # Diagonal move (X) is possible if we are not on the last row or column
+        if i + 1 < n and j + 1 < n:
+            if next_move_must_be_diag:
+                # Must take diagonal if possible
+                sum_diag, path_diag = dfs(i + 1, j + 1, move_index + 1)
+                total_sum = grid[i][j] + sum_diag
+                if total_sum > best_sum:
+                    best_sum = total_sum
+                    best_path = "X" + path_diag
+            else:
+                # Diagonal is optional
+                sum_diag, path_diag = dfs(i + 1, j + 1, move_index + 1)
+                total_sum = grid[i][j] + sum_diag
+                if total_sum > best_sum:
+                    best_sum = total_sum
+                    best_path = "X" + path_diag
+        
+        # Down move (D) is possible if not on the last row
+        if i + 1 < n:
+            if next_move_must_be_diag:
+                # Can only take down if diagonal is not possible
+                if not (i + 1 < n and j + 1 < n):
+                    sum_down, path_down = dfs(i + 1, j, move_index + 1)
+                    total_sum = grid[i][j] + sum_down
+                    if total_sum > best_sum:
+                        best_sum = total_sum
+                        best_path = "D" + path_down
+            else:
+                sum_down, path_down = dfs(i + 1, j, move_index + 1)
+                total_sum = grid[i][j] + sum_down
+                if total_sum > best_sum:
+                    best_sum = total_sum
+                    best_path = "D" + path_down
+        
+        # Right move (R) is possible if not on the last column
+        if j + 1 < n:
+            if next_move_must_be_diag:
+                # Can only take right if diagonal is not possible
+                if not (i + 1 < n and j + 1 < n):
+                    sum_right, path_right = dfs(i, j + 1, move_index + 1)
+                    total_sum = grid[i][j] + sum_right
+                    if total_sum > best_sum:
+                        best_sum = total_sum
+                        best_path = "R" + path_right
+            else:
+                sum_right, path_right = dfs(i, j + 1, move_index + 1)
+                total_sum = grid[i][j] + sum_right
+                if total_sum > best_sum:
+                    best_sum = total_sum
+                    best_path = "R" + path_right
+        
+        memo[key] = (best_sum, best_path)
+        return (best_sum, best_path)
+    
+    max_sum, path = dfs(0, 0, 0)
+    return (max_sum, path)
+```
+
+=== EXTRACTED CODE ===
+from typing import List, Tuple
+
+def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
+    """
+    Finds the path from top-left to bottom-right of an N×N grid that maximizes the sum.
+    Moves: right (R), down (D), diagonal down-right (X).
+    Every 3rd move (1-indexed) must be diagonal if possible; otherwise R or D can be used.
+    Returns (max_sum, path_string).
+    """
+    if not grid or not grid[0]:
+        return (0, "")
+    
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+    
+    # Memoization: (i, j, move_index) -> (max_sum, path)
+    memo = {}
+    
+    def dfs(i: int, j: int, move_index: int) -> Tuple[int, str]:
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+        
+        key = (i, j, move_index)
+        if key in memo:
+            return memo[key]
+        
+        best_sum = -10**18
+        best_path = ""
+        
+        # Determine if the next move (move_index+1) must be diagonal
+        next_move_must_be_diag = (move_index + 1) % 3 == 0
+        
+        # Diagonal move (X) is possible if we are not on the last row or column
+        if i + 1 < n and j + 1 < n:
+            if next_move_must_be_diag:
+                # Must take diagonal if possible
+                sum_diag, path_diag = dfs(i + 1, j + 1, move_index + 1)
+                total_sum = grid[i][j] + sum_diag
+                if total_sum > best_sum:
+                    best_sum = total_sum
+                    best_path = "X" + path_diag
+            else:
+                # Diagonal is optional
+                sum_diag, path_diag = dfs(i + 1, j + 1, move_index + 1)
+                total_sum = grid[i][j] + sum_diag
+                if total_sum > best_sum:
+                    best_sum = total_sum
+                    best_path = "X" + path_diag
+        
+        # Down move (D) is possible if not on the last row
+        if i + 1 < n:
+            if next_move_must_be_diag:
+                # Can only take down if diagonal is not possible
+                if not (i + 1 < n and j + 1 < n):
+                    sum_down, path_down = dfs(i + 1, j, move_index + 1)
+                    total_sum = grid[i][j] + sum_down
+                    if total_sum > best_sum:
+                        best_sum = total_sum
+                        best_path = "D" + path_down
+            else:
+                sum_down, path_down = dfs(i + 1, j, move_index + 1)
+                total_sum = grid[i][j] + sum_down
+                if total_sum > best_sum:
+                    best_sum = total_sum
+                    best_path = "D" + path_down
+        
+        # Right move (R) is possible if not on the last column
+        if j + 1 < n:
+            if next_move_must_be_diag:
+                # Can only take right if diagonal is not possible
+                if not (i + 1 < n and j + 1 < n):
+                    sum_right, path_right = dfs(i, j + 1, move_index + 1)
+                    total_sum = grid[i][j] + sum_right
+                    if total_sum > best_sum:
+                        best_sum = total_sum
+                        best_path = "R" + path_right
+            else:
+                sum_right, path_right = dfs(i, j + 1, move_index + 1)
+                total_sum = grid[i][j] + sum_right
+                if total_sum > best_sum:
+                    best_sum = total_sum
+                    best_path = "R" + path_right
+        
+        memo[key] = (best_sum, best_path)
+        return (best_sum, best_path)
+    
+    max_sum, path = dfs(0, 0, 0)
+    return (max_sum, path)

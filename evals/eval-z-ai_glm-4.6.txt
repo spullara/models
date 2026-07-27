@@ -1,0 +1,235 @@
+Model: z-ai/glm-4.6
+Provider: openrouter
+Evaluated: 2026-07-27T19:45:56.512417+00:00
+
+=== TIMING ===
+Response time: 61.44s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+
+```python
+from typing import List, Tuple
+
+def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
+    """
+    Finds the maximum‑sum path from the top‑left to the bottom‑right cell
+    of an N×N grid using moves:
+        R – right   (i, j+1)
+        D – down    (i+1, j)
+        X – diagonal down‑right (i+1, j+1)
+
+    Every 3rd move (i.e. moves numbered 3, 6, 9, …) must be a diagonal
+    move if a diagonal move is possible from the current cell.
+    If a diagonal move is not possible on a forced diagonal step,
+    the algorithm may use R or D instead.
+
+    Returns a tuple (max_sum, path_string) where `path_string` consists
+    of the characters 'R', 'D', and 'X' describing the chosen path.
+    """
+    N = len(grid)
+    if N == 0:
+        return 0, ""
+    # dp[i][j][r] = maximum sum to reach cell (i, j) after a number of steps k with k % 3 == r
+    # r = 0, 1, 2
+    INF_NEG = -10**18
+    dp: List[List[List[int]]] = [[[INF_NEG] * 3 for _ in range(N)] for __ in range(N)]
+    # prev[i][j][r] stores (prev_i, prev_j, prev_r, move_char) for reconstruction
+    prev: List[List[List[Tuple[int, int, int, str] | None]]] = [
+        [[None] * 3 for _ in range(N)] for __ in range(N)
+    ]
+
+    dp[0][0][0] = grid[0][0]  # start cell, 0 steps taken
+
+    for i in range(N):
+        for j in range(N):
+            for r in range(3):
+                cur_sum = dp[i][j][r]
+                if cur_sum == INF_NEG:
+                    continue  # unreachable state
+
+                # Determine whether the next move is a forced diagonal
+                # Current step count k satisfies k % 3 == r.
+                # Next move number is k+1; it is forced diagonal if (k+1) % 3 == 0,
+                # i.e. when r == 2.
+                forced_diag = (r == 2)
+
+                # Helper to update a successor state
+                def try_move(ni: int, nj: int, move_char: str):
+                    if not (0 <= ni < N and 0 <= nj < N):
+                        return
+                    new_r = (r + 1) % 3
+                    new_sum = cur_sum + grid[ni][nj]
+                    if new_sum > dp[ni][nj][new_r]:
+                        dp[ni][nj][new_r] = new_sum
+                        prev[ni][nj][new_r] = (i, j, r, move_char)
+
+                # If forced diagonal and diagonal is possible, only diagonal is allowed.
+                if forced_diag:
+                    if i + 1 < N and j + 1 < N:
+                        # Diagonal move is mandatory
+                        try_move(i + 1, j + 1, 'X')
+                    else:
+                        # Diagonal not possible – allow right or down if they exist
+                        try_move(i, j + 1, 'R')  # right
+                        try_move(i + 1, j, 'D')  # down
+                else:
+                    # Non‑forced move – all allowed moves that stay inside the grid
+                    try_move(i, j + 1, 'R')          # right
+                    try_move(i + 1, j, 'D')          # down
+                    try_move(i + 1, j + 1, 'X')      # diagonal
+
+    # Find the best sum among the three possible step‑remainder states at the destination.
+    best_sum = INF_NEG
+    best_r = -1
+    for r in range(3):
+        if dp[N - 1][N - 1][r] > best_sum:
+            best_sum = dp[N - 1][N - 1][r]
+            best_r = r
+
+    # Reconstruct the path string.
+    path_chars: List[str] = []
+    i, j, r = N - 1, N - 1, best_r
+    while not (i == 0 and j == 0 and r == 0):
+        entry = prev[i][j][r]
+        if entry is None:
+            # Defensive programming – should not happen.
+            raise RuntimeError("Path reconstruction failed; predecessor missing.")
+        pi, pj, pr, move = entry
+        path_chars.append(move)
+        i, j, r = pi, pj, pr
+
+    path = ''.join(reversed(path_chars))
+    return best_sum, path
+
+
+# ----------------------------------------------------------------------
+# Example usage (can be removed or commented out when integrating elsewhere):
+if __name__ == "__main__":
+    example_grid = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+    ]
+    total, path = solve_grid(example_grid)
+    print(f"Maximum sum: {total}")
+    print(f"Path: {path}")
+    # Expected for this grid: max sum = 29, path = "DDRR"
+```
+
+=== EXTRACTED CODE ===
+from typing import List, Tuple
+
+def solve_grid(grid: List[List[int]]) -> Tuple[int, str]:
+    """
+    Finds the maximum‑sum path from the top‑left to the bottom‑right cell
+    of an N×N grid using moves:
+        R – right   (i, j+1)
+        D – down    (i+1, j)
+        X – diagonal down‑right (i+1, j+1)
+
+    Every 3rd move (i.e. moves numbered 3, 6, 9, …) must be a diagonal
+    move if a diagonal move is possible from the current cell.
+    If a diagonal move is not possible on a forced diagonal step,
+    the algorithm may use R or D instead.
+
+    Returns a tuple (max_sum, path_string) where `path_string` consists
+    of the characters 'R', 'D', and 'X' describing the chosen path.
+    """
+    N = len(grid)
+    if N == 0:
+        return 0, ""
+    # dp[i][j][r] = maximum sum to reach cell (i, j) after a number of steps k with k % 3 == r
+    # r = 0, 1, 2
+    INF_NEG = -10**18
+    dp: List[List[List[int]]] = [[[INF_NEG] * 3 for _ in range(N)] for __ in range(N)]
+    # prev[i][j][r] stores (prev_i, prev_j, prev_r, move_char) for reconstruction
+    prev: List[List[List[Tuple[int, int, int, str] | None]]] = [
+        [[None] * 3 for _ in range(N)] for __ in range(N)
+    ]
+
+    dp[0][0][0] = grid[0][0]  # start cell, 0 steps taken
+
+    for i in range(N):
+        for j in range(N):
+            for r in range(3):
+                cur_sum = dp[i][j][r]
+                if cur_sum == INF_NEG:
+                    continue  # unreachable state
+
+                # Determine whether the next move is a forced diagonal
+                # Current step count k satisfies k % 3 == r.
+                # Next move number is k+1; it is forced diagonal if (k+1) % 3 == 0,
+                # i.e. when r == 2.
+                forced_diag = (r == 2)
+
+                # Helper to update a successor state
+                def try_move(ni: int, nj: int, move_char: str):
+                    if not (0 <= ni < N and 0 <= nj < N):
+                        return
+                    new_r = (r + 1) % 3
+                    new_sum = cur_sum + grid[ni][nj]
+                    if new_sum > dp[ni][nj][new_r]:
+                        dp[ni][nj][new_r] = new_sum
+                        prev[ni][nj][new_r] = (i, j, r, move_char)
+
+                # If forced diagonal and diagonal is possible, only diagonal is allowed.
+                if forced_diag:
+                    if i + 1 < N and j + 1 < N:
+                        # Diagonal move is mandatory
+                        try_move(i + 1, j + 1, 'X')
+                    else:
+                        # Diagonal not possible – allow right or down if they exist
+                        try_move(i, j + 1, 'R')  # right
+                        try_move(i + 1, j, 'D')  # down
+                else:
+                    # Non‑forced move – all allowed moves that stay inside the grid
+                    try_move(i, j + 1, 'R')          # right
+                    try_move(i + 1, j, 'D')          # down
+                    try_move(i + 1, j + 1, 'X')      # diagonal
+
+    # Find the best sum among the three possible step‑remainder states at the destination.
+    best_sum = INF_NEG
+    best_r = -1
+    for r in range(3):
+        if dp[N - 1][N - 1][r] > best_sum:
+            best_sum = dp[N - 1][N - 1][r]
+            best_r = r
+
+    # Reconstruct the path string.
+    path_chars: List[str] = []
+    i, j, r = N - 1, N - 1, best_r
+    while not (i == 0 and j == 0 and r == 0):
+        entry = prev[i][j][r]
+        if entry is None:
+            # Defensive programming – should not happen.
+            raise RuntimeError("Path reconstruction failed; predecessor missing.")
+        pi, pj, pr, move = entry
+        path_chars.append(move)
+        i, j, r = pi, pj, pr
+
+    path = ''.join(reversed(path_chars))
+    return best_sum, path
+
+
+# ----------------------------------------------------------------------
+# Example usage (can be removed or commented out when integrating elsewhere):
+if __name__ == "__main__":
+    example_grid = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+    ]
+    total, path = solve_grid(example_grid)
+    print(f"Maximum sum: {total}")
+    print(f"Path: {path}")
+    # Expected for this grid: max sum = 29, path = "DDRR"

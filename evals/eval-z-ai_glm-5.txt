@@ -1,0 +1,1561 @@
+Model: z-ai/glm-5
+Provider: openrouter
+Evaluated: 2026-07-27T19:26:29.474869+00:00
+
+=== TIMING ===
+Response time: 410.68s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+Let me analyze this problem step by step:
+
+1. We need to find the maximum sum path from top-left (0,0) to bottom-right (N-1, N-1) in an N×N grid.
+2. Valid moves are: Right (R), Down (D), and Diagonal down-right (X).
+3. Every 3rd move (moves 3, 6, 9, ...) must be diagonal (X) if possible.
+4. If diagonal is not possible on a required diagonal move, we can use R or D instead.
+5. Return the maximum sum and the path string.
+
+Let me think about how to approach this:
+
+This is a dynamic programming problem with a constraint. The constraint depends on the number of moves made so far (modulo 3).
+
+Let me define the state:
+- Position (i, j)
+- Move count modulo 3 (0, 1, or 2)
+
+If move_count % 3 == 2 (meaning the next move is the 3rd, 6th, 9th, etc.), then the next move must be diagonal if possible.
+
+Wait, let me re-read the problem. "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position"
+
+So moves numbered 3, 6, 9, ... must be diagonal. This means:
+- After 2 moves, the 3rd move must be diagonal
+- After 5 moves, the 6th move must be diagonal
+- etc.
+
+So when move_count % 3 == 2 (meaning we've made 2, 5, 8, ... moves), the next move (which would be move 3, 6, 9, ...) must be diagonal if possible.
+
+Let me define DP[i][j][k] = maximum sum to reach cell (i,j) with move count % 3 == k.
+
+Actually, let me think about this more carefully. The state should be:
+- Current position (i, j)
+- Number of moves made so far (modulo 3)
+
+Let me denote:
+- moves_made % 3 == 0: next move can be anything (move 1, 4, 7, ...)
+- moves_made % 3 == 1: next move can be anything (move 2, 5, 8, ...)
+- moves_made % 3 == 2: next move MUST be diagonal if possible (move 3, 6, 9, ...)
+
+Starting position: (0, 0) with 0 moves made.
+
+From state (i, j, moves % 3 == 0):
+- Can move R to (i, j+1) with moves+1
+- Can move D to (i+1, j) with moves+1
+- Can move X to (i+1, j+1) with moves+1
+
+From state (i, j, moves % 3 == 1):
+- Can move R to (i, j+1) with moves+1
+- Can move D to (i+1, j) with moves+1
+- Can move X to (i+1, j+1) with moves+1
+
+From state (i, j, moves % 3 == 2):
+- Must try X first
+- If X is possible (i+1 < N and j+1 < N), MUST use X
+- If X is not possible, can use R or D
+
+Let me implement this:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    # DP[i][j][k] = (max_sum, path) to reach (i,j) with k moves made (k = moves % 3)
+    # k can be 0, 1, or 2
+    
+    # Initialize with negative infinity
+    INF = float('-inf')
+    dp = [[{} for _ in range(N)] for _ in range(N)]
+    
+    # Starting position: (0, 0) with 0 moves, sum = grid[0][0], path = ""
+    dp[0][0][0] = (grid[0][0], "")
+    
+    # BFS/DP approach
+    # We process states by number of moves made
+    
+    from collections import defaultdict
+    
+    # states[moves] = list of (i, j) positions reached with that many moves
+    # But we only need to track modulo 3
+    
+    # Let's use a different approach: process in order
+    # For each cell (i, j), we can come from:
+    # - (i-1, j) with move D
+    # - (i, j-1) with move R
+    # - (i-1, j-1) with move X
+    
+    # But the constraint depends on the number of moves, not just the position
+    
+    # Let me think again...
+    
+    # The key insight is that for any path from (0,0) to (i,j), the number of moves
+    # can vary (because X moves change both i and j).
+    
+    # So we need to track both (i, j) and the number of moves % 3.
+    
+    # Let's use a BFS-style approach:
+    # Process all states by the number of moves made.
+    
+    max_moves = 2 * N - 2  # Maximum moves if we only use R and D
+    
+    # Actually, let's use a queue-based approach
+    
+    from collections import deque
+    
+    # State: (i, j, moves % 3)
+    # We'll process all states and update
+    
+    # Initialize: starting at (0, 0) with 0 moves
+    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k moves made
+    
+    dp = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = (grid[0][0], "")
+    
+    # Use BFS to explore all states
+    # We need to process states in order of number of moves
+    # But since we're tracking modulo 3, we can use a different approach
+    
+    # Process all cells in order of i+j (sum), but also need to consider diagonal moves
+    
+    # Actually, let's think differently:
+    # - From any cell, we can make a move to the next cell
+    # - The type of move depends on the number of moves made so far
+    
+    # Let's use dynamic programming with states:
+    # For each cell (i, j), we can arrive with move count modulo 3 being 0, 1, or 2
+    # And we need to consider all possible previous cells
+    
+    for _ in range(N * N):  # Iterate enough times to propagate values
+        for i in range(N):
+            for j in range(N):
+                for k in range(3):
+                    if dp[i][j][k] is None:
+                        continue
+                    
+                    current_sum, current_path = dp[i][j][k]
+                    
+                    # Determine valid next moves based on k
+                    next_k = (k + 1) % 3
+                    
+                    if k == 2:  # Next move must be diagonal if possible
+                        # Try diagonal first
+                        if i + 1 < N and j + 1 < N:
+                            ni, nj = i + 1, j + 1
+                            new_sum = current_sum + grid[ni][nj]
+                            new_path = current_path + "X"
+                            if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                dp[ni][nj][next_k] = (new_sum, new_path)
+                        else:
+                            # Diagonal not possible, try R or D
+                            if j + 1 < N:
+                                ni, nj = i, j + 1
+                                new_sum = current_sum + grid[ni][nj]
+                                new_path = current_path + "R"
+                                if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                    dp[ni][nj][next_k] = (new_sum, new_path)
+                            if i + 1 < N:
+                                ni, nj = i + 1, j
+                                new_sum = current_sum + grid[ni][nj]
+                                new_path = current_path + "D"
+                                if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                    dp[ni][nj][next_k] = (new_sum, new_path)
+                    else:
+                        # Any move is valid
+                        if j + 1 < N:
+                            ni, nj = i, j + 1
+                            new_sum = current_sum + grid[ni][nj]
+                            new_path = current_path + "R"
+                            if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                dp[ni][nj][next_k] = (new_sum, new_path)
+                        if i + 1 < N:
+                            ni, nj = i + 1, j
+                            new_sum = current_sum + grid[ni][nj]
+                            new_path = current_path + "D"
+                            if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                dp[ni][nj][next_k] = (new_sum, new_path)
+                        if i + 1 < N and j + 1 < N:
+                            ni, nj = i + 1, j + 1
+                            new_sum = current_sum + grid[ni][nj]
+                            new_path = current_path + "X"
+                            if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                dp[ni][nj][next_k] = (new_sum, new_path)
+    
+    # Find the best result at (N-1, N-1)
+    best = None
+    for k in range(3):
+        if dp[N-1][N-1][k] is not None:
+            if best is None or dp[N-1][N-1][k][0] > best[0]:
+                best = dp[N-1][N-1][k]
+    
+    if best is None:
+        return (0, "")
+    return best
+```
+
+Wait, this approach has a problem. The iteration order might not be correct because we're updating cells that might affect earlier cells due to diagonal moves.
+
+Let me think of a different approach. Since the number of moves determines the modulo, and we want to maximize the sum, let's use a priority queue or process states in order of number of moves.
+
+Actually, the issue is that with diagonal moves, we can reach a cell with different numbers of moves. For example:
+- (1, 1) can be reached by "RD" (2 moves) or "X" (1 move) or "DR" (2 moves)
+
+So the same cell can be reached with different values of moves % 3.
+
+Let me use a BFS-like approach with a queue, processing states by the number of moves:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    from collections import deque
+    
+    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k moves made (k = moves % 3)
+    dp = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Start at (0, 0) with 0 moves
+    # We need to count the starting cell's value
+    dp[0][0][0] = (grid[0][0], "")
+    
+    # Queue: (i, j, moves)
+    queue = deque([(0, 0, 0)])
+    
+    while queue:
+        i, j, moves = queue.popleft()
+        
+        k = moves % 3
+        if dp[i][j][k] is None:
+            continue
+        
+        current_sum, current_path = dp[i][j][k]
+        next_moves = moves + 1
+        next_k = next_moves % 3
+        
+        # Determine valid moves
+        candidates = []
+        if k == 2:  # Next move (move #moves+1) must be diagonal if it's the 3rd, 6th, etc.
+            # moves = 2, 5, 8, ... so next_moves = 3, 6, 9, ...
+            # Must use diagonal if possible
+            if i + 1 < N and j + 1 < N:
+                candidates.append(("X", i + 1, j + 1))
+            else:
+                # Diagonal not possible, can use R or D
+                if j + 1 < N:
+                    candidates.append(("R", i, j + 1))
+                if i + 1 < N:
+                    candidates.append(("D", i + 1, j))
+        else:
+            # Any move is valid
+            if j + 1 < N:
+                candidates.append(("R", i, j + 1))
+            if i + 1 < N:
+                candidates.append(("D", i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                candidates.append(("X", i + 1, j + 1))
+        
+        for move_char, ni, nj in candidates:
+            new_sum = current_sum + grid[ni][nj]
+            new_path = current_path + move_char
+            
+            if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                dp[ni][nj][next_k] = (new_sum, new_path)
+                queue.append((ni, nj, next_moves))
+    
+    # Find the best result at (N-1, N-1)
+    best = None
+    for k in range(3):
+        if dp[N-1][N-1][k] is not None:
+            if best is None or dp[N-1][N-1][k][0] > best[0]:
+                best = dp[N-1][N-1][k]
+    
+    if best is None:
+        return (0, "")
+    return best
+```
+
+Hmm, but this still might have issues with revisiting cells. Let me think more carefully.
+
+Actually, the issue is that when we process a state from the queue, we might have already found a better path to that state. But since we check `if dp[i][j][k] is None`, we might skip states that have been updated after they were added to the queue.
+
+Let me fix this by checking the value at the time of processing:
+
+Actually wait, the current check is `if dp[i][j][k] is None: continue` which skips if no path found. But we should check if the current path is worse than what we have stored.
+
+Let me rewrite:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    from collections import deque
+    
+    # dp[i][j][k] = max_sum to reach (i,j) with k moves made (k = moves % 3)
+    # path[i][j][k] = path string
+    dp = [[[float('-inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    path = [[["" for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Start at (0, 0) with 0 moves
+    dp[0][0][0] = grid[0][0]
+    
+    # Queue: (i, j, moves)
+    queue = deque([(0, 0, 0)])
+    
+    while queue:
+        i, j, moves = queue.popleft()
+        
+        k = moves % 3
+        current_sum = dp[i][j][k]
+        current_path = path[i][j][k]
+        
+        next_moves = moves + 1
+        next_k = next_moves % 3
+        
+        # Determine valid moves
+        candidates = []
+        if k == 2:  # Next move must be diagonal if it's the 3rd, 6th, etc.
+            if i + 1 < N and j + 1 < N:
+                candidates.append(("X", i + 1, j + 1))
+            else:
+                if j + 1 < N:
+                    candidates.append(("R", i, j + 1))
+                if i + 1 < N:
+                    candidates.append(("D", i + 1, j))
+        else:
+            if j + 1 < N:
+                candidates.append(("R", i, j + 1))
+            if i + 1 < N:
+                candidates.append(("D", i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                candidates.append(("X", i + 1, j + 1))
+        
+        for move_char, ni, nj in candidates:
+            new_sum = current_sum + grid[ni][nj]
+            new_path = current_path + move_char
+            
+            if new_sum > dp[ni][nj][next_k]:
+                dp[ni][nj][next_k] = new_sum
+                path[ni][nj][next_k] = new_path
+                queue.append((ni, nj, next_moves))
+    
+    # Find the best result at (N-1, N-1)
+    best_sum = float('-inf')
+    best_path = ""
+    for k in range(3):
+        if dp[N-1][N-1][k] > best_sum:
+            best_sum = dp[N-1][N-1][k]
+            best_path = path[N-1][N-1][k]
+    
+    if best_sum == float('-inf'):
+        return (0, "")
+    return (best_sum, best_path)
+```
+
+Wait, there's still an issue. When we process a state from the queue, the current_sum and current_path we use might be outdated if a better path was found later.
+
+Let me fix this by always using the current values:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    from collections import deque
+    
+    # dp[i][j][k] = max_sum to reach (i,j) with k moves made (k = moves % 3)
+    # path[i][j][k] = path string
+    dp = [[[float('-inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    path = [[["" for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Start at (0, 0) with 0 moves
+    dp[0][0][0] = grid[0][0]
+    
+    # Queue: (i, j, k) where k = moves % 3
+    queue = deque([(0, 0, 0)])
+    
+    while queue:
+        i, j, k = queue.popleft()
+        
+        current_sum = dp[i][j][k]
+        current_path = path[i][j][k]
+        
+        # Compute the actual number of moves from k... wait, we don't track the exact number
+        
+        # Actually, the key insight is: k tells us what the next move constraint is
+        # If k == 2, the next move is constrained
+        # If k != 2, the next move is unconstrained
+        
+        next_k = (k + 1) % 3
+        
+        # Determine valid moves
+        candidates = []
+        if k == 2:  # Next move must be diagonal if possible
+            if i + 1 < N and j + 1 < N:
+                candidates.append(("X", i + 1, j + 1))
+            else:
+                if j + 1 < N:
+                    candidates.append(("R", i, j + 1))
+                if i + 1 < N:
+                    candidates.append(("D", i + 1, j))
+        else:
+            if j + 1 < N:
+                candidates.append(("R", i, j + 1))
+            if i + 1 < N:
+                candidates.append(("D", i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                candidates.append(("X", i + 1, j + 1))
+        
+        for move_char, ni, nj in candidates:
+            new_sum = current_sum + grid[ni][nj]
+            new_path = current_path + move_char
+            
+            if new_sum > dp[ni][nj][next_k]:
+                dp[ni][nj][next_k] = new_sum
+                path[ni][nj][next_k] = new_path
+                queue.append((ni, nj, next_k))
+    
+    # Find the best result at (N-1, N-1)
+    best_sum = float('-inf')
+    best_path = ""
+    for k in range(3):
+        if dp[N-1][N-1][k] > best_sum:
+            best_sum = dp[N-1][N-1][k]
+            best_path = path[N-1][N-1][k]
+    
+    if best_sum == float('-inf'):
+        return (0, "")
+    return (best_sum, best_path)
+```
+
+This looks better, but there's still a subtle issue. The BFS might not terminate because we keep adding states to the queue when we find better paths. Since the path sum is bounded and always increases, it should eventually converge, but it might be slow.
+
+Actually, let me think about this differently. In BFS, we normally process states in order of distance (number of moves). But here, different paths can reach the same cell with different numbers of moves (due to diagonal X moves).
+
+Let me use a different approach: process states in order of the sum, like Dijkstra's algorithm:
+
+Actually, that's what we want for maximizing, but in reverse. We want to find the maximum sum path.
+
+Hmm, let me think about the structure of the problem more carefully.
+
+Actually, the constraint is: every 3rd move must be diagonal if possible. This is a constraint on the type of move based on the position in the path (move count).
+
+Let's define the state as (i, j, m) where m is the number of moves made modulo 3.
+
+The transitions are:
+- From (i, j, m), we can go to:
+  - (i, j+1, (m+1)%3) with move R if m != 2 or (diagonal not possible from (i, j))
+  - (i+1, j, (m+1)%3) with move D if m != 2 or (diagonal not possible from (i, j))
+  - (i+1, j+1, (m+1)%3) with move X if m != 2 or (this is the required diagonal)
+
+Wait, I need to be more careful. The constraint says: "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position"
+
+So if we're making the 3rd move (or 6th, or 9th, ...), it must be diagonal if possible.
+
+Move 3 means we've made 2 moves already. So if moves_made % 3 == 2, the next move must be diagonal if possible.
+
+Let me re-examine:
+- Move 1: moves_made before = 0, moves_made % 3 = 0, next move is unconstrained
+- Move 2: moves_made before = 1, moves_made % 3 = 1, next move is unconstrained
+- Move 3: moves_made before = 2, moves_made % 3 = 2, next move MUST be diagonal if possible
+- Move 4: moves_made before = 3, moves_made % 3 = 0, next move is unconstrained
+- etc.
+
+So the constraint applies when k = moves_made % 3 = 2.
+
+In my code above, I'm using k to represent the state after some number of moves. So:
+- State (i, j, k=0): at cell (i, j) after a number of moves where moves % 3 = 0
+- State (i, j, k=1): at cell (i, j) after a number of moves where moves % 3 = 1
+- State (i, j, k=2): at cell (i, j) after a number of moves where moves % 3 = 2
+
+From state (i, j, k), the next move will be move number (moves + 1). If k == 2, the next move is move 3, 6, 9, etc., so it must be diagonal if possible.
+
+Let me verify:
+- Starting state: (0, 0, k=0) meaning 0 moves made
+- From (i, j, k=0): next move is move 1 (unconstrained)
+- From (i, j, k=1): next move is move 2 (unconstrained)
+- From (i, j, k=2): next move is move 3, 6, 9... (constrained to diagonal if possible)
+
+This matches my code above. Let me trace through a small example to verify:
+
+Grid:
+```
+1 2
+3 4
+```
+
+Start: (0, 0), k=0, sum=1, path=""
+
+From (0, 0, k=0):
+- Can go R to (0, 1), new state (0, 1, k=1), sum=1+2=3, path="R"
+- Can go D to (1, 0), new state (1, 0, k=1), sum=1+3=4, path="D"
+- Can go X to (1, 1), new state (1, 1, k=1), sum=1+4=5, path="X"
+
+From (0, 1, k=1):
+- Can go D to (1, 1), new state (1, 1, k=2), sum=3+4=7, path="RD"
+- Can go X to... wait, X from (0, 1) would go to (1, 2) which is out of bounds
+
+From (1, 0, k=1):
+- Can go R to (1, 1), new state (1, 1, k=2), sum=4+4=8, path="DR"
+- Can go X to... X from (1, 0) would go to (2, 1) which is out of bounds
+
+From (1, 1, k=1): (reached by X)
+- This is the goal cell! k=1 means we've made 1 move.
+
+From (1, 1, k=2): (reached by RD or DR)
+- This is the goal cell! k=2 means we've made 2 moves.
+
+So at the goal (1, 1), we have:
+- k=1: sum=5, path="X"
+- k=2: sum=8, path="DR" (best)
+
+So the answer would be (8, "DR").
+
+But wait, let me double-check. Starting at (0,0), the value is 1. Then:
+- "X" goes to (1,1) and adds 4, total = 1+4 = 5
+- "DR" goes D to (1,0) adds 3, then R to (1,1) adds 4, total = 1+3+4 = 8
+
+Yes, (8, "DR") is correct for this grid.
+
+Now let me think about a case where the constraint matters.
+
+Grid:
+```
+1 2 3
+4 5 6
+7 8 9
+```
+
+Let's trace:
+Start: (0, 0), k=0, sum=1
+
+From (0, 0, k=0):
+- R: (0, 1, k=1), sum=3, path="R"
+- D: (1, 0, k=1), sum=5, path="D"
+- X: (1, 1, k=1), sum=6, path="X"
+
+From (0, 1, k=1):
+- R: (0, 2, k=2), sum=6, path="RR"
+- D: (1, 1, k=2), sum=8, path="RD"
+- X: (1, 2, k=2), sum=9, path="RX"
+
+From (1, 0, k=1):
+- R: (1, 1, k=2), sum=10, path="DR"
+- D: (2, 0, k=2), sum=12, path="DD"
+- X: (2, 1, k=2), sum=13, path="DX"
+
+From (1, 1, k=1):
+- R: (1, 2, k=2), sum=12, path="XR"
+- D: (2, 1, k=2), sum=14, path="XD"
+- X: (2, 2, k=2), sum=15, path="XX"
+
+From (0, 2, k=2):
+- Next move MUST be diagonal if possible. Diagonal would go to (1, 3) which is out of bounds.
+- So can use R (out of bounds) or D: (1, 2, k=0), sum=12, path="RRD"
+
+From (1, 1, k=2):
+- Must be diagonal: (2, 2, k=0), sum=17, path="RDX" or sum=19, path="DRX"
+
+Wait, let me be more careful. Let me redo this systematically.
+
+Actually, this is getting complicated. Let me just trust my algorithm and trace through the code logic.
+
+Let me reconsider the algorithm. The issue with the BFS approach is that we might process the same state multiple times, which could be slow.
+
+Alternative approach: Since we're looking for the maximum sum path, and the constraint depends on the position in the path (modulo 3), we can use dynamic programming.
+
+But the issue is that the number of moves to reach a cell can vary. For example, (i, j) can be reached with:
+- All R and D moves: i + j moves
+- With some X moves: fewer moves
+
+And the value of moves % 3 matters for the constraint.
+
+So we need to track (i, j, moves % 3).
+
+Let me think about the DP transitions differently:
+- dp[i][j][k] = maximum sum to reach (i, j) with moves % 3 = k
+
+For dp[i][j][k], we can come from:
+- dp[i][j-1][k-1] (mod 3) with move R
+- dp[i-1][j][k-1] (mod 3) with move D
+- dp[i-1][j-1][k-1] (mod 3) with move X
+
+But the constraint says: if we're at state (i', j', k'=2), the next move must be diagonal if possible.
+
+So from dp[i'][j'][k'=2]:
+- If diagonal is possible (i'+1 < N and j'+1 < N), MUST use X
+- Otherwise, can use R or D
+
+This means the transitions are:
+- From dp[i][j][0]: can go R, D, or X
+- From dp[i][j][1]: can go R, D, or X
+- From dp[i][j][2]: must go X if possible, else R or D
+
+But we need to check if the destination cell can be reached by that move type.
+
+Let me reformulate:
+- dp[i][j][k] = maximum sum to reach (i, j) with moves % 3 = k
+
+Transitions to dp[i][j][k]:
+- From dp[i][j-1][(k-1)%3] with R if ((k-1)%3 != 2) or (diagonal from (i, j-1) not possible)
+- From dp[i-1][j][(k-1)%3] with D if ((k-1)%3 != 2) or (diagonal from (i-1, j) not possible)
+- From dp[i-1][j-1][(k-1)%3] with X if ((k-1)%3 != 2) or (diagonal from (i-1, j-1) is possible)
+
+Wait, this is getting complicated. Let me think again.
+
+Actually, the constraint is on the move being made, not on the state before the move. So if we're making a move from state (i, j, k) to state (i', j', k+1), the constraint depends on k:
+- If k == 2, the move must be X if possible
+
+Let me reformulate once more:
+- dp[i][j][k] = maximum sum to reach (i, j) with moves % 3 = k
+
+For each state (i, j, k), consider transitions:
+- If k == 2:
+  - If X is possible from (i, j): must transition to (i+1, j+1, (k+1)%3) with X
+  - Else: can transition with R or D
+- Else: can transition with R, D, or X
+
+Let me implement this with proper DP ordering. The issue is that diagonal X means we might not have a clear topological order.
+
+Actually, let's use the BFS approach with proper handling. The key is that we update dp[i][j][k] whenever we find a better path, and we add to the queue.
+
+Here's my revised implementation:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    from collections import deque
+    
+    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k moves made (k = moves % 3)
+    dp = [[[{float('-inf'): None} for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Let's use a simpler approach: track max_sum and path separately
+    max_sum = [[[-1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    path_str = [[["" for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Start at (0, 0) with 0 moves
+    max_sum[0][0][0] = grid[0][0]
+    
+    # Queue: (i, j, k)
+    queue = deque([(0, 0, 0)])
+    
+    while queue:
+        i, j, k = queue.popleft()
+        
+        curr_sum = max_sum[i][j][k]
+        curr_path = path_str[i][j][k]
+        
+        next_k = (k + 1) % 3
+        
+        # Determine valid moves
+        moves = []
+        if k == 2:  # Must be diagonal if possible
+            if i + 1 < N and j + 1 < N:
+                moves.append(("X", i + 1, j + 1))
+            else:
+                if j + 1 < N:
+                    moves.append(("R", i, j + 1))
+                if i + 1 < N:
+                    moves.append(("D", i + 1, j))
+        else:
+            if j + 1 < N:
+                moves.append(("R", i, j + 1))
+            if i + 1 < N:
+                moves.append(("D", i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                moves.append(("X", i + 1, j + 1))
+        
+        for move_char, ni, nj in moves:
+            new_sum = curr_sum + grid[ni][nj]
+            new_path = curr_path + move_char
+            
+            if new_sum > max_sum[ni][nj][next_k]:
+                max_sum[ni][nj][next_k] = new_sum
+                path_str[ni][nj][next_k] = new_path
+                queue.append((ni, nj, next_k))
+    
+    # Find the best result at (N-1, N-1)
+    best_sum = -1
+    best_path = ""
+    for k in range(3):
+        if max_sum[N-1][N-1][k] > best_sum:
+            best_sum = max_sum[N-1][N-1][k]
+            best_path = path_str[N-1][N-1][k]
+    
+    return (best_sum, best_path)
+```
+
+Hmm, there's still a potential issue: we're using the curr_path at the time of processing, but it might have been updated after this state was added to the queue.
+
+Let me fix this by always getting the current values:
+
+Actually, I realize the issue: when we pop from the queue and use curr_sum and curr_path, these values might be outdated. But the key insight is: we should only use the values at the time of processing if they are the best known values.
+
+Let me restructure:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    from collections import deque
+    
+    # max_sum[i][j][k] = max sum to reach (i,j) with moves % 3 = k
+    max_sum = [[[-float('inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    path_str = [[["" for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Start at (0, 0) with 0 moves
+    max_sum[0][0][0] = grid[0][0]
+    
+    # Queue: (i, j, k)
+    queue = deque([(0, 0, 0)])
+    
+    while queue:
+        i, j, k = queue.popleft()
+        
+        # Get current values (might be updated since added to queue)
+        curr_sum = max_sum[i][j][k]
+        curr_path = path_str[i][j][k]
+        
+        next_k = (k + 1) % 3
+        
+        # Determine valid moves
+        moves = []
+        if k == 2:  # Must be diagonal if possible
+            if i + 1 < N and j + 1 < N:
+                moves.append(("X", i + 1, j + 1))
+            else:
+                if j + 1 < N:
+                    moves.append(("R", i, j + 1))
+                if i + 1 < N:
+                    moves.append(("D", i + 1, j))
+        else:
+            if j + 1 < N:
+                moves.append(("R", i, j + 1))
+            if i + 1 < N:
+                moves.append(("D", i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                moves.append(("X", i + 1, j + 1))
+        
+        for move_char, ni, nj in moves:
+            new_sum = curr_sum + grid[ni][nj]
+            new_path = curr_path + move_char
+            
+            if new_sum > max_sum[ni][nj][next_k]:
+                max_sum[ni][nj][next_k] = new_sum
+                path_str[ni][nj][next_k] = new_path
+                queue.append((ni, nj, next_k))
+    
+    # Find the best result at (N-1, N-1)
+    best_sum = -float('inf')
+    best_path = ""
+    for k in range(3):
+        if max_sum[N-1][N-1][k] > best_sum:
+            best_sum = max_sum[N-1][N-1][k]
+            best_path = path_str[N-1][N-1][k]
+    
+    if best_sum == -float('inf'):
+        return (0, "")
+    return (best_sum, best_path)
+```
+
+Wait, there's still a bug. When we pop a state and it's been updated since it was added, we're using the outdated path (curr_path). The path might be from a better path that was found later.
+
+Let me think about this differently. The path string depends on the path, not just the cell and the move count. Different paths to the same (i, j, k) state can have different path strings, but we're only storing one.
+
+Actually, for the purpose of this problem, we want to find the maximum sum path. The path string is just for reconstruction. If we find a better sum, we should update the path string as well.
+
+The issue is: when we process a state (i, j, k) from the queue, the curr_path might be from a path that's no longer the best.
+
+Let me trace through an example to see if this is a problem:
+
+Consider a grid where there are two paths to (1, 1, k=1):
+1. "X" from (0, 0), sum = grid[0][0] + grid[1][1]
+2. "R" from (0, 0) -> "RD" from (0, 1)... wait, this would lead to (1, 1, k=2) not (1, 1, k=1).
+
+Let me think of a case where the path matters:
+- Path 1 to (i, j, k): sum = S1, path = P1
+- Path 2 to (i, j, k): sum = S2, path = P2
+- S1 > S2, so we should use P1
+
+When we update max_sum[i][j][k] and path_str[i][j][k], we're setting them atomically. So the path string should always correspond to the maximum sum.
+
+But the issue is: when we pop a state, we get the current path string. If a better path was found and the state was re-added to the queue, we might process the same state twice.
+
+Let me trace:
+1. Find path P1 to (i, j, k) with sum S1. Update and add to queue.
+2. Process (i, j, k): use S1 and P1 to extend. Add successors to queue.
+3. Find path P2 to (i, j, k) with sum S2 > S1. Update and add to queue.
+4. Process (i, j, k): use S2 and P2 to extend. Add successors to queue.
+
+So we process (i, j, k) twice, but the second time we use the better values. The successors will also be updated.
+
+This should be correct, just potentially slow.
+
+Let me test with a simple example:
+
+Grid:
+```
+1 2
+3 4
+```
+
+Initial: max_sum[0][0][0] = 1, path_str[0][0][0] = ""
+Queue: [(0, 0, 0)]
+
+Process (0, 0, 0):
+- k = 0, so any move
+- R: (0, 1, 1), sum = 1+2 = 3, path = "R"
+- D: (1, 0, 1), sum = 1+3 = 4, path = "D"
+- X: (1, 1, 1), sum = 1+4 = 5, path = "X"
+
+Queue: [(0, 1, 1), (1, 0, 1), (1, 1, 1)]
+
+Process (0, 1, 1):
+- k = 1, so any move
+- R: out of bounds
+- D: (1, 1, 2), sum = 3+4 = 7, path = "RD"
+- X: out of bounds
+
+Process (1, 0, 1):
+- k = 1, so any move
+- R: (1, 1, 2), sum = 4+4 = 8, path = "DR"
+- D: out of bounds
+- X: out of bounds
+
+At this point, max_sum[1][1][2] is updated twice:
+1. "RD", sum = 7
+2. "DR", sum = 8
+
+max_sum[1][1][2] = 8, path_str[1][1][2] = "DR"
+
+Process (1, 1, 1):
+- k = 1, so any move
+- All moves go out of bounds
+
+Process (1, 1, 2):
+- k = 2, so must be diagonal if possible
+- Diagonal from (1, 1) goes to (2, 2) which is out of bounds
+- R: out of bounds
+- D: out of bounds
+
+No more states.
+
+Final: max_sum[1][1][0], max_sum[1][1][1], max_sum[1][1][2]
+- max_sum[1][1][0] = -inf
+- max_sum[1][1][1] = 5, path = "X"
+- max_sum[1][1][2] = 8, path = "DR"
+
+Best: sum = 8, path = "DR"
+
+This matches my earlier manual calculation.
+
+Now let me check the constraint case:
+
+Grid:
+```
+1 2 3
+4 5 6
+7 8 9
+```
+
+Let me focus on paths where the constraint matters.
+
+One path: "RRD..."
+From (0, 0), k=0:
+- "RR": (0, 2), k=2
+From (0, 2), k=2:
+- Must be diagonal. Diagonal from (0, 2) goes to (1, 3) which is out of bounds.
+- Can use R (out of bounds) or D: (1, 2), sum = 1+2+3+6 = 12
+
+Another path: "RX..."
+From (0, 0), k=0:
+- "R": (0, 1), k=1, sum = 3
+- "X" from (0, 1): (1, 2), k=2, sum = 3+6 = 9
+
+Wait, let me trace more carefully:
+
+"RRD":
+- Start: (0, 0), k=0, sum=1
+- R: (0, 1), k=1, sum=3
+- R: (0, 2), k=2, sum=6
+- D (diagonal not possible from (0, 2)): (1, 2), k=0, sum=12
+- D (from (1, 2), k=0): (2, 2), k=1, sum=12+9=21
+
+So "RRDD" gives sum 21.
+
+"DRR":
+- Start: (0, 0), k=0, sum=1
+- D: (1, 0), k=1, sum=5
+- R: (1, 1), k=2, sum=10
+- D (diagonal possible from (1, 1)): must use X to (2, 2), sum=10+9=19, path="DRX"
+
+Wait, so from (1, 1), k=2, diagonal is possible, so we MUST use X.
+
+So "DRX" gives sum 19.
+
+Hmm, but "RRDD" gives sum 21 which is better. Let me verify:
+- "RRDD": 1 + 2 + 3 + 6 + 9 = 21
+- "DRX": 1 + 4 + 5 + 9 = 19
+
+Actually, wait. Let me re-trace "DRX":
+- D: (1, 0), sum = 1+4 = 5
+- R: (1, 1), sum = 5+5 = 10
+- X: (2, 2), sum = 10+9 = 19
+
+Yes, 19. And "RRDD":
+- R: (0, 1), sum = 1+2 = 3
+- R: (0, 2), sum = 3+3 = 6
+- D: (1, 2), sum = 6+6 = 12
+- D: (2, 2), sum = 12+9 = 21
+
+So "RRDD" is better.
+
+Now let me check another path:
+"DX":
+- D: (1, 0), k=1, sum=5
+- X: (2, 1), k=2, sum=5+8=13
+- From (2, 1), k=2, diagonal to (3, 2) is out of bounds. Can use R: (2, 2), sum=13+9=22
+
+So "DXR" gives sum 22.
+
+Let me verify: 1 + 4 + 8 + 9 = 22. Yes!
+
+What about "XDR":
+- X: (1, 1), k=1, sum=1+5=6
+- D: (2, 1), k=2, sum=6+8=14
+- From (2, 1), k=2, diagonal to (3, 2) is out of bounds. R: (2, 2), sum=14+9=23
+
+So "XDR" gives sum 23. Let me verify: 1 + 5 + 8 + 9 = 23. Yes!
+
+What about "XRD":
+- X: (1, 1), k=1, sum=6
+- R: (1, 2), k=2, sum=6+6=12
+- From (1, 2), k=2, diagonal to (2, 3) is out of bounds. D: (2, 2), sum=12+9=21
+
+So "XRD" gives sum 21.
+
+What about "RXD":
+- R: (0, 1), k=1, sum=3
+- X: (1, 2), k=2, sum=3+6=9
+- From (1, 2), k=2, diagonal to (2, 3) is out of bounds. D: (2, 2), sum=9+9=18
+
+So "RXD" gives sum 18.
+
+What about "RDD":
+- R: (0, 1), k=1, sum=3
+- D: (1, 1), k=2, sum=3+5=8
+- From (1, 1), k=2, diagonal to (2, 2), sum=8+9=17, path="RDX"
+
+So "RDX" gives sum 17.
+
+Hmm wait, that's wrong. Let me re-trace:
+- R: (0, 1), k=1, sum = 1+2 = 3
+- D: (1, 1), k=2, sum = 3+5 = 8
+- X (required): (2, 2), k=0, sum = 8+9 = 17
+
+So "RDX" gives sum 17.
+
+OK so far, "XDR" with sum 23 is the best.
+
+What about "XR":
+- X: (1, 1), k=1, sum=6
+- R: (1, 2), k=2, sum=6+6=12
+- From (1, 2), k=2, D to (2, 2), sum=12+9=21
+
+So "XRD" gives sum 21.
+
+What about "XD":
+- X: (1, 1), k=1, sum=6
+- D: (2, 1), k=2, sum=6+8=14
+- From (2, 1), k=2, R to (2, 2), sum=14+9=23
+
+So "XDR" gives sum 23 (same as before).
+
+Actually, let me recalculate. We have:
+- "XDR": X from (0,0) to (1,1), D from (1,1) to (2,1), R from (2,1) to (2,2)
+  Sum: 1 + 5 + 8 + 9 = 23
+
+Wait, that's 4 cells, so 3 moves. Let me re-check:
+- Move 1 (X): from (0,0) to (1,1), adds grid[1][1] = 5
+- Move 2 (D): from (1,1) to (2,1), adds grid[2][1] = 8
+- Move 3 (R): from (2,1) to (2,2), adds grid[2][2] = 9
+
+So sum = 1 + 5 + 8 + 9 = 23.
+
+Actually, let me be more careful. The starting cell is (0, 0) with value grid[0][0]. Each move adds the value of the destination cell.
+
+For "XDR":
+- Start at (0, 0): sum = grid[0][0] = 1
+- Move X to (1, 1): sum += grid[1][1] = 1 + 5 = 6
+- Move D to (2, 1): sum += grid[2][1] = 6 + 8 = 14
+- Move R to (2, 2): sum += grid[2][2] = 14 + 9 = 23
+
+So "XDR" gives sum 23.
+
+Now, what's the constraint check?
+- Move 1 (X): k=0 before, unconstrained
+- Move 2 (D): k=1 before, unconstrained
+- Move 3 (R): k=2 before, must be diagonal if possible
+
+At move 3, we're at (2, 1) with k=2. Diagonal from (2, 1) would go to (3, 2), which is out of bounds. So we can use R or D. We use R to reach (2, 2).
+
+This seems correct.
+
+Let me also check "RRDD":
+- Start: sum = 1
+- R to (0, 1): sum = 1 + 2 = 3
+- R to (0, 2): sum = 3 + 3 = 6
+- D to (1, 2): sum = 6 + 6 = 12 (diagonal from (0, 2) is out of bounds, so D is allowed)
+- D to (2, 2): sum = 12 + 9 = 21
+
+So "RRDD" gives sum 21.
+
+Now, the question is: does my algorithm find "XDR" with sum 23?
+
+Let me trace the algorithm:
+
+Initial: max_sum[0][0][0] = 1
+Queue: [(0, 0, 0)]
+
+Process (0, 0, 0):
+- k = 0, unconstrained
+- R: (0, 1, 1), sum = 3
+- D: (1, 0, 1), sum = 5
+- X: (1, 1, 1), sum = 6
+
+Queue: [(0, 1, 1), (1, 0, 1), (1, 1, 1)]
+
+Process (0, 1, 1):
+- k = 1, unconstrained
+- R: (0, 2, 2), sum = 6
+- D: (1, 1, 2), sum = 8
+- X: (1, 2, 2), sum = 9
+
+Queue: [(1, 0, 1), (1, 1, 1), (0, 2, 2), (1, 1, 2), (1, 2, 2)]
+
+Process (1, 0, 1):
+- k = 1, unconstrained
+- R: (1, 1, 2), sum = 10
+- D: (2, 0, 2), sum = 12
+- X: (2, 1, 2), sum = 13
+
+Update max_sum[1][1][2] from 8 to 10.
+Queue: [(1, 1, 1), (0, 2, 2), (1, 1, 2), (1, 2, 2), (2, 0, 2), (2, 1, 2)]
+
+Process (1, 1, 1):
+- k = 1, unconstrained
+- R: (1, 2, 2), sum = 12
+- D: (2, 1, 2), sum = 14
+- X: (2, 2, 2), sum = 15
+
+Update max_sum[1][2][2] from 9 to 12.
+Update max_sum[2][1][2] from 13 to 14.
+max_sum[2][2][2] = 15.
+
+Queue: [(0, 2, 2), (1, 1, 2), (1, 2, 2), (2, 0, 2), (2, 1, 2), (2, 2, 2), ...]
+
+Process (0, 2, 2):
+- k = 2, must be diagonal if possible
+- Diagonal from (0, 2) to (1, 3): out of bounds
+- R: out of bounds
+- D: (1, 2, 0), sum = 12
+
+Process (1, 1, 2):
+- k = 2, must be diagonal if possible
+- Diagonal from (1, 1) to (2, 2): possible!
+- X: (2, 2, 0), sum = 10 + 9 = 19
+
+Process (1, 2, 2):
+- k = 2, must be diagonal if possible
+- Diagonal from (1, 2) to (2, 3): out of bounds
+- R: out of bounds
+- D: (2, 2, 0), sum = 12 + 9 = 21
+
+Update max_sum[2][2][0] from 19 to 21.
+
+Process (2, 0, 2):
+- k = 2, must be diagonal if possible
+- Diagonal from (2, 0) to (3, 1): out of bounds
+- R: (2, 1, 0), sum = 12 + 8 = 20
+- D: out of bounds
+
+Process (2, 1, 2):
+- k = 2, must be diagonal if possible
+- Diagonal from (2, 1) to (3, 2): out of bounds
+- R: (2, 2, 0), sum = 14 + 9 = 23
+- D: out of bounds
+
+Update max_sum[2][2][0] from 21 to 23!
+
+Process (2, 2, 2):
+- k = 2, must be diagonal if possible
+- Diagonal from (2, 2) to (3, 3): out of bounds
+- R: out of bounds
+- D: out of bounds
+
+No more valid moves.
+
+So the final max_sum[2][2][0] = 23.
+
+And what's the path?
+When we processed (2, 1, 2) and added R to (2, 2, 0):
+- curr_path for (2, 1, 2) was "XD" (from (1, 1, 1) -> D -> (2, 1, 2))
+- new_path = "XD" + "R" = "XDR"
+
+So path_str[2][2][0] = "XDR".
+
+Great, the algorithm finds the correct answer!
+
+Let me clean up the code:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    from collections import deque
+    
+    # max_sum[i][j][k] = max sum to reach (i,j) with moves % 3 = k
+    max_sum = [[[-float('inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    path_str = [[["" for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Start at (0, 0) with 0 moves
+    max_sum[0][0][0] = grid[0][0]
+    
+    # Queue: (i, j, k)
+    queue = deque([(0, 0, 0)])
+    
+    while queue:
+        i, j, k = queue.popleft()
+        
+        curr_sum = max_sum[i][j][k]
+        curr_path = path_str[i][j][k]
+        
+        next_k = (k + 1) % 3
+        
+        # Determine valid moves
+        moves = []
+        if k == 2:  # Must be diagonal if possible
+            if i + 1 < N and j + 1 < N:
+                moves.append(("X", i + 1, j + 1))
+            else:
+                if j + 1 < N:
+                    moves.append(("R", i, j + 1))
+                if i + 1 < N:
+                    moves.append(("D", i + 1, j))
+        else:
+            if j + 1 < N:
+                moves.append(("R", i, j + 1))
+            if i + 1 < N:
+                moves.append(("D", i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                moves.append(("X", i + 1, j + 1))
+        
+        for move_char, ni, nj in moves:
+            new_sum = curr_sum + grid[ni][nj]
+            new_path = curr_path + move_char
+            
+            if new_sum > max_sum[ni][nj][next_k]:
+                max_sum[ni][nj][next_k] = new_sum
+                path_str[ni][nj][next_k] = new_path
+                queue.append((ni, nj, next_k))
+    
+    # Find the best result at (N-1, N-1)
+    best_sum = -float('inf')
+    best_path = ""
+    for k in range(3):
+        if max_sum[N-1][N-1][k] > best_sum:
+            best_sum = max_sum[N-1][N-1][k]
+            best_path = path_str[N-1][N-1][k]
+    
+    return (best_sum, best_path)
+```
+
+Actually, I just realized there might be an issue with how I'm handling the path string. Let me trace through more carefully.
+
+When we update max_sum[ni][nj][next_k] and path_str[ni][nj][next_k], we're using curr_path from the current state. But curr_path was set when we popped from the queue. If a better path was found to the current state and it was re-added to the queue, we might use the outdated path.
+
+Let me trace an example:
+
+Suppose we have two paths to (i, j, k):
+- Path P1 with sum S1, found first
+- Path P2 with sum S2 > S1, found later
+
+When we find P1, we update max_sum and path_str, and add to queue.
+When we process P1 from the queue, we use path P1.
+When we find P2, we update max_sum and path_str (to P2), and add to queue.
+When we process P2 from the queue, we use path P2.
+
+So when we process the second time, we use the correct path.
+
+But wait, there's a subtle issue. When we process P1 from the queue:
+- curr_sum = S1 (from max_sum at the time of processing)
+- curr_path = P1 (from path_str at the time of processing)
+
+But if P2 was already found and max_sum was updated to S2, then curr_sum would be S2, not S1!
+
+Hmm, let me re-check. In Python, when we do:
+```python
+curr_sum = max_sum[i][j][k]
+```
+
+We're reading the current value of max_sum[i][j][k], which might have been updated.
+
+So if:
+1. We find P1, set max_sum = S1, add to queue.
+2. We find P2, set max_sum = S2, add to queue.
+3. We pop P1's queue entry.
+4. We read max_sum, which is S2.
+5. We read path_str, which is P2.
+
+So we'd use S2 and P2 for processing, which is correct!
+
+But wait, the queue entry was added for P1, not P2. The queue contains (i, j, k), not the actual path. So when we pop, we don't know if it's for P1 or P2.
+
+Let me re-trace:
+1. Find P1, set max_sum[i][j][k] = S1, path_str[i][j][k] = P1, add (i, j, k) to queue.
+2. Process other states...
+3. Find P2, set max_sum[i][j][k] = S2, path_str[i][j][k] = P2, add (i, j, k) to queue.
+4. Pop (i, j, k) from queue (the first entry, added for P1).
+5. Read max_sum[i][j][k] = S2, path_str[i][j][k] = P2.
+6. Process using S2 and P2.
+
+So we process correctly!
+
+And when we pop the second entry (added for P2):
+7. Pop (i, j, k) from queue (the second entry, added for P2).
+8. Read max_sum[i][j][k] = S2, path_str[i][j][k] = P2.
+9. Process using S2 and P2.
+
+So we process the same state twice, but both times with the correct values. This is inefficient but correct.
+
+Actually, there's a potential issue: when we process step 6, we might add successors to the queue. When we process step 9, we might add the same successors again (with the same values). This could lead to redundant processing.
+
+To avoid this, we can check if the current max_sum is still the best when we pop:
+
+```python
+while queue:
+    i, j, k = queue.popleft()
+    
+    # Check if this state is still valid (might have been updated since added)
+    # Actually, this check is not needed for correctness, just efficiency
+    # If we're processing with outdated values, the condition new_sum > max_sum[ni][nj][next_k] will fail
+```
+
+Actually, the issue is: when we pop and process, we use the current values. If the current values are S2 and P2, we compute new_sum and new_path based on S2 and P2. If new_sum > max_sum[ni][nj][next_k], we update and add to queue.
+
+So even if we process the same state multiple times, we'll only update successors if we find a better path.
+
+I think the algorithm is correct, just potentially inefficient for some inputs. Let me finalize:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    from collections import deque
+    
+    # max_sum[i][j][k] = max sum to reach (i,j) with moves % 3 = k
+    max_sum = [[[-float('inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    path_str = [[["" for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Start at (0, 0) with 0 moves
+    max_sum[0][0][0] = grid[0][0]
+    
+    # Queue: (i, j, k)
+    queue = deque([(0, 0, 0)])
+    
+    while queue:
+        i, j, k = queue.popleft()
+        
+        curr_sum = max_sum[i][j][k]
+        curr_path = path_str[i][j][k]
+        
+        next_k = (k + 1) % 3
+        
+        # Determine valid moves
+        moves = []
+        if k == 2:  # Must be diagonal if possible
+            if i + 1 < N and j + 1 < N:
+                moves.append(("X", i + 1, j + 1))
+            else:
+                if j + 1 < N:
+                    moves.append(("R", i, j + 1))
+                if i + 1 < N:
+                    moves.append(("D", i + 1, j))
+        else:
+            if j + 1 < N:
+                moves.append(("R", i, j + 1))
+            if i + 1 < N:
+                moves.append(("D", i + 1, j))
+            if i + 1 < N and j + 1 < N:
+                moves.append(("X", i + 1, j + 1))
+        
+        for move_char, ni, nj in moves:
+            new_sum = curr_sum + grid[ni][nj]
+            new_path = curr_path + move_char
+            
+            if new_sum > max_sum[ni][nj][next_k]:
+                max_sum[ni][nj][next_k] = new_sum
+                path_str[ni][nj][next_k] = new_path
+                queue.append((ni, nj, next_k))
+    
+    # Find the best result at (N-1, N-1)
+    best_sum = -float('inf')
+    best_path = ""
+    for k in range(3):
+        if max_sum[N-1][N-1][k] > best_sum:
+            best_sum = max_sum[N-1][N-1][k]
+            best_path = path_str[N-1][N-1][k]
+    
+    return (best_sum, best_path)
+```
+
+Actually, I think there might be one more edge case. If the grid is all negative, we still need to find a path. Let me think...
+
+If grid[0][0] is negative, we still start with that value. The algorithm should still work because we're looking for the maximum sum, not a positive sum.
+
+Let me also handle the case where the destination is unreachable. Actually, in a grid where we can move right and down, the destination should always be reachable. Unless the grid is malformed (e.g., N=0, which we handle).
+
+Hmm wait, there's another edge case. If N == 1, we're already at the destination, so we should return (grid[0][0], ""). My code handles this.
+
+What about N == 2? The destination is (1, 1), and we can reach it by:
+- R then D
+- D then R
+- X
+
+The algorithm should handle this correctly.
+
+I think the algorithm is correct. Let me also add a check for if the destination was never reached:
+
+Actually, if max_sum[N-1][N-1][k] is -inf for all k, then the destination was never reached. This shouldn't happen for a valid grid, but let me handle it:
+
+```python
+if best_sum == -float('inf'):
+    return (0, "")
+return (best_sum, best_path)
+```
+
+Actually, wait. If the destination is not reachable, we should probably return something indicating an error. But based on the problem description, the grid should always have a valid path.
+
+Let me also consider: what if the grid has negative values? The algorithm should still work because we're maximizing the sum.
+
+One more thing: the problem says "every 3rd move MUST be diagonal if possible from current position". This means if we're at a position where diagonal is possible, we must use it. If diagonal is not possible (would go out of bounds), we can use R or D.
+
+I think my implementation handles this correctly. Let me double-check:
+
+When k == 2 (meaning the next move is the 3rd, 6th, etc.):
+- If i+1 < N and j+1 < N: diagonal is possible, so we MUST use X. We only add X to moves.
+- Else: diagonal is not possible, so we can use R (if j+1 < N) or D (if i+1 < N).
+
+This matches the problem description.
+
+Let me also check: does the path string correctly reflect the moves? Yes, we append the move character when we update the path.
+
+I think the implementation is correct. Let me finalize and clean up:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    from collections import deque
+    
+    # max_sum[i][j][k] = max sum to reach (i,j) with moves % 3 = k
+    max_sum = [[[-float('inf') for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    path_str = [[["" for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Start at (0, 0) with 0 moves
+    max_sum[0][0][0] = grid[0][0]
+    queue = deque([(0, 0, 0)])
+    
+    while queue:
+        i, j, k = queue.popleft()
+        
+        curr_sum = max_sum[i][j][
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    # DP[i][j][k] = (max_sum, path) to reach (i,j) with k moves made (k = moves % 3)
+    # k can be 0, 1, or 2
+    
+    # Initialize with negative infinity
+    INF = float('-inf')
+    dp = [[{} for _ in range(N)] for _ in range(N)]
+    
+    # Starting position: (0, 0) with 0 moves, sum = grid[0][0], path = ""
+    dp[0][0][0] = (grid[0][0], "")
+    
+    # BFS/DP approach
+    # We process states by number of moves made
+    
+    from collections import defaultdict
+    
+    # states[moves] = list of (i, j) positions reached with that many moves
+    # But we only need to track modulo 3
+    
+    # Let's use a different approach: process in order
+    # For each cell (i, j), we can come from:
+    # - (i-1, j) with move D
+    # - (i, j-1) with move R
+    # - (i-1, j-1) with move X
+    
+    # But the constraint depends on the number of moves, not just the position
+    
+    # Let me think again...
+    
+    # The key insight is that for any path from (0,0) to (i,j), the number of moves
+    # can vary (because X moves change both i and j).
+    
+    # So we need to track both (i, j) and the number of moves % 3.
+    
+    # Let's use a BFS-style approach:
+    # Process all states by the number of moves made.
+    
+    max_moves = 2 * N - 2  # Maximum moves if we only use R and D
+    
+    # Actually, let's use a queue-based approach
+    
+    from collections import deque
+    
+    # State: (i, j, moves % 3)
+    # We'll process all states and update
+    
+    # Initialize: starting at (0, 0) with 0 moves
+    # dp[i][j][k] = (max_sum, path) to reach (i,j) with k moves made
+    
+    dp = [[[None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = (grid[0][0], "")
+    
+    # Use BFS to explore all states
+    # We need to process states in order of number of moves
+    # But since we're tracking modulo 3, we can use a different approach
+    
+    # Process all cells in order of i+j (sum), but also need to consider diagonal moves
+    
+    # Actually, let's think differently:
+    # - From any cell, we can make a move to the next cell
+    # - The type of move depends on the number of moves made so far
+    
+    # Let's use dynamic programming with states:
+    # For each cell (i, j), we can arrive with move count modulo 3 being 0, 1, or 2
+    # And we need to consider all possible previous cells
+    
+    for _ in range(N * N):  # Iterate enough times to propagate values
+        for i in range(N):
+            for j in range(N):
+                for k in range(3):
+                    if dp[i][j][k] is None:
+                        continue
+                    
+                    current_sum, current_path = dp[i][j][k]
+                    
+                    # Determine valid next moves based on k
+                    next_k = (k + 1) % 3
+                    
+                    if k == 2:  # Next move must be diagonal if possible
+                        # Try diagonal first
+                        if i + 1 < N and j + 1 < N:
+                            ni, nj = i + 1, j + 1
+                            new_sum = current_sum + grid[ni][nj]
+                            new_path = current_path + "X"
+                            if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                dp[ni][nj][next_k] = (new_sum, new_path)
+                        else:
+                            # Diagonal not possible, try R or D
+                            if j + 1 < N:
+                                ni, nj = i, j + 1
+                                new_sum = current_sum + grid[ni][nj]
+                                new_path = current_path + "R"
+                                if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                    dp[ni][nj][next_k] = (new_sum, new_path)
+                            if i + 1 < N:
+                                ni, nj = i + 1, j
+                                new_sum = current_sum + grid[ni][nj]
+                                new_path = current_path + "D"
+                                if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                    dp[ni][nj][next_k] = (new_sum, new_path)
+                    else:
+                        # Any move is valid
+                        if j + 1 < N:
+                            ni, nj = i, j + 1
+                            new_sum = current_sum + grid[ni][nj]
+                            new_path = current_path + "R"
+                            if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                dp[ni][nj][next_k] = (new_sum, new_path)
+                        if i + 1 < N:
+                            ni, nj = i + 1, j
+                            new_sum = current_sum + grid[ni][nj]
+                            new_path = current_path + "D"
+                            if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                dp[ni][nj][next_k] = (new_sum, new_path)
+                        if i + 1 < N and j + 1 < N:
+                            ni, nj = i + 1, j + 1
+                            new_sum = current_sum + grid[ni][nj]
+                            new_path = current_path + "X"
+                            if dp[ni][nj][next_k] is None or dp[ni][nj][next_k][0] < new_sum:
+                                dp[ni][nj][next_k] = (new_sum, new_path)
+    
+    # Find the best result at (N-1, N-1)
+    best = None
+    for k in range(3):
+        if dp[N-1][N-1][k] is not None:
+            if best is None or dp[N-1][N-1][k][0] > best[0]:
+                best = dp[N-1][N-1][k]
+    
+    if best is None:
+        return (0, "")
+    return best

@@ -1,0 +1,195 @@
+Model: nvidia/nemotron-3-super-120b-a12b
+Provider: openrouter
+Evaluated: 2026-07-27T19:20:29.463252+00:00
+
+=== TIMING ===
+Response time: 18.26s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Returns the maximum obtainable sum and the corresponding path string
+    from the top‑left to the bottom‑right of an N×N grid.
+    Moves allowed: Right (R), Down (D), Diagonal down‑right (X).
+    Every 3rd move (3, 6, 9, …) must be a diagonal move if it is legal;
+    otherwise a Right or Down move may be used.
+    """
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    # Use None to denote an unreachable state.
+    NEG = None
+    # dp[i][j][r] = maximum sum reaching cell (i,j) after having taken
+    # a number of moves congruent to r (mod 3).  r = 0,1,2.
+    dp = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    # prev[i][j][r] stores the predecessor information needed to rebuild the path:
+    # (pi, pj, pr, move_char) that led to (i,j,r) with the optimal sum.
+    prev = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    dp[0][0][0] = grid[0][0]          # start: zero moves taken, sum includes the start cell
+    # prev[0][0][0] stays None (no predecessor)
+
+    for i in range(n):
+        for j in range(n):
+            for r in range(3):
+                cur = dp[i][j][r]
+                if cur is None:
+                    continue
+
+                # Is the next move (the (r+1)-th move) forced to be diagonal?
+                forced_diag = (r == 2)   # because (r+1) % 3 == 0 exactly when r == 2
+
+                moves = []
+                if forced_diag:
+                    # Diagonal is required if it stays inside the board.
+                    if i + 1 < n and j + 1 < n:
+                        moves.append((i + 1, j + 1, 'X'))
+                    else:
+                        # Diagonal not possible → we may use Right or Down.
+                        if j + 1 < n:
+                            moves.append((i, j + 1, 'R'))
+                        if i + 1 < n:
+                            moves.append((i + 1, j, 'D'))
+                else:
+                    # No restriction: any legal move is allowed.
+                    if j + 1 < n:
+                        moves.append((i, j + 1, 'R'))
+                    if i + 1 < n:
+                        moves.append((i + 1, j, 'D'))
+                    if i + 1 < n and j + 1 < n:
+                        moves.append((i + 1, j + 1, 'X'))
+
+                for ni, nj, ch in moves:
+                    new_r = (r + 1) % 3
+                    new_val = cur + grid[ni][nj]
+                    if dp[ni][nj][new_r] is None or new_val > dp[ni][nj][new_r]:
+                        dp[ni][nj][new_r] = new_val
+                        prev[ni][nj][new_r] = (i, j, r, ch)
+
+    # Pick the best reachable state at the bottom‑right corner.
+    best_sum = None
+    best_r = None
+    for r in range(3):
+        val = dp[n - 1][n - 1][r]
+        if val is not None:
+            if best_sum is None or val > best_sum:
+                best_sum = val
+                best_r = r
+
+    # Reconstruct the path (should always exist for a non‑empty grid).
+    if best_sum is None:   # safety fallback
+        return (0, "")
+
+    path_rev = []
+    i, j, r = n - 1, n - 1, best_r
+    while prev[i][j][r] is not None:
+        pi, pj, pr, ch = prev[i][j][r]
+        path_rev.append(ch)
+        i, j, r = pi, pj, pr
+    path_rev.reverse()
+    path_str = ''.join(path_rev)
+
+    return (best_sum, path_str)
+```
+
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Returns the maximum obtainable sum and the corresponding path string
+    from the top‑left to the bottom‑right of an N×N grid.
+    Moves allowed: Right (R), Down (D), Diagonal down‑right (X).
+    Every 3rd move (3, 6, 9, …) must be a diagonal move if it is legal;
+    otherwise a Right or Down move may be used.
+    """
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    # Use None to denote an unreachable state.
+    NEG = None
+    # dp[i][j][r] = maximum sum reaching cell (i,j) after having taken
+    # a number of moves congruent to r (mod 3).  r = 0,1,2.
+    dp = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    # prev[i][j][r] stores the predecessor information needed to rebuild the path:
+    # (pi, pj, pr, move_char) that led to (i,j,r) with the optimal sum.
+    prev = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    dp[0][0][0] = grid[0][0]          # start: zero moves taken, sum includes the start cell
+    # prev[0][0][0] stays None (no predecessor)
+
+    for i in range(n):
+        for j in range(n):
+            for r in range(3):
+                cur = dp[i][j][r]
+                if cur is None:
+                    continue
+
+                # Is the next move (the (r+1)-th move) forced to be diagonal?
+                forced_diag = (r == 2)   # because (r+1) % 3 == 0 exactly when r == 2
+
+                moves = []
+                if forced_diag:
+                    # Diagonal is required if it stays inside the board.
+                    if i + 1 < n and j + 1 < n:
+                        moves.append((i + 1, j + 1, 'X'))
+                    else:
+                        # Diagonal not possible → we may use Right or Down.
+                        if j + 1 < n:
+                            moves.append((i, j + 1, 'R'))
+                        if i + 1 < n:
+                            moves.append((i + 1, j, 'D'))
+                else:
+                    # No restriction: any legal move is allowed.
+                    if j + 1 < n:
+                        moves.append((i, j + 1, 'R'))
+                    if i + 1 < n:
+                        moves.append((i + 1, j, 'D'))
+                    if i + 1 < n and j + 1 < n:
+                        moves.append((i + 1, j + 1, 'X'))
+
+                for ni, nj, ch in moves:
+                    new_r = (r + 1) % 3
+                    new_val = cur + grid[ni][nj]
+                    if dp[ni][nj][new_r] is None or new_val > dp[ni][nj][new_r]:
+                        dp[ni][nj][new_r] = new_val
+                        prev[ni][nj][new_r] = (i, j, r, ch)
+
+    # Pick the best reachable state at the bottom‑right corner.
+    best_sum = None
+    best_r = None
+    for r in range(3):
+        val = dp[n - 1][n - 1][r]
+        if val is not None:
+            if best_sum is None or val > best_sum:
+                best_sum = val
+                best_r = r
+
+    # Reconstruct the path (should always exist for a non‑empty grid).
+    if best_sum is None:   # safety fallback
+        return (0, "")
+
+    path_rev = []
+    i, j, r = n - 1, n - 1, best_r
+    while prev[i][j][r] is not None:
+        pi, pj, pr, ch = prev[i][j][r]
+        path_rev.append(ch)
+        i, j, r = pi, pj, pr
+    path_rev.reverse()
+    path_str = ''.join(path_rev)
+
+    return (best_sum, path_str)

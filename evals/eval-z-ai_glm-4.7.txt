@@ -1,0 +1,214 @@
+Model: z-ai/glm-4.7
+Provider: openrouter
+Evaluated: 2026-07-27T18:45:20.499139+00:00
+
+=== TIMING ===
+Response time: 246.05s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return (0, "")
+    N = len(grid)
+    if N == 1:
+        return (grid[0][0], "")
+
+    # Maximum moves needed is (N-1) rights and (N-1) downs = 2N - 2
+    max_moves = 2 * (N - 1)
+    NEG_INF = -10**18
+
+    # dp[k][r][c] stores the maximum sum to reach cell (r, c) in exactly k moves.
+    dp = [[[NEG_INF for _ in range(N)] for _ in range(N)] for _ in range(max_moves + 2)]
+    # parent[k][r][c] stores the character ('R', 'D', 'X') of the move taken to reach (r, c) at step k.
+    parent = [[[None for _ in range(N)] for _ in range(N)] for _ in range(max_moves + 2)]
+
+    # Initial state: at (0,0) with 0 moves, sum is grid[0][0]
+    dp[0][0][0] = grid[0][0]
+
+    # Iterate through all possible step counts
+    for k in range(max_moves + 1):
+        for r in range(N):
+            for c in range(N):
+                if dp[k][r][c] == NEG_INF:
+                    continue
+
+                current_sum = dp[k][r][c]
+                next_k = k + 1
+
+                # Check if the next move is a mandatory diagonal move (3rd, 6th, 9th...)
+                is_mandatory_diagonal = (next_k % 3 == 0)
+
+                possible_moves = []
+
+                if is_mandatory_diagonal:
+                    # MUST use diagonal if possible
+                    if r + 1 < N and c + 1 < N:
+                        possible_moves.append('X')
+                    else:
+                        # If diagonal is not possible, fallback to R or D
+                        if r + 1 < N: possible_moves.append('D')
+                        if c + 1 < N: possible_moves.append('R')
+                else:
+                    # Free to choose any valid move
+                    if r + 1 < N: possible_moves.append('D')
+                    if c + 1 < N: possible_moves.append('R')
+                    if r + 1 < N and c + 1 < N: possible_moves.append('X')
+
+                for move in possible_moves:
+                    nr, nc = r, c
+                    if move == 'R':
+                        nc += 1
+                    elif move == 'D':
+                        nr += 1
+                    elif move == 'X':
+                        nr += 1
+                        nc += 1
+                    
+                    # Since moves are pre-validated, we just update the DP table
+                    new_sum = current_sum + grid[nr][nc]
+                    if new_sum > dp[next_k][nr][nc]:
+                        dp[next_k][nr][nc] = new_sum
+                        parent[next_k][nr][nc] = move
+
+    # Find the maximum sum reaching the bottom-right corner (N-1, N-1)
+    best_sum = NEG_INF
+    best_k = -1
+    for k in range(max_moves + 2):
+        if dp[k][N-1][N-1] > best_sum:
+            best_sum = dp[k][N-1][N-1]
+            best_k = k
+
+    # Reconstruct the path by backtracking from (N-1, N-1)
+    path_chars = []
+    curr_r, curr_c = N-1, N-1
+    curr_k = best_k
+
+    while curr_k > 0:
+        move = parent[curr_k][curr_r][curr_c]
+        # move should not be None if a path exists
+        if move is None:
+            break
+        
+        path_chars.append(move)
+        if move == 'R':
+            curr_c -= 1
+        elif move == 'D':
+            curr_r -= 1
+        elif move == 'X':
+            curr_r -= 1
+            curr_c -= 1
+        
+        curr_k -= 1
+
+    path_str = "".join(reversed(path_chars))
+    return (best_sum, path_str)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return (0, "")
+    N = len(grid)
+    if N == 1:
+        return (grid[0][0], "")
+
+    # Maximum moves needed is (N-1) rights and (N-1) downs = 2N - 2
+    max_moves = 2 * (N - 1)
+    NEG_INF = -10**18
+
+    # dp[k][r][c] stores the maximum sum to reach cell (r, c) in exactly k moves.
+    dp = [[[NEG_INF for _ in range(N)] for _ in range(N)] for _ in range(max_moves + 2)]
+    # parent[k][r][c] stores the character ('R', 'D', 'X') of the move taken to reach (r, c) at step k.
+    parent = [[[None for _ in range(N)] for _ in range(N)] for _ in range(max_moves + 2)]
+
+    # Initial state: at (0,0) with 0 moves, sum is grid[0][0]
+    dp[0][0][0] = grid[0][0]
+
+    # Iterate through all possible step counts
+    for k in range(max_moves + 1):
+        for r in range(N):
+            for c in range(N):
+                if dp[k][r][c] == NEG_INF:
+                    continue
+
+                current_sum = dp[k][r][c]
+                next_k = k + 1
+
+                # Check if the next move is a mandatory diagonal move (3rd, 6th, 9th...)
+                is_mandatory_diagonal = (next_k % 3 == 0)
+
+                possible_moves = []
+
+                if is_mandatory_diagonal:
+                    # MUST use diagonal if possible
+                    if r + 1 < N and c + 1 < N:
+                        possible_moves.append('X')
+                    else:
+                        # If diagonal is not possible, fallback to R or D
+                        if r + 1 < N: possible_moves.append('D')
+                        if c + 1 < N: possible_moves.append('R')
+                else:
+                    # Free to choose any valid move
+                    if r + 1 < N: possible_moves.append('D')
+                    if c + 1 < N: possible_moves.append('R')
+                    if r + 1 < N and c + 1 < N: possible_moves.append('X')
+
+                for move in possible_moves:
+                    nr, nc = r, c
+                    if move == 'R':
+                        nc += 1
+                    elif move == 'D':
+                        nr += 1
+                    elif move == 'X':
+                        nr += 1
+                        nc += 1
+                    
+                    # Since moves are pre-validated, we just update the DP table
+                    new_sum = current_sum + grid[nr][nc]
+                    if new_sum > dp[next_k][nr][nc]:
+                        dp[next_k][nr][nc] = new_sum
+                        parent[next_k][nr][nc] = move
+
+    # Find the maximum sum reaching the bottom-right corner (N-1, N-1)
+    best_sum = NEG_INF
+    best_k = -1
+    for k in range(max_moves + 2):
+        if dp[k][N-1][N-1] > best_sum:
+            best_sum = dp[k][N-1][N-1]
+            best_k = k
+
+    # Reconstruct the path by backtracking from (N-1, N-1)
+    path_chars = []
+    curr_r, curr_c = N-1, N-1
+    curr_k = best_k
+
+    while curr_k > 0:
+        move = parent[curr_k][curr_r][curr_c]
+        # move should not be None if a path exists
+        if move is None:
+            break
+        
+        path_chars.append(move)
+        if move == 'R':
+            curr_c -= 1
+        elif move == 'D':
+            curr_r -= 1
+        elif move == 'X':
+            curr_r -= 1
+            curr_c -= 1
+        
+        curr_k -= 1
+
+    path_str = "".join(reversed(path_chars))
+    return (best_sum, path_str)

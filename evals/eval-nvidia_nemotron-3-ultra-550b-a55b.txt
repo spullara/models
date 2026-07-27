@@ -1,0 +1,162 @@
+Model: nvidia/nemotron-3-ultra-550b-a55b
+Provider: openrouter
+Evaluated: 2026-07-27T17:52:29.374833+00:00
+
+=== TIMING ===
+Response time: 41.68s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    
+    NEG_INF = -10**18
+    # dp[i][j][k] = maximum sum reaching (i, j) with moves_taken % 3 == k
+    dp = [[[NEG_INF] * 3 for _ in range(N)] for __ in range(N)]
+    # prev[i][j][k] = (pi, pj, pk, move_char) for path reconstruction
+    prev = [[[None] * 3 for _ in range(N)] for __ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for i in range(N):
+        for j in range(N):
+            for mod in range(3):
+                cur = dp[i][j][mod]
+                if cur == NEG_INF:
+                    continue
+                # No moves from the destination
+                if i == N - 1 and j == N - 1:
+                    continue
+                
+                forced_diag = (mod == 2)          # next move is 3rd, 6th, ...
+                diag_possible = (i + 1 < N and j + 1 < N)
+                right_possible = (j + 1 < N)
+                down_possible = (i + 1 < N)
+                
+                moves = []
+                if forced_diag:
+                    if diag_possible:
+                        moves.append(('X', i + 1, j + 1))
+                    else:
+                        if right_possible:
+                            moves.append(('R', i, j + 1))
+                        if down_possible:
+                            moves.append(('D', i + 1, j))
+                else:
+                    if right_possible:
+                        moves.append(('R', i, j + 1))
+                    if down_possible:
+                        moves.append(('D', i + 1, j))
+                    if diag_possible:
+                        moves.append(('X', i + 1, j + 1))
+                
+                for move_char, ni, nj in moves:
+                    nmod = (mod + 1) % 3
+                    new_sum = cur + grid[ni][nj]
+                    if new_sum > dp[ni][nj][nmod]:
+                        dp[ni][nj][nmod] = new_sum
+                        prev[ni][nj][nmod] = (i, j, mod, move_char)
+    
+    # Choose the best modulo at the bottom‑right cell
+    best_mod = 0
+    max_sum = NEG_INF
+    for mod in range(3):
+        if dp[N - 1][N - 1][mod] > max_sum:
+            max_sum = dp[N - 1][N - 1][mod]
+            best_mod = mod
+    
+    # Reconstruct the path
+    path_chars = []
+    i, j, mod = N - 1, N - 1, best_mod
+    while not (i == 0 and j == 0):
+        pi, pj, pmod, move_char = prev[i][j][mod]
+        path_chars.append(move_char)
+        i, j, mod = pi, pj, pmod
+    path_str = ''.join(reversed(path_chars))
+    
+    return (max_sum, path_str)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    
+    NEG_INF = -10**18
+    # dp[i][j][k] = maximum sum reaching (i, j) with moves_taken % 3 == k
+    dp = [[[NEG_INF] * 3 for _ in range(N)] for __ in range(N)]
+    # prev[i][j][k] = (pi, pj, pk, move_char) for path reconstruction
+    prev = [[[None] * 3 for _ in range(N)] for __ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for i in range(N):
+        for j in range(N):
+            for mod in range(3):
+                cur = dp[i][j][mod]
+                if cur == NEG_INF:
+                    continue
+                # No moves from the destination
+                if i == N - 1 and j == N - 1:
+                    continue
+                
+                forced_diag = (mod == 2)          # next move is 3rd, 6th, ...
+                diag_possible = (i + 1 < N and j + 1 < N)
+                right_possible = (j + 1 < N)
+                down_possible = (i + 1 < N)
+                
+                moves = []
+                if forced_diag:
+                    if diag_possible:
+                        moves.append(('X', i + 1, j + 1))
+                    else:
+                        if right_possible:
+                            moves.append(('R', i, j + 1))
+                        if down_possible:
+                            moves.append(('D', i + 1, j))
+                else:
+                    if right_possible:
+                        moves.append(('R', i, j + 1))
+                    if down_possible:
+                        moves.append(('D', i + 1, j))
+                    if diag_possible:
+                        moves.append(('X', i + 1, j + 1))
+                
+                for move_char, ni, nj in moves:
+                    nmod = (mod + 1) % 3
+                    new_sum = cur + grid[ni][nj]
+                    if new_sum > dp[ni][nj][nmod]:
+                        dp[ni][nj][nmod] = new_sum
+                        prev[ni][nj][nmod] = (i, j, mod, move_char)
+    
+    # Choose the best modulo at the bottom‑right cell
+    best_mod = 0
+    max_sum = NEG_INF
+    for mod in range(3):
+        if dp[N - 1][N - 1][mod] > max_sum:
+            max_sum = dp[N - 1][N - 1][mod]
+            best_mod = mod
+    
+    # Reconstruct the path
+    path_chars = []
+    i, j, mod = N - 1, N - 1, best_mod
+    while not (i == 0 and j == 0):
+        pi, pj, pmod, move_char = prev[i][j][mod]
+        path_chars.append(move_char)
+        i, j, mod = pi, pj, pmod
+    path_str = ''.join(reversed(path_chars))
+    
+    return (max_sum, path_str)

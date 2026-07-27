@@ -1,0 +1,232 @@
+Model: z-ai/glm-4.7-flash
+Provider: openrouter
+Evaluated: 2026-07-27T19:52:05.297089+00:00
+
+=== TIMING ===
+Response time: 243.98s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+from functools import lru_cache
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    
+    @lru_cache(maxsize=None)
+    def dfs(r: int, c: int, step: int) -> tuple[int, str]:
+        # Base case: reached the bottom-right corner
+        if r == N - 1 and c == N - 1:
+            return (grid[r][c], "")
+        
+        # Determine valid moves based on the current step (move index)
+        # step is 1-based index of the move we are about to perform
+        
+        # Check if this is a mandatory diagonal move (indices 3, 6, 9...)
+        is_mandatory_diagonal = (step % 3 == 0)
+        
+        best_sum = float('-inf')
+        best_move = ''
+        
+        if is_mandatory_diagonal:
+            # Rule: MUST be diagonal if possible. 
+            # "If diagonal is not possible on a required diagonal move, you may use R or D."
+            if r + 1 < N and c + 1 < N:
+                # Must take X
+                next_sum, next_move = dfs(r + 1, c + 1, step + 1)
+                if next_sum != float('-inf'):
+                    return (grid[r][c] + next_sum, 'X')
+                else:
+                    return (float('-inf'), '')
+            else:
+                # Diagonal not possible, can try R or D
+                candidates = []
+                # Try Right
+                if c + 1 < N:
+                    sub_sum, _ = dfs(r, c + 1, step + 1)
+                    if sub_sum != float('-inf'):
+                        candidates.append((sub_sum, 'R'))
+                # Try Down
+                if r + 1 < N:
+                    sub_sum, _ = dfs(r + 1, c, step + 1)
+                    if sub_sum != float('-inf'):
+                        candidates.append((sub_sum, 'D'))
+                
+                if not candidates:
+                    return (float('-inf'), '')
+                
+                # Find the best candidate
+                # If sums are equal, R > D > X logic is handled by candidates order 
+                # or max picks first found. Here we use max on sum.
+                candidates.sort(key=lambda x: x[0]) 
+                best_sum, best_move = candidates[-1]
+                return (grid[r][c] + best_sum, best_move)
+        
+        # Regular move (step % 3 != 0)
+        # Rule: Can use R, D, or X.
+        candidates = []
+        # Try Right
+        if c + 1 < N:
+            sub_sum, _ = dfs(r, c + 1, step + 1)
+            if sub_sum != float('-inf'):
+                candidates.append((sub_sum, 'R'))
+        # Try Down
+        if r + 1 < N:
+            sub_sum, _ = dfs(r + 1, c, step + 1)
+            if sub_sum != float('-inf'):
+                candidates.append((sub_sum, 'D'))
+        # Try Diagonal
+        if r + 1 < N and c + 1 < N:
+            sub_sum, _ = dfs(r + 1, c + 1, step + 1)
+            if sub_sum != float('-inf'):
+                candidates.append((sub_sum, 'X'))
+        
+        if not candidates:
+            return (float('-inf'), '')
+        
+        candidates.sort(key=lambda x: x[0])
+        best_sum, best_move = candidates[-1]
+        return (grid[r][c] + best_sum, best_move)
+    
+    max_sum, first_move = dfs(0, 0, 1)
+    
+    if max_sum == float('-inf'):
+        return (0, "")
+    
+    # Reconstruct the path
+    curr_r, curr_c = 0, 0
+    step = 1
+    path_chars = []
+    
+    while (curr_r, curr_c) != (N - 1, N - 1):
+        _, move = dfs(curr_r, curr_c, step)
+        if move == '':
+            break # Should not happen for valid grid
+        path_chars.append(move)
+        if move == 'R':
+            curr_c += 1
+        elif move == 'D':
+            curr_r += 1
+        elif move == 'X':
+            curr_r += 1
+            curr_c += 1
+        step += 1
+        
+    return (max_sum, "".join(path_chars))
+```
+
+=== EXTRACTED CODE ===
+from functools import lru_cache
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    
+    @lru_cache(maxsize=None)
+    def dfs(r: int, c: int, step: int) -> tuple[int, str]:
+        # Base case: reached the bottom-right corner
+        if r == N - 1 and c == N - 1:
+            return (grid[r][c], "")
+        
+        # Determine valid moves based on the current step (move index)
+        # step is 1-based index of the move we are about to perform
+        
+        # Check if this is a mandatory diagonal move (indices 3, 6, 9...)
+        is_mandatory_diagonal = (step % 3 == 0)
+        
+        best_sum = float('-inf')
+        best_move = ''
+        
+        if is_mandatory_diagonal:
+            # Rule: MUST be diagonal if possible. 
+            # "If diagonal is not possible on a required diagonal move, you may use R or D."
+            if r + 1 < N and c + 1 < N:
+                # Must take X
+                next_sum, next_move = dfs(r + 1, c + 1, step + 1)
+                if next_sum != float('-inf'):
+                    return (grid[r][c] + next_sum, 'X')
+                else:
+                    return (float('-inf'), '')
+            else:
+                # Diagonal not possible, can try R or D
+                candidates = []
+                # Try Right
+                if c + 1 < N:
+                    sub_sum, _ = dfs(r, c + 1, step + 1)
+                    if sub_sum != float('-inf'):
+                        candidates.append((sub_sum, 'R'))
+                # Try Down
+                if r + 1 < N:
+                    sub_sum, _ = dfs(r + 1, c, step + 1)
+                    if sub_sum != float('-inf'):
+                        candidates.append((sub_sum, 'D'))
+                
+                if not candidates:
+                    return (float('-inf'), '')
+                
+                # Find the best candidate
+                # If sums are equal, R > D > X logic is handled by candidates order 
+                # or max picks first found. Here we use max on sum.
+                candidates.sort(key=lambda x: x[0]) 
+                best_sum, best_move = candidates[-1]
+                return (grid[r][c] + best_sum, best_move)
+        
+        # Regular move (step % 3 != 0)
+        # Rule: Can use R, D, or X.
+        candidates = []
+        # Try Right
+        if c + 1 < N:
+            sub_sum, _ = dfs(r, c + 1, step + 1)
+            if sub_sum != float('-inf'):
+                candidates.append((sub_sum, 'R'))
+        # Try Down
+        if r + 1 < N:
+            sub_sum, _ = dfs(r + 1, c, step + 1)
+            if sub_sum != float('-inf'):
+                candidates.append((sub_sum, 'D'))
+        # Try Diagonal
+        if r + 1 < N and c + 1 < N:
+            sub_sum, _ = dfs(r + 1, c + 1, step + 1)
+            if sub_sum != float('-inf'):
+                candidates.append((sub_sum, 'X'))
+        
+        if not candidates:
+            return (float('-inf'), '')
+        
+        candidates.sort(key=lambda x: x[0])
+        best_sum, best_move = candidates[-1]
+        return (grid[r][c] + best_sum, best_move)
+    
+    max_sum, first_move = dfs(0, 0, 1)
+    
+    if max_sum == float('-inf'):
+        return (0, "")
+    
+    # Reconstruct the path
+    curr_r, curr_c = 0, 0
+    step = 1
+    path_chars = []
+    
+    while (curr_r, curr_c) != (N - 1, N - 1):
+        _, move = dfs(curr_r, curr_c, step)
+        if move == '':
+            break # Should not happen for valid grid
+        path_chars.append(move)
+        if move == 'R':
+            curr_c += 1
+        elif move == 'D':
+            curr_r += 1
+        elif move == 'X':
+            curr_r += 1
+            curr_c += 1
+        step += 1
+        
+    return (max_sum, "".join(path_chars))

@@ -1,0 +1,166 @@
+Model: z-ai/glm-4.5
+Provider: openrouter
+Evaluated: 2026-07-27T18:28:02.997951+00:00
+
+=== TIMING ===
+Response time: 251.14s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    # dp[r][c][m] stores the (max_sum, path_string) for reaching cell (r, c)
+    # having taken 'steps' moves such that steps % 3 == m.
+    # We store 3 states for each cell corresponding to the move count modulo 3.
+    dp = [[ [None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Base case: Bottom-right corner.
+    # Regardless of how many steps it took to get here (mod 0, 1, or 2),
+    # the remaining sum is just the cell's value, and the path is empty.
+    for m in range(3):
+        dp[N-1][N-1][m] = (grid[N-1][N-1], "")
+        
+    # Fill the DP table from bottom-right to top-left.
+    for r in range(N-1, -1, -1):
+        for c in range(N-1, -1, -1):
+            if r == N-1 and c == N-1:
+                continue
+            
+            for m in range(3):
+                best_sum = float('-inf')
+                best_path = ""
+                
+                # Determine valid moves based on the constraint:
+                # The next move will be step index (steps_taken + 1).
+                # If (steps_taken + 1) % 3 == 0, the move MUST be diagonal (X).
+                # Since steps_taken % 3 == m, this condition simplifies to (m + 1) % 3 == 0, i.e., m == 2.
+                
+                candidates = []
+                if m == 2:
+                    # Next move is a multiple of 3 (3rd, 6th, ...). MUST be Diagonal (X).
+                    if r + 1 < N and c + 1 < N:
+                        # Diagonal is possible, so it is the only valid move.
+                        candidates.append(('X', r+1, c+1))
+                    else:
+                        # Diagonal is not possible (out of bounds), so we fall back to R or D.
+                        if c + 1 < N:
+                            candidates.append(('R', r, c+1))
+                        if r + 1 < N:
+                            candidates.append(('D', r+1, c))
+                else:
+                    # Free move: can be Right (R), Down (D), or Diagonal (X).
+                    if c + 1 < N:
+                        candidates.append(('R', r, c+1))
+                    if r + 1 < N:
+                        candidates.append(('D', r+1, c))
+                    if r + 1 < N and c + 1 < N:
+                        candidates.append(('X', r+1, c+1))
+                
+                # Evaluate all valid candidates to find the maximum sum.
+                for char, nr, nc in candidates:
+                    # The next state's modulo index will be (m + 1) % 3.
+                    next_m = (m + 1) % 3
+                    
+                    # Access the pre-computed state for the neighbor.
+                    # Since we iterate r and c backwards, neighbors (nr, nc) are guaranteed to be computed.
+                    if dp[nr][nc][next_m] is not None:
+                        val, path = dp[nr][nc][next_m]
+                        total_sum = grid[r][c] + val
+                        if total_sum > best_sum:
+                            best_sum = total_sum
+                            best_path = char + path
+                
+                dp[r][c][m] = (best_sum, best_path)
+                
+    # Start at (0, 0) having taken 0 steps, so m = 0.
+    return dp[0][0][0]
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    if N == 1:
+        return (grid[0][0], "")
+    
+    # dp[r][c][m] stores the (max_sum, path_string) for reaching cell (r, c)
+    # having taken 'steps' moves such that steps % 3 == m.
+    # We store 3 states for each cell corresponding to the move count modulo 3.
+    dp = [[ [None for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    # Base case: Bottom-right corner.
+    # Regardless of how many steps it took to get here (mod 0, 1, or 2),
+    # the remaining sum is just the cell's value, and the path is empty.
+    for m in range(3):
+        dp[N-1][N-1][m] = (grid[N-1][N-1], "")
+        
+    # Fill the DP table from bottom-right to top-left.
+    for r in range(N-1, -1, -1):
+        for c in range(N-1, -1, -1):
+            if r == N-1 and c == N-1:
+                continue
+            
+            for m in range(3):
+                best_sum = float('-inf')
+                best_path = ""
+                
+                # Determine valid moves based on the constraint:
+                # The next move will be step index (steps_taken + 1).
+                # If (steps_taken + 1) % 3 == 0, the move MUST be diagonal (X).
+                # Since steps_taken % 3 == m, this condition simplifies to (m + 1) % 3 == 0, i.e., m == 2.
+                
+                candidates = []
+                if m == 2:
+                    # Next move is a multiple of 3 (3rd, 6th, ...). MUST be Diagonal (X).
+                    if r + 1 < N and c + 1 < N:
+                        # Diagonal is possible, so it is the only valid move.
+                        candidates.append(('X', r+1, c+1))
+                    else:
+                        # Diagonal is not possible (out of bounds), so we fall back to R or D.
+                        if c + 1 < N:
+                            candidates.append(('R', r, c+1))
+                        if r + 1 < N:
+                            candidates.append(('D', r+1, c))
+                else:
+                    # Free move: can be Right (R), Down (D), or Diagonal (X).
+                    if c + 1 < N:
+                        candidates.append(('R', r, c+1))
+                    if r + 1 < N:
+                        candidates.append(('D', r+1, c))
+                    if r + 1 < N and c + 1 < N:
+                        candidates.append(('X', r+1, c+1))
+                
+                # Evaluate all valid candidates to find the maximum sum.
+                for char, nr, nc in candidates:
+                    # The next state's modulo index will be (m + 1) % 3.
+                    next_m = (m + 1) % 3
+                    
+                    # Access the pre-computed state for the neighbor.
+                    # Since we iterate r and c backwards, neighbors (nr, nc) are guaranteed to be computed.
+                    if dp[nr][nc][next_m] is not None:
+                        val, path = dp[nr][nc][next_m]
+                        total_sum = grid[r][c] + val
+                        if total_sum > best_sum:
+                            best_sum = total_sum
+                            best_path = char + path
+                
+                dp[r][c][m] = (best_sum, best_path)
+                
+    # Start at (0, 0) having taken 0 steps, so m = 0.
+    return dp[0][0][0]

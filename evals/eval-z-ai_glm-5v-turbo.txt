@@ -1,0 +1,179 @@
+Model: z-ai/glm-5v-turbo
+Provider: openrouter
+Evaluated: 2026-07-27T19:06:00.037338+00:00
+
+=== TIMING ===
+Response time: 42.17s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+Looking at this problem, I need to:
+1. Navigate from top-left to bottom-right maximizing sum
+2. Handle the constraint that every 3rd move (3, 6, 9...) MUST be diagonal if possible
+3. Track both the path and cumulative sum using dynamic programming
+
+**Approach:** Use DP with state `(row, col, moves_made)` → `(max_sum, path_string)`. Process states level-by-level by move count, applying the diagonal constraint rule appropriately.
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+    
+    # dp[(i, j, moves)] = (max_sum, path_string)
+    # moves = number of moves made to reach position (i, j)
+    dp = {(0, 0, 0): (grid[0][0], "")}
+    
+    # Maximum possible moves is 2*(n-1) (only right/down moves)
+    for current_moves in range(2 * n - 1):
+        # Get all states with exactly 'current_moves' moves
+        states_at_current = [(i, j, m) for (i, j, m) in dp if m == current_moves]
+        
+        for (i, j, moves) in states_at_current:
+            # Skip if already at destination
+            if i == n - 1 and j == n - 1:
+                continue
+            
+            sum_val, path = dp[(i, j, moves)]
+            next_move_num = moves + 1
+            
+            # Determine valid next moves based on the 3rd-move-diagonal rule
+            valid_moves = []
+            
+            if next_move_num % 3 == 0:  # Must be diagonal if possible
+                if i + 1 < n and j + 1 < n:  # Diagonal available
+                    valid_moves = ['X']
+                else:  # Diagonal not possible - fallback to R/D
+                    if j + 1 < n:
+                        valid_moves.append('R')
+                    if i + 1 < n:
+                        valid_moves.append('D')
+            else:  # Free choice of direction
+                if j + 1 < n:
+                    valid_moves.append('R')
+                if i + 1 < n:
+                    valid_moves.append('D')
+                if i + 1 < n and j + 1 < n:
+                    valid_moves.append('X')
+            
+            # Explore each valid move
+            for move in valid_moves:
+                if move == 'R':
+                    ni, nj = i, j + 1
+                elif move == 'D':
+                    ni, nj = i + 1, j
+                else:  # X (diagonal)
+                    ni, nj = i + 1, j + 1
+                
+                new_sum = sum_val + grid[ni][nj]
+                new_path = path + move
+                new_state = (ni, nj, next_move_num)
+                
+                # Keep only the path with maximum sum for each state
+                if new_state not in dp or dp[new_state][0] < new_sum:
+                    dp[new_state] = (new_sum, new_path)
+    
+    # Find best path reaching bottom-right corner
+    best_sum = float('-inf')
+    best_path = ""
+    
+    for (i, j, moves), (sum_val, path) in dp.items():
+        if i == n - 1 and j == n - 1:
+            if sum_val > best_sum:
+                best_sum = sum_val
+                best_path = path
+    
+    return (best_sum, best_path)
+```
+
+**Key design decisions:**
+- **State tracking**: Include move count in state to enforce the "every 3rd move" constraint
+- **Constraint handling**: On moves 3,6,9..., force diagonal (X) when available; otherwise allow R/D
+- **Optimization**: Only store the maximum-sum path for each unique state
+- **Complexity**: O(N³) time and space where N is grid dimension
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+    
+    # dp[(i, j, moves)] = (max_sum, path_string)
+    # moves = number of moves made to reach position (i, j)
+    dp = {(0, 0, 0): (grid[0][0], "")}
+    
+    # Maximum possible moves is 2*(n-1) (only right/down moves)
+    for current_moves in range(2 * n - 1):
+        # Get all states with exactly 'current_moves' moves
+        states_at_current = [(i, j, m) for (i, j, m) in dp if m == current_moves]
+        
+        for (i, j, moves) in states_at_current:
+            # Skip if already at destination
+            if i == n - 1 and j == n - 1:
+                continue
+            
+            sum_val, path = dp[(i, j, moves)]
+            next_move_num = moves + 1
+            
+            # Determine valid next moves based on the 3rd-move-diagonal rule
+            valid_moves = []
+            
+            if next_move_num % 3 == 0:  # Must be diagonal if possible
+                if i + 1 < n and j + 1 < n:  # Diagonal available
+                    valid_moves = ['X']
+                else:  # Diagonal not possible - fallback to R/D
+                    if j + 1 < n:
+                        valid_moves.append('R')
+                    if i + 1 < n:
+                        valid_moves.append('D')
+            else:  # Free choice of direction
+                if j + 1 < n:
+                    valid_moves.append('R')
+                if i + 1 < n:
+                    valid_moves.append('D')
+                if i + 1 < n and j + 1 < n:
+                    valid_moves.append('X')
+            
+            # Explore each valid move
+            for move in valid_moves:
+                if move == 'R':
+                    ni, nj = i, j + 1
+                elif move == 'D':
+                    ni, nj = i + 1, j
+                else:  # X (diagonal)
+                    ni, nj = i + 1, j + 1
+                
+                new_sum = sum_val + grid[ni][nj]
+                new_path = path + move
+                new_state = (ni, nj, next_move_num)
+                
+                # Keep only the path with maximum sum for each state
+                if new_state not in dp or dp[new_state][0] < new_sum:
+                    dp[new_state] = (new_sum, new_path)
+    
+    # Find best path reaching bottom-right corner
+    best_sum = float('-inf')
+    best_path = ""
+    
+    for (i, j, moves), (sum_val, path) in dp.items():
+        if i == n - 1 and j == n - 1:
+            if sum_val > best_sum:
+                best_sum = sum_val
+                best_path = path
+    
+    return (best_sum, best_path)

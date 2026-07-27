@@ -1,0 +1,164 @@
+Model: z-ai/glm-5-turbo
+Provider: openrouter
+Evaluated: 2026-07-27T19:33:20.223589+00:00
+
+=== TIMING ===
+Response time: 210.43s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+    
+    max_moves = 2 * (n - 1)
+    
+    # dp[r][c][k] = max sum to reach (r, c) after exactly k moves
+    # None means unreachable
+    dp = [[[None for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
+    # parent[r][c][k] = (prev_r, prev_c, prev_k, move_char) or None
+    parent = [[[None for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for k in range(max_moves):
+        for r in range(n):
+            for c in range(n):
+                if dp[r][c][k] is None:
+                    continue
+                
+                move_num = k + 1  # 1-indexed
+                required_diag = (move_num % 3 == 0)
+                can_diag = r + 1 < n and c + 1 < n
+                can_right = c + 1 < n
+                can_down = r + 1 < n
+                
+                moves = []
+                if required_diag and can_diag:
+                    # Must take diagonal
+                    moves.append((r + 1, c + 1, 'X'))
+                elif required_diag:
+                    # Diagonal required but not possible, fall back to R or D
+                    if can_right:
+                        moves.append((r, c + 1, 'R'))
+                    if can_down:
+                        moves.append((r + 1, c, 'D'))
+                else:
+                    # No restriction, can use any valid move
+                    if can_right:
+                        moves.append((r, c + 1, 'R'))
+                    if can_down:
+                        moves.append((r + 1, c, 'D'))
+                    if can_diag:
+                        moves.append((r + 1, c + 1, 'X'))
+                
+                for nr, nc, ch in moves:
+                    val = dp[r][c][k] + grid[nr][nc]
+                    if dp[nr][nc][k + 1] is None or val > dp[nr][nc][k + 1]:
+                        dp[nr][nc][k + 1] = val
+                        parent[nr][nc][k + 1] = (r, c, k, ch)
+    
+    # Find best sum at destination
+    best_sum, best_k = None, None
+    for k in range(max_moves + 1):
+        if dp[n - 1][n - 1][k] is not None:
+            if best_sum is None or dp[n - 1][n - 1][k] > best_sum:
+                best_sum, best_k = dp[n - 1][n - 1][k], k
+    
+    # Reconstruct path
+    path = []
+    r, c, k = n - 1, n - 1, best_k
+    while parent[r][c][k] is not None:
+        pr, pc, pk, ch = parent[r][c][k]
+        path.append(ch)
+        r, c, k = pr, pc, pk
+    path.reverse()
+    
+    return (best_sum, ''.join(path))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+    
+    max_moves = 2 * (n - 1)
+    
+    # dp[r][c][k] = max sum to reach (r, c) after exactly k moves
+    # None means unreachable
+    dp = [[[None for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
+    # parent[r][c][k] = (prev_r, prev_c, prev_k, move_char) or None
+    parent = [[[None for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for k in range(max_moves):
+        for r in range(n):
+            for c in range(n):
+                if dp[r][c][k] is None:
+                    continue
+                
+                move_num = k + 1  # 1-indexed
+                required_diag = (move_num % 3 == 0)
+                can_diag = r + 1 < n and c + 1 < n
+                can_right = c + 1 < n
+                can_down = r + 1 < n
+                
+                moves = []
+                if required_diag and can_diag:
+                    # Must take diagonal
+                    moves.append((r + 1, c + 1, 'X'))
+                elif required_diag:
+                    # Diagonal required but not possible, fall back to R or D
+                    if can_right:
+                        moves.append((r, c + 1, 'R'))
+                    if can_down:
+                        moves.append((r + 1, c, 'D'))
+                else:
+                    # No restriction, can use any valid move
+                    if can_right:
+                        moves.append((r, c + 1, 'R'))
+                    if can_down:
+                        moves.append((r + 1, c, 'D'))
+                    if can_diag:
+                        moves.append((r + 1, c + 1, 'X'))
+                
+                for nr, nc, ch in moves:
+                    val = dp[r][c][k] + grid[nr][nc]
+                    if dp[nr][nc][k + 1] is None or val > dp[nr][nc][k + 1]:
+                        dp[nr][nc][k + 1] = val
+                        parent[nr][nc][k + 1] = (r, c, k, ch)
+    
+    # Find best sum at destination
+    best_sum, best_k = None, None
+    for k in range(max_moves + 1):
+        if dp[n - 1][n - 1][k] is not None:
+            if best_sum is None or dp[n - 1][n - 1][k] > best_sum:
+                best_sum, best_k = dp[n - 1][n - 1][k], k
+    
+    # Reconstruct path
+    path = []
+    r, c, k = n - 1, n - 1, best_k
+    while parent[r][c][k] is not None:
+        pr, pc, pk, ch = parent[r][c][k]
+        path.append(ch)
+        r, c, k = pr, pc, pk
+    path.reverse()
+    
+    return (best_sum, ''.join(path))

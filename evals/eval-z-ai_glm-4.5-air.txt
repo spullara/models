@@ -1,0 +1,167 @@
+Model: z-ai/glm-4.5-air
+Provider: openrouter
+Evaluated: 2026-07-27T21:31:41.035320+00:00
+
+=== TIMING ===
+Response time: 250.05s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+To solve this problem, we need to find the path from the top-left corner to the bottom-right corner of an N×N grid that maximizes the sum of the values along the path. The path must adhere to specific movement rules: valid moves are right (R), down (D), or diagonal down-right (X). Additionally, every 3rd move (i.e., the 3rd, 6th, 9th, etc.) must be a diagonal move (X) if possible. If a diagonal move is not possible at a required step, we can use either R or D.
+
+### Approach
+1. **Dynamic Programming (DP) with State Tracking**: We use a 3D DP array `dp[i][j][m]` where:
+   - `i` and `j` represent the current position in the grid.
+   - `m` represents the modulo 3 of the number of moves taken so far (to enforce the 3rd move constraint).
+   
+2. **Initialization**: The starting point `(0, 0)` is initialized with the grid value at that position and `m = 0` (since 0 moves have been taken initially).
+
+3. **State Transitions**: For each state `(i, j, m)`, we consider the next possible moves:
+   - **If the next move (step count `m+1`) is a 3rd move (i.e., `(m+1) % 3 == 0`)**:
+     - We must attempt a diagonal move (X) if possible (i.e., within grid bounds). If diagonal is not possible, we can use R or D.
+   - **Otherwise**, we can use any of the three moves (R, D, X) if within bounds.
+   
+4. **Parent Tracking**: We maintain a parent array to reconstruct the path. For each state, we record the previous state and the move taken to reach the current state.
+
+5. **Path Reconstruction**: After processing all states, we determine the maximum sum at the bottom-right corner `(N-1, N-1)` across all possible modulo states. We then backtrack from this state to the start using the parent array to construct the path string in reverse, which we reverse again to get the correct sequence of moves.
+
+### Solution Code
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    
+    NEG_INF = -10**18
+    dp = [[[NEG_INF] * 3 for _ in range(n)] for __ in range(n)]
+    parent = [[[None] * 3 for _ in range(n)] for __ in range(n)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for i in range(n):
+        for j in range(n):
+            for m in range(3):
+                if dp[i][j][m] == NEG_INF:
+                    continue
+                next_mod = (m + 1) % 3
+                next_moves = []
+                
+                if next_mod == 0:
+                    if i + 1 < n and j + 1 < n:
+                        next_moves.append((i+1, j+1, 'X', grid[i+1][j+1]))
+                    if not next_moves:
+                        if j + 1 < n:
+                            next_moves.append((i, j+1, 'R', grid[i][j+1]))
+                        if i + 1 < n:
+                            next_moves.append((i+1, j, 'D', grid[i+1][j]))
+                else:
+                    if j + 1 < n:
+                        next_moves.append((i, j+1, 'R', grid[i][j+1]))
+                    if i + 1 < n:
+                        next_moves.append((i+1, j, 'D', grid[i+1][j]))
+                    if i + 1 < n and j + 1 < n:
+                        next_moves.append((i+1, j+1, 'X', grid[i+1][j+1]))
+                
+                for ni, nj, move_char, val in next_moves:
+                    new_sum = dp[i][j][m] + val
+                    if new_sum > dp[ni][nj][next_mod]:
+                        dp[ni][nj][next_mod] = new_sum
+                        parent[ni][nj][next_mod] = (i, j, m, move_char)
+    
+    best_sum = NEG_INF
+    best_m = -1
+    for m in range(3):
+        if dp[n-1][n-1][m] > best_sum:
+            best_sum = dp[n-1][n-1][m]
+            best_m = m
+    
+    if best_sum == NEG_INF:
+        return (0, "")
+    
+    path = []
+    i, j, m = n-1, n-1, best_m
+    while parent[i][j][m] is not None:
+        prev_i, prev_j, prev_m, move_char = parent[i][j][m]
+        path.append(move_char)
+        i, j, m = prev_i, prev_j, prev_m
+    
+    path_str = ''.join(path[::-1])
+    return (best_sum, path_str)
+```
+
+### Explanation
+1. **Initialization**: The DP array `dp` is initialized to negative infinity to represent unreachable states, except for the starting cell `(0, 0)` which is set to the grid's value at that position. The parent array `parent` is initialized to `None` to track the path.
+2. **State Processing**: For each cell `(i, j)` and each possible modulo state `m`, we check the next moves. If the next move count `(m+1) % 3` is 0, we prioritize diagonal moves (X) if possible; otherwise, we consider R or D. For other modulo states, all valid moves (R, D, X) are considered.
+3. **Path Reconstruction**: After processing all states, the maximum sum at `(n-1, n-1)` is determined by checking all modulo states. The path is reconstructed by backtracking from the end state to the start using the parent array, recording each move in reverse order, which is then reversed to form the final path string.
+4. **Result**: The function returns the maximum sum and the corresponding path string, which represents the sequence of moves from top-left to bottom-right that maximizes the sum while adhering to the movement constraints.
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    
+    NEG_INF = -10**18
+    dp = [[[NEG_INF] * 3 for _ in range(n)] for __ in range(n)]
+    parent = [[[None] * 3 for _ in range(n)] for __ in range(n)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for i in range(n):
+        for j in range(n):
+            for m in range(3):
+                if dp[i][j][m] == NEG_INF:
+                    continue
+                next_mod = (m + 1) % 3
+                next_moves = []
+                
+                if next_mod == 0:
+                    if i + 1 < n and j + 1 < n:
+                        next_moves.append((i+1, j+1, 'X', grid[i+1][j+1]))
+                    if not next_moves:
+                        if j + 1 < n:
+                            next_moves.append((i, j+1, 'R', grid[i][j+1]))
+                        if i + 1 < n:
+                            next_moves.append((i+1, j, 'D', grid[i+1][j]))
+                else:
+                    if j + 1 < n:
+                        next_moves.append((i, j+1, 'R', grid[i][j+1]))
+                    if i + 1 < n:
+                        next_moves.append((i+1, j, 'D', grid[i+1][j]))
+                    if i + 1 < n and j + 1 < n:
+                        next_moves.append((i+1, j+1, 'X', grid[i+1][j+1]))
+                
+                for ni, nj, move_char, val in next_moves:
+                    new_sum = dp[i][j][m] + val
+                    if new_sum > dp[ni][nj][next_mod]:
+                        dp[ni][nj][next_mod] = new_sum
+                        parent[ni][nj][next_mod] = (i, j, m, move_char)
+    
+    best_sum = NEG_INF
+    best_m = -1
+    for m in range(3):
+        if dp[n-1][n-1][m] > best_sum:
+            best_sum = dp[n-1][n-1][m]
+            best_m = m
+    
+    if best_sum == NEG_INF:
+        return (0, "")
+    
+    path = []
+    i, j, m = n-1, n-1, best_m
+    while parent[i][j][m] is not None:
+        prev_i, prev_j, prev_m, move_char = parent[i][j][m]
+        path.append(move_char)
+        i, j, m = prev_i, prev_j, prev_m
+    
+    path_str = ''.join(path[::-1])
+    return (best_sum, path_str)
