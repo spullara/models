@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-25 10:04:17
+Last updated: 2026-07-27 16:05:17
 
-## Updates This Week (2026-07-19 to 2026-07-25)
+## Updates This Week (2026-07-21 to 2026-07-27)
 
 ### Anthropic
 
@@ -25,15 +25,10 @@ Last updated: 2026-07-25 10:04:17
 
 ### Mistral
 
-**Added**
-
-- voxtral-mini-realtime-charente-2606-solutions (added: 2026-07-24)
-
 **Deleted**
 
+- voxtral-mini-realtime-charente-2606-solutions (deleted: 2026-07-27)
 - deepseek-v4-flash (deleted: 2026-07-25)
-- voxtral-mini-realtime-mellon-greek-2606-solutions (deleted: 2026-07-20)
-- voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-20)
 
 ### Qwen
 
@@ -54,7 +49,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/21
 
-**Mistral**: 61/53
+**Mistral**: 60/54
 
 **DeepSeek**: 2/2
 
@@ -482,7 +477,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- voxtral-mini-realtime-charente-2606-solutions (added: 2026-07-24)
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
 - mistral-ocr-4-0 (added: 2026-06-23)
@@ -546,6 +540,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- voxtral-mini-realtime-charente-2606-solutions (deleted: 2026-07-27)
 - deepseek-v4-flash (deleted: 2026-07-25)
 - voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-20)
 - voxtral-mini-realtime-mellon-greek-2606-solutions (deleted: 2026-07-20)
