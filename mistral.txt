@@ -52,7 +52,6 @@ open-mistral-nemo-2407
 voxtral-mini-2602
 voxtral-mini-latest
 voxtral-mini-realtime-2602
-voxtral-mini-realtime-charente-2606-solutions
 voxtral-mini-realtime-latest
 voxtral-mini-transcribe-realtime-2602
 voxtral-mini-tts-2603
