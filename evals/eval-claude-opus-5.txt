@@ -1,22 +1,171 @@
 Model: claude-opus-5
 Provider: anthropic
-Evaluated: 2026-07-24T16:52:06.281785+00:00
+Evaluated: 2026-07-27T22:02:50.181039+00:00
 
 === TIMING ===
-Response time: 4.23s
+Response time: 30.37s
 
 === FALLBACK ===
-Fallback used: anthropic_refusal_system
+Fallback used: anthropic_refusal_prompt_reframe
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: Anthropic refusal (stop_reason=refusal, no content)
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Find the path from top-left to bottom-right of an N x N grid maximizing the
+    sum of visited cells.
+
+    Moves: 'R' (right), 'D' (down), 'X' (diagonal down-right).
+    Every 3rd move (moves 3, 6, 9, ...) must be diagonal if the diagonal move
+    is possible from the current position; otherwise 'R' or 'D' may be used.
+
+    Returns (max_sum, path_string).  Ties in the sum are broken by choosing the
+    lexicographically smallest path string.
+    """
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+
+    # dp[r][c][m] = (best sum from (r,c) to the end inclusive of grid[r][c],
+    #                best path string from (r,c))
+    # where m = (number of moves already made) mod 3, so the next move index
+    # is m+1 (mod 3 arithmetic); it is a forced-diagonal move when (m+1)%3 == 0.
+    dp = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            for m in range(3):
+                if r == n - 1 and c == n - 1:
+                    dp[r][c][m] = (grid[r][c], "")
+                    continue
+
+                diag_ok = (r + 1 < n) and (c + 1 < n)
+                forced_diag = ((m + 1) % 3 == 0)
+
+                candidates = []
+                if forced_diag and diag_ok:
+                    # Must take the diagonal move.
+                    candidates.append(('X', r + 1, c + 1))
+                else:
+                    # Either a normal move, or a forced-diagonal move where the
+                    # diagonal is impossible (then R/D are allowed).
+                    if r + 1 < n:
+                        candidates.append(('D', r + 1, c))
+                    if c + 1 < n:
+                        candidates.append(('R', r, c + 1))
+                    if diag_ok and not forced_diag:
+                        candidates.append(('X', r + 1, c + 1))
+
+                best = None
+                for mv, nr, nc in candidates:
+                    sub = dp[nr][nc][(m + 1) % 3]
+                    if sub is None:
+                        continue
+                    total = grid[r][c] + sub[0]
+                    path = mv + sub[1]
+                    if best is None or total > best[0] or \
+                       (total == best[0] and path < best[1]):
+                        best = (total, path)
+
+                dp[r][c][m] = best
+
+    result = dp[0][0][0]
+    if result is None:
+        return (0, "")
+    return (result[0], result[1])
+
+
+if __name__ == "__main__":
+    g = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+    ]
+    print(solve_grid(g))
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Find the path from top-left to bottom-right of an N x N grid maximizing the
+    sum of visited cells.
+
+    Moves: 'R' (right), 'D' (down), 'X' (diagonal down-right).
+    Every 3rd move (moves 3, 6, 9, ...) must be diagonal if the diagonal move
+    is possible from the current position; otherwise 'R' or 'D' may be used.
+
+    Returns (max_sum, path_string).  Ties in the sum are broken by choosing the
+    lexicographically smallest path string.
+    """
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+
+    # dp[r][c][m] = (best sum from (r,c) to the end inclusive of grid[r][c],
+    #                best path string from (r,c))
+    # where m = (number of moves already made) mod 3, so the next move index
+    # is m+1 (mod 3 arithmetic); it is a forced-diagonal move when (m+1)%3 == 0.
+    dp = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            for m in range(3):
+                if r == n - 1 and c == n - 1:
+                    dp[r][c][m] = (grid[r][c], "")
+                    continue
+
+                diag_ok = (r + 1 < n) and (c + 1 < n)
+                forced_diag = ((m + 1) % 3 == 0)
+
+                candidates = []
+                if forced_diag and diag_ok:
+                    # Must take the diagonal move.
+                    candidates.append(('X', r + 1, c + 1))
+                else:
+                    # Either a normal move, or a forced-diagonal move where the
+                    # diagonal is impossible (then R/D are allowed).
+                    if r + 1 < n:
+                        candidates.append(('D', r + 1, c))
+                    if c + 1 < n:
+                        candidates.append(('R', r, c + 1))
+                    if diag_ok and not forced_diag:
+                        candidates.append(('X', r + 1, c + 1))
+
+                best = None
+                for mv, nr, nc in candidates:
+                    sub = dp[nr][nc][(m + 1) % 3]
+                    if sub is None:
+                        continue
+                    total = grid[r][c] + sub[0]
+                    path = mv + sub[1]
+                    if best is None or total > best[0] or \
+                       (total == best[0] and path < best[1]):
+                        best = (total, path)
+
+                dp[r][c][m] = best
+
+    result = dp[0][0][0]
+    if result is None:
+        return (0, "")
+    return (result[0], result[1])
+
+
+if __name__ == "__main__":
+    g = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+    ]
+    print(solve_grid(g))

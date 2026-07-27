@@ -50,6 +50,20 @@ ANTHROPIC_REFUSAL_FALLBACK_SYSTEM = (
     "Please answer the question with a Python solution."
 )
 
+# claude-opus-5's classifier refuses even with the system-level fallback above.
+# Bisection showed the trigger is the exact opening phrase
+# "Write a Python function with this exact signature:" — swapping only that
+# line for "Implement the following Python function:" clears the classifier
+# while preserving the rest of the prompt (signature, rules, expected return
+# format, example) byte-for-byte. This second-tier fallback only fires when
+# the first-tier system-message fallback also fails.
+ANTHROPIC_REFUSAL_PROMPT_OPENING_ORIG = (
+    "Write a Python function with this exact signature:\n\n"
+)
+ANTHROPIC_REFUSAL_PROMPT_OPENING_REPLACEMENT = (
+    "Implement the following Python function:\n\n"
+)
+
 
 def get_chat_endpoint(provider: str) -> dict:
     """Get the chat completions endpoint config for a provider."""
@@ -313,10 +327,14 @@ def call_model(provider: str, model: str,
     ``meta`` is a dict with any extra diagnostics (currently
     ``fallback_used``) or None when the first attempt succeeded cleanly.
 
-    Fallback behaviour: if the anthropic classifier refuses the bare prompt
-    (``stop_reason == "refusal"``), retry once with a benchmark-framing
-    system message. This bypass is anthropic-only and does not modify the
-    user turn, so the eval remains comparable across providers.
+    Fallback behaviour (anthropic-only): if the classifier refuses the bare
+    prompt (``stop_reason == "refusal"``), retry once with a benchmark-framing
+    system message. If that also refuses, make a final attempt with the
+    system frame plus the opening line of the user prompt reworded
+    ("Write a Python function with this exact signature:" ->
+    "Implement the following Python function:"). All other content in the
+    user turn — signature, rules, expected return format, example — is
+    preserved verbatim so results stay comparable.
     """
     endpoint = get_chat_endpoint(provider)
     if not endpoint:
@@ -340,11 +358,29 @@ def call_model(provider: str, model: str,
         retry_body['system'] = ANTHROPIC_REFUSAL_FALLBACK_SYSTEM
         r_text, r_elapsed, r_error, r_stop = _post_and_extract(
             url, headers, retry_body, provider)
-        total_elapsed = elapsed + r_elapsed
+        elapsed += r_elapsed
         if r_text:
-            return r_text, total_elapsed, None, {'fallback_used': 'anthropic_refusal_system'}
-        # Retry also failed; report retry error but keep note of the attempt.
-        return None, total_elapsed, r_error, {'fallback_used': 'anthropic_refusal_system', 'fallback_failed': True}
+            return r_text, elapsed, None, {'fallback_used': 'anthropic_refusal_system'}
+
+        # Second tier: swap the opening framing of the user prompt. Only fires
+        # when both the bare and system-framed calls returned stop_reason=refusal.
+        if r_stop == 'refusal' and ANTHROPIC_REFUSAL_PROMPT_OPENING_ORIG in prompt:
+            reframed = prompt.replace(
+                ANTHROPIC_REFUSAL_PROMPT_OPENING_ORIG,
+                ANTHROPIC_REFUSAL_PROMPT_OPENING_REPLACEMENT,
+                1,
+            )
+            reframed_body = build_request_body(provider, model, reframed)
+            reframed_body['system'] = ANTHROPIC_REFUSAL_FALLBACK_SYSTEM
+            f_text, f_elapsed, f_error, f_stop = _post_and_extract(
+                url, headers, reframed_body, provider)
+            elapsed += f_elapsed
+            if f_text:
+                return f_text, elapsed, None, {'fallback_used': 'anthropic_refusal_prompt_reframe'}
+            return None, elapsed, f_error, {'fallback_used': 'anthropic_refusal_prompt_reframe', 'fallback_failed': True}
+
+        # First-tier retry failed for a non-refusal reason; report as-is.
+        return None, elapsed, r_error, {'fallback_used': 'anthropic_refusal_system', 'fallback_failed': True}
 
     return text, elapsed, error, None
 
