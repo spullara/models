@@ -1,0 +1,26 @@
+Model: gpt-transcribe
+Provider: openai_responses
+Evaluated: 2026-07-28T17:52:06.221030+00:00
+
+=== TIMING ===
+Response time: 1.7s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 500: {
+  "error": {
+    "message": "An error occurred while processing your request. You can retry your request, or contact us through our help center at help.openai.com if the error persists. Please include the request ID 976f374d-295f-457f-b745-d006b55b1be9 in your message.",
+    "type": "server_error",
+    "param": null,
+    "code": "server_error"
+  }
+}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
