@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-30 14:51:21
+Last updated: 2026-07-30 15:00:38
 
 ## Updates This Week (2026-07-24 to 2026-07-30)
 
@@ -21,6 +21,16 @@ Last updated: 2026-07-30 14:51:21
 **Added**
 
 - claude-opus-5 (added: 2026-07-24)
+
+### Gemini
+
+**Added**
+
+- models/gemini-robotics-er-2-preview (added: 2026-07-30)
+
+**Deleted**
+
+- models/veo-3.1-fast-generate-preview (deleted: 2026-07-30)
 
 ### Mistral
 
@@ -70,7 +80,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 11/12
 
-**Gemini**: 50/96
+**Gemini**: 50/97
 
 **Grok**: 10/21
 
@@ -316,6 +326,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-robotics-er-2-preview (added: 2026-07-30)
 - models/gemini-3.6-flash (added: 2026-07-21)
 - models/gemini-3.5-flash-lite (added: 2026-07-21)
 - models/gemini-omni-flash-preview (added: 2026-06-30)
@@ -341,7 +352,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
-- models/veo-3.1-fast-generate-preview (added: 2025-12-09)
 - models/veo-3.1-generate-preview (added: 2025-12-05)
 - models/imagen-4.0-fast-generate-001 (added: 2025-12-05)
 - models/nano-banana-pro-preview (added: 2025-11-20)
@@ -369,6 +379,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/veo-3.1-fast-generate-preview (deleted: 2026-07-30)
 - models/veo-3.1-lite-generate-preview (deleted: 2026-07-21)
 - models/gemini-2.5-flash-native-audio-latest (deleted: 2026-07-21)
 - models/veo-3.0-generate-001 (deleted: 2026-06-30)
