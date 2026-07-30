@@ -38,6 +38,7 @@ models/gemini-omni-flash-preview
 models/gemini-pro-latest
 models/gemini-robotics-er-1.5-preview
 models/gemini-robotics-er-1.6-preview
+models/gemini-robotics-er-2-preview
 models/gemma-4-26b-a4b-it
 models/gemma-4-31b-it
 models/imagen-4.0-fast-generate-001
@@ -46,5 +47,4 @@ models/imagen-4.0-ultra-generate-001
 models/lyria-3-clip-preview
 models/lyria-3-pro-preview
 models/nano-banana-pro-preview
-models/veo-3.1-fast-generate-preview
 models/veo-3.1-generate-preview
