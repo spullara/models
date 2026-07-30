@@ -7,6 +7,7 @@ glm-5.2
 glm-5.2-fast-preview
 kimi-k2.7-code
 qvq-max
+qwen-audio-3.0-asr-flash
 qwen-coder-plus
 qwen-flash
 qwen-flash-character
