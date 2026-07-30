@@ -1,0 +1,120 @@
+Model: models/gemini-robotics-er-2-preview
+Provider: gemini
+Evaluated: 2026-07-30T15:00:06.462648+00:00
+
+=== TIMING ===
+Response time: 21.14s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+import sys
+
+# Set higher recursion limit for larger grids
+sys.setrecursionlimit(5000)
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    memo = {}
+    
+    def dp(r, c, k):
+        if r == N - 1 and c == N - 1:
+            return grid[r][c], ""
+        
+        state = (r, c, k)
+        if state in memo:
+            return memo[state]
+        
+        valid_moves = []
+        if k == 2:
+            # 3rd move constraint: Must use 'X' if possible
+            if r + 1 < N and c + 1 < N:
+                valid_moves.append(('X', r + 1, c + 1))
+            else:
+                if c + 1 < N:
+                    valid_moves.append(('R', r, c + 1))
+                if r + 1 < N:
+                    valid_moves.append(('D', r + 1, c))
+        else:
+            if c + 1 < N:
+                valid_moves.append(('R', r, c + 1))
+            if r + 1 < N:
+                valid_moves.append(('D', r + 1, c))
+            if r + 1 < N and c + 1 < N:
+                valid_moves.append(('X', r + 1, c + 1))
+        
+        best_sum = -float('inf')
+        best_path = ""
+        
+        for move_char, next_r, next_c in valid_moves:
+            sub_sum, sub_path = dp(next_r, next_c, (k + 1) % 3)
+            total_sum = grid[r][c] + sub_sum
+            if total_sum > best_sum:
+                best_sum = total_sum
+                best_path = move_char + sub_path
+                
+        memo[state] = (best_sum, best_path)
+        return memo[state]
+
+    return dp(0, 0, 0)
+```
+
+=== EXTRACTED CODE ===
+import sys
+
+# Set higher recursion limit for larger grids
+sys.setrecursionlimit(5000)
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    memo = {}
+    
+    def dp(r, c, k):
+        if r == N - 1 and c == N - 1:
+            return grid[r][c], ""
+        
+        state = (r, c, k)
+        if state in memo:
+            return memo[state]
+        
+        valid_moves = []
+        if k == 2:
+            # 3rd move constraint: Must use 'X' if possible
+            if r + 1 < N and c + 1 < N:
+                valid_moves.append(('X', r + 1, c + 1))
+            else:
+                if c + 1 < N:
+                    valid_moves.append(('R', r, c + 1))
+                if r + 1 < N:
+                    valid_moves.append(('D', r + 1, c))
+        else:
+            if c + 1 < N:
+                valid_moves.append(('R', r, c + 1))
+            if r + 1 < N:
+                valid_moves.append(('D', r + 1, c))
+            if r + 1 < N and c + 1 < N:
+                valid_moves.append(('X', r + 1, c + 1))
+        
+        best_sum = -float('inf')
+        best_path = ""
+        
+        for move_char, next_r, next_c in valid_moves:
+            sub_sum, sub_path = dp(next_r, next_c, (k + 1) % 3)
+            total_sum = grid[r][c] + sub_sum
+            if total_sum > best_sum:
+                best_sum = total_sum
+                best_path = move_char + sub_path
+                
+        memo[state] = (best_sum, best_path)
+        return memo[state]
+
+    return dp(0, 0, 0)
