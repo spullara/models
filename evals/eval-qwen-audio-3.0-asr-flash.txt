@@ -1,0 +1,19 @@
+Model: qwen-audio-3.0-asr-flash
+Provider: qwen
+Evaluated: 2026-07-30T14:51:05.813652+00:00
+
+=== TIMING ===
+Response time: 1.38s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"error":{"message":"format is empty","type":"UNSUPPORTED_FORMAT","param":null,"code":"UNSUPPORTED_FORMAT"},"id":"chatcmpl-c6f18523-b2a5-9c01-80f0-8fc4a54a3241","request_id":"c6f18523-b2a5-9c01-80f0-8fc4a54a3241"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
