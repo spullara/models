@@ -1,17 +1,20 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-29 22:44:19
+Last updated: 2026-07-30 14:38:18
 
-## Updates This Week (2026-07-23 to 2026-07-29)
+## Updates This Week (2026-07-24 to 2026-07-30)
 
 ### OpenAI
 
 **Added**
 
-- ra-gpt-5.6-sol (added: 2026-07-29)
 - gpt-live-transcribe (added: 2026-07-28)
 - gpt-transcribe (added: 2026-07-28)
+
+**Deleted**
+
+- ra-gpt-5.6-sol (deleted: 2026-07-30)
 
 ### Anthropic
 
@@ -62,7 +65,7 @@ Last updated: 2026-07-29 22:44:19
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 134/50
+**OpenAI**: 133/51
 
 **Anthropic**: 11/12
 
@@ -89,7 +92,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- ra-gpt-5.6-sol (added: 2026-07-29)
 - gpt-transcribe (added: 2026-07-28)
 - gpt-live-transcribe (added: 2026-07-28)
 - gpt-5.6-terra (added: 2026-07-09)
@@ -226,6 +228,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- ra-gpt-5.6-sol (deleted: 2026-07-30)
 - gpt-5.5-pagi-local-ev3 (deleted: 2026-06-06)
 - gpt-4o-realtime-preview-2025-06-03 (deleted: 2026-05-18)
 - gpt-4o-realtime-preview-2024-12-17 (deleted: 2026-05-18)
