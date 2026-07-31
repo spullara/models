@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-30 15:00:38
+Last updated: 2026-07-31 12:00:23
 
-## Updates This Week (2026-07-24 to 2026-07-30)
+## Updates This Week (2026-07-25 to 2026-07-31)
 
 ### OpenAI
 
@@ -15,12 +15,6 @@ Last updated: 2026-07-30 15:00:38
 **Deleted**
 
 - ra-gpt-5.6-sol (deleted: 2026-07-30)
-
-### Anthropic
-
-**Added**
-
-- claude-opus-5 (added: 2026-07-24)
 
 ### Gemini
 
@@ -36,6 +30,18 @@ Last updated: 2026-07-30 15:00:38
 
 **Deleted**
 
+- devstral-2512 (deleted: 2026-07-31)
+- devstral-latest (deleted: 2026-07-31)
+- devstral-medium-latest (deleted: 2026-07-31)
+- magistral-medium-2509 (deleted: 2026-07-31)
+- magistral-medium-latest (deleted: 2026-07-31)
+- magistral-small-2509 (deleted: 2026-07-31)
+- mistral-code-agent-latest (deleted: 2026-07-31)
+- mistral-small-2506 (deleted: 2026-07-31)
+- mistral-tiny-2407 (deleted: 2026-07-31)
+- mistral-tiny-latest (deleted: 2026-07-31)
+- open-mistral-nemo (deleted: 2026-07-31)
+- open-mistral-nemo-2407 (deleted: 2026-07-31)
 - voxtral-mini-realtime-charente-2606-solutions (deleted: 2026-07-27)
 - deepseek-v4-flash (deleted: 2026-07-25)
 
@@ -44,8 +50,6 @@ Last updated: 2026-07-30 15:00:38
 **Added**
 
 - qwen-audio-3.0-asr-flash (added: 2026-07-30)
-- qwen3.7-flash (added: 2026-07-24)
-- qwen3.7-flash-2026-07-15 (added: 2026-07-24)
 
 ### NVIDIA
 
@@ -84,7 +88,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/21
 
-**Mistral**: 60/54
+**Mistral**: 48/66
 
 **DeepSeek**: 2/2
 
@@ -528,7 +532,6 @@ Model counts shown as: **Available/Deleted**
 - mistral-ocr-3 (added: 2026-06-16)
 - mistral-code-latest (added: 2026-06-02)
 - mistral-code-fim-latest (added: 2026-06-02)
-- mistral-code-agent-latest (added: 2026-06-02)
 - mistral-medium-3-5 (added: 2026-04-21)
 - mistral-medium-3.5 (added: 2026-04-09)
 - mistral-medium-3 (added: 2026-04-09)
@@ -544,9 +547,7 @@ Model counts shown as: **Available/Deleted**
 - voxtral-mini-2602 (added: 2026-02-04)
 - mistral-vibe-cli-with-tools (added: 2026-02-04)
 - mistral-ocr-2512 (added: 2025-12-15)
-- devstral-latest (added: 2025-12-15)
 - mistral-vibe-cli-latest (added: 2025-12-09)
-- devstral-2512 (added: 2025-12-09)
 - mistral-large-2512 (added: 2025-12-02)
 - ministral-8b-2512 (added: 2025-12-02)
 - ministral-3b-2512 (added: 2025-12-02)
@@ -555,12 +556,7 @@ Model counts shown as: **Available/Deleted**
 - voxtral-small-latest (added: 2025-11-24)
 - voxtral-small-2507 (added: 2025-11-24)
 - voxtral-mini-latest (added: 2025-11-24)
-- open-mistral-nemo-2407 (added: 2025-11-24)
-- open-mistral-nemo (added: 2025-11-24)
-- mistral-tiny-latest (added: 2025-11-24)
-- mistral-tiny-2407 (added: 2025-11-24)
 - mistral-small-latest (added: 2025-11-24)
-- mistral-small-2506 (added: 2025-11-24)
 - mistral-ocr-latest (added: 2025-11-24)
 - mistral-medium-latest (added: 2025-11-24)
 - mistral-medium-2508 (added: 2025-11-24)
@@ -572,10 +568,6 @@ Model counts shown as: **Available/Deleted**
 - ministral-8b-latest (added: 2025-11-24)
 - ministral-3b-latest (added: 2025-11-24)
 - magistral-small-latest (added: 2025-11-24)
-- magistral-small-2509 (added: 2025-11-24)
-- magistral-medium-latest (added: 2025-11-24)
-- magistral-medium-2509 (added: 2025-11-24)
-- devstral-medium-latest (added: 2025-11-24)
 - codestral-latest (added: 2025-11-24)
 - codestral-embed-2505 (added: 2025-11-24)
 - codestral-embed (added: 2025-11-24)
@@ -583,6 +575,18 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- open-mistral-nemo-2407 (deleted: 2026-07-31)
+- open-mistral-nemo (deleted: 2026-07-31)
+- mistral-tiny-latest (deleted: 2026-07-31)
+- mistral-tiny-2407 (deleted: 2026-07-31)
+- mistral-small-2506 (deleted: 2026-07-31)
+- mistral-code-agent-latest (deleted: 2026-07-31)
+- magistral-small-2509 (deleted: 2026-07-31)
+- magistral-medium-latest (deleted: 2026-07-31)
+- magistral-medium-2509 (deleted: 2026-07-31)
+- devstral-medium-latest (deleted: 2026-07-31)
+- devstral-latest (deleted: 2026-07-31)
+- devstral-2512 (deleted: 2026-07-31)
 - voxtral-mini-realtime-charente-2606-solutions (deleted: 2026-07-27)
 - deepseek-v4-flash (deleted: 2026-07-25)
 - voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-20)
