@@ -1,0 +1,112 @@
+Model: devstral-latest
+Provider: mistral
+Evaluated: 2026-07-31T12:37:28.747116+00:00
+
+=== TIMING ===
+Response time: 10.27s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    # Directions: right (R), down (D), diagonal (X)
+    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+
+    # DP table: (max_sum, path, move_count)
+    dp = [[(0, "", 0) for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "", 0)
+
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            current_max = -1
+            best_path = ""
+            best_move_count = 0
+
+            for move, di, dj in directions:
+                prev_i, prev_j = i - di, j - dj
+                if 0 <= prev_i < n and 0 <= prev_j < n:
+                    prev_sum, prev_path, move_count = dp[prev_i][prev_j]
+                    new_move_count = move_count + 1
+                    # Check if the move is valid based on the move count
+                    if new_move_count % 3 == 0:
+                        if move != 'X':
+                            # Check if diagonal is possible from (prev_i, prev_j)
+                            if prev_i + 1 < n and prev_j + 1 < n:
+                                continue  # Skip non-diagonal moves when diagonal is possible
+                    new_sum = prev_sum + grid[i][j]
+                    new_path = prev_path + move
+                    if new_sum > current_max:
+                        current_max = new_sum
+                        best_path = new_path
+                        best_move_count = new_move_count
+                    elif new_sum == current_max and len(new_path) < len(best_path):
+                        best_path = new_path
+                        best_move_count = new_move_count
+
+            dp[i][j] = (current_max, best_path, best_move_count)
+
+    max_sum, path, _ = dp[n-1][n-1]
+    return (max_sum, path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    # Directions: right (R), down (D), diagonal (X)
+    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+
+    # DP table: (max_sum, path, move_count)
+    dp = [[(0, "", 0) for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "", 0)
+
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            current_max = -1
+            best_path = ""
+            best_move_count = 0
+
+            for move, di, dj in directions:
+                prev_i, prev_j = i - di, j - dj
+                if 0 <= prev_i < n and 0 <= prev_j < n:
+                    prev_sum, prev_path, move_count = dp[prev_i][prev_j]
+                    new_move_count = move_count + 1
+                    # Check if the move is valid based on the move count
+                    if new_move_count % 3 == 0:
+                        if move != 'X':
+                            # Check if diagonal is possible from (prev_i, prev_j)
+                            if prev_i + 1 < n and prev_j + 1 < n:
+                                continue  # Skip non-diagonal moves when diagonal is possible
+                    new_sum = prev_sum + grid[i][j]
+                    new_path = prev_path + move
+                    if new_sum > current_max:
+                        current_max = new_sum
+                        best_path = new_path
+                        best_move_count = new_move_count
+                    elif new_sum == current_max and len(new_path) < len(best_path):
+                        best_path = new_path
+                        best_move_count = new_move_count
+
+            dp[i][j] = (current_max, best_path, best_move_count)
+
+    max_sum, path, _ = dp[n-1][n-1]
+    return (max_sum, path)

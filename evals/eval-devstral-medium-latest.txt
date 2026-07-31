@@ -1,0 +1,88 @@
+Model: devstral-medium-latest
+Provider: mistral
+Evaluated: 2026-07-31T12:37:39.048585+00:00
+
+=== TIMING ===
+Response time: 7.8s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    # Directions: right (R), down (D), diagonal down-right (X)
+    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+
+    # DP table: (max_sum, path, move_count)
+    dp = [[(-1, "", 0) for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "", 0)
+
+    for i in range(n):
+        for j in range(n):
+            if dp[i][j][0] == -1:
+                continue
+            current_sum, current_path, move_count = dp[i][j]
+            next_move_count = move_count + 1
+
+            for dir_name, di, dj in directions:
+                ni, nj = i + di, j + dj
+                if ni < n and nj < n:
+                    # Check if it's a required diagonal move
+                    if next_move_count % 3 == 0 and dir_name != 'X':
+                        # Skip non-diagonal moves on required diagonal steps
+                        continue
+                    new_sum = current_sum + grid[ni][nj]
+                    new_path = current_path + dir_name
+                    if new_sum > dp[ni][nj][0]:
+                        dp[ni][nj] = (new_sum, new_path, next_move_count)
+
+    max_sum, path, _ = dp[n-1][n-1]
+    return (max_sum, path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    # Directions: right (R), down (D), diagonal down-right (X)
+    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+
+    # DP table: (max_sum, path, move_count)
+    dp = [[(-1, "", 0) for _ in range(n)] for _ in range(n)]
+    dp[0][0] = (grid[0][0], "", 0)
+
+    for i in range(n):
+        for j in range(n):
+            if dp[i][j][0] == -1:
+                continue
+            current_sum, current_path, move_count = dp[i][j]
+            next_move_count = move_count + 1
+
+            for dir_name, di, dj in directions:
+                ni, nj = i + di, j + dj
+                if ni < n and nj < n:
+                    # Check if it's a required diagonal move
+                    if next_move_count % 3 == 0 and dir_name != 'X':
+                        # Skip non-diagonal moves on required diagonal steps
+                        continue
+                    new_sum = current_sum + grid[ni][nj]
+                    new_path = current_path + dir_name
+                    if new_sum > dp[ni][nj][0]:
+                        dp[ni][nj] = (new_sum, new_path, next_move_count)
+
+    max_sum, path, _ = dp[n-1][n-1]
+    return (max_sum, path)
