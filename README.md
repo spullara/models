@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-07-31 12:00:23
+Last updated: 2026-07-31 12:38:14
 
 ## Updates This Week (2026-07-25 to 2026-07-31)
 
@@ -30,13 +30,9 @@ Last updated: 2026-07-31 12:00:23
 
 **Deleted**
 
-- devstral-2512 (deleted: 2026-07-31)
-- devstral-latest (deleted: 2026-07-31)
-- devstral-medium-latest (deleted: 2026-07-31)
 - magistral-medium-2509 (deleted: 2026-07-31)
 - magistral-medium-latest (deleted: 2026-07-31)
 - magistral-small-2509 (deleted: 2026-07-31)
-- mistral-code-agent-latest (deleted: 2026-07-31)
 - mistral-small-2506 (deleted: 2026-07-31)
 - mistral-tiny-2407 (deleted: 2026-07-31)
 - mistral-tiny-latest (deleted: 2026-07-31)
@@ -88,7 +84,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/21
 
-**Mistral**: 48/66
+**Mistral**: 52/62
 
 **DeepSeek**: 2/2
 
@@ -532,6 +528,7 @@ Model counts shown as: **Available/Deleted**
 - mistral-ocr-3 (added: 2026-06-16)
 - mistral-code-latest (added: 2026-06-02)
 - mistral-code-fim-latest (added: 2026-06-02)
+- mistral-code-agent-latest (added: 2026-06-02)
 - mistral-medium-3-5 (added: 2026-04-21)
 - mistral-medium-3.5 (added: 2026-04-09)
 - mistral-medium-3 (added: 2026-04-09)
@@ -547,7 +544,9 @@ Model counts shown as: **Available/Deleted**
 - voxtral-mini-2602 (added: 2026-02-04)
 - mistral-vibe-cli-with-tools (added: 2026-02-04)
 - mistral-ocr-2512 (added: 2025-12-15)
+- devstral-latest (added: 2025-12-15)
 - mistral-vibe-cli-latest (added: 2025-12-09)
+- devstral-2512 (added: 2025-12-09)
 - mistral-large-2512 (added: 2025-12-02)
 - ministral-8b-2512 (added: 2025-12-02)
 - ministral-3b-2512 (added: 2025-12-02)
@@ -568,6 +567,7 @@ Model counts shown as: **Available/Deleted**
 - ministral-8b-latest (added: 2025-11-24)
 - ministral-3b-latest (added: 2025-11-24)
 - magistral-small-latest (added: 2025-11-24)
+- devstral-medium-latest (added: 2025-11-24)
 - codestral-latest (added: 2025-11-24)
 - codestral-embed-2505 (added: 2025-11-24)
 - codestral-embed (added: 2025-11-24)
@@ -580,13 +580,9 @@ Model counts shown as: **Available/Deleted**
 - mistral-tiny-latest (deleted: 2026-07-31)
 - mistral-tiny-2407 (deleted: 2026-07-31)
 - mistral-small-2506 (deleted: 2026-07-31)
-- mistral-code-agent-latest (deleted: 2026-07-31)
 - magistral-small-2509 (deleted: 2026-07-31)
 - magistral-medium-latest (deleted: 2026-07-31)
 - magistral-medium-2509 (deleted: 2026-07-31)
-- devstral-medium-latest (deleted: 2026-07-31)
-- devstral-latest (deleted: 2026-07-31)
-- devstral-2512 (deleted: 2026-07-31)
 - voxtral-mini-realtime-charente-2606-solutions (deleted: 2026-07-27)
 - deepseek-v4-flash (deleted: 2026-07-25)
 - voxtral-mini-tts-mellon-greek-2606-solutions (deleted: 2026-07-20)
