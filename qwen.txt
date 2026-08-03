@@ -143,6 +143,7 @@ qwen3.7-max-2026-06-08
 qwen3.7-max-preview
 qwen3.7-plus
 qwen3.7-plus-2026-05-26
+qwen3.8-max
 qwq-plus
 qwq-plus-2025-03-05
 text-embedding-v3
