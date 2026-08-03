@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-01 05:50:23
+Last updated: 2026-08-03 01:48:24
 
-## Updates This Week (2026-07-26 to 2026-08-01)
+## Updates This Week (2026-07-28 to 2026-08-03)
 
 ### OpenAI
 
@@ -38,39 +38,14 @@ Last updated: 2026-08-01 05:50:23
 - mistral-tiny-latest (deleted: 2026-07-31)
 - open-mistral-nemo (deleted: 2026-07-31)
 - open-mistral-nemo-2407 (deleted: 2026-07-31)
-- voxtral-mini-realtime-charente-2606-solutions (deleted: 2026-07-27)
 
 ### Qwen
 
 **Added**
 
+- qwen3.8-max (added: 2026-08-03)
 - deepseek-v4-flash-0731 (added: 2026-08-01)
 - qwen-audio-3.0-asr-flash (added: 2026-07-30)
-
-### NVIDIA
-
-**Added**
-
-- nvidia/nemotron-3-nano-30b-a3b (added: 2026-07-27)
-- nvidia/nemotron-3-super-120b-a12b (added: 2026-07-27)
-- nvidia/nemotron-3-ultra-550b-a55b (added: 2026-07-27)
-
-### Z.AI
-
-**Added**
-
-- z-ai/glm-4.5 (added: 2026-07-27)
-- z-ai/glm-4.5-air (added: 2026-07-27)
-- z-ai/glm-4.5v (added: 2026-07-27)
-- z-ai/glm-4.6 (added: 2026-07-27)
-- z-ai/glm-4.6v (added: 2026-07-27)
-- z-ai/glm-4.7 (added: 2026-07-27)
-- z-ai/glm-4.7-flash (added: 2026-07-27)
-- z-ai/glm-5 (added: 2026-07-27)
-- z-ai/glm-5-turbo (added: 2026-07-27)
-- z-ai/glm-5.1 (added: 2026-07-27)
-- z-ai/glm-5.2 (added: 2026-07-27)
-- z-ai/glm-5v-turbo (added: 2026-07-27)
 
 ## Summary
 
@@ -90,7 +65,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 12/6
 
-**Qwen**: 153/24
+**Qwen**: 154/24
 
 **Meta**: 1/0
 
@@ -680,6 +655,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- qwen3.8-max (added: 2026-08-03)
 - deepseek-v4-flash-0731 (added: 2026-08-01)
 - qwen-audio-3.0-asr-flash (added: 2026-07-30)
 - qwen3.7-flash-2026-07-15 (added: 2026-07-24)
