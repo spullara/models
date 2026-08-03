@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-03 01:48:24
+Last updated: 2026-08-03 23:14:17
 
 ## Updates This Week (2026-07-28 to 2026-08-03)
 
@@ -14,6 +14,7 @@ Last updated: 2026-08-03 01:48:24
 
 **Deleted**
 
+- gpt-realtime-mini-2025-10-06 (deleted: 2026-08-03)
 - ra-gpt-5.6-sol (deleted: 2026-07-30)
 
 ### Gemini
@@ -51,7 +52,7 @@ Last updated: 2026-08-03 01:48:24
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 133/51
+**OpenAI**: 132/52
 
 **Anthropic**: 11/12
 
@@ -132,7 +133,6 @@ Model counts shown as: **Available/Deleted**
 - gpt-5-search-api (added: 2025-10-14)
 - sora-2-pro (added: 2025-10-06)
 - sora-2 (added: 2025-10-06)
-- gpt-realtime-mini-2025-10-06 (added: 2025-10-06)
 - gpt-realtime-mini (added: 2025-10-06)
 - gpt-image-1-mini (added: 2025-10-06)
 - gpt-audio-mini-2025-10-06 (added: 2025-10-06)
@@ -214,6 +214,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- gpt-realtime-mini-2025-10-06 (deleted: 2026-08-03)
 - ra-gpt-5.6-sol (deleted: 2026-07-30)
 - gpt-5.5-pagi-local-ev3 (deleted: 2026-06-06)
 - gpt-4o-realtime-preview-2025-06-03 (deleted: 2026-05-18)
