@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-04 09:44:23
+Last updated: 2026-08-04 10:07:25
 
 ## Updates This Week (2026-07-29 to 2026-08-04)
 
@@ -24,10 +24,12 @@ Last updated: 2026-08-04 09:44:23
 
 ### Mistral
 
+**Added**
+
+- mistral-ocr-4-1 (added: 2026-08-04)
+
 **Deleted**
 
-- mistral-ocr-4 (deleted: 2026-08-04)
-- mistral-ocr-4-1 (deleted: 2026-08-04)
 - magistral-medium-2509 (deleted: 2026-07-31)
 - magistral-medium-latest (deleted: 2026-07-31)
 - magistral-small-2509 (deleted: 2026-07-31)
@@ -57,7 +59,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/21
 
-**Mistral**: 51/64
+**Mistral**: 53/62
 
 **DeepSeek**: 2/2
 
@@ -493,9 +495,11 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- mistral-ocr-4-1 (added: 2026-08-04)
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
 - mistral-ocr-4-0 (added: 2026-06-23)
+- mistral-ocr-4 (added: 2026-06-23)
 - mistral-ocr-3-0 (added: 2026-06-16)
 - mistral-ocr-3 (added: 2026-06-16)
 - mistral-code-latest (added: 2026-06-02)
@@ -547,8 +551,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- mistral-ocr-4-1 (deleted: 2026-08-04)
-- mistral-ocr-4 (deleted: 2026-08-04)
 - open-mistral-nemo-2407 (deleted: 2026-07-31)
 - open-mistral-nemo (deleted: 2026-07-31)
 - mistral-tiny-latest (deleted: 2026-07-31)
