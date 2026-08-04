@@ -1,0 +1,19 @@
+Model: qwen-image-3.0
+Provider: qwen
+Evaluated: 2026-08-04T16:55:06.052964+00:00
+
+=== TIMING ===
+Response time: 1.16s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"error":{"message":"Input should be a valid list: input.messages.0.content","type":"invalid_request_error","param":null,"code":"invalid_parameter_error"},"id":"chatcmpl-6882ca6f-511c-9680-a468-a82289dc42bc","request_id":"6882ca6f-511c-9680-a468-a82289dc42bc"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
