@@ -1,0 +1,19 @@
+Model: mistral-ocr-latest
+Provider: mistral
+Evaluated: 2026-08-04T09:44:06.458084+00:00
+
+=== TIMING ===
+Response time: 0.29s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"object":"error","message":"Invalid model: mistral-ocr-latest","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
