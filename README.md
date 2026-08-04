@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-04 09:33:25
+Last updated: 2026-08-04 09:44:23
 
 ## Updates This Week (2026-07-29 to 2026-08-04)
 
@@ -28,7 +28,6 @@ Last updated: 2026-08-04 09:33:25
 
 - mistral-ocr-4 (deleted: 2026-08-04)
 - mistral-ocr-4-1 (deleted: 2026-08-04)
-- mistral-ocr-latest (deleted: 2026-08-04)
 - magistral-medium-2509 (deleted: 2026-07-31)
 - magistral-medium-latest (deleted: 2026-07-31)
 - magistral-small-2509 (deleted: 2026-07-31)
@@ -58,7 +57,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/21
 
-**Mistral**: 50/65
+**Mistral**: 51/64
 
 **DeepSeek**: 2/2
 
@@ -529,6 +528,7 @@ Model counts shown as: **Available/Deleted**
 - voxtral-small-2507 (added: 2025-11-24)
 - voxtral-mini-latest (added: 2025-11-24)
 - mistral-small-latest (added: 2025-11-24)
+- mistral-ocr-latest (added: 2025-11-24)
 - mistral-medium-latest (added: 2025-11-24)
 - mistral-medium-2508 (added: 2025-11-24)
 - mistral-medium-2505 (added: 2025-11-24)
@@ -547,7 +547,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- mistral-ocr-latest (deleted: 2026-08-04)
 - mistral-ocr-4-1 (deleted: 2026-08-04)
 - mistral-ocr-4 (deleted: 2026-08-04)
 - open-mistral-nemo-2407 (deleted: 2026-07-31)
