@@ -5,7 +5,6 @@ codestral-latest
 devstral-2512
 devstral-latest
 devstral-medium-latest
-glm-5-2
 labs-leanstral-1-5
 labs-leanstral-1-5-1
 magistral-small-latest
@@ -52,4 +51,3 @@ voxtral-mini-tts-2603
 voxtral-mini-tts-latest
 voxtral-small-2507
 voxtral-small-latest
-zai-glm-5-2
