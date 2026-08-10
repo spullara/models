@@ -1,0 +1,19 @@
+Model: glm-5-2
+Provider: mistral
+Evaluated: 2026-08-10T08:14:06.120804+00:00
+
+=== TIMING ===
+Response time: 0.26s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"object":"error","message":"Invalid model: glm-5-2","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
