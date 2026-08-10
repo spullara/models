@@ -1,16 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-05 19:09:17
+Last updated: 2026-08-10 08:14:25
 
-## Updates This Week (2026-07-30 to 2026-08-05)
-
-### OpenAI
-
-**Deleted**
-
-- gpt-realtime-mini-2025-10-06 (deleted: 2026-08-03)
-- ra-gpt-5.6-sol (deleted: 2026-07-30)
+## Updates This Week (2026-08-04 to 2026-08-10)
 
 ### Anthropic
 
@@ -18,32 +11,13 @@ Last updated: 2026-08-05 19:09:17
 
 - claude-opus-4-1-20250805 (deleted: 2026-08-05)
 
-### Gemini
-
-**Added**
-
-- models/gemini-robotics-er-2-preview (added: 2026-07-30)
-
-**Deleted**
-
-- models/veo-3.1-fast-generate-preview (deleted: 2026-07-30)
-
 ### Mistral
 
 **Added**
 
+- glm-5-2 (added: 2026-08-10)
+- zai-glm-5-2 (added: 2026-08-10)
 - mistral-ocr-4-1 (added: 2026-08-04)
-
-**Deleted**
-
-- magistral-medium-2509 (deleted: 2026-07-31)
-- magistral-medium-latest (deleted: 2026-07-31)
-- magistral-small-2509 (deleted: 2026-07-31)
-- mistral-small-2506 (deleted: 2026-07-31)
-- mistral-tiny-2407 (deleted: 2026-07-31)
-- mistral-tiny-latest (deleted: 2026-07-31)
-- open-mistral-nemo (deleted: 2026-07-31)
-- open-mistral-nemo-2407 (deleted: 2026-07-31)
 
 ### Qwen
 
@@ -51,9 +25,6 @@ Last updated: 2026-08-05 19:09:17
 
 - qwen-image-3.0 (added: 2026-08-04)
 - qwen-image-3.0-pro (added: 2026-08-04)
-- qwen3.8-max (added: 2026-08-03)
-- deepseek-v4-flash-0731 (added: 2026-08-01)
-- qwen-audio-3.0-asr-flash (added: 2026-07-30)
 
 ### Meta
 
@@ -74,7 +45,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/21
 
-**Mistral**: 53/62
+**Mistral**: 55/62
 
 **DeepSeek**: 2/2
 
@@ -510,6 +481,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- zai-glm-5-2 (added: 2026-08-10)
+- glm-5-2 (added: 2026-08-10)
 - mistral-ocr-4-1 (added: 2026-08-04)
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
