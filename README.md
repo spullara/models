@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-10 08:56:25
+Last updated: 2026-08-10 08:57:20
 
 ## Updates This Week (2026-08-04 to 2026-08-10)
 
@@ -15,20 +15,23 @@ Last updated: 2026-08-10 08:56:25
 
 **Deleted**
 
-- models/gemini-2.0-flash (deleted: 2026-08-10)
-- models/gemini-2.0-flash-001 (deleted: 2026-08-10)
-- models/gemini-2.0-flash-lite (deleted: 2026-08-10)
-- models/gemini-2.0-flash-lite-001 (deleted: 2026-08-10)
-- models/gemini-3-pro-preview (deleted: 2026-08-10)
-- models/gemini-robotics-er-1.5-preview (deleted: 2026-08-10)
+- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-08-10)
+- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-08-10)
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-08-10)
+- models/gemini-3.1-flash-live-preview (deleted: 2026-08-10)
+- models/veo-3.1-fast-generate-preview (deleted: 2026-08-10)
+- models/veo-3.1-lite-generate-preview (deleted: 2026-08-10)
 
 ### Mistral
 
 **Added**
 
-- glm-5-2 (added: 2026-08-10)
-- zai-glm-5-2 (added: 2026-08-10)
 - mistral-ocr-4-1 (added: 2026-08-04)
+
+**Deleted**
+
+- glm-5-2 (deleted: 2026-08-10)
+- zai-glm-5-2 (deleted: 2026-08-10)
 
 ### Qwen
 
@@ -56,7 +59,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 10/21
 
-**Mistral**: 55/62
+**Mistral**: 53/64
 
 **DeepSeek**: 2/2
 
@@ -315,8 +318,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-robotics-er-1.6-preview (added: 2026-04-14)
 - models/gemma-4-31b-it (added: 2026-04-02)
 - models/gemma-4-26b-a4b-it (added: 2026-04-02)
-- models/veo-3.1-lite-generate-preview (added: 2026-03-31)
-- models/gemini-3.1-flash-live-preview (added: 2026-03-26)
 - models/lyria-3-pro-preview (added: 2026-03-25)
 - models/lyria-3-clip-preview (added: 2026-03-25)
 - models/gemini-embedding-2-preview (added: 2026-03-10)
@@ -324,20 +325,18 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
-- models/gemini-2.5-flash-native-audio-preview-12-2025 (added: 2026-01-27)
-- models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
-- models/gemini-2.5-flash-native-audio-latest (added: 2025-12-10)
-- models/veo-3.1-fast-generate-preview (added: 2025-12-09)
 - models/veo-3.1-generate-preview (added: 2025-12-05)
 - models/imagen-4.0-fast-generate-001 (added: 2025-12-05)
 - models/nano-banana-pro-preview (added: 2025-11-20)
 - models/gemini-3-pro-image-preview (added: 2025-11-20)
 - models/imagen-4.0-ultra-generate-001 (added: 2025-11-18)
+- models/gemini-3-pro-preview (added: 2025-11-18)
 - models/gemini-2.5-computer-use-preview-10-2025 (added: 2025-10-07)
 - models/gemini-2.5-flash-image (added: 2025-10-02)
 - models/imagen-4.0-generate-001 (added: 2025-09-27)
+- models/gemini-robotics-er-1.5-preview (added: 2025-09-25)
 - models/gemini-pro-latest (added: 2025-09-25)
 - models/gemini-flash-lite-latest (added: 2025-09-25)
 - models/gemini-flash-latest (added: 2025-09-25)
@@ -347,16 +346,20 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-2.5-flash (added: 2025-06-17)
 - models/gemini-2.5-pro-preview-tts (added: 2025-05-21)
 - models/gemini-2.5-flash-preview-tts (added: 2025-05-21)
+- models/gemini-2.0-flash-lite-001 (added: 2025-02-25)
+- models/gemini-2.0-flash-lite (added: 2025-02-25)
+- models/gemini-2.0-flash-001 (added: 2025-02-05)
+- models/gemini-2.0-flash (added: 2025-02-05)
 - models/aqa (added: 2024-12-07)
 
 ### Deleted Models
 
-- models/gemini-robotics-er-1.5-preview (deleted: 2026-08-10)
-- models/gemini-3-pro-preview (deleted: 2026-08-10)
-- models/gemini-2.0-flash-lite-001 (deleted: 2026-08-10)
-- models/gemini-2.0-flash-lite (deleted: 2026-08-10)
-- models/gemini-2.0-flash-001 (deleted: 2026-08-10)
-- models/gemini-2.0-flash (deleted: 2026-08-10)
+- models/veo-3.1-lite-generate-preview (deleted: 2026-08-10)
+- models/veo-3.1-fast-generate-preview (deleted: 2026-08-10)
+- models/gemini-3.1-flash-live-preview (deleted: 2026-08-10)
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-08-10)
+- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-08-10)
+- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-08-10)
 - models/veo-3.0-generate-001 (deleted: 2026-06-30)
 - models/veo-3.0-fast-generate-001 (deleted: 2026-06-30)
 - models/veo-2.0-generate-001 (deleted: 2026-06-30)
@@ -492,8 +495,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- zai-glm-5-2 (added: 2026-08-10)
-- glm-5-2 (added: 2026-08-10)
 - mistral-ocr-4-1 (added: 2026-08-04)
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
@@ -550,6 +551,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- zai-glm-5-2 (deleted: 2026-08-10)
+- glm-5-2 (deleted: 2026-08-10)
 - open-mistral-nemo-2407 (deleted: 2026-07-31)
 - open-mistral-nemo (deleted: 2026-07-31)
 - mistral-tiny-latest (deleted: 2026-07-31)
