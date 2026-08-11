@@ -1,19 +1,188 @@
 Model: glm-5-2
 Provider: mistral
-Evaluated: 2026-08-11T11:17:05.896640+00:00
+Evaluated: 2026-08-11T11:19:06.730721+00:00
 
 === TIMING ===
-Response time: 0.31s
+Response time: 3.66s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 400: {"object":"error","message":"Invalid model: glm-5-2","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+from functools import lru_cache
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Finds the path from top-left to bottom-right of an N×N
+    grid that maximizes the sum. 
+    
+    Rules:
+    - Valid moves: right (R), down (D), diagonal down-right (X)
+    - Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position
+    - If diagonal is not possible on a required diagonal move, you may use R or D
+    - Return (max_sum, path_string) e.g., (73, "RRXDDX")
+    """
+    if not grid or not grid[0]:
+        return 0, ""
+    
+    n = len(grid)
+    
+    # Memoization cache
+    # dp[r][c][move_count % 3] = (max_sum, path_string)
+    dp = {}
+
+    def dfs(r, c, move_count_mod_3):
+        # Base case: reached destination
+        if r == n - 1 and c == n - 1:
+            return grid[r][c], ""
+        
+        # Return cached result if already computed
+        if (r, c, move_count_mod_3) in dp:
+            return dp[(r, c, move_count_mod_3)]
+        
+        best_sum = -float('inf')
+        best_path = ""
+        
+        can_diag = (r + 1 < n) and (c + 1 < n)
+        
+        if move_count_mod_3 == 2:  # 3rd move (1-indexed), 3 % 3 = 0, 6 % 3 = 0, mapped to 2 for mod math
+            # Must be diagonal if possible
+            if can_diag:
+                next_sum, next_path = dfs(r + 1, c + 1, 0)
+                current_sum = grid[r][c] + next_sum
+                if current_sum > best_sum:
+                    best_sum = current_sum
+                    best_path = "X" + next_path
+            else:
+                # Can't move diagonally, fallback to R or D
+                if r + 1 < n:
+                    next_sum, next_path = dfs(r + 1, c, 0)
+                    current_sum = grid[r][c] + next_sum
+                    if current_sum > best_sum:
+                        best_sum = current_sum
+                        best_path = "D" + next_path
+                if c + 1 < n:
+                    next_sum, next_path = dfs(r, c + 1, 0)
+                    current_sum = grid[r][c] + next_sum
+                    if current_sum > best_sum:
+                        best_sum = current_sum
+                        best_path = "R" + next_path
+        else:
+            # Normal moves: R, D, X
+            if r + 1 < n:
+                next_sum, next_path = dfs(r + 1, c, move_count_mod_3 + 1)
+                current_sum = grid[r][c] + next_sum
+                if current_sum > best_sum:
+                    best_sum = current_sum
+                    best_path = "D" + next_path
+            if c + 1 < n:
+                next_sum, next_path = dfs(r, c + 1, move_count_mod_3 + 1)
+                current_sum = grid[r][c] + next_sum
+                if current_sum > best_sum:
+                    best_sum = current_sum
+                    best_path = "R" + next_path
+            if can_diag:
+                next_sum, next_path = dfs(r + 1, c + 1, move_count_mod_3 + 1)
+                current_sum = grid[r][c] + next_sum
+                if current_sum > best_sum:
+                    best_sum = current_sum
+                    best_path = "X" + next_path
+                    
+        dp[(r, c, move_count_mod_3)] = (best_sum, best_path)
+        return dp[(r, c, move_count_mod_3)]
+
+    return dfs(0, 0, 0)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+from functools import lru_cache
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Finds the path from top-left to bottom-right of an N×N
+    grid that maximizes the sum. 
+    
+    Rules:
+    - Valid moves: right (R), down (D), diagonal down-right (X)
+    - Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position
+    - If diagonal is not possible on a required diagonal move, you may use R or D
+    - Return (max_sum, path_string) e.g., (73, "RRXDDX")
+    """
+    if not grid or not grid[0]:
+        return 0, ""
+    
+    n = len(grid)
+    
+    # Memoization cache
+    # dp[r][c][move_count % 3] = (max_sum, path_string)
+    dp = {}
+
+    def dfs(r, c, move_count_mod_3):
+        # Base case: reached destination
+        if r == n - 1 and c == n - 1:
+            return grid[r][c], ""
+        
+        # Return cached result if already computed
+        if (r, c, move_count_mod_3) in dp:
+            return dp[(r, c, move_count_mod_3)]
+        
+        best_sum = -float('inf')
+        best_path = ""
+        
+        can_diag = (r + 1 < n) and (c + 1 < n)
+        
+        if move_count_mod_3 == 2:  # 3rd move (1-indexed), 3 % 3 = 0, 6 % 3 = 0, mapped to 2 for mod math
+            # Must be diagonal if possible
+            if can_diag:
+                next_sum, next_path = dfs(r + 1, c + 1, 0)
+                current_sum = grid[r][c] + next_sum
+                if current_sum > best_sum:
+                    best_sum = current_sum
+                    best_path = "X" + next_path
+            else:
+                # Can't move diagonally, fallback to R or D
+                if r + 1 < n:
+                    next_sum, next_path = dfs(r + 1, c, 0)
+                    current_sum = grid[r][c] + next_sum
+                    if current_sum > best_sum:
+                        best_sum = current_sum
+                        best_path = "D" + next_path
+                if c + 1 < n:
+                    next_sum, next_path = dfs(r, c + 1, 0)
+                    current_sum = grid[r][c] + next_sum
+                    if current_sum > best_sum:
+                        best_sum = current_sum
+                        best_path = "R" + next_path
+        else:
+            # Normal moves: R, D, X
+            if r + 1 < n:
+                next_sum, next_path = dfs(r + 1, c, move_count_mod_3 + 1)
+                current_sum = grid[r][c] + next_sum
+                if current_sum > best_sum:
+                    best_sum = current_sum
+                    best_path = "D" + next_path
+            if c + 1 < n:
+                next_sum, next_path = dfs(r, c + 1, move_count_mod_3 + 1)
+                current_sum = grid[r][c] + next_sum
+                if current_sum > best_sum:
+                    best_sum = current_sum
+                    best_path = "R" + next_path
+            if can_diag:
+                next_sum, next_path = dfs(r + 1, c + 1, move_count_mod_3 + 1)
+                current_sum = grid[r][c] + next_sum
+                if current_sum > best_sum:
+                    best_sum = current_sum
+                    best_path = "X" + next_path
+                    
+        dp[(r, c, move_count_mod_3)] = (best_sum, best_path)
+        return dp[(r, c, move_count_mod_3)]
+
+    return dfs(0, 0, 0)
