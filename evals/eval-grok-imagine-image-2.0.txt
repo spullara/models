@@ -1,0 +1,19 @@
+Model: grok-imagine-image-2.0
+Provider: grok
+Evaluated: 2026-08-11T20:48:05.456275+00:00
+
+=== TIMING ===
+Response time: 0.11s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"code":"invalid-argument","error":"Model not found: grok-imagine-image-2.0"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
