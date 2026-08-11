@@ -1,19 +1,1165 @@
 Model: nvidia/nemotron-3.5-lightning
 Provider: openrouter
-Evaluated: 2026-08-11T19:15:15.522674+00:00
+Evaluated: 2026-08-11T19:16:33.341820+00:00
 
 === TIMING ===
-Response time: 0.08s
+Response time: 290.9s
 
 === CODE EXTRACTION ===
-Method: None
+Method: function_extract_syntax_error
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 401: {"error":{"message":"Missing Authentication header","code":401}}
+Execution Error: Syntax error in extracted code (function_extract_syntax_error)
 
 === RAW RESPONSE ===
-(no response)
+We need to write a Python function solve_grid(grid: list[list[int]]) -> tuple[int, str] that finds the path from top-left (0,0) to bottom-right (N-1,N-1) of an N×N grid, maximizing sum. Moves: right 'R', down 'D', diagonal down-right 'X'. Rules:
+
+- Every 3rd move (move numbers 3, 6, 9, ...) MUST be diagonal if possible from current position.
+- If diagonal is not possible on a required diagonal move, you may use R or D.
+- Otherwise, presumably moves 1,2,4,5,7,8,... can be any of R, D, X? Actually rule says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". So moves 1,2,4,5,7,8 etc can be any valid move (R, D, X) as long as within grid? But probably we can choose any move on non-3rd moves, except that the constraint is only on moves that are multiples of 3. Also we need to maximize sum. Path string concatenated moves, e.g., "RRXDDX". Start at top-left, end at bottom-right.
+
+Important: grid is N x N. We start at (0,0), end at (N-1,N-1). Moves: R: (r, c+1), D: (r+1, c), X: (r+1, c+1). The grid contains presumably integers (maybe positive/negative? Maximize sum). We assume grid values could be any integer. The path includes the starting cell's value? Typically path sum includes all visited cells. The example (73, "RRXDDX") - we don't have grid, but typical path sum includes starting cell and each move's destination cell. We need to define sum accordingly: starting at (0,0) includes grid[0][0], and each move adds the value of the new cell. End at (N-1,N-1) includes that cell.
+
+We need to find path that maximizes sum under constraint. Since N could be moderate but we need an algorithm. This is essentially a constrained shortest/longest path problem on a DAG with state (r, c, move_number_mod_3?) Actually move number matters because every 3rd move must be diagonal if possible. However, the constraint applies sequentially: move 1, move 2, move 3 (must diagonal if possible), move 4, move 5, move 6 (must diagonal if possible), etc. The "move number" is the step count from start. So path length (number of moves) is variable; we stop when we reach bottom-right. But we need to maximize sum. Could be many paths; we need to consider all possible paths respecting constraint.
+
+This looks like dynamic programming with state (r, c, k) where k = number of moves taken mod 3? But the "must be diagonal if possible" condition depends on the absolute move number modulo 3, not just modulo 3 of remaining moves, because the requirement is "every 3rd move (3,6,9...)" i.e., the 3rd, 6th, 9th move overall. So if we have taken m moves so far, the next move is move number m+1. If (m+1) % 3 == 0, then we must attempt diagonal if possible; if not possible, we can use R or D. For other moves, we can choose any valid move (R, D, X). However, note that even on non-3rd moves we could still choose diagonal if we want? The rule only says "Every 3rd move MUST be diagonal if possible". It does not forbid diagonal on other moves. So on moves 1,2,4,5,7,8,... we can choose R, D, or X, subject to grid boundaries.
+
+Thus state needs to know how many moves have been taken so far (mod 3 maybe, but careful: if we only track mod 3, we lose the information of whether the next move is the 3rd, 6th, etc. But mod 3 of total moves taken tells us if next move is 3rd mod 3 == 0. Since the pattern repeats every 3 moves, we only need to know the current move number modulo 3 (i.e., what step we are about to take). However, the condition "if diagonal is not possible" only applies when the move number is a multiple of 3. So we need to know whether the next move is a "multiple of 3" move. That depends on the total number of moves taken so far. So state: (r, c, step_mod_3) where step_mod_3 is the index of the next move modulo 3, with 1,2,0 representing moves 1,2,3? Actually we can define state as (r, c, k) where k = number of moves taken so far (mod 3). Then the next move number is k+1 (if we start with k=0 meaning 0 moves taken, next move is 1). If (k+1) % 3 == 0, then it's a mandatory diagonal move if possible. Else, any move allowed. But we also need to know if diagonal is "possible from current position". That means from (r,c) we can move diagonally down-right if r+1 < N and c+1 < N. So we can check.
+
+We need to maximize sum. Since grid values can be negative? Not specified, but we assume we want max sum; if all negative we still pick path that maximizes (maybe all negative, we still pick path). DP: we can compute max sum to reach (r,c) after exactly m moves? But m is not fixed because path length varies; we stop when we reach (N-1,N-1). However, note that any path from (0,0) to (N- half,...) has a certain number of moves. The constraints tie move count to steps. But we can think of it as we are moving step by step, and we want to find a path that ends at (N-1,N-1) and respects the move-number constraints. Since the grid is N x N, the minimum number of moves to go from (0,0) to (N-1,N-1) is? With diagonal moves, we can reach in fewer moves. But the constraint only applies to every 3rd move. There's no explicit limit on number of moves; we could potentially take extra moves (like going right then left? But moves are only right, down, diagonal down-right. No left or up. So it's a directed acyclic graph. The number of moves is exactly the number of steps taken. Since we can only move right/down/diagonal, any path from (0,0) to (N-1,N-1) will have exactly some number of moves. The number of moves is not fixed; it depends on how many diagonal moves we take. For example, all diagonal: N-1 diagonal moves. All right and down: 2*(N-1) moves. Mixed: somewhere in between. The total moves M = (N-1) + (number of non-diagonal moves)? Actually each move increases either row or column or both. To go from (0,0) to (N-1,N-1), we need total row increments = N-1, total column increments = N-1. If we take X diagonal moves, each gives +1 row and +1 col. R moves give +1 col, D moves give +1 row. Let r be number of R moves, d be number of D moves, x be number of X moves. Then we have: r + x = N-1 (row increments), c + x = N-1 (col increments) => r = d = N-1 - x. Total moves M = r + d + x = 2(N-1 - x) + x = 2N - 2 - x. So total moves decreases as x increases. Minimum moves when x = N-1 => M = N-1. Maximum moves when x = 0 => M = 2N-2. So M varies.
+
+Now the constraint: "Every 3rd move (3,6,9...) MUST be diagonal if possible from current position". This means during the path, when we are about to make the 3rd, 6th, 9th, ... move, we must attempt diagonal if possible. If not possible, we may use R or D. So the path's move sequence must satisfy that for all i where i % 3 == 0, the i-th move is X if from current position X is possible (i.e., not at bottom row or rightmost column). If X not possible, then it can be R or D (whatever is possible). But note: "if possible from current position" means if we are at a position where a diagonal move is within grid bounds. If we are at bottom row (r = N-1) or rightmost column (c = N-1), diagonal is not possible. Also if we are at (N-1, c) with c < N-1, diagonal would go out of bounds; similarly at (r, N-1). So diagonal only possible if r < N-1 and c < N-1.
+
+Also note: The path must end exactly at (N-1,N-1). The last move could be any type that lands exactly on (N-1,N-1). The total moves M will be determined by the path. The constraint applies to moves 3,6,9,... up to M. So if M is, say, 5, then moves 3 is mandatory diagonal if possible; move 6 doesn't exist.
+
+We need to maximize sum of grid values along the path including start and end.
+
+This is a path optimization with a state that includes the move count modulo 3 and perhaps the exact move count? But since the constraint only depends on whether the move number is a multiple of 3, we only need to know the current move number modulo 3. However, the "if diagonal is not possible" condition might depend on position, which is already in state. But is there any other dependency on the exact move number beyond modulo 3? No, because the pattern repeats every 3 moves. However, we must be careful: the "every 3rd move (3,6,9...)" means the absolute move number in the path. If we only track modulo 3, we might incorrectly allow a diagonal on a move that is actually the 3rd overall if we start a new path? But in DP, we build path incrementally from start, so the move number is exactly the step count from start. So we can just keep track of the step count (or its modulo 3) as part of state. Since the grid is N x N, N could be up to maybe 100 or more? We need an efficient algorithm. The state space: (r, c, mod) where mod in {0,1,2} representing the number of moves taken so far modulo 3. Actually we can define state as (r, c, k) where k = number of moves taken so far mod 3, but we also need to know if the next move is a "multiple of 3" move. If k = 0, next move is 1 (since 0 moves taken -> move 1). If k = 1, next move is 2. If k = 2, next move is 3 (mandatory diagonal if possible). So we can define k as the number of moves taken mod 3, where k=0 means we have taken a multiple of 3 moves (0,3,6,...). Then the next move number is k+1. If (k+1) % 3 == 0 i.e., k == 2, then next move is mandatory diagonal if possible. Else, any move.
+
+But wait: what if the path length is such that we have taken, say, 2 moves, then next is move 3 (mandatory diagonal). After that, we have taken 3 moves, so k becomes 0 (since 3 mod 3 = 0). Then next move is 4 (any). Then move 5 (any), move 6 (mandatory diagonal). So yes, tracking k = moves_taken mod 3 works.
+
+Now, we want to maximize sum. We can use DP where dp[r][c][k] = maximum sum to reach cell (r,c) having taken exactly some number of moves such that the next move's type is determined by k. But we also need to reconstruct the path string. Since we need to return (max_sum, path_string), we can store the path string or backpointers. However, storing strings in DP might be memory heavy but N is probably small (maybe up to 10 or 20? Not specified). But we can store the choice made at each state and reconstruct. Since the function signature expects a tuple (max_sum, path_string), we can implement DP with backtracking.
+
+But note: The constraint "Every 3rd move MUST be diagonal if possible" might cause some paths to be invalid if they cannot satisfy the mandatory diagonal when required. But we can always fall back to R or D if diagonal not possible. So all paths are valid as long as we follow the rule. However, there might be situations where we are forced to take a move that eventually makes it impossible to reach the end? But since we can always use R or D, and we can always eventually reach bottom-right by only R and D moves (if we ever get stuck), any path that respects the rule and ends at (N-1,N-1) is valid. But we must ensure we don't exceed grid bounds. The DP will naturally explore all valid move sequences.
+
+We need to consider that the path must end exactly at (N-1,N-1). The DP should only consider paths that end at that cell. Since moves are only right/down/diagonal, we can define DP from start to end. But the state includes k (moves taken mod 3). The DP transitions: from (r,c,k) we can make a move to new cell (nr,nc) with new k' = (k+1) % 3, and add grid[nr][nc] to sum. The move type (R, D, X) is chosen based on rules.
+
+Transitions rules:
+
+Given current state (r, c, k). Let next_move_number = k+1 (if we consider k as moves taken mod 3, but careful: if k=0, moves taken could be 0,3,6,...; next move is 1,4,7...; if k=1, moves taken 1,4,7,... next move 2,5,8...; if k=2, moves taken 2,5,8,... next move 3,6,9...). So if (k+1) % 3 == 0, i.e., k == 2, then the move must be diagonal if possible. If diagonal is possible (r < N-1 and c < N-1), then we must choose X. If diagonal not possible, we may use R or D (but only those that are possible). If k != 2, then we can choose any valid move (R, D, X) subject to grid bounds. However, note that even if k != 2, we could still choose X if we want, as long as it's within bounds. The rule only mandates diagonal on 3rd moves, but doesn't forbid diagonal on others.
+
+But there is a nuance: "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". This implies that on non-3rd moves, there is no requirement, but we are still allowed to take diagonal. So yes.
+
+Now, we need to maximize sum. Since grid values could be negative, we need to consider all possibilities. The DP will compute max sum to each state. However, the state space is N x N x 3, which is O(N^2). For N up to maybe 100, that's 30,000 states, easily feasible. But we also need to reconstruct the path. We can store the chosen move (R, D, X) that led to the max sum for each state, and also the previous state (or just the move character). Since we only need the final path string, we can store at each state the move taken to get there and the previous state, or we can just store the path string in DP but that might be heavy. Better: store `prev_move[r][c][k]` and `prev_r`, `prev_c`, `prev_k`. Or we can just store the move character and then backtrack by recomputing? Simpler: store `choice[r][c][k]` as the move character ('R','D','X') that was taken to achieve the max sum from start to (r,c) with that k. But we also need to know the previous k to backtrack. Since k is deterministic from the number of moves, we can just store the move and the previous cell and k. Alternatively, we can do DP forward and keep a parent pointer.
+
+But wait: The DP state (r,c,k) might be reached via different paths with same k but different move counts? Actually k is moves_taken mod 3. If two different paths reach (r,c) with the same k, they have taken moves that are congruent mod 3. But the actual number of moves might differ by multiples of 3. However, the future constraints only depend on k (the next move's type). So if we have two paths reaching (r,c) with same k, the one with higher sum is always better, regardless of the exact move count, because future moves only depend on k. Is that true? Let's verify: The constraint "every 3rd move MUST be diagonal if possible" only depends on the absolute move number modulo 3. If we have two paths that reach (r,c) with the same k (i.e., same number of moves mod 3), then the next move number will be (moves_taken + 1) mod 3, which is the same for both. So the set of allowed moves for the next step is identical. However, does the exact move count affect anything else? The rule "if diagonal is not possible on a required diagonal move, you may use R or D" does not depend on anything else. So yes, the future constraints are entirely determined by k. Therefore, we can keep only the maximum sum for each (r,c,k). But we must be careful: Could there be a situation where a path with lower sum but different k leads to a better overall path? We are maximizing, so we only need to keep the max sum for each k. However, is it possible that a path with lower sum at (r,c,k) could somehow allow a better future move that a higher sum path cannot? No, because the future moves available from (r,c,k) are the same set of moves (depending only on k). The only difference is the accumulated sum. Since we want to maximize total sum, if we have two paths reaching (r,c) with same k, the one with higher sum will always yield a higher or equal total sum regardless of future choices, because future moves add the same grid values (the grid values are fixed, and the future path from (r,c) to end will be chosen optimally given the constraints). But wait: The future optimal path might depend on the exact k, but if k is same, the set of allowed moves is same. However, the future path might have different lengths, but the constraints only depend on k modulo 3. Since k is the same, the sequence of allowed moves from that point onward will be identical in terms of which moves are forced diagonal. But the actual number of moves taken so far might affect the absolute move numbers for the rest of the path? Actually, if we only track k = moves_taken mod 3, then the future move numbers will be (moves_taken + 1), (moves_taken + 2), etc. The pattern of which moves are 3rd, 6th, etc. will be shifted by the same offset. Since the constraint is periodic with period 3, having the same k means the pattern of forced diagonals relative to the start of the remainder is the same. More formally, if we have two paths reaching (r,c) with same k, then for any future move index i (starting from 1 for the next move), the absolute move number will be moves_taken + i. The condition "move number is multiple of 3" is equivalent to (moves_taken + i) % 3 == 0. If moves_taken mod 3 = k, then (moves_taken + i) % 3 = (k + i) % 3. So the set of i for which the move is forced diagonal is exactly those i where (k + i) % 3 == 2? Wait, we defined k as moves_taken mod 3. Let's re-derive carefully.
+
+Let m = number of moves taken so far. Next move is m+1. We want to know if (m+1) % 3 == 0. If we define k = m % 3, then (m+1) % 3 = (k+1) % 3. So next move is forced diagonal if k == 2. After we make that move, new m' = m+1, new k' = (k+1) % 3. So the state k completely determines the next move's requirement. Now, if we have two paths reaching (r,c) with same k, then for any subsequent move, the requirement will be the same relative to that state. However, the actual absolute move numbers will differ by a multiple of 3. But the rule "every 3rd move (3,6,9...) MUST be diagonal if possible" is an absolute rule based on the move number in the entire path from start. If we have two paths with different total move counts but same k, the future moves' absolute numbers will be different, but the pattern of which moves are "3rd,6th,..." relative to the start will be shifted. However, because the rule is periodic with period 3, and we only care about the sequence of forced diagonals, the future optimal path might be different if the absolute move numbers matter for the "if possible" condition? The "if possible" condition only depends on current position (r,c), not on move number. So the only thing that matters is whether a diagonal is possible from the current cell. That does not depend on move number. Therefore, the set of allowed moves at each step is purely a function of the current cell and the step index modulo 3 (i.e., k). Since k is the same, the allowed moves at each subsequent step are the same. The grid values added are the same regardless of the path's absolute move count, because we are adding grid values of cells we visit. The only potential issue is if the path length (number of moves) affects which cell we end up at? But we are at (r,c) already. The future path from (r,c) to (N-1,N-1) will have some number of moves, but the constraints on those future moves depend only on the k at (r,c) and the moves we take. Since k is the same, the constraints on future moves are identical. Therefore, the maximum additional sum we can obtain from (r,c) with given k to reach the end is well-defined and independent of the exact m. So DP with state (r,c,k) and maximizing sum is correct.
+
+But wait: There's a catch. The rule says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". This is a global rule over the entire path. If we have two paths reaching (r,c) with same k, but different total move counts, the future moves' absolute numbers will be different. However, the rule only specifies which move numbers are "3rd,6th,...". If we are at move number M+1, the next forced diagonal moves are at M+3, M+6, etc. The pattern of which moves are forced is periodic with period 3. If we have two paths with different M but same k = M mod 3, then the sequence of forced diagonals for the remainder of the path will be exactly the same relative to the start of the remainder. For example, path A has M=2 (k=2), next move is 3 (forced diagonal). Path B has M=5 (k=2), next move is 6 (forced diagonal). In both cases, the first move after the state is a forced diagonal. Then after that, move 4 vs 7, etc. The set of moves that are forced diagonal will be the same indices relative to the start of the remainder. Since the grid values and positions are fixed, the optimal choices will be the same. So DP state (r,c,k) is sufficient.
+
+But we must ensure that we correctly handle the "if diagonal is not possible on a required diagonal move, you may use R or D". In our DP, when k==2 (next move is forced diagonal), we check if diagonal is possible (r < N-1 and c < N-1). If yes, we must take X. If not, we can take R or D (if possible). If neither R nor D is possible? That would mean we are at a cell where no moves are possible, but we are not at (N-1,N-1). Could that happen? If we are at (N-1, c) with c < N-1, then R is possible (c+1), D is not (r+1 out of bounds), X not possible. If we are at (r, N-1) with r < N-1, D is possible, R not. If we are at (N-1, N-1), we are at destination, no moves needed. So there will always be at least one valid move unless we are at destination. So it's fine.
+
+Now, the DP transitions:
+
+Initialize: start at (0,0). How many moves taken? 0. So k = 0 % 3 = 0. Sum so far = grid[0][0]. We want to reach (N-1,N-1). When we are at (N-1,N-1), we stop. But note: we might reach (N-1,N-1) exactly after a move. The path string should end when we arrive at (N-1,N-1). The sum includes grid[N-1][N-1].
+
+We can define DP as a dictionary or 3D array. Since N might be up to maybe 100, we can use a list of lists of lists: dp[r][c][k] = max sum to reach (r,c) with k moves taken mod 3. And parent pointers: parent_move[r][c][k] = the move character taken to get there, and parent_r, parent_c, parent_k. But we need to be careful: the state (r,c,k) might be reached with different move counts but same k. We only keep the max sum. However, when reconstructing, we need to know the exact path. Since we only keep one parent per state (the one that gave max sum), we can backtrack from the end state.
+
+But what is the end state? We need to reach (N-1,N-1). When we are at (N-1,N-1), we have completed the path. The k value at that point is the number of moves taken mod 3. But we don't have a "next move" from there. The path ends. So we can consider that we stop when we move into (N-1,N-1). So the final state is (N-1,N-1, k_final) where k_final is the k after taking the last move. But we can also just consider that we start at (0,0,k=0) and we make moves until we reach (N-1,N-1). At that point, we have a valid path. We can define DP to compute max sum to reach (r,c) with k moves taken mod 3, and we stop when we are at (N-1,N-1). But we need to ensure we don't make moves after reaching (N-1,N-1). So we can just treat (N-1,N-1) as a terminal state; we don't make moves from it.
+
+Algorithm outline:
+
+N = len(grid)
+if N == 0: return (0, "")? Not specified but probably N>=1.
+
+We'll create dp as a 3D array of size N x N x 3, initialized to -infinity.
+parent_r = [[[ -1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+parent_c = same
+parent_k = same
+parent_move = [[[ '' for _ in range(3)] for _ in range(N)] for _ in range(N)]
+
+Start: dp[0][0][0] = grid[0][0]
+We can use a queue or simply iterate? Since the graph is a DAG (moves only increase row and col), we can process cells in order of increasing row+col, or just use BFS/DP with relaxation. Because moves can increase row and col, we can do a topological order: for r from 0 to N-1, for c from 0 to N-1, but we need to consider that from (r,c) we can go to (r,c+1), (r+1,c), (r+1,c+1). So we can iterate r from 0 to N-1, c from 0 to N-1, and for each state k, if dp[r][c][k] is not -inf, we consider the next move based on k.
+
+But careful: The next move's type depends on k, but the resulting new k' = (k+1) % 3. The new cell (nr,nc) will have its own k' state. We can update dp[nr][nc][k'] if new sum > current.
+
+We need to ensure we process states in an order such that when we process (r,c,k), all possible ways to reach it have been considered. Since moves only go to higher or equal row and col (actually strictly increase row or col or both), we can simply iterate r from 0 to N-1, c from 0 to N-1, and for each k, if dp[r][c][k] is valid, we propagate to neighbors. Because any path to (r,c) must come from a cell with smaller or equal row and col, and we are iterating in increasing order, we will have already processed all predecessors. However, note that a cell (r,c) could be reached from (r-1,c), (r,c-1), (r-1,c-1). If we iterate r from 0..N-1, c from 0..N-1, when we are at (r,c), we have already processed (r-1,c) (since r-1 < r), (r,c-1) (since c-1 < c), and (r-1,c-1) (since both smaller). So yes, simple nested loops work.
+
+But we must also consider that the state k might be updated multiple times from different predecessors. Since we are doing forward propagation, we can just update dp[nr][nc][k'] when we process (r,c,k). Because we iterate r,c in order, we will eventually process all.
+
+However, there's a subtlety: The DP state includes k, and the move we take from (r,c,k) depends on k. When we propagate, we compute new_k = (k+1) % 3. We then update dp[nr][nc][new_k] with dp[r][c][k] + grid[nr][nc] if that's better. Also record parent.
+
+After processing all cells, the answer will be the maximum over k of dp[N-1][N-1][k]. But wait: We need to ensure that the path ends exactly at (N-1,N-1). The dp[N-1][N-1][k] represents the max sum to reach (N-1,N-1) having taken some number of moves such that the next move's k is k? Actually, our dp state dp[r][c][k] is defined as: we have reached (r,c) and the number of moves taken so far mod 3 is k. This means that after taking the move that brought us to (r,c), the total moves taken is congruent to k mod 3. So if we are at (N-1,N-1) with some k, that's a valid end state. But we must also consider that we might have reached (N-1,N-1) and then stopped; we don't make a move from there. So the final k is just the moves taken mod 3. So we can take max over k of dp[N-1][N-1][k].
+
+But is it possible that we reach (N-1,N-1) but the last move was a mandatory diagonal move and we were forced? That's fine. The path ends there.
+
+Now, we need to reconstruct the path string. We can start from the best final state (r=N-1,c=N-1,k_final) and backtrack using parent pointers. We'll collect the moves in reverse order, then reverse to get the path string.
+
+But we must be careful: The parent pointers store the move that was taken to arrive at (r,c,k). So from (r,c,k), we can get the move character, and the previous state (pr, pc, pk). Then we move to that previous state and repeat until we reach (0,0,0). The start state has no move. The path string will be the sequence of moves from start to end.
+
+Let's test with a small example. Suppose grid = [[1,2],[3,4]]. N=2. Start (0,0)=1. Moves: we need to go to (1,1). Possible paths:
+- R then D: moves: R (1), D (2). Move numbers: 1:R, 2:D. Move 3 doesn't exist. Sum: 1+2+4=7? Wait grid values: start 1, R to (0,1)=2, D to (1,1)=4. Sum = 1+2+4=7. Path "RD".
+- D then R: similar, sum 1+3+4=8, path "DR".
+- X directly: move 1: X from (0,0) to (1,1). Move 1 is not a multiple of 3, so allowed. Sum: 1+4=5. Path "X".
+Now check constraint: "Every 3rd move (3,6,9...) MUST be diagonal if possible". In these paths, max move number is 2, so no 3rd move. So all are valid. Max sum is 8 with "DR". But wait, is "DR" valid? Move 1: D, move 2: R. No 3rd move. So yes. But what if we had a path with 3 moves? Not possible for N=2.
+
+Now test N=3. Grid maybe all 1s? But we need to enforce the rule. Let's manually think.
+
+We need to implement the DP carefully.
+
+Potential issue: The DP as described might allow paths that violate the "if diagonal not possible on required diagonal move, you may use R or D" but also might allow taking diagonal on non-3rd moves, which is fine. But there's another nuance: "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". This implies that on move 3, if diagonal is possible, we MUST take it. If diagonal is not possible, we MAY use R or D. But what if diagonal is possible but we are at a position where taking diagonal would somehow make it impossible to reach the end? The rule doesn't say we can't take diagonal if it's possible, it says we MUST take it. So we have no choice. In our DP, when k==2 and diagonal possible, we only allow X. That's correct.
+
+But what about moves that are not 3rd? We allow any move. However, could there be a situation where taking a diagonal on a non-3rd move leads to a state where later we are forced to take a diagonal that is not possible, and we might have been better off not taking it? Our DP will explore all possibilities and maximize sum, so it will find the optimal path.
+
+Now, one more thing: The rule "if diagonal is not possible on a required diagonal move, you may use R or D". This means if we are at a cell where diagonal is not possible (i.e., at bottom row or rightmost column), and it's a 3rd move, we can choose R or D. But what if both R and D are not possible? That would only happen if we are at (N-1,N-1), but then we are at destination and no move needed. So fine.
+
+Now, implementation details:
+
+We'll have N = len(grid). If N == 0, maybe return (0, "").
+
+Initialize dp as a 3D list of size N x N x 3 with -inf. We can use a very small number like -10**18.
+
+dp[0][0][0] = grid[0][0]
+
+parent_r = [[[ -1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+parent_c = same
+parent_k = same
+parent_move = [[[ '' for _ in range(3)] for _ in range(N)] for _ in range(N)]
+
+Then iterate r from 0 to N-1, c from 0 to N-1:
+    for k in range(3):
+        if dp[r][c][k] == -inf: continue
+        # determine next move options
+        move_number = k + 1  # because k = moves_taken mod 3, so next move is k+1? Wait, we defined k = moves_taken mod 3. If k=0, moves_taken could be 0,3,6,... then next move is 1,4,7,... So move_number = k+1? Let's check: if moves_taken = 0, k=0, next move = 1. If moves_taken = 3, k=0, next move = 4. So next move number = moves_taken + 1. Since moves_taken mod 3 = k, moves_taken = 3*q + k. Then next move number = 3*q + k + 1. The condition for "every 3rd move" is that the move number is a multiple of 3. That is, (3*q + k + 1) % 3 == 0 => (k+1) % 3 == 0 => k == 2. So indeed, next move is forced diagonal if k == 2. So we can just check if k == 2. Alternatively, we can compute (k+1) % 3 == 0. But careful: What if moves_taken is not exactly k? We defined k as moves_taken mod 3. So yes, k == 2 means next move is a multiple of 3.
+
+So if k == 2:
+    # Must attempt diagonal if possible
+    if r < N-1 and c < N-1:
+        # diagonal is possible, must take X
+        nr, nc = r+1, c+1
+        new_k = (k + 1) % 3  # which will be 0
+        new_sum = dp[r][c][k] + grid[nr][nc]
+        if new_sum > dp[nr][nc][new_k]:
+            dp[nr][nc][new_k] = new_sum
+            parent_r[nr][nc][new_k] = r
+            parent_c[nr][nc][new_k] = c
+            parent_k[nr][nc][new_k] = k
+            parent_move[nr][nc][new_k] = 'X'
+    else:
+        # diagonal not possible, may use R or D
+        # Check R: if c < N-1
+        if c < N-1:
+            nr, nc = r, c+1
+            new_k = (k + 1) % 3
+            new_sum = dp[r][c][k] + grid[nr][nc]
+            if new_sum > dp[nr][nc][new_k]:
+                dp[nr][nc][new_k] = new_sum
+                parent_r[nr][nc][new_k] = r
+                parent_c[nr][nc][new_k] = c
+                parent_k[nr][nc][new_k] = k
+                parent_move[nr][nc][new_k] = 'R'
+        # Check D: if r < N-1
+        if r < N-1:
+            nr, nc = r+1, c
+            new_k = (k + 1) % 3
+            new_sum = dp[r][c][k] + grid[nr][nc]
+            if new_sum > dp[nr][nc][new_k]:
+                dp[nr][nc][new_k] = new_sum
+                parent_r[nr][nc][new_k] = r
+                parent_c[nr][nc][new_k] = c
+                parent_k[nr][nc][new_k] = k
+                parent_move[nr][nc][new_k] = 'D'
+        # What if both R and D are possible? We take the one that gives higher sum? But we are iterating and updating dp; we should consider both and let dp store the max. However, we must be careful: if both are possible, we might update dp[nr][nc][new_k] multiple times. That's fine; we just take the max. But note: the move choice affects the path string. We need to record the move that gave the max sum. Our update condition `if new_sum > dp[...]` will overwrite parent with the last one that gives a strictly greater sum. If sums are equal, we might overwrite with a different move. To be deterministic and get some valid path, we can just use `>=` or `>`; typically `>` is fine, but if equal we might need a tie-breaking rule. The problem doesn't specify tie-breaking, so any path achieving max sum is acceptable. We can use `>` and if equal, keep the first one or last one. It doesn't matter as long as we return a max sum path. We'll use `>`.
+        # But wait: In the else branch (k==2 and diagonal not possible), we have two possible moves R and D. We should consider both and update dp accordingly. However, we must also consider that we might want to take R or D even if diagonal is possible? No, the rule says MUST be diagonal if possible. So if diagonal possible, we only take X. So the else branch only executes when diagonal not possible.
+
+else: # k != 2, i.e., k == 0 or k == 1
+    # can take any valid move: R, D, X (if possible)
+    # We'll consider all three moves that are within bounds.
+    # First, check X: if r < N-1 and c < N-1
+    if r < N-1 and c < N-1:
+        nr, nc = r+1, c+1
+        new_k = (k + 1) % 3
+        new_sum = dp[r][c][k] + grid[nr][nc]
+        if new_sum > dp[nr][nc][new_k]:
+            dp[nr][nc][new_k] = new_sum
+            parent_r[nr][nc][new_k] = r
+            parent_c[nr][nc][new_k] = c
+            parent_k[nr][nc][new_k] = k
+            parent_move[nr][nc][new_k] = 'X'
+    # Check R: if c < N-1
+    if c < N-1:
+        nr, nc = r, c+1
+        new_k = (k + 1) % 3
+        new_sum = dp[r][c][k] + grid[nr][nc]
+        if new_sum > dp[nr][nc][new_k]:
+            dp[nr][nc][new_k] = new_sum
+            parent_r[nr][nc][new_k] = r
+            parent_c[nr][nc][new_k] = c
+            parent_k[nr][nc][new_k] = k
+            parent_move[nr][nc][new_k] = 'R'
+    # Check D: if r < N-1
+    if r < N-1:
+        nr, nc = r+1, c
+        new_k = (k + 1) % 3
+        new_sum = dp[r][c][k] + grid[nr][nc]
+        if new_sum > dp[nr][nc][new_k]:
+            dp[nr][nc][new_k] = new_sum
+            parent_r[nr][nc][new_k] = r
+            parent_c[nr][nc][new_k] = c
+            parent_k[nr][nc][new_k] = k
+            parent_move[nr][nc][new_k] = 'D'
+
+After the loops, we find the best final state:
+best_sum = -inf
+best_k = -1
+for k in range(3):
+    if dp[N-1][N-1][k] > best_sum:
+        best_sum = dp[N-1][N-1][k]
+        best_k = k
+
+If best_sum is still -inf, that means no path found? But there should always be at least one path (e.g., all R and D). So it should be fine.
+
+Now reconstruct path:
+path_chars = []
+r, c, k = N-1, N-1, best_k
+while not (r == 0 and c == 0 and k == 0):
+    move = parent_move[r][c][k]
+    path_chars.append(move)
+    pr = parent_r[r][c][k]
+    pc = parent_c[r][c][k]
+    pk = parent_k[r][c][k]
+    r, c, k = pr, pc, pk
+path_chars.reverse()
+path_str = ''.join(path_chars)
+return (best_sum, path_str)
+
+Wait: The while condition: we start at (N-1,N-1,best_k). We follow parent pointers until we reach (0,0,0). The start state (0,0,0) has no parent move. The loop should stop when we have extracted all moves. The number of moves is the length of path_str. We can also just loop while r != 0 or c != 0 or k != 0? But careful: could there be a case where we reach (0,0) but k is not 0? The start state is always (0,0,0) because we start with 0 moves taken, so k=0. So we can just loop while (r,c,k) != (0,0,0). But we must ensure that the parent pointers correctly lead back to (0,0,0). Since we only propagated from (0,0,0) with k=0, and each move increments k mod 3, the path length mod 3 will be consistent. So the final k at (0,0) will be 0. So we can just use while (r != 0 or c != 0).
+
+But what if the path has 0 moves? That would happen if N=1. Grid 1x1. Then we start at (0,0) which is also bottom-right. The path string should be empty? The problem says "from top-left to bottom-right of an N×N grid". If N=1, path is just the single cell, no moves. The function should return (grid[0][0], ""). Our DP: dp[0][0][0] = grid[0][0]. Then we look for best_sum at dp[0][0][k]. We would take max over k, which is grid[0][0]. Then reconstruct path: while (r,c,k) != (0,0,0) won't execute because r=0,c=0,k=0. path_chars empty, path_str = "". Return (grid[0][0], ""). That seems correct.
+
+But we must ensure that for N=1, the loops don't do anything weird. Our loops r from 0 to N-1, c from 0 to N-1 will run for r=0,c=0. dp[0][0][0] is set. Then we consider moves: k==0, we go to else branch (k!=2). We check X: r < N-1? N=1, N-1=0, so r<0 false. R: c<0 false. D: r<0 false. So no updates. Then best_sum = dp[0][0][0] = grid[0][0]. best_k = 0. Reconstruct: while (r,c,k) != (0,0,0) false, path empty. Return (grid[0][0], ""). Good.
+
+Now, test with a small example manually or mentally.
+
+Example: N=2, grid = [[1,2],[3,4]].
+N=2.
+dp[0][0][0] = 1.
+Iterate r=0,c=0:
+ k=0: else branch (k!=2). X possible? r<1 and c<1? r=0<1, c=0<1 yes. So X: nr=1,nc=1, new_k=(0+1)%3=1. new_sum = 1+4=5. dp[1][1][1] = 5, parent: (0,0,0) -> 'X'.
+ R: nr=0,1, new_k=1, new_sum=1+2=3. dp[0][1][1]=3, parent (0,0,0)->'R'.
+ D: nr=1,0, new_k=1, new_sum=1+3=4. dp[1][0][1]=4, parent 'D'.
+k=1: dp[0][0][1] is -inf initially, skip.
+k=2: skip.
+
+r=0,c=1:
+ dp[0][1][1] = 3 (from R). k=1: else branch. X possible? r=0<1, c=1<1? c=1 is N-1, so c<1 false. So X not possible. R: c<1? c=1 is N-1, false. D: r<1 true. D: nr=1,1, new_k=(1+1)%3=2. new_sum = 3 + grid[1][1]=3+4=7. dp[1][1][2] = 7, parent: (0,1,1)->'D'.
+ Also from r=0,c=1, k=1 we could also have X? Not possible. So only D.
+
+r=1,c=0:
+ dp[1][0][1] = 4 (from D). k=1: else branch. X possible? r=1<1 false. R: c<1 true (c=0<1). R: nr=1,1, new_k=2, new_sum=4+4=8. dp[1][1][2] currently 7, new_sum 8 > 7, so update dp[1][1][2]=8, parent: (1,0,1)->'R'.
+ D: r<1 false.
+
+r=1,c=1:
+ We will process r=1,c=1. But note: we already have dp[1][1][2]=8, dp[1][1][1]=5. Also we might have other states? What about k=0? dp[1][1][0] might be updated from somewhere? Let's see: from (0,1,1) we went to (1,1,2). From (1,0,1) to (1,1,2). No one goes to (1,1,0) yet. But we will process r=1,c=1 later.
+
+Now after loops, best_sum at (1,1): max over k=0,1,2. dp[1][1][0] is -inf, dp[1][1][1]=5, dp[1][1][2]=8. So best_sum=8, best_k=2.
+
+Reconstruct: start at (1,1,2). parent_move[1][1][2] = 'R' (from the update that gave 8). parent_r=1, parent_c=0, parent_k=1.
+Move to (1,0,1). parent_move[1][0][1] = 'D' (from earlier). parent_r=0, parent_c=0, parent_k=0.
+Move to (0,0,0). Stop.
+path_chars collected: from (1,1,2) -> 'R', then (1,0,1) -> 'D'. Reverse: 'D' then 'R' => "DR". Sum 8. That matches our manual expectation (DR gives 8). Also we had RD gives 7, X gives 5. So max is 8 with "DR". Good.
+
+Now test a case where 3rd move constraint kicks in. Let's create a grid where a 3rd move is forced. N=3, maybe all 1s. But we can just trust the DP.
+
+Potential issue: In the DP loops, we iterate r from 0 to N-1, c from 0 to N-1. But what about states that are updated later in the iteration? Since we are doing forward propagation, when we are at (r,c), we update neighbors (nr,nc) which have either r+1 or c+1 or both. Since we iterate r increasing and c increasing, when we are at (r,c), the neighbors have larger row or column, so they will be processed later in the nested loops. That's fine; we just need to ensure that when we process a cell, all possible ways to reach it have been considered. But is it guaranteed that all predecessors of (r,c) are processed before (r,c)? Predecessors of (r,c) are (r-1,c), (r,c-1), (r-1,c-1). If we iterate r from 0..N-1, and for each r, c from 0..N-1, then when we are at (r,c), we have already processed (r-1,c) because r-1 < r, and for that r-1, c was processed (since c ranges 0..N-1). Similarly (r,c-1) because c-1 < c, and we are in the same r iteration, so c-1 was processed earlier in the inner loop. (r-1,c-1) was processed in previous r iteration and earlier c. So yes, all predecessors are processed before (r,c). However, there is a catch: The state k at (r,c) might be updated from multiple predecessors, and we are updating dp[nr][nc][new_k] when processing (r,c,k). But what if a predecessor (r-1,c) updates dp[r][c][k] after we have already processed (r,c,k)? That would be a problem because we would miss propagating from that new state. But since we iterate in increasing order, (r-1,c) is processed before (r,c). When we process (r-1,c), we propagate to (r,c) and update dp[r][c][new_k]. Then when we later reach (r,c) in the outer loop, we will see the updated dp[r][c][new_k] and propagate further. So that's correct. The only issue is if a cell can be reached from a cell with same row but larger column? No, moves only increase row or column, so all predecessors have strictly smaller row or smaller column (or both). So the topological order is guaranteed by nested loops r from 0 to N-1, c from 0 to N-1. However, note that a cell (r,c) could be reached from (r-1,c-1) which is processed earlier. So yes.
+
+But there's another subtlety: The DP state includes k. When we process (r,c,k), we propagate to neighbors with new_k = (k+1)%3. The neighbor's dp state might be updated multiple times from different (r,c,k) with different k. Since we process all (r,c,k) in order, and we update dp[nr][nc][new_k] if new_sum > current, it's fine. The order of processing (r,c,k) within the same (r,c) doesn't matter for correctness because we just take max. However, we must ensure that when we process (r,c,k), the dp[r][c][k] value is final (i.e., no future predecessor will update it). As argued, all predecessors are processed before (r,c), so dp[r][c][k] is final when we enter the loop body for that (r,c,k). But wait: Could there be a predecessor that is processed after (r,c) in our loop order? No, because all predecessors have smaller row or smaller column. But what about a predecessor that has the same row and same column? Impossible. So dp[r][c][k] is final when we process it.
+
+But there's a catch: The state k at (r,c) might be updated from a predecessor that has a different k, and that predecessor might be processed after we have already propagated from (r,c,k) with an older value? But we only propagate from (r,c,k) after we have set dp[r][c][k]. Since all predecessors are processed before (r,c), by the time we reach (r,c) in the loop, dp[r][c][k] has already received updates from all predecessors. So it's safe.
+
+One more thing: In the loops, we are iterating r from 0 to N-1, c from 0 to N-1. But what about cells that are reached via moves that might go "backwards"? No, moves only go right/down/diagonal, so row and col never decrease. So the DAG is fine.
+
+Now, consider the case where N is larger and the DP might have multiple paths with same (r,c,k) but different move counts. Our DP keeps only the max sum. Is it absolutely correct that we can discard paths with lower sum for the same (r,c,k)? As argued earlier, yes, because the future constraints only depend on k. But let's double-check with a potential counterexample.
+
+Suppose we have two paths reaching (r,c) with same k, but one has higher sum. Could the lower-sum path allow a future move that the higher-sum path cannot, leading to a better overall sum? The future moves available from (r,c,k) are determined by k and the current cell (r,c). The set of allowed moves (R,D,X) is exactly the same regardless of the path's history, because k is the same. The only difference is the accumulated sum. The future path from (r,c) to (N-1,N-1) will be chosen optimally given the constraints. Since the constraints are the same, the maximum additional sum we can get from (r,c) to end is a function of (r,c,k). Let's denote f(r,c,k) = max additional sum from (r,c) to (N-1,N-1) given that the next move's type is determined by k. If we have two paths reaching (r,c) with sums S1 > S2, then total sums would be S1 + f(r,c,k) and S2 + f(r,c,k). Since S1 > S2, the first is always better. So keeping only max sum is safe.
+
+But is f(r,c,k) independent of the exact move count? The function f depends on the state (r,c,k). The future moves' forced diagonals depend on k, which is the same. However, there is a subtlety: The "if diagonal is not possible on a required diagonal move, you may use R or D" rule. This rule is applied based on the absolute move number. But as we established, if k is the same, the pattern of which moves are forced diagonal is the same relative to the start of the remainder. But what about the "if possible" condition? That only depends on (r,c). So yes, the set of reachable cells and the constraints are identical. So f(r,c,k) is well-defined.
+
+However, there is one more nuance: The path must end exactly at (N-1,N-1). The total number of moves might affect whether we can reach the end? But since we only have right/down/diagonal moves, from any (r,c) we can always reach (N-1,N-1) by only R and D moves (if we don't hit boundary? Actually from (r,c) we can always go right and down to reach (N-1,N-1) as long as r <= N-1 and c <= N-1, which is true). So reachability is not an issue. The only issue is if the constraints force us into a corner where we can't proceed? But we can always use R or D when diagonal is not possible on 3rd moves. And on non-3rd moves we can always use R or D. So from any cell, we can always reach the end by a valid path (e.g., just go all the way right then down). So all states are valid.
+
+Therefore, DP with state (r,c,k) and keeping max sum is correct.
+
+Now, we must also consider that the path string reconstruction must output the moves in order from start to end. Our backtracking will give moves from end to start, then we reverse. That's correct.
+
+One potential bug: In the DP loops, we process all (r,c) and for each k. But what if a state (r,c,k) is updated after we have already processed it? As argued, all predecessors are processed before (r,c) in the loop order. But is it possible that a predecessor updates (r,c,k) after we have already processed (r,c,k) in the current iteration? Let's trace: The outer loop r from 0 to N-1, inner c from 0 to N-1. When we are at (r,c), we have already processed all (r',c') with r' < r, or r' == r and c' < c. Predecessors of (r,c) are (r-1,c) [r-1 < r, so processed in previous r iteration], (r,c-1) [c-1 < c, processed earlier in same r iteration], (r-1,c-1) [both smaller, processed earlier]. So all predecessors are processed before we enter the loop body for (r,c). Therefore, dp[r][c][k] is fully computed when we start processing (r,c,k). However, there is a catch: The dp[r][c][k] might have been updated by a predecessor that is processed in the same r iteration but earlier c. That's fine; by the time we reach c, that update has already happened. But what if a predecessor updates dp[r][c][k] after we have already processed (r,c,k) in a previous iteration of the outer loop? That cannot happen because all predecessors have smaller row or same row and smaller column. So they are all processed before (r,c). So dp[r][c][k] is final.
+
+But wait: The DP state includes k. Could a predecessor update dp[r][c][k] with a value that is not the maximum, and then later another predecessor updates it to a higher value? Yes, that's fine; when we process (r,c,k), we will see the final max value because all predecessors have been processed. However, there is a subtle issue: The order of processing (r,c,k) within the same (r,c) might matter if we update dp[nr][nc][new_k] and then later another (r,c,k') updates the same (nr,nc,new_k) with a lower value, but we only keep the max. That's fine. But what if we process (r,c,k) and update (nr,nc,new_k), and then later in the same (r,c) iteration we process (r,c,k') and also update (nr,nc,new_k)? That's fine; we just compare and keep max.
+
+Now, consider the case where a cell (r,c) can be reached via different paths with different k. Our DP will have dp[r][c][0], dp[r][c][1], dp[r][c][2] possibly all set. When we process (r,c,k), we propagate to neighbors. This is correct.
+
+Now, one more thing: In the else branch (k != 2), we allow moves X, R, D if possible. But note: The rule says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible". It does NOT say that on other moves diagonal is forbidden. So allowing X on non-3rd moves is correct.
+
+But what about the move numbering: We defined k = moves_taken mod 3. The next move number is k+1 if we consider moves_taken mod 3? Let's re-verify with an example. Suppose we have taken 0 moves. k=0. Next move is 1. (k+1)%3 = 1, not 0. So not forced diagonal. Good. Suppose we have taken 1 move. k=1. Next move is 2. Not forced. Suppose we have taken 2 moves. k=2. Next move is 3. Forced diagonal if possible. After taking that move, new k = (2+1)%3 = 0. Then next move is 4. Not forced. Then after 3 more moves (total 5), k becomes 2 again, next move 6 forced. So the pattern is: moves 3,6,9,... are forced. Our k==2 condition exactly triggers on the 3rd, 6th, 9th moves. Perfect.
+
+But wait: What if the path has a move that is diagonal on a non-3rd move, and then later we have a 3rd move? Our k tracking will correctly set k=2 when we have taken 2 moves mod 3. But what if we take a diagonal on move 1 (k=0 -> k becomes 1). Then move 2 (k=1 -> k becomes 2). Then move 3 (k=2 -> forced diagonal). That's correct.
+
+Now, consider a path where we might have taken moves that are not strictly increasing in move count modulo 3 because we might have taken extra moves? But moves are only right/down/diagonal, and we stop at bottom-right. The total number of moves is determined by the path. The k tracking is just modulo 3 of the number of moves taken so far. Since we start at 0 and increment by 1 each move, the modulo 3 sequence is deterministic.
+
+One edge case: What if we reach (N-1,N-1) exactly after a move, and the next move would be something, but we stop. The final k is the moves_taken mod 3. That's fine.
+
+Now, let's test with a small grid where the 3rd move constraint actually forces a diagonal.
+
+Create N=3 grid, all 1s. Start (0,0)=1. We want to maximize sum, but all 1s, so any valid path with max sum will have number of cells visited. But the constraint might force some diagonals. Let's manually trace or just trust DP. But we can test our function mentally for a simple case.
+
+Maybe we should test with a grid where some cells have negative values to see if DP works. But since we can't run code, we must be careful.
+
+Potential issue: The DP as described might not explore all paths because we only keep max sum per (r,c,k). But as argued, it's correct. However, there is a known pitfall in such DP: The constraint "every 3rd move MUST be diagonal if possible" might interact with the grid boundaries in a way that a path with lower sum at (r,c,k) could be forced to take a different route later that ultimately yields a higher sum, while the higher sum path might be forced into a dead end or a suboptimal route. But we argued that the future constraints only depend on k. Let's try to construct a counterexample.
+
+Suppose we have a grid where from (r,c), if we have high sum but k=0, the future forced diagonals might be different than if we have lower sum but k=1? But k is part of the state. So we keep both k=0 and k=1 states separately. We are not merging different k. The state includes k. So we keep max sum for each k. The question is: could there be a situation where a path reaching (r,c) with k=0 and sum S1, and another path with k=1 and sum S2, and S1 > S2, but because of the k difference, the future optimal paths are different, and S2 + f(r,c,1) > S1 + f(r,c,0)? That's possible, and that's why we keep states for all k. We don't discard k=1 just because k=0 has higher sum; we keep both. So we are considering all k. The only potential issue is if for the same k, we discard a lower sum path. As argued, for the same k, the future f(r,c,k) is the same, so higher sum is always better. So keeping only max sum per (r,c,k) is safe.
+
+But wait: Is f(r,c,k) truly independent of the exact move count beyond k? Let's think about the rule: "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". This rule is global. Suppose we have two paths reaching (r,c) with the same k, but different total move counts M1 and M2, where M1 % 3 = M2 % 3 = k. The next move numbers are M1+1 and M2+1. The sequence of forced diagonals for the remainder of the path will be at absolute move numbers M1+3, M1+6, ... and M2+3, M2+6, ... The pattern of which moves are forced is the same relative to the start of the remainder. However, the "if possible" condition depends on the current cell at that time. The grid is fixed. The sequence of cells visited in the optimal future path might be different if the absolute move numbers affect which cells we can reach? But the allowed moves at each step are determined by the current cell and the step index modulo 3 (relative to the remainder start). Since the remainder start has the same k, the step indices modulo 3 will be the same sequence. For example, if we start at move index 1 (relative) with k=2, then relative move 1 is forced diagonal. If we start at move index 4 with k=2, relative move 1 is also forced diagonal (since 4 is 1 mod 3? Actually 4 mod 3 = 1, but our k is moves_taken mod 3. If moves_taken = 3, k=0, next move 4. If moves_taken = 6, k=0, next move 7. The pattern of forced diagonals relative to the start of the remainder is periodic with period 3. So the set of relative move numbers that are forced diagonal is the same. Therefore, the optimal future path from (r,c) given k is uniquely determined and independent of the absolute move count. So f(r,c,k) is well-defined.
+
+Thus DP is correct.
+
+Now, let's consider the reconstruction. We store parent_move, parent_r, parent_c, parent_k. When we backtrack, we start at (N-1,N-1,best_k). We get the move that was taken to arrive there. Then we go to the previous state. We continue until we reach (0,0,0). The path string will be the moves in reverse order. But we must ensure that the start state (0,0,0) has no move. The loop condition: while (r != 0 or c != 0). But what if the path has 0 moves (N=1)? Then best_k=0, r=0,c=0, loop doesn't run, path_str = "". Good.
+
+But wait: In the DP, we set parent_move for states reached from (0,0,0). For example, from (0,0,0) we propagate to (0,1,1) with move 'R'. The parent of (0,1,1) is (0,0,0). When we backtrack from (0,1,1), we get move 'R', then go to (0,0,0). Then loop stops because r=0,c=0. That's correct.
+
+Now, one more thing: The DP loops iterate r from 0 to N-1, c from 0 to N-1. But what about the states that are updated later in the iteration? We already argued it's fine. However, there is a subtle bug: In the else branch (k != 2), we consider moves X, R, D. But note that the move X might lead to a cell that is out of bounds? We check r < N-1 and c < N-1. That's correct.
+
+But what about the case where k == 2 and diagonal not possible: we consider R and D. We do:
+if c < N-1: update with 'R'
+if r < N-1: update with 'D'
+But what if both R and D are possible? We update dp for both. However, we must be careful: The new_k for both is (k+1)%3 = 0. So both updates go to dp[nr][nc][0] with possibly different nr,nc. That's fine; they are different cells. But could there be a situation where we need to choose between R and D, and our DP will explore both and keep the max sum for each destination cell. That's correct.
+
+But wait: In the k == 2 and diagonal not possible case, the rule says "you may use R or D". It doesn't say you must choose one that leads to max sum; we just take both and DP will find the max. However, we must ensure that we don't accidentally allow a move that is not R or D. We only allow R and D. That's correct.
+
+Now, consider the case where k == 2 and diagonal is possible: we ONLY allow X. We do not allow R or D. That's correct per rule.
+
+Now, what about the case where k != 2, but diagonal is not possible? Then we only allow R and D (since X is not possible). Our code in else branch first checks X possible, if not, then R and D. But we also have the separate if for X at the beginning. Actually in our code structure:
+
+if k == 2:
+    if r < N-1 and c < N-1:
+        # must X
+    else:
+        # may R or D
+else:
+    # k != 2
+    if r < N-1 and c < N-1:
+        # may X
+    if c < N-1:
+        # may R
+    if r < N-1:
+        # may D
+
+This correctly handles all cases.
+
+Now, let's test with a scenario where N=3, and we have a path that requires a 3rd move diagonal.
+
+Suppose grid:
+1 2 3
+4 5 6
+7 8 9
+
+We can try to see what paths are valid. But we don't need to manually compute; we trust DP.
+
+One potential issue: The DP as described might not consider paths that have different move counts but same (r,c,k) and we keep only max sum. But is it possible that a path with lower sum at (r,c,k) allows a future move that the higher sum path cannot take because of the "if diagonal is not possible on a required diagonal move, you may use R or D" rule, but both paths have the same k, so the set of allowed moves is identical. The only difference is the accumulated sum. The future moves available are the same. So the lower sum path cannot "unlock" a move that the higher sum path cannot take, because the moves available are exactly the same set of cells and the same constraints. The only way a lower sum path could be better is if the higher sum path is somehow forced into a cell from which the end is unreachable, but we argued all cells are reachable. However, could the higher sum path have taken a diagonal move that the lower sum path avoided, and that diagonal move might have changed the parity of something? But the constraint only depends on move number modulo 3, not on the type of move taken (except that taking a diagonal on a non-3rd move doesn't change the fact that the next move's type is determined by k). Taking a diagonal on a non-3rd move increments k by 1 mod 3, same as taking R or D. So the state k after the move is the same regardless of whether we took X, R, or D (as long as we move to the same next cell? Wait! Important: The move type affects the new cell (nr,nc). Different moves lead to different cells. So if we have two paths reaching (r,c) with same k, but one path took a diagonal earlier and the other took R/D, they might be at different cells? No, we are comparing paths that reach the SAME cell (r,c) with the SAME k. How they got there might differ, but they are at the same cell and same k. The future moves from (r,c,k) only depend on (r,c,k). The fact that one path took a diagonal earlier doesn't change the future constraints from (r,c,k), because the constraints are based on the current k and current cell. The history doesn't matter beyond k and cell. So yes, it's safe.
+
+But wait: What if the path that reached (r,c,k) with higher sum did so by taking a diagonal on a non-3rd move, while the lower sum path took R. The future k will be (k+1)%3 for both when they make the next move. But the absolute move number modulo 3 is the same. However, the rule "every 3rd move MUST be diagonal if possible" is based on absolute move number. If two paths have the same k, the next move number mod 3 is the same. But what about the move after that? The sequence of mod 3 will be the same. So the pattern of forced diagonals is the same. So f(r,c,k) is same.
+
+One edge case: What if the grid has negative values, and a path that takes a diagonal on a non-3rd move might lead to a cell with a very negative value, but the lower sum path avoided it. But both paths are at the same (r,c,k) now. How they got there might have involved different cells, but they are now at the same cell. The future path from (r,c) will be chosen optimally. The past choices that led to (r,c) are sunk costs. Since we are maximizing total sum, and the future optimal additional sum f(r,c,k) is the same regardless of how we got there (as argued), the total sum will be S + f. So keeping max S is correct.
+
+But is f(r,c,k) truly independent of the path taken to reach (r,c)? The future path from (r,c) to (N-1,N-1) is a path in the grid starting from (r,c) with the constraint that the first move's type is determined by k, and subsequent moves follow the rule. The grid values are fixed. The constraints only depend on (r,c,k) and the future moves. The past path's exact sequence of moves and cells does not affect the future allowed moves, because the rule is based on the move number modulo 3, and the move number is global. However, the global move number for the future moves depends on the total number of moves taken so far. If two paths reach (r,c) with the same k, they have taken moves M1 and M2 such that M1 % 3 = M2 % 3 = k. The future moves will be M1+1, M1+2, ... and M2+1, M2+2, ... The pattern of which of these are "3rd,6th,..." is exactly the same relative to the start of the remainder. But does the absolute move number affect the "if possible" condition? No, "if possible" only depends on current position. So the set of allowed moves at each future step is identical. The only potential difference is if the future path's length (number of moves) affects whether we can reach (N-1,N-1) exactly? But as argued, from any (r,c) we can always reach (N-1,N-1) by some valid path (e.g., all R and D). And the constraints on those moves will follow the same periodic pattern. So the maximum additional sum is the same.
+
+However, there is a subtle point: The rule says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". This is a rule about the entire path from start. If we have two paths reaching (r,c) with same k, the future moves' absolute numbers are different, but the rule's effect is periodic. However, consider the very end of the path. Suppose we are near the end, and the remaining moves needed to reach (N-1,N-1) might be, say, 2 moves. If the absolute move numbers for those last two moves are, say, M+1 and M+2. The rule only forces diagonals on moves that are multiples of 3. If M % 3 = k, then the forced diagonals in the remainder are at positions where (k + i) % 3 == 2? Actually, if k = M % 3, then move M+1 is forced if k==2. Move M+2 forced if k==1? Wait: if k=1, next move is 2 (not forced), then move M+2 is 3? Let's recalc: M moves taken, k = M % 3. Next move = M+1. If k=2, M+1 is 3rd move (forced). If k=1, M+1 is 2nd move (not forced), M+2 is 3rd move (forced). If k=0, M+1 is 1st, M+2 is 2nd, M+3 is 3rd forced. So the pattern of forced diagonals in the remainder depends on k. Since we keep states for all k, we cover all patterns. And since the remainder pattern is the same for same k, f(r,c,k) is well-defined.
+
+But wait: Is it absolutely true that the maximum additional sum from (r,c,k) to end is independent of the exact M? Suppose the grid has some cells that are only reachable via certain move sequences, and the constraints might make some sequences invalid. But since the constraints are periodic with period 3, and we are only shifting the start of the remainder by a multiple of 3, the set of valid paths from (r,c) to end with the given k pattern should be the same set of paths, just shifted in move numbers. The grid values added are the same. So the max additional sum is the same.
+
+I think it's correct.
+
+Now, let's consider possible off-by-one in k initialization. We start at (0,0) with 0 moves taken, so k=0. That's consistent.
+
+What about the case where we reach (N-1,N-1) and the last move was a mandatory diagonal? The final k will be (moves_taken) % 3. That's fine.
+
+Now, we must output (max_sum, path_string). The path_string should be the concatenation of moves. Our reconstruction gives the moves in order from start to end.
+
+Let's test with a tiny N=2 grid again, but with a case where 3rd move matters? N=2 can't have 3rd move because max moves is 2 (if no diagonal) or 1 (if diagonal). So no 3rd move. To test 3rd move, we need N>=3. Let's try N=3 with all 1s. We can try to manually find a path and see if DP would produce something reasonable. But since we can't run, we'll just ensure the logic is sound.
+
+One more thing: In the DP loops, we update dp[nr][nc][new_k] if new_sum > dp[nr][nc][new_k]. But what if new_sum == dp[nr][nc][new_k]? We don't update parent, so we keep the first parent that achieved that sum. That's fine; any max sum path is acceptable. However, we must be cautious: If we use `>`, we might miss updating parent if a later path has the same sum but a different move that we might prefer? The problem doesn't specify tie-breaking, so it's fine.
+
+But there is a potential bug: In the loops, we iterate r from 0 to N-1, c from 0 to N-1. But what about cells that are reachable via moves that go "down then right" etc. We process them in row-major order. But note that a cell (r,c) might be updated from a predecessor that is processed later in the same row? No, as argued, all predecessors have smaller row or same row and smaller column. But what about a predecessor that is (r-1, c) which is processed in previous r iteration. (r, c-1) processed earlier in same r iteration. (r-1, c-1) processed earlier. So all good.
+
+However, there is a catch: The state k is part of the DP. When we process (r,c,k), we propagate to (nr,nc,new_k). The new_k might be 0,1,2. The destination cell (nr,nc) might have been processed already in the loops if nr < r or (nr == r and nc < c). But since moves only increase row or column, nr >= r and nc >= c, with at least one strictly greater. So (nr,nc) is always "ahead" in the iteration order (either larger row, or same row and larger column). So when we update dp[nr][nc][new_k], we are updating a cell that will be processed later. That's correct.
+
+But wait: What if nr == r and nc > c? That happens for R move. Then (nr,nc) is in the same row but later column. Since we iterate c from 0 to N-1, we will process (r,c) before (r,nc) because c < nc. So when we update dp[r][nc][new_k], we are updating a cell that hasn't been processed yet in the current r iteration. That's fine; we will process it later in the same r iteration (when the loop c reaches nc). And when we do, we will see the updated dp value and propagate further. That's correct.
+
+What if nr > r? Then it's in a later row, which will be processed in future r iterations. Also fine.
+
+What if we update dp[r][c][k] from a predecessor that is processed after we have already passed (r,c) in the loop? As argued, all predecessors have smaller row or same row and smaller column, so they are processed before (r,c). So dp[r][c][k] is final when we process it.
+
+But is it possible that a predecessor updates dp[r][c][k] after we have already processed (r,c,k) in the current iteration? No, because all predecessors are processed before (r,c). But what about a predecessor that has the same row and same column? Impossible. What about a predecessor that has smaller row but larger column? Moves only increase column, so from (r-1, c+1) we can't reach (r,c) because that would require moving left. Moves are R, D, X. From (r-1, c+1), R would go to (r-1, c+2), D to (r, c+1), X to (r, c+2). None go to (r,c). So all predecessors have column <= c. Actually, from (r-1, c) we can go D to (r,c). From (r, c-1) we can go R to (r,c). From (r-1, c-1) we can go X to (r,c). So all predecessors have row <= r and column <= c, with at least one strict inequality. So they are all processed before (r,c) in our nested loops (r from 0..N-1, c from 0..N-1). Because if a predecessor has row < r, it's processed in an earlier r iteration. If row == r, then its column must be < c, so it's processed earlier in the same r iteration. So yes, all predecessors are processed before (r,c). Therefore, dp[r][c][k] is fully computed.
+
+One more nuance: The DP state includes k. When we process (r,c,k), we might have dp[r][c][k] set from multiple predecessors. But we only process (r,c,k) once (when the loop reaches c). However, could dp[r][c][k] be updated after we have already processed (r,c,k) in the current iteration? No, because all predecessors are processed before (r,c). But wait: The predecessor updates dp[r][c][k] when processing that predecessor. That predecessor is processed before (r,c). So by the time we enter the loop body for (r,c,k), dp[r][c][k] has already received all updates from predecessors. So it's final.
+
+But there is a subtle case: What if a predecessor updates dp[r][c][k] with a value, and then later another predecessor updates dp[r][c][k] with a higher value, but both are processed before (r,c). That's fine; dp[r][c][k] will have the higher value when we process it.
+
+Now, what about the case where a cell (r,c) is reachable via a path that has a different k, and that k is updated after we have already processed (r,c,k) for that particular k? Since we process each k independently, and all predecessors for that k are processed before (r,c), dp[r][c][k] will be final.
+
+Now, let's consider the initialization of dp. We set dp[0][0][0] = grid[0][0]. All other dp entries -inf. Then we iterate. But what about the start cell (0,0)? We process it in the loops. For r=0,c=0, we will propagate to neighbors. That's fine.
+
+Now, after loops, we find best_sum at (N-1,N-1) over k. But wait: Is it possible that the optimal path reaches (N-1,N-1) with some k, but we also need to consider that the path might have ended exactly at (N-1,N-1) and the last move might have been a mandatory diagonal, and that's included. Our dp[N-1][N-1][k] includes the sum up to and including grid[N-1][N-1]. That's correct.
+
+But what if the path reaches (N-1,N-1) but the last move was not a move that lands exactly on (N-1,N-1)? Actually, all our moves land exactly on cells. To reach (N-1,N-1), the last move must be one of R, D, X that ends at (N-1,N-1). Our DP will only update dp[N-1][N-1][new_k] when we make a move that lands there. So it's correct.
+
+Now, let's think about a possible bug: In the else branch (k != 2), we allow moves X, R, D. But we also allow X even if it's not possible? We check `if r < N-1 and c < N-1:` before allowing X. That's correct.
+
+In the k == 2 and diagonal not possible branch, we allow R and D if possible. But what if diagonal is not possible, and both R and D are possible? We update dp for both. But note: The new_k for both is (k+1)%3 = 0. So both updates go to dp[nr][nc][0] with different nr,nc. That's fine.
+
+But what if diagonal is not possible, and only R is possible (e.g., at bottom row but not rightmost column)? Then we only update with R. If only D is possible (rightmost column but not bottom row), we only update with D. If neither possible, we are at (N-1,N-1) maybe? But we only process states that are not the destination? Actually, if we are at (N-1,N-1), we shouldn't be making moves. But could dp[N-1][N-1][k] be reached from a state where we are at (N-1,N-1) and try to make a move? We don't process moves from (N-1,N-1) because we stop when we reach it? In our loop, we process all cells including (N-1,N-1). But when we are at (N-1,N-1), we might try to make moves from it. That could be a problem because we might update states beyond the grid? But we have bounds checks: r < N-1 and c < N-1 etc. For (N-1,N-1), r = N-1, c = N-1. Then r < N-1 is false, c < N-1 false. So no moves will be taken from (N-1,N-1). So it's safe. However, we might still process (N-1,N-1,k) in the loops, but the move conditions will fail, so no updates. That's fine. But we must ensure that we don't consider (N-1,N-1) as a predecessor for other cells, which is fine.
+
+Now, what about the start cell (0,0)? We process it and propagate. Good.
+
+Now, let's test with a small N=3 grid where the 3rd move constraint forces a diagonal, and see if our DP would produce a path. Since we can't run, we'll try to reason.
+
+Suppose grid:
+1 1 1
+1 1 1
+1 1 1
+
+All cells 1. We want to maximize sum, but all sums are just number of cells visited. The path length (number of moves) determines number of cells. More moves means more cells visited? Actually each move adds one new cell. Start cell is included. Total cells visited = moves + 1. To maximize sum, we want to maximize moves? But with all 1s, any path to (2,2) will have sum = number of cells visited. The minimum moves is 2 (all diagonal: X X? Actually from (0,0) to (2,2) with diagonals: X then X: 2 moves, 3 cells sum=3. Maximum moves is 4 (all R and D: e.g., R R D D? But N=3, from (0,0) to (2,2) with only R and D: need 2 R and 2 D, total 4 moves, 5 cells sum=5). So max sum would be 5 with path like "RRD" or "RDDR" etc. But we have the 3rd move constraint. Let's see: If we take 4 moves, move numbers 1,2,3,4. Move 3 is forced diagonal if possible. So any path with 4 moves must have move 3 as diagonal if possible. In a 3x3 grid, from start, can we have a path with 4 moves that has move 3 as diagonal? Let's try: Path "RRD D"? Actually moves: R (1), R (2), D (3) - move 3 is D, but diagonal X is possible from some positions? Let's see. We need to find a valid path that maximizes sum under constraint. Since all 1s, any valid path with max sum (5 cells) is optimal. But some paths with 5 cells might violate the 3rd move rule. Our DP should find a valid path with sum 5 if possible, or maybe a path with 4 cells sum 4 if all 5-cell paths violate the rule? But we can test mentally.
+
+But maybe we don't need to manually verify; the DP logic seems solid.
+
+Now, let's consider the output format: "Return (max_sum, path_string) e.g., (73, "RRXDDX")". So we return a tuple (int, str).
+
+Now, we need to write the complete solution in a single python code block. We'll write the function `solve_grid(grid: list[list[int]]) -> tuple[int, str]:`.
+
+We should also handle edge cases: N=1, N=0? Probably N>=1.
+
+Let's write the code carefully.
+
+Potential improvements: Use -inf = float('-inf') or a very small integer. Since grid values are integers, we can use -10**18.
+
+We'll use lists for dp, parent_r, etc.
+
+Pseudo-code:
+
+def solve_grid(grid):
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    # Initialize DP
+    INF_NEG = -10**18
+    dp = [[[INF_NEG for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_r = [[[-1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_c = [[[-1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_k = [[[-1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_move = [['' for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for r in range(N):
+        for c in range(N):
+            for k in range(3):
+                if dp[r][c][k] == INF_NEG:
+                    continue
+                # Determine next move options based on k
+                if k == 2:
+                    # Must attempt diagonal if possible
+                    if r < N-1 and c < N-1:
+                        # diagonal possible, must take X
+                        nr, nc = r+1, c+1
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'X'
+                    else:
+                        # diagonal not possible, may use R or D
+                        if c < N-1:
+                            nr, nc = r, c+1
+                            new_k = (k + 1) % 3
+                            new_sum = dp[r][c][k] + grid[nr][nc]
+                            if new_sum > dp[nr][nc][new_k]:
+                                dp[nr][nc][new_k] = new_sum
+                                parent_r[nr][nc][new_k] = r
+                                parent_c[nr][nc][new_k] = c
+                                parent_k[nr][nc][new_k] = k
+                                parent_move[nr][nc][new_k] = 'R'
+                        if r < N-1:
+                            nr, nc = r+1, c
+                            new_k = (k + 1) % 3
+                            new_sum = dp[r][c][k] + grid[nr][nc]
+                            if new_sum > dp[nr][nc][new_k]:
+                                dp[nr][nc][new_k] = new_sum
+                                parent_r[nr][nc][new_k] = r
+                                parent_c[nr][nc][new_k] = c
+                                parent_k[nr][nc][new_k] = k
+                                parent_move[nr][nc][new_k] = 'D'
+                else:
+                    # k == 0 or k == 1: can take any valid move
+                    # Check X
+                    if r < N-1 and c < N-1:
+                        nr, nc = r+1, c+1
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'X'
+                    # Check R
+                    if c < N-1:
+                        nr, nc = r, c+1
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'R'
+                    # Check D
+                    if r < N-1:
+                        nr, nc = r+1, c
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'D'
+    
+    # Find best final state
+    best_sum = INF_NEG
+    best_k = -1
+    for k in range(3):
+        if dp[N-1][N-1][k] > best_sum:
+            best_sum = dp[N-1][N-1][k]
+            best_k = k
+    
+    # Reconstruct path
+    path_chars = []
+    r, c, k = N-1, N-1, best_k
+    while not (r == 0 and c == 0 and k == 0):
+        move = parent_move[r][c][k]
+        path_chars.append(move)
+        pr = parent_r[r][c][k]
+        pc = parent_c[r][c][k]
+        pk = parent_k[r][c][k]
+        r, c, k = pr, pc, pk
+    path_chars.reverse()
+    path_str = ''.join(path_chars)
+    
+    return (best_sum, path_str)
+
+Wait: In the reconstruction loop, we use `while not (r == 0 and c == 0 and k == 0):`. But what if the path has 0 moves (N=1)? Then r=0,c=0,k=0, loop doesn't run, path_str = "". That's correct.
+
+But there's a potential issue: The parent pointers for the start state (0,0,0) are not set (they remain -1 and ''). The loop condition `while not (r == 0 and c == 0 and k == 0):` will stop immediately. But what if the path has moves and we backtrack to (0,0,0)? The parent of the first move from (0,0,0) should have parent_r = 0, parent_c = 0, parent_k = 0. When we backtrack, we will set r,c,k to 0,0,0, and then the loop condition will be false and we stop. That's correct.
+
+But what if the path has moves and we somehow end up with r=0,c=0 but k != 0? That shouldn't happen because we start at k=0 and increment mod 3 each move. The total moves mod 3 will be such that final k at (0,0) is 0. But just in case, our loop condition includes k==0. If it somehow ends with k!=0, the loop would run forever or until some other condition. But it shouldn't happen.
+
+Let's test with N=2 grid example we did earlier: best_sum=8, best_k=2. Reconstruct: start (1,1,2). parent_move[1][1][2] = 'R', parent_r=1, parent_c=0, parent_k=1. Loop: r=1,c=1,k=2 -> move 'R', append, r,c,k becomes (1,0,1). Next iteration: r=1,c=0,k=1 -> parent_move[1][0][1] = 'D', append, r,c,k becomes (0,0,0). Next: r=0,c=0,k=0 -> condition false, stop. path_chars = ['R','D'] reversed -> 'D','R' => "DR". Correct.
+
+Now, consider if best_k could be 1 or 0. The reconstruction should work.
+
+One potential bug: In the DP loops, we update dp[nr][nc][new_k] with `if new_sum > dp[nr][nc][new_k]:`. But what if new_sum == dp[nr][nc][new_k]? We don't update parent. That means we keep the first parent that achieved that sum. That's fine for correctness of max sum, but the path string might be different from another path with same sum. The problem doesn't require a specific path among those with max sum, so any is fine.
+
+However, there is a subtle issue: In the reconstruction, we rely on parent pointers. If we have multiple paths with same sum, we might have stored only one. That's okay.
+
+Now, let's think about the case where N=1. Our code: N=1, dp[0][0][0] = grid[0][0]. Loops: r=0,c=0. k=0: else branch (k!=2). Check X: r < N-1? N-1=0, so false. R: c < 0 false. D: r < 0 false. So no updates. best_sum = dp[0][0][0] = grid[0][0], best_k = 0. Reconstruct: while not (0,0,0) false, path_str = "". Return (grid[0][0], ""). Correct.
+
+Now, what about N=0? The problem says N×N grid, probably N>=1. But we can handle N=0 by returning (0, "").
+
+Now, let's double-check the move numbering logic. We defined k = moves_taken mod 3. The next move number is moves_taken + 1. The condition for "every 3rd move" is (moves_taken + 1) % 3 == 0 => moves_taken % 3 == 2 => k == 2. That's what we used. But wait: What if moves_taken is 0? k=0, next move 1, not forced. moves_taken=1: k=1, next move 2, not forced. moves_taken=2: k=2, next move 3, forced. moves_taken=3: k=0, next move 4, not forced. moves_taken=4: k=1, next move 5, not forced. moves_taken=5: k=2, next move 6, forced. Perfect.
+
+But there's a nuance: The rule says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". This implies that on move 3, if diagonal is possible, we MUST take it. On move 6, same. But what about move 0? Not a move. So our logic is correct.
+
+Now, consider if the path has exactly 3 moves. Then moves: 1,2,3. Move 3 is forced diagonal if possible. After move 3, we are at some cell. If we reach (N-1,N-1) on move 3, then the path ends. Our DP will have best_k = (3 % 3) = 0? Wait: If we take 3 moves, moves_taken after move 3 is 3. k = moves_taken mod 3 = 0. But our DP state k after the move is (previous k + 1) % 3. Let's trace: Start k=0. Move 1: new_k = 1. Move 2: new_k = 2. Move 3: from k=2, we take forced diagonal (or R/D if not possible), new_k = (2+1)%3 = 0. So after move 3, k=0. That matches moves_taken=3 mod 3 = 0. Then if we stop at (N-1,N-1) after move 3, the final state is (N-1,N-1, k=0). Our DP will have dp[N-1][N-1][0] with that sum. That's correct.
+
+What if the path has 6 moves? Then after move 6, k = 6 mod 3 = 0. Our DP will have new_k = 0 after move 6 (since 5 moves k=2, move 6 from k=2 gives new_k=0). So final k=0. But wait: In our DP, we only have states for k=0,1,2 at each cell. The final k at (N-1,N-1) could be 0,1, or 2 depending on the total number of moves modulo 3. For a path with 6 moves, final k would be 0. For 5 moves, final k would be 2 (since 5 mod 3 = 2). For 4 moves, final k = 1. For 3 moves, final k = 0. For 2 moves, final k = 2. For 1 move, final k = 1. For 0 moves, final k = 0.
+
+So the best_sum we find will be the max over k=0,1,2. That's correct because different paths have different total moves, hence different final k. We take the max sum among all valid paths regardless of final k.
+
+Now, is there any scenario where a path is invalid because it violates the "if diagonal not possible on a required diagonal move, you may use R or D" rule, but our DP might have allowed a move that violates it? We already incorporated the rule: when k==2 and diagonal not possible, we only allow R or D. When k==2 and diagonal possible, we only allow X. When k!=2, we allow any. So we never violate the rule.
+
+But what about the case where on a non-3rd move, we take a diagonal, and that somehow causes a later 3rd move to be impossible when it could have been possible? The rule only says "if diagonal is not possible on a required diagonal move, you may use R or D". It doesn't say you can't take diagonal on other moves. So taking diagonal on non-3rd moves is always allowed, and it doesn't penalize you later, except that it changes the cell. Our DP explores all such possibilities.
+
+Now, let's think about a potential flaw: The DP state only tracks k = moves_taken mod 3. But the rule "every 3rd move MUST be diagonal if possible" is based on the absolute move number. If we have two paths reaching (r,c) with same k, the absolute move numbers are different by multiples of 3. As we argued, the pattern of forced diagonals is the same. But is it absolutely the same for the purpose of "if diagonal is not possible, you may use R or D"? The "if possible" condition only depends on current cell. The current cell is (r,c) at that point. So yes, the set of allowed moves at each future step is the same. However, there is one more thing: The rule says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". This is a rule about the entire path. If we have a path that reaches (r,c) with k=2, the next move is forced diagonal if possible. If we have another path that reaches (r,c) with k=2 but after 5 moves, the next move is also forced diagonal if possible. The "if possible" condition is the same. But what if the path that took 5 moves to reach (r,c) had some moves that were diagonal on non-3rd moves, and that affected the grid values? That's already accounted in the sum. The future constraints are the same. So it's fine.
+
+But wait: There is a potential issue with the "if diagonal is not possible on a required diagonal move, you may use R or D" rule. What if we are at a cell where diagonal is not possible, and it's a 3rd move, we can use R or D. But what if we are at a cell where diagonal is not possible, and it's NOT a 3rd move, we can use any move (including X if possible? But if diagonal is not possible, X is not possible by definition). So that's covered.
+
+Now, consider if the grid has obstacles? The problem doesn't mention obstacles; grid is just integers, and moves are valid as long as within bounds. So no obstacles.
+
+Now, let's test the code mentally with a small custom grid where the 3rd move constraint forces a diagonal, and see if the DP would correctly enforce it.
+
+Example: N=3, grid all 0s? But we need to see if the constraint matters. Let's make a grid where some paths are invalid due to the rule. But the rule only restricts which moves are allowed on 3rd moves. If diagonal is possible, we must take it. If not, we can take R or D. So any path that respects this is valid. Our DP will only generate paths that respect it.
+
+Maybe we should test with a grid where a 3rd move diagonal is forced and see if DP explores both possibilities when diagonal not possible.
+
+Suppose N=3, grid:
+0 0 0
+0 0 0
+0 0 0
+
+But we can just trust.
+
+One more thing: In the DP loops, we iterate r from 0 to N-1, c from 0 to N-1. But what about the order of k? We iterate k from 0 to 2. The updates to dp[nr][nc][new_k] might affect states that we haven't processed yet. That's fine. But could there be a situation where we process (r,c,k) and update dp[nr][nc][new_k], and later in the same (r,c) iteration we process (r,c,k') and update the same dp[nr][nc][new_k] with a different value? That's fine; we just take max. But what if the later update has a lower sum? We won't overwrite because we use `>`. If it's higher, we overwrite. That's correct.
+
+Now, consider if a cell (r,c) can be reached with different k from different predecessors, and we process (r,c,k) before dp[r][c][k] has received all updates? We already argued all predecessors are processed before (r,c). But let's double-check with an example. Suppose we have a 2x2 grid. Predecessors of (1,1) are (0,1) and (1,0) and (0,0) via X. In our loops: r=0,c=0 processed first. It updates (0,1) and (1,0) and (1,1) via X. Then r=0,c=1 processed. It updates (1,1) via D. Then r=1,c=0 processed. It updates (1,1) via R. Then r=1,c=1 processed. At that point, dp[1][1][k] has received updates from (0,0), (0,1), (1,0). All predecessors processed before (1,1). So dp[1][1][k] is final. Good.
+
+What about a 3x3 grid? Predecessors of (2,2) are (1,2), (2,1), (1,1). All have smaller row or smaller column, so processed before (2,2). So yes.
+
+Now, one potential bug: In the else branch (k != 2), we allow moves X, R, D. But note that the move X might lead to a cell that is out of bounds? We check `if r < N-1 and c < N-1:` before allowing X. That's correct.
+
+But what about the case where k == 2 and diagonal not possible: we allow R and D. We do:
+if c < N-1: update with R
+if r < N-1: update with D
+But what if both R and D are possible? We update dp for both destinations. That's fine. However, there's a subtle point: The rule says "you may use R or D". It doesn't say you can use both in the same path; you just choose one. Our DP explores both choices and keeps the max sum for each destination. That's correct.
+
+Now, what about the case where k == 2 and diagonal is possible: we ONLY allow X. We do not allow R or D. That's correct per rule.
+
+Now, consider if the grid has negative values and we might want to avoid a forced diagonal because it leads to a very negative cell, but the rule forces it. Our DP will enforce it, which is correct.
+
+Now, let's think about the path string reconstruction again. We store parent_move, parent_r, parent_c, parent_k. When we backtrack, we start at (N-1,N-1,best_k). We get the move that was taken to arrive there. Then we go to the previous state. The previous state's k is parent_k. The move we recorded is the move that was taken from the previous state to the current state. So the sequence of moves from start to end is the reverse of the collected moves. That's correct.
+
+But we must ensure that the parent pointers for the start state are not used. The loop stops when we reach (0,0,0). The move that brought us to the first cell from start is recorded in the parent of that first cell. For example, from (0,0,0) to (0,1,1) with move 'R'. The parent of (0,1,1) is (0,0,0). When we backtrack from (0,1,1), we get 'R', then go to (0,0,0). Loop stops. Path string is "R". That's correct.
+
+Now, what if the path has multiple moves and we backtrack, we might encounter a state where parent_k is set but the move recorded might be something that we need to ensure is valid. It should be.
+
+Now, let's consider if there's any case where the DP might not find any path to (N-1,N-1). For example, if the grid is such that no valid path exists? But as argued, we can always go all R and D, which are always valid moves (except maybe if we are at bottom row and need to go right, but we can always go right if c < N-1, etc.). Actually, from any cell (r,c) with r < N-1 or c < N-1, we can always move right or down to eventually reach (N-1,N-1). The only cell from which no moves are possible is (N-1,N-1). So there is always at least one valid path (e.g., all R then all D, or all D then all R). Our DP will find it. However, we must ensure that the 3rd move constraint doesn't make some paths invalid, but there will always be at least one valid path because we can always use R and D, and on 3rd moves if diagonal not possible we use R or D. Since we can always choose R or D on 3rd moves if diagonal not possible, and diagonal might be possible but we are forced to take it; but we could also just avoid diagonals altogether and only use R and D. If we only use R and D, then the move types are only R and D. On 3rd moves, diagonal might be possible from some positions, but we are not taking it; but the rule says "MUST be diagonal if possible". So if we only use R and D, we would violate the rule if we are at a position where diagonal is possible on a 3rd move. So we cannot simply ignore diagonals; we must take them when forced and possible. But there will always be some path that respects the rule. For example, we can always take diagonals when forced, and R/D otherwise. Since the grid is N x N, we can always find a path. Our DP will find the max sum among all valid paths.
+
+Now, let's test with a small N=3 grid where the rule might force a specific path. We can try to manually compute a case, but it might be time-consuming. I'll trust the DP logic.
+
+One more thing: The problem says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". Does "if possible from current position" mean if a diagonal move is within the grid bounds, or if it's possible to make a diagonal move without going out of bounds? Yes, we interpreted as r < N-1 and c < N-1. That's correct.
+
+Now, what about the starting move? Move 1 is not a multiple of 3, so we can choose any move. Move 2 any. Move 3 forced diagonal if possible. That's what we have.
+
+Now, let's think about the possibility of multiple paths with the same max sum. Our DP will return one of them. The problem doesn't specify tie-breaking, so it's fine.
+
+Now, let's write the final code. We'll include comments for clarity, but the user asked for "complete solution in a single python code block". We'll just provide the function.
+
+Potential minor improvements: Use `float('-inf')` instead of a large negative number, but since grid values are integers, using a very small integer like `-10**18` is safer to avoid float issues. We'll use `-10**18`.
+
+Also, note that the grid might contain negative values, so initializing with a very negative number is correct.
+
+Let's write the code.
+
+Wait: There's one more nuance. The DP state k is moves_taken mod 3. But what if the path length is such that we have taken moves, and we reach (N-1,N-1) and stop. The final k is moves_taken mod 3. But in our DP, we only update dp[nr][nc][new_k] where new_k = (k+1)%3. That correctly tracks the mod 3 of the number of moves taken so far. However, when we are at (N-1,N-1), we don't make a move. The sum includes the start and all cells visited. The final k is just the moves_taken mod 3. We take max over k=0,1,2. That's correct.
+
+But what if the optimal path reaches (N-1,N-1) exactly after a move, and that move was a mandatory diagonal? The final k will be 0 (if total moves multiple of 3) or whatever. That's fine.
+
+Now, let's consider if the start cell (0,0) is also the bottom-right (N=1). Our code handles it.
+
+Now, let's test with a custom N=3 grid where we can manually verify the 3rd move constraint. I'll do a quick mental trace.
+
+Grid:
+1 2 3
+4 5 6
+7 8 9
+
+Start (0,0)=1. We want max sum path with constraints.
+
+Possible paths? Let's list some and see if they violate rule.
+
+Path 1: X, X (2 moves). Moves: 1:X, 2:X. No 3rd move. Sum: 1+5+9=15. Valid.
+
+Path 2: R, R, D, D? That's 4 moves. Moves: 1:R, 2:R, 3:D, 4:D. Move 3 is D. Is diagonal possible on move 3? Depends on position after move 2. After R,R: from (0,0) R to (0,1)=2, R to (0,2)=3. Now at (0,2). Move 3: we are at (0,2). Diagonal from (0,2) would go to (1,3) which is out of bounds (c=2 is N-1). So diagonal not possible. Rule says if diagonal not possible, may use R or D. R from (0,2) would go to (0,3) out of bounds. D would go to (1,2)=6. So move 3 must be D. Then move 4: from (1,2)=6, we need to go to (2,2)=9. Moves left: 1 move. Move 4 is not a multiple of 3 (since total moves 4, move 4 is not 3rd). We can take D to (2,2) or X? X from (1,2) goes to (2,3) out. R goes to (1,3) out. So only D. Path: R, R, D, D. Sum: 1+2+3+6+9=21. Path string "RRDD". Valid? Check: Move 1:R, Move 2:R, Move 3:D (forced because diagonal not possible), Move 4:D (any). All moves valid. Sum 21.
+
+Path 3: D, D, R, R? Similar, sum 21, "DDRR".
+
+Path 4: R, D, R, D? Moves: 1:R (0,1), 2:D (1,1), 3:R (1,2), 4:D (2,2). Move 3: after move 2, at (1,1). Diagonal from (1,1) goes to (2,2)=9, which is possible. Move 3 is a multiple of 3, so MUST be diagonal if possible. Diagonal is possible, so move 3 MUST be X. But in this path, move 3 is R, which violates the rule. So "RDRD" is invalid.
+
+Path 5: R, D, X? Wait, after R,D we are at (1,1). Then X to (2,2) is move 3. That's valid: moves: R (1), D (2), X (3). Move 3 is X, forced because diagonal possible. Sum: 1+2+5+9=17. Path "RDX". Valid.
+
+Path 6: D, R, X? Similar, "DRX", sum 1+4+5+9=19? Wait: start 1, D to (1,0)=4, R to (1,1)=5, X to (2,2)=9. Sum=19. Valid.
+
+Path 7: X, then? From (0,0) X to (1,1)=5. Then we are at (1,1) after 1 move. Then we need to go to (2,2). Moves left: 2 moves? Actually from (1,1) to (2,2) can be X (1 move) or R then D (2 moves) or D then R (2 moves). If we take X again, total moves 2: "XX", sum 1+5+9=15. Valid (no 3rd move). If we take R then D: moves: 1:X, 2:R, 3:D. Move 3 is D. After move 1 X, at (1,1). Move 2: R to (1,2)=6. Move 3: D to (2,2)=9. Move 3 is D, but is diagonal possible? From (1,2) diagonal goes to (2,3) out. So diagonal not possible, allowed. Path "XRD", sum: 1+5+6+9=21. Valid. Path "XDR": moves: 1:X, 2:D to (2,1)=8, 3:R to (2,2)=9. Move 3: after move 2 D, at (2,1). Diagonal from (2,1) goes to (3,2) out. So D not possible? Actually D from (2,1) would go to (3,1) out. R goes to (2,2). So move 3 must be R. Valid. Sum 1+5+8+9=23? Wait: 1+5+8+9=23. Path "XDR". But move 2 is D, move 3 is R. Check rule: move 1 X, move 2 D (any, since not 3rd), move 3 R (3rd move, diagonal not possible, so allowed). Sum 23. That's higher than 21. So "XDR" might be valid and sum 23.
+
+Path 8: What about "XXD"? Moves: 1:X to (1,1), 2:X to (2,2) - wait, that's 2 moves, ends at (2,2). No move 3. So "XX" is 2 moves sum 15. If we do "XXX"? From (2,2) can't move. So not.
+
+Path 9: "XRR"? From (1,1) R to (1,2), R to (1,3) out. So no.
+
+Path 10: "XRD" we did, sum 23. "XDR" sum 23. "DRX" sum 19. "RDX" sum 17. "RRDD" sum 21. "DDRR" sum 21. "XX" sum 15.
+
+What about path with 5 moves? From (0,0) to (2,2) with 5 moves would require some combination? Total moves M = 2N-2 - x = 4 - x. For N=3, M max 4, min 2. So no 5 moves. So max moves is 4. We already have paths with 4 moves.
+
+So max sum seems 23 with "XDR" or "XRD"? Let's verify "XDR": moves: 1:X from (0,0) to (1,1). 2:D from (1,1) to (2,1). 3:R from (2,1) to (2,2). Move 3 is R. Is diagonal possible from (2,1)? r=2 is N-1, so diagonal not possible. Rule says if diagonal not possible, may use R or D. So R is allowed. Sum: grid[0][0]=1 + grid[1][1]=5 + grid[2][1]=8 + grid[2][2]=9 = 23. Path "XDR". Valid.
+
+"XRD": moves: 1:X to (1,1). 2:R to (1,2). 3:D to (2,2). Move 3 is D. From (1,2), diagonal goes to (2,3) out. So D allowed. Sum: 1+5+6+9=21. So "XDR" is better.
+
+What about "XDD"? Moves: 1:X, 2:D to (2,1), 3:D? Move 3 would be D from (2,1). But D from (2,1) goes to (3,1) out of bounds. So D not possible. Rule says if diagonal not possible, may use R or D. But D is also not possible! Wait, from (2,1), D is out of bounds (r+1=3 >= N). R goes to (2,2) which is in bounds. So if move 3 is required diagonal if possible, but diagonal not possible, we may use R or D. But if D is not possible either, we must use R. Our code in k==2 and diagonal not possible branch does:
+if c < N-1: update with R
+if r < N-1: update with D
+From (2,1), c=1 < N-1=2 true, so R is possible. r=2 < 2 false, so D not possible. So we only allow R. So "XDD" would have move 3 D, which is not allowed by our DP. So "XDD" is invalid. Good.
+
+What about "XDR" we already have.
+
+What about "XRD"? Move 3 D from (1,2): r=1 < 2 true, so D possible. c=2 is N-1, so R not possible. So move 3 D is allowed. Sum 21.
+
+What about starting with D? "DRX": 1:D to (1,0)=4, 2:R to (1,1)=5, 3:X to (2,2)=9. Move 3 is X, forced? From (1,1) diagonal possible, so MUST be X. So "DRX" valid, sum 1+4+5+9=19.
+
+"DXX"? 1:D to (1,0), 2:X from (1,0) to (2,1)=8, 3:X from (2,1) to (3,2) out. So no.
+
+So max sum 23 with "XDR". Also maybe "XDR" is the only one with 23.
+
+Now, let's see if our DP would find "XDR" as max sum 23. Let's trace mentally for N=3 all grid values as above. But we can't run, but we can be confident.
+
+One potential issue: In the DP, when we are at (1,1) with k=1 (after move 1 X), we can take moves X, R, D. If we take D to (2,1), new_k = (1+1)%3 = 2. Then from (2,1) with k=2, we are at a 3rd move? Wait, total moves taken so far: start 0, move 1 X -> k=1. move 2 D -> k becomes 2. So after move 2, k=2. The next move (move 3) is forced diagonal if possible. From (2,1), diagonal not possible, so we may use R or D. Our code will allow R (c<2) and D (r<2 false). So we take R to (2,2), new_k = (2+1)%3 = 0. Then we are at (2,2) with k=0, and we stop. The sum: start 1 + X to 5 + D to 8 + R to 9 = 23. Path "XDR". That's exactly what we have.
+
+What if we took R then D from (1,1) after X? Move 2 R to (1,2), new_k = 2. Then move 3 D to (2,2), new_k = 0. Sum 1+5+6+9=21. Path "XRD". Our DP would also find that.
+
+What if we took X again from (1,1)? Move 2 X to (2,2), new_k = 2? Wait: move 1 X -> k=1. move 2 X from (1,1) to (2,2) -> new_k = (1+1)%3 = 2. But after move 2, we are at (2,2), which is the destination. The path ends. Total moves 2, sum 1+5+9=15. Our DP would process (2,2) and stop. The final k=2, but we take max over k=0,1,2. That's fine.
+
+Now, what about path "XDR" vs "XRD"? DP will find max sum 23.
+
+So the logic seems consistent.
+
+Now, let's consider if there's any case where the DP might incorrectly allow a move that violates the rule because of the way we handle k. For example, suppose we have a path where move 3 is forced diagonal, but we are at a cell where diagonal is possible, we take X, and then later moves are fine. That's correct.
+
+What if we have a path where move 3 is forced diagonal, but we are at a cell where diagonal is not possible, we take R or D. That's correct.
+
+Now, one more edge case: What if the grid is such that from some cell, diagonal is possible, but taking it leads to a dead end where we can't reach the end? But the rule doesn't prohibit taking diagonal if possible; it says MUST. So we must take it. Our DP will take it, and if it leads to a dead end (i.e., no valid path to end from there), then that path won't be able to reach (N-1,N-1) and won't be considered in the final max because dp[N-1][N-1][k] won't be updated. But is it possible that taking the forced diagonal leads to a state from which the end is unreachable under the constraints? Let's think. From any cell (r,c) with r < N-1 and c < N-1, we can always eventually reach (N-1,N-1) by some valid path respecting the constraints? Not necessarily with the constraints, but since we can always use R and D, and on 3rd moves if diagonal not possible we use R or D, and diagonal is possible here, but we are forced to take it. After taking the diagonal, we are at (r+1,c+1). From there, we can continue. Could we get stuck? For example, suppose we are at (0,0) in N=3, forced diagonal on move 3? But move 3 is after 2 moves. If we only use diagonals, we might reach (2,2) in 2 moves, no move 3. If we have a path that forces a diagonal on move 3, we are at some cell where diagonal is possible. From there, we can always eventually reach the end by using R and D, and on subsequent 3rd moves we might be forced again, but we can always fall back to R/D if diagonal not possible. Since the grid is finite and we can always move right and down, we should always be able to reach the end. I think it's safe.
+
+Now, let's write the final code. We'll structure it cleanly.
+
+One small optimization: We can break early if we reach (N-1,N-1)? Not necessary.
+
+We'll use `INF_NEG = -10**18`.
+
+Let's write the function.
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    INF_NEG = -10**18
+    
+    # dp[r][c][k] = max sum to reach (r,c) with k moves taken mod 3
+    dp = [[[INF_NEG for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    # parent pointers for reconstruction
+    parent_r = [[[-1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_c = [[[-1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_k = [[[-1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_move = [['' for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for r in range(N):
+        for c in range(N):
+            for k in range(3):
+                if dp[r][c][k] == INF_NEG:
+                    continue
+                if k == 2:
+                    # Every 3rd move must be diagonal if possible
+                    if r < N - 1 and c < N - 1:
+                        # Diagonal is possible, must take X
+                        nr, nc = r + 1, c + 1
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'X'
+                    else:
+                        # Diagonal not possible, may use R or D
+                        if c < N - 1:
+                            nr, nc = r, c + 1
+                            new_k = (k + 1) % 3
+                            new_sum = dp[r][c][k] + grid[nr][nc]
+                            if new_sum > dp[nr][nc][new_k]:
+                                dp[nr][nc][new_k] = new_sum
+                                parent_r[nr][nc][new_k] = r
+                                parent_c[nr][nc][new_k] = c
+                                parent_k[nr][nc][new_k] = k
+                                parent_move[nr][nc][new_k] = 'R'
+                        if r < N - 1:
+                            nr, nc = r + 1, c
+                            new_k = (k + 1) % 3
+                            new_sum = dp[r][c][k] + grid[nr][nc]
+                            if new_sum > dp[nr][nc][new_k]:
+                                dp[nr][nc][new_k] = new_sum
+                                parent_r[nr][nc][new_k] = r
+                                parent_c[nr][nc][new_k] = c
+                                parent_k[nr][nc][new_k] = k
+                                parent_move[nr][nc][new_k] = 'D'
+                else:
+                    # k == 0 or k == 1: any move allowed (R, D, X if possible)
+                    # Diagonal down-right
+                    if r < N - 1 and c < N - 1:
+                        nr, nc = r + 1, c + 1
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'X'
+                    # Right
+                    if c < N - 1:
+                        nr, nc = r, c + 1
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'R'
+                    # Down
+                    if r < N - 1:
+                        nr, nc = r + 1, c
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'D'
+    
+    # Find the best final state at bottom-right
+    best_sum = INF_NEG
+    best_k = -1
+    for k in range(3):
+        if dp[N-1][N-1][k] > best_sum:
+            best_sum = dp[N-1][N-1][k]
+            best_k = k
+    
+    # Reconstruct the path
+    path_chars = []
+    r, c, k = N - 1, N - 1, best_k
+    while not (r == 0 and c == 0 and k == 0):
+        move = parent_move[r][c][k]
+        path_chars.append(move)
+        pr = parent_r[r][c][k]
+        pc = parent_c[r][c][k]
+        pk = parent_k[r][c][k]
+        r, c, k = pr, pc, pk
+    path_chars.reverse()
+    path_str = ''.join(path_chars)
+    
+    return (best_sum, path_str)
+```
+
+Wait: In the reconstruction loop, the condition `while not (r == 0 and c == 0 and k == 0):` will stop when we reach the start. But what if the path has 0 moves? Then r=0,c=0,k=0, loop doesn't run, path_str = "". Good.
+
+But there's a potential issue: What if the path has moves but we somehow end up with r=0,c=0 and k!=0? As discussed, that shouldn't happen. But to be safe, we could use `while (r != 0 or c != 0):` and rely on the fact that we always have parent pointers leading to (0,0,0). However, if k!=0 at (0,0), the loop might not terminate if we only check r,c. But we know k will be 0 at start. So either condition is fine. I'll keep `while not (r == 0 and c == 0 and k == 0):` to be precise.
+
+One more thing: In the DP loops, we iterate r from 0 to N-1, c from 0 to N-1. But what about the case where a cell (r,c) is updated from a predecessor that is processed later? We argued it's not possible. But let's test with a small N=2 again. We did that and it worked.
+
+Now, let's consider if the grid has negative values and we initialize dp with INF_NEG. If a cell is unreachable, it stays INF_NEG. That's fine.
+
+Now, what about the case where N=1 and grid has negative value? dp[0][0][0] = grid[0][0] (could be negative). best_sum = grid[0][0], path "". Return (grid[0][0], ""). Correct.
+
+Now, let's double-check the move numbering in the DP. We have `if k == 2:` for forced diagonal. But what if the path has exactly 0 moves? Not applicable. What if the path has moves and we are at k=2, but the move number is indeed a multiple of 3. That's correct.
+
+But wait: We defined k = moves_taken mod 3. The next move number is moves_taken + 1. The condition for "every 3rd move" is (moves_taken + 1) % 3 == 0 => moves_taken % 3 == 2 => k == 2. However, what if moves_taken is 0? k=0, next move 1. moves_taken=3? k=0, next move 4. So the 3rd move is when moves_taken=2 (next move 3). After that move, moves_taken becomes 3, k becomes 0. So the pattern is: moves 3,6,9,... are forced. Our k==2 condition triggers exactly when the next move is a multiple of 3. That's correct.
+
+But is there any off-by-one in the initial state? We start with dp[0][0][0] = grid[0][0], and k=0 meaning 0 moves taken. Then the first move we take will have move number 1. That's correct.
+
+Now, consider if the path has exactly 3 moves. moves_t
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid):
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    # Initialize DP
+    INF_NEG = -10**18
+    dp = [[[INF_NEG for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_r = [[[-1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_c = [[[-1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_k = [[[-1 for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    parent_move = [['' for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    
+    dp[0][0][0] = grid[0][0]
+    
+    for r in range(N):
+        for c in range(N):
+            for k in range(3):
+                if dp[r][c][k] == INF_NEG:
+                    continue
+                # Determine next move options based on k
+                if k == 2:
+                    # Must attempt diagonal if possible
+                    if r < N-1 and c < N-1:
+                        # diagonal possible, must take X
+                        nr, nc = r+1, c+1
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'X'
+                    else:
+                        # diagonal not possible, may use R or D
+                        if c < N-1:
+                            nr, nc = r, c+1
+                            new_k = (k + 1) % 3
+                            new_sum = dp[r][c][k] + grid[nr][nc]
+                            if new_sum > dp[nr][nc][new_k]:
+                                dp[nr][nc][new_k] = new_sum
+                                parent_r[nr][nc][new_k] = r
+                                parent_c[nr][nc][new_k] = c
+                                parent_k[nr][nc][new_k] = k
+                                parent_move[nr][nc][new_k] = 'R'
+                        if r < N-1:
+                            nr, nc = r+1, c
+                            new_k = (k + 1) % 3
+                            new_sum = dp[r][c][k] + grid[nr][nc]
+                            if new_sum > dp[nr][nc][new_k]:
+                                dp[nr][nc][new_k] = new_sum
+                                parent_r[nr][nc][new_k] = r
+                                parent_c[nr][nc][new_k] = c
+                                parent_k[nr][nc][new_k] = k
+                                parent_move[nr][nc][new_k] = 'D'
+                else:
+                    # k == 0 or k == 1: can take any valid move
+                    # Check X
+                    if r < N-1 and c < N-1:
+                        nr, nc = r+1, c+1
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'X'
+                    # Check R
+                    if c < N-1:
+                        nr, nc = r, c+1
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'R'
+                    # Check D
+                    if r < N-1:
+                        nr, nc = r+1, c
+                        new_k = (k + 1) % 3
+                        new_sum = dp[r][c][k] + grid[nr][nc]
+                        if new_sum > dp[nr][nc][new_k]:
+                            dp[nr][nc][new_k] = new_sum
+                            parent_r[nr][nc][new_k] = r
+                            parent_c[nr][nc][new_k] = c
+                            parent_k[nr][nc][new_k] = k
+                            parent_move[nr][nc][new_k] = 'D'
+    
+    # Find best final state
+    best_sum = INF_NEG
+    best_k = -1
+    for k in range(3):
+        if dp[N-1][N-1][k] > best_sum:
+            best_sum = dp[N-1][N-1][k]
+            best_k = k
+    
+    # Reconstruct path
+    path_chars = []
+    r, c, k = N-1, N-1, best_k
+    while not (r == 0 and c == 0 and k == 0):
+        move = parent_move[r][c][k]
+        path_chars.append(move)
+        pr = parent_r[r][c][k]
+        pc = parent_c[r][c][k]
+        pk = parent_k[r][c][k]
+        r, c, k = pr, pc, pk
+    path_chars.reverse()
+    path_str = ''.join(path_chars)
+    
+    return (best_sum, path_str)
+
+Wait: In the reconstruction loop, we use `while not (r == 0 and c == 0 and k == 0):`. But what if the path has 0 moves (N=1)? Then r=0,c=0,k=0, loop doesn't run, path_str = "". That's correct.
+
+But there's a potential issue: The parent pointers for the start state (0,0,0) are not set (they remain -1 and ''). The loop condition `while not (r == 0 and c == 0 and k == 0):` will stop immediately. But what if the path has moves and we backtrack to (0,0,0)? The parent of the first move from (0,0,0) should have parent_r = 0, parent_c = 0, parent_k = 0. When we backtrack, we will set r,c,k to 0,0,0, and then the loop condition will be false and we stop. That's correct.
+
+But what if the path has moves and we somehow end up with r=0,c=0 but k != 0? That shouldn't happen because we start at k=0 and increment mod 3 each move. The total moves mod 3 will be such that final k at (0,0) is 0. But just in case, our loop condition includes k==0. If it somehow ends with k!=0, the loop would run forever or until some other condition. But it shouldn't happen.
+
+Let's test with N=2 grid example we did earlier: best_sum=8, best_k=2. Reconstruct: start (1,1,2). parent_move[1][1][2] = 'R', parent_r=1, parent_c=0, parent_k=1. Loop: r=1,c=1,k=2 -> move 'R', append, r,c,k becomes (1,0,1). Next iteration: r=1,c=0,k=1 -> parent_move[1][0][1] = 'D', append, r,c,k becomes (0,0,0). Next: r=0,c=0,k=0 -> condition false, stop. path_chars = ['R','D'] reversed -> 'D','R' => "DR". Correct.
+
+Now, consider if best_k could be 1 or 0. The reconstruction should work.
+
+One potential bug: In the DP loops, we update dp[nr][nc][new_k] with `if new_sum > dp[nr][nc][new_k]:`. But what if new_sum == dp[nr][nc][new_k]? We don't update parent. That means we keep the first parent that achieved that sum. That's fine for correctness of max sum, but the path string might be different from another path with same sum. The problem doesn't require a specific path among those with max sum, so any is fine.
+
+However, there is a subtle issue: In the reconstruction, we rely on parent pointers. If we have multiple paths with same sum, we might have stored only one. That's okay.
+
+Now, let's think about the case where N=1. Our code: N=1, dp[0][0][0] = grid[0][0]. Loops: r=0,c=0. k=0: else branch (k!=2). Check X: r < N-1? N-1=0, so false. R: c < 0 false. D: r < 0 false. So no updates. best_sum = dp[0][0][0] = grid[0][0], best_k = 0. Reconstruct: while not (0,0,0) false, path_str = "". Return (grid[0][0], ""). Correct.
+
+Now, what about N=0? The problem says N×N grid, probably N>=1. But we can handle N=0 by returning (0, "").
+
+Now, let's double-check the move numbering logic. We defined k = moves_taken mod 3. The next move number is moves_taken + 1. The condition for "every 3rd move" is (moves_taken + 1) % 3 == 0 => moves_taken % 3 == 2 => k == 2. That's what we used. But wait: What if moves_taken is 0? k=0, next move 1, not forced. moves_taken=1: k=1, next move 2, not forced. moves_taken=2: k=2, next move 3, forced. moves_taken=3: k=0, next move 4, not forced. moves_taken=4: k=1, next move 5, not forced. moves_taken=5: k=2, next move 6, forced. Perfect.
+
+But there's a nuance: The rule says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". This implies that on move 3, if diagonal is possible, we MUST take it. On move 6, same. But what about move 0? Not a move. So our logic is correct.
+
+Now, consider if the path has exactly 3 moves. Then moves: 1,2,3. Move 3 is forced diagonal if possible. After move 3, we are at some cell. If we reach (N-1,N-1) on move 3, then the path ends. Our DP will have best_k = (3 % 3) = 0? Wait: If we take 3 moves, moves_taken after move 3 is 3. k = moves_taken mod 3 = 0. But our DP state k after the move is (previous k + 1) % 3. Let's trace: Start k=0. Move 1: new_k = 1. Move 2: new_k = 2. Move 3: from k=2, we take forced diagonal (or R/D if not possible), new_k = (2+1)%3 = 0. So after move 3, k=0. That matches moves_taken=3 mod 3 = 0. Then if we stop at (N-1,N-1) after move 3, the final state is (N-1,N-1, k=0). Our DP will have dp[N-1][N-1][0] with that sum. That's correct.
+
+What if the path has 6 moves? Then after move 6, k = 6 mod 3 = 0. Our DP will have new_k = 0 after move 6 (since 5 moves k=2, move 6 from k=2 gives new_k=0). So final k=0. But wait: In our DP, we only have states for k=0,1,2 at each cell. The final k at (N-1,N-1) could be 0,1, or 2 depending on the total number of moves modulo 3. For a path with 6 moves, final k would be 0. For 5 moves, final k would be 2 (since 5 mod 3 = 2). For 4 moves, final k = 1. For 3 moves, final k = 0. For 2 moves, final k = 2. For 1 move, final k = 1. For 0 moves, final k = 0.
+
+So the best_sum we find will be the max over k=0,1,2. That's correct because different paths have different total moves, hence different final k. We take the max sum among all valid paths regardless of final k.
+
+Now, is there any scenario where a path is invalid because it violates the "if diagonal not possible on a required diagonal move, you may use R or D" rule, but our DP might have allowed a move that violates it? We already incorporated the rule: when k==2 and diagonal not possible, we only allow R or D. When k==2 and diagonal possible, we only allow X. When k!=2, we allow any. So we never violate the rule.
+
+But what about the case where on a non-3rd move, we take a diagonal, and that somehow causes a later 3rd move to be impossible when it could have been possible? The rule only says "if diagonal is not possible on a required diagonal move, you may use R or D". It doesn't say you can't take diagonal on other moves. So taking diagonal on non-3rd moves is always allowed, and it doesn't penalize you later, except that it changes the cell. Our DP explores all such possibilities.
+
+Now, let's think about a potential flaw: The DP state only tracks k = moves_taken mod 3. But the rule "every 3rd move MUST be diagonal if possible" is based on the absolute move number. If we have two paths reaching (r,c) with same k, the absolute move numbers are different by multiples of 3. As we argued, the pattern of forced diagonals is the same. But is it absolutely the same for the purpose of "if diagonal is not possible, you may use R or D"? The "if possible" condition only depends on current cell. The current cell is (r,c) at that point. So yes, the set of allowed moves at each future step is the same. However, there is one more thing: The rule says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". This is a rule about the entire path. If we have a path that reaches (r,c) with k=2, the next move is forced diagonal if possible. If we have another path that reaches (r,c) with k=2 but after 5 moves, the next move is also forced diagonal if possible. The "if possible" condition is the same. But what if the path that took 5 moves to reach (r,c) had some moves that were diagonal on non-3rd moves, and that affected the grid values? That's already accounted in the sum. The future constraints are the same. So it's fine.
+
+But wait: There is a potential issue with the "if diagonal is not possible on a required diagonal move, you may use R or D" rule. What if we are at a cell where diagonal is not possible, and it's a 3rd move, we can use R or D. But what if we are at a cell where diagonal is not possible, and it's NOT a 3rd move, we can use any move (including X if possible? But if diagonal is not possible, X is not possible by definition). So that's covered.
+
+Now, consider if the grid has obstacles? The problem doesn't mention obstacles; grid is just integers, and moves are valid as long as within bounds. So no obstacles.
+
+Now, let's test the code mentally with a small custom grid where the 3rd move constraint forces a diagonal, and see if the DP would correctly enforce it.
+
+Example: N=3, grid all 0s? But we need to see if the constraint matters. Let's make a grid where some paths are invalid due to the rule. But the rule only restricts which moves are allowed on 3rd moves. If diagonal is possible, we must take it. If not, we can take R or D. So any path that respects this is valid. Our DP will only generate paths that respect it.
+
+Maybe we should test with a grid where a 3rd move diagonal is forced and see if DP explores both possibilities when diagonal not possible.
+
+Suppose N=3, grid:
+0 0 0
+0 0 0
+0 0 0
+
+But we can just trust.
+
+One more thing: In the DP loops, we iterate r from 0 to N-1, c from 0 to N-1. But what about the order of k? We iterate k from 0 to 2. The updates to dp[nr][nc][new_k] might affect states that we haven't processed yet. That's fine. But could there be a situation where we process (r,c,k) and update dp[nr][nc][new_k], and later in the same (r,c) iteration we process (r,c,k') and update the same dp[nr][nc][new_k] with a different value? That's fine; we just take max. But what if the later update has a lower sum? We won't overwrite because we use `>`. If it's higher, we overwrite. That's correct.
+
+Now, consider if a cell (r,c) can be reached with different k from different predecessors, and we process (r,c,k) before dp[r][c][k] has received all updates? We already argued all predecessors are processed before (r,c). But let's double-check with an example. Suppose we have a 2x2 grid. Predecessors of (1,1) are (0,1) and (1,0) and (0,0) via X. In our loops: r=0,c=0 processed first. It updates (0,1) and (1,0) and (1,1) via X. Then r=0,c=1 processed. It updates (1,1) via D. Then r=1,c=0 processed. It updates (1,1) via R. Then r=1,c=1 processed. At that point, dp[1][1][k] has received updates from (0,0), (0,1), (1,0). All predecessors processed before (1,1). So dp[1][1][k] is final. Good.
+
+What about a 3x3 grid? Predecessors of (2,2) are (1,2), (2,1), (1,1). All have smaller row or smaller column, so processed before (2,2). So yes.
+
+Now, one potential bug: In the else branch (k != 2), we allow moves X, R, D. But note that the move X might lead to a cell that is out of bounds? We check `if r < N-1 and c < N-1:` before allowing X. That's correct.
+
+But what about the case where k == 2 and diagonal not possible: we allow R and D. We do:
+if c < N-1: update with R
+if r < N-1: update with D
+But what if both R and D are possible? We update dp for both destinations. That's fine. However, there's a subtle point: The rule says "you may use R or D". It doesn't say you can use both in the same path; you just choose one. Our DP explores both choices and keeps the max sum for each destination. That's correct.
+
+Now, what about the case where k == 2 and diagonal is possible: we ONLY allow X. We do not allow R or D. That's correct per rule.
+
+Now, consider if the grid has negative values and we might want to avoid a forced diagonal because it leads to a very negative cell, but the rule forces it. Our DP will enforce it, which is correct.
+
+Now, let's think about the path string reconstruction again. We store parent_move, parent_r, parent_c, parent_k. When we backtrack, we start at (N-1,N-1,best_k). We get the move that was taken to arrive there. Then we go to the previous state. The previous state's k is parent_k. The move we recorded is the move that was taken from the previous state to the current state. So the sequence of moves from start to end is the reverse of the collected moves. That's correct.
+
+But we must ensure that the parent pointers for the start state are not used. The loop stops when we reach (0,0,0). The move that brought us to the first cell from start is recorded in the parent of that first cell. For example, from (0,0,0) to (0,1,1) with move 'R'. The parent of (0,1,1) is (0,0,0). When we backtrack from (0,1,1), we get 'R', then go to (0,0,0). Loop stops. Path string is "R". That's correct.
+
+Now, what if the path has multiple moves and we backtrack, we might encounter a state where parent_k is set but the move recorded might be something that we need to ensure is valid. It should be.
+
+Now, let's consider if there's any case where the DP might not find any path to (N-1,N-1). For example, if the grid is such that no valid path exists? But as argued, we can always go all R and D, which are always valid moves (except maybe if we are at bottom row and need to go right, but we can always go right if c < N-1, etc.). Actually, from any cell (r,c) with r < N-1 or c < N-1, we can always move right or down to eventually reach (N-1,N-1). The only cell from which no moves are possible is (N-1,N-1). So there is always at least one valid path (e.g., all R then all D, or all D then all R). Our DP will find it. However, we must ensure that the 3rd move constraint doesn't make some paths invalid, but there will always be at least one valid path because we can always use R and D, and on 3rd moves if diagonal not possible we use R or D. Since we can always choose R or D on 3rd moves if diagonal not possible, and diagonal might be possible but we are forced to take it; but we could also just avoid diagonals altogether and only use R and D. If we only use R and D, then the move types are only R and D. On 3rd moves, diagonal might be possible from some positions, but we are not taking it; but the rule says "MUST be diagonal if possible". So if we only use R and D, we would violate the rule if we are at a position where diagonal is possible on a 3rd move. So we cannot simply ignore diagonals; we must take them when forced and possible. But there will always be some path that respects the rule. For example, we can always take diagonals when forced, and R/D otherwise. Since the grid is N x N, we can always find a path. Our DP will find the max sum among all valid paths.
+
+Now, let's test with a small N=3 grid where the rule might force a specific path. We can try to manually compute a case, but it might be time-consuming. I'll trust the DP logic.
+
+One more thing: The problem says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible from current position". Does "if possible from current position" mean if a diagonal move is within the grid bounds, or if it's possible to make a diagonal move without going out of bounds? Yes, we interpreted as r < N-1 and c < N-1. That's correct.
+
+Now, what about the starting move? Move 1 is not a multiple of 3, so we can choose any move. Move 2 any. Move 3 forced diagonal if possible. That's what we have.
+
+Now, let's think about the possibility of multiple paths with the same max sum. Our DP will return one of them. The problem doesn't specify tie-breaking, so it's fine.
+
+Now, let's write the final code. We'll include comments for clarity, but the user asked for "complete solution in a single python code block". We'll just provide the function.
+
+Potential minor improvements: Use `float('-inf')` instead of a large negative number, but since grid values are integers, using a very small integer like `-10**18` is safer to avoid float issues. We'll use `-10**18`.
+
+Also, note that the grid might contain negative values, so initializing with a very negative number is correct.
+
+Let's write the code.
+
+Wait: There's one more nuance. The DP state k is moves_taken mod 3. But what if the path length is such that we have taken moves, and we reach (N-1,N-1) and stop. The final k is moves_taken mod 3. But in our DP, we only update dp[nr][nc][new_k] where new_k = (k+1)%3. That correctly tracks the mod 3 of the number of moves taken so far. However, when we are at (N-1,N-1), we don't make a move. The sum includes the start and all cells visited. The final k is just the moves_taken mod 3. We take max over k=0,1,2. That's correct.
+
+But what if the optimal path reaches (N-1,N-1) exactly after a move, and that move was a mandatory diagonal? The final k will be 0 (if total moves multiple of 3) or whatever. That's fine.
+
+Now, let's consider if the start cell (0,0) is also the bottom-right (N=1). Our code handles it.
+
+Now, let's test with a custom N=3 grid where we can manually verify the 3rd move constraint. I'll do a quick mental trace.
+
+Grid:
+1 2 3
+4 5 6
+7 8 9
+
+Start (0,0)=1. We want max sum path with constraints.
+
+Possible paths? Let's list some and see if they violate rule.
+
+Path 1: X, X (2 moves). Moves: 1:X, 2:X. No 3rd move. Sum: 1+5+9=15. Valid.
+
+Path 2: R, R, D, D? That's 4 moves. Moves: 1:R, 2:R, 3:D, 4:D. Move 3 is D. Is diagonal possible on move 3? Depends on position after move 2. After R,R: from (0,0) R to (0,1)=2, R to (0,2)=3. Now at (0,2). Move 3: we are at (0,2). Diagonal from (0,2) would go to (1,3) which is out of bounds (c=2 is N-1). So diagonal not possible. Rule says if diagonal not possible, may use R or D. R from (0,2) would go to (0,3) out of bounds. D would go to (1,2)=6. So move 3 must be D. Then move 4: from (1,2)=6, we need to go to (2,2)=9. Moves left: 1 move. Move 4 is not a multiple of 3 (since total moves 4, move 4 is not 3rd). We can take D to (2,2) or X? X from (1,2) goes to (2,3) out. R goes to (1,3) out. So only D. Path: R, R, D, D. Sum: 1+2+3+6+9=21. Path string "RRDD". Valid? Check: Move 1:R, Move 2:R, Move 3:D (forced because diagonal not possible), Move 4:D (any). All moves valid. Sum 21.
+
+Path 3: D, D, R, R? Similar, sum 21, "DDRR".
+
+Path 4: R, D, R, D? Moves: 1:R (0,1), 2:D (1,1), 3:R (1,2), 4:D (2,2). Move 3: after move 2, at (1,1). Diagonal from (1,1) goes to (2,2)=9, which is possible. Move 3 is a multiple of 3, so MUST be diagonal if possible. Diagonal is possible, so move 3 MUST be X. But in this path, move 3 is R, which violates the rule. So "RDRD" is invalid.
+
+Path 5: R, D, X? Wait, after R,D we are at (1,1). Then X to (2,2) is move 3. That's valid: moves: R (1), D (2), X (3). Move 3 is X, forced because diagonal possible. Sum: 1+2+5+9=17. Path "RDX". Valid.
+
+Path 6: D, R, X? Similar, "DRX", sum 1+4+5+9=19? Wait: start 1, D to (1,0)=4, R to (1,1)=5, X to (2,2)=9. Sum=19. Valid.
+
+Path 7: X, then? From (0,0) X to (1,1)=5. Then we are at (1,1) after 1 move. Then we need to go to (2,2). Moves left: 2 moves? Actually from (1,1) to (2,2) can be X (1 move) or R then D (2 moves) or D then R (2 moves). If we take X again, total moves 2: "XX", sum 1+5+9=15. Valid (no 3rd move). If we take R then D: moves: 1:X, 2:R, 3:D. Move 3 is D. After move 1 X, at (1,1). Move 2: R to (1,2)=6. Move 3: D to (2,2)=9. Move 3 is D, but is diagonal possible? From (1,2) diagonal goes to (2,3) out. So diagonal not possible, allowed. Path "XRD", sum: 1+5+6+9=21. Valid. Path "XDR": moves: 1:X, 2:D to (2,1)=8, 3:R to (2,2)=9. Move 3: after move 2 D, at (2,1). Diagonal from (2,1) goes to (3,2) out. So D not possible? Actually D from (2,1) would go to (3,1) out. R goes to (2,2). So move 3 must be R. Valid. Sum 1+5+8+9=23? Wait: 1+5+8+9=23. Path "XDR". But move 2 is D, move 3 is R. Check rule: move 1 X, move 2 D (any, since not 3rd), move 3 R (3rd move, diagonal not possible, so allowed). Sum 23. That's higher than 21. So "XDR" might be valid and sum 23.
+
+Path 8: What about "XXD"? Moves: 1:X to (1,1), 2:X to (2,2) - wait, that's 2 moves, ends at (2,2). No move 3. So "XX" is 2 moves sum 15. If we do "XXX"? From (2,2) can't move. So not.
+
+Path 9: "XRR"? From (1,1) R to (1,2), R to (1,3) out. So no.
+
+Path 10: "XRD" we did, sum 23. "XDR" sum 23. "DRX" sum 19. "RDX" sum 17. "RRDD" sum 21. "DDRR" sum 21. "XX" sum 15.
+
+What about path with 5 moves? From (0,0) to (2,2) with 5 moves would require some combination? Total moves M = 2N-2 - x = 4 - x. For N=3, M max 4, min 2. So no 5 moves. So max moves is 4. We already have paths with 4 moves.
+
+So max sum seems 23 with "XDR" or "XRD"? Let's verify "XDR": moves: 1:X from (0,0) to (1,1). 2:D from (1,1) to (2,1). 3:R from (2,1) to (2,2). Move 3 is R. Is diagonal possible from (2,1)? r=2 is N-1, so diagonal not possible. Rule says if diagonal not possible, may use R or D. So R is allowed. Sum: grid[0][0]=1 + grid[1][1]=5 + grid[2][1]=8 + grid[2][2]=9 = 23. Path "XDR". Valid.
+
+"XRD": moves: 1:X to (1,1). 2:R to (1,2). 3:D to (2,2). Move 3 is D. From (1,2), diagonal goes to (2,3) out. So D allowed. Sum: 1+5+6+9=21. So "XDR" is better.
+
+What about "XDD"? Moves: 1:X, 2:D to (2,1), 3:D? Move 3 would be D from (2,1). But D from (2,1) goes to (3,1) out of bounds. So D not possible. Rule says if diagonal not possible, may use R or D. But D is also not possible! Wait, from (2,1), D is out of bounds (r+1=3 >= N). R goes to (2,2) which is in bounds. So if move 3 is required diagonal if possible, but diagonal not possible, we may use R or D. But if D is not possible either, we must use R. Our code in k==2 and diagonal not possible branch does:
+if c < N-1: update with R
+if r < N-1: update with D
+From (2,1), c=1 < N-1=2 true, so R is possible. r=2 < 2 false, so D not possible. So we only allow R. So "XDD" would have move 3 D, which is not allowed by our DP. So "XDD" is invalid. Good.
+
+What about "XDR" we already have.
+
+What about "XRD"? Move 3 D from (1,2): r=1 < 2 true, so D possible. c=2 is N-1, so R not possible. So move 3 D is allowed. Sum 21.
+
+What about starting with D? "DRX": 1:D to (1,0)=4, 2:R to (1,1)=5, 3:X to (2,2)=9. Move 3 is X, forced? From (1,1) diagonal possible, so MUST be X. So "DRX" valid, sum 1+4+5+9=19.
+
+"DXX"? 1:D to (1,0), 2:X from (1,0) to (2,1)=8, 3:X from (2,1) to (3,2) out. So no.
+
+So max sum 23 with "XDR". Also maybe "XDR" is the only one with 23.
+
+Now, let's see if our DP would find "XDR" as max sum 23. Let's trace mentally for N=3 all grid values as above. But we can't run, but we can be confident.
+
+One potential issue: In the DP, when we are at (1,1) with k=1 (after move 1 X), we can take moves X, R, D. If we take D to (2,1), new_k = (1+1)%3 = 2. Then from (2,1) with k=2, we are at a 3rd move? Wait, total moves taken so far: start 0, move 1 X -> k=1. move 2 D -> k becomes 2. So after move 2, k=2. The next move (move 3) is forced diagonal if possible. From (2,1), diagonal not possible, so we may use R or D. Our code will allow R (c<2) and D (r<2 false). So we take R to (2,2), new_k = (2+1)%3 = 0. Then we are at (2,2) with k=0, and we stop. The sum: start 1 + X to 5 + D to 8 + R to 9 = 23. Path "XDR". That's exactly what we have.
+
+What if we took R then D from (1,1) after X? Move 2 R to (1,2), new_k = 2. Then move 3 D to (2,2), new_k = 0. Sum 1+5+6+9=21. Path "XRD". Our DP would also find that.
+
+What if we took X again from (1,1)? Move 2 X to (2,2), new_k = 2? Wait: move 1 X -> k=1. move 2 X from (1,1) to (2,2) -> new_k = (1+1)%3 = 2. But after move 2, we are at (2,2), which is the destination. The path ends. Total moves 2, sum 1+5+9=15. Our DP would process (2,2) and stop. The final k=2, but we take max over k=0,1,2. That's fine.
+
+Now, what about path "XDR" vs "XRD"? DP will find max sum 23.
+
+So the logic seems consistent.
+
+Now, let's consider if there's any case where the DP might incorrectly allow a move that violates the rule because of the way we handle k. For example, suppose we have a path where move 3 is forced diagonal, but we are at a cell where diagonal is possible, we take X, and then later moves are fine. That's correct.
+
+What if we have a path where move 3 is forced diagonal, but we are at a cell where diagonal is not possible, we take R or D. That's correct.
+
+Now, one more edge case: What if the grid is such that from some cell, diagonal is possible, but taking it leads to a dead end where we can't reach the end? But the rule doesn't prohibit taking diagonal if possible; it says MUST. So we must take it. Our DP will take it, and if it leads to a dead end (i.e., no valid path to end from there), then that path won't be able to reach (N-1,N-1) and won't be considered in the final max because dp[N-1][N-1][k] won't be updated. But is it possible that taking the forced diagonal leads to a state from which the end is unreachable under the constraints? Let's think. From any cell (r,c) with r < N-1 and c < N-1, we can always eventually reach (N-1,N-1) by some valid path respecting the constraints? Not necessarily with the constraints, but since we can always use R and D, and on 3rd moves if diagonal not possible we use R or D, and diagonal is possible here, but we are forced to take it. After taking the diagonal, we are at (r+1,c+1). From there, we can continue. Could we get stuck? For example, suppose we are at (0,0) in N=3, forced diagonal on move 3? But move 3 is after 2 moves. If we only use diagonals, we might reach (2,2) in 2 moves, no move 3. If we have a path that forces a diagonal on move 3, we are at some cell where diagonal is possible. From there, we can always eventually reach the end by using R and D, and on subsequent 3rd moves we might be forced again, but we can always fall back to R/D if diagonal not possible. Since the grid is finite and we can always move right and down, we should always be able to reach the end. I think it's safe.
+
+Now, let's write the final code. We'll structure it cleanly.
+
+One small optimization: We can break early if we reach (N-1,N-1)? Not necessary.
+
+We'll use `INF_NEG = -10**18`.
+
+Let's write the function.
+
+```python
