@@ -1,0 +1,19 @@
+Model: nvidia/nemotron-3.5-lightning
+Provider: openrouter
+Evaluated: 2026-08-11T16:43:06.141000+00:00
+
+=== TIMING ===
+Response time: 0.24s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 401: {"error":{"message":"Missing Authentication header","code":401}}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
