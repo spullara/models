@@ -1,0 +1,19 @@
+Model: qwen3.7-text-embedding
+Provider: qwen
+Evaluated: 2026-08-11T08:00:06.302792+00:00
+
+=== TIMING ===
+Response time: 1.16s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: {"error":{"message":"Unsupported model `qwen3.7-text-embedding` for OpenAI compatibility mode.","type":"invalid_request_error","param":null,"code":"model_not_supported"},"request_id":"aa7421bc-e727-9652-ad14-37e912c8ba28"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
