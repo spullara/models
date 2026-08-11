@@ -1,148 +1,19 @@
 Model: zai-glm-5-2
 Provider: mistral
-Evaluated: 2026-08-10T08:14:06.381137+00:00
+Evaluated: 2026-08-11T11:17:06.205068+00:00
 
 === TIMING ===
-Response time: 8.19s
+Response time: 0.29s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 400: {"object":"error","message":"Invalid model: zai-glm-5-2","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
 
 === RAW RESPONSE ===
-```python
-from functools import lru_cache
-
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    
-    n = len(grid)
-    N = n - 1
-    
-    @lru_cache(maxsize=None)
-    def dfs(r, c, move_count):
-        if r == N and c == N:
-            return grid[N][N], ""
-        
-        diag_possible = (r + 1 <= N and c + 1 <= N)
-        
-        if (move_count + 1) % 3 == 0:
-            if diag_possible:
-                nxt_sum, nxt_path = dfs(r + 1, c + 1, move_count + 1)
-                return grid[r][c] + nxt_sum, "X" + nxt_path
-            else:
-                best_val = float('-inf')
-                best_path = ""
-                if r + 1 <= N:
-                    nxt_sum, nxt_path = dfs(r + 1, c, move_count + 1)
-                    if grid[r][c] + nxt_sum > best_val:
-                        best_val = grid[r][c] + nxt_sum
-                        best_path = "D" + nxt_path
-                if c + 1 <= N:
-                    nxt_sum, nxt_path = dfs(r, c + 1, move_count + 1)
-                    if grid[r][c] + nxt_sum > best_val:
-                        best_val = grid[r][c] + nxt_sum
-                        best_path = "R" + nxt_path
-                return best_val, best_path
-        else:
-            best_val = float('-inf')
-            best_path = ""
-            
-            # Down
-            if r + 1 <= N:
-                nxt_sum, nxt_path = dfs(r + 1, c, move_count + 1)
-                if grid[r][c] + nxt_sum > best_val:
-                    best_val = grid[r][c] + nxt_sum
-                    best_path = "D" + nxt_path
-                    
-            # Right
-            if c + 1 <= N:
-                nxt_sum, nxt_path = dfs(r, c + 1, move_count + 1)
-                if grid[r][c] + nxt_sum > best_val:
-                    best_val = grid[r][c] + nxt_sum
-                    best_path = "R" + nxt_path
-                    
-            # Diagonal
-            if diag_possible:
-                nxt_sum, nxt_path = dfs(r + 1, c + 1, move_count + 1)
-                if grid[r][c] + nxt_sum > best_val:
-                    best_val = grid[r][c] + nxt_sum
-                    best_path = "X" + nxt_path
-                    
-            return best_val, best_path
-
-    max_sum, path = dfs(0, 0, 0)
-    return max_sum, path
-```
+(no response)
 
 === EXTRACTED CODE ===
-from functools import lru_cache
-
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return 0, ""
-    
-    n = len(grid)
-    N = n - 1
-    
-    @lru_cache(maxsize=None)
-    def dfs(r, c, move_count):
-        if r == N and c == N:
-            return grid[N][N], ""
-        
-        diag_possible = (r + 1 <= N and c + 1 <= N)
-        
-        if (move_count + 1) % 3 == 0:
-            if diag_possible:
-                nxt_sum, nxt_path = dfs(r + 1, c + 1, move_count + 1)
-                return grid[r][c] + nxt_sum, "X" + nxt_path
-            else:
-                best_val = float('-inf')
-                best_path = ""
-                if r + 1 <= N:
-                    nxt_sum, nxt_path = dfs(r + 1, c, move_count + 1)
-                    if grid[r][c] + nxt_sum > best_val:
-                        best_val = grid[r][c] + nxt_sum
-                        best_path = "D" + nxt_path
-                if c + 1 <= N:
-                    nxt_sum, nxt_path = dfs(r, c + 1, move_count + 1)
-                    if grid[r][c] + nxt_sum > best_val:
-                        best_val = grid[r][c] + nxt_sum
-                        best_path = "R" + nxt_path
-                return best_val, best_path
-        else:
-            best_val = float('-inf')
-            best_path = ""
-            
-            # Down
-            if r + 1 <= N:
-                nxt_sum, nxt_path = dfs(r + 1, c, move_count + 1)
-                if grid[r][c] + nxt_sum > best_val:
-                    best_val = grid[r][c] + nxt_sum
-                    best_path = "D" + nxt_path
-                    
-            # Right
-            if c + 1 <= N:
-                nxt_sum, nxt_path = dfs(r, c + 1, move_count + 1)
-                if grid[r][c] + nxt_sum > best_val:
-                    best_val = grid[r][c] + nxt_sum
-                    best_path = "R" + nxt_path
-                    
-            # Diagonal
-            if diag_possible:
-                nxt_sum, nxt_path = dfs(r + 1, c + 1, move_count + 1)
-                if grid[r][c] + nxt_sum > best_val:
-                    best_val = grid[r][c] + nxt_sum
-                    best_path = "X" + nxt_path
-                    
-            return best_val, best_path
-
-    max_sum, path = dfs(0, 0, 0)
-    return max_sum, path
+(no code extracted)
