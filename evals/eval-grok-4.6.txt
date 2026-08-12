@@ -1,0 +1,114 @@
+Model: grok-4.6
+Provider: grok
+Evaluated: 2026-08-12T15:22:05.758945+00:00
+
+=== TIMING ===
+Response time: 26.21s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+from functools import lru_cache
+import sys
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+
+    sys.setrecursionlimit(max(10000, 4 * n + 100))
+
+    @lru_cache(maxsize=None)
+    def dfs(i: int, j: int, mod: int) -> tuple[int, str]:
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+
+        must_x = ((mod + 1) % 3 == 0)
+        can_r = j + 1 < n
+        can_d = i + 1 < n
+        can_x = can_r and can_d
+
+        best_sum = float("-inf")
+        best_path = ""
+
+        def consider(ni: int, nj: int, ch: str) -> None:
+            nonlocal best_sum, best_path
+            sub_sum, sub_path = dfs(ni, nj, (mod + 1) % 3)
+            total = grid[i][j] + sub_sum
+            if total > best_sum:
+                best_sum = total
+                best_path = ch + sub_path
+
+        if must_x and can_x:
+            consider(i + 1, j + 1, "X")
+        else:
+            if can_r:
+                consider(i, j + 1, "R")
+            if can_d:
+                consider(i + 1, j, "D")
+            if can_x:
+                consider(i + 1, j + 1, "X")
+
+        return (int(best_sum) if best_sum != float("-inf") else grid[i][j], best_path)
+
+    return dfs(0, 0, 0)
+```
+
+=== EXTRACTED CODE ===
+from functools import lru_cache
+import sys
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+
+    sys.setrecursionlimit(max(10000, 4 * n + 100))
+
+    @lru_cache(maxsize=None)
+    def dfs(i: int, j: int, mod: int) -> tuple[int, str]:
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+
+        must_x = ((mod + 1) % 3 == 0)
+        can_r = j + 1 < n
+        can_d = i + 1 < n
+        can_x = can_r and can_d
+
+        best_sum = float("-inf")
+        best_path = ""
+
+        def consider(ni: int, nj: int, ch: str) -> None:
+            nonlocal best_sum, best_path
+            sub_sum, sub_path = dfs(ni, nj, (mod + 1) % 3)
+            total = grid[i][j] + sub_sum
+            if total > best_sum:
+                best_sum = total
+                best_path = ch + sub_path
+
+        if must_x and can_x:
+            consider(i + 1, j + 1, "X")
+        else:
+            if can_r:
+                consider(i, j + 1, "R")
+            if can_d:
+                consider(i + 1, j, "D")
+            if can_x:
+                consider(i + 1, j + 1, "X")
+
+        return (int(best_sum) if best_sum != float("-inf") else grid[i][j], best_path)
+
+    return dfs(0, 0, 0)
