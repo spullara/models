@@ -1,14 +1,19 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-13 13:05:19
+Last updated: 2026-08-13 16:40:48
 
 ## Updates This Week (2026-08-07 to 2026-08-13)
 
 ### Gemini
 
+**Added**
+
+- models/gemini-3.7-flash (added: 2026-08-13)
+
 **Deleted**
 
+- models/gemini-3.1-flash-live-preview (deleted: 2026-08-13)
 - models/gemini-2.0-flash (deleted: 2026-08-10)
 - models/gemini-2.0-flash-001 (deleted: 2026-08-10)
 - models/gemini-2.0-flash-lite (deleted: 2026-08-10)
@@ -51,7 +56,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 10/13
 
-**Gemini**: 50/97
+**Gemini**: 50/98
 
 **Grok**: 12/21
 
@@ -297,6 +302,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-3.7-flash (added: 2026-08-13)
 - models/gemini-robotics-er-2-preview (added: 2026-07-30)
 - models/gemini-3.6-flash (added: 2026-07-21)
 - models/gemini-3.5-flash-lite (added: 2026-07-21)
@@ -315,7 +321,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemma-4-31b-it (added: 2026-04-02)
 - models/gemma-4-26b-a4b-it (added: 2026-04-02)
 - models/veo-3.1-lite-generate-preview (added: 2026-03-31)
-- models/gemini-3.1-flash-live-preview (added: 2026-03-26)
 - models/lyria-3-pro-preview (added: 2026-03-25)
 - models/lyria-3-clip-preview (added: 2026-03-25)
 - models/gemini-embedding-2-preview (added: 2026-03-10)
@@ -350,6 +355,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/gemini-3.1-flash-live-preview (deleted: 2026-08-13)
 - models/gemini-robotics-er-1.5-preview (deleted: 2026-08-10)
 - models/gemini-3-pro-preview (deleted: 2026-08-10)
 - models/gemini-2.0-flash-lite-001 (deleted: 2026-08-10)
