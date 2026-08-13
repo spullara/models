@@ -146,6 +146,7 @@ qwen3.7-max-preview
 qwen3.7-plus
 qwen3.7-plus-2026-05-26
 qwen3.7-text-embedding
+qwen3.8-2.4t-a95b
 qwen3.8-max
 qwq-plus
 qwq-plus-2025-03-05
