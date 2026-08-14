@@ -1,0 +1,168 @@
+Model: deepseek-v4-pro-0813
+Provider: qwen
+Evaluated: 2026-08-14T14:26:05.548215+00:00
+
+=== TIMING ===
+Response time: 270.96s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or len(grid[0]) == 0:
+        return (0, "")
+
+    total_states = n * n * 3
+
+    def idx(r: int, c: int, m: int) -> int:
+        return (r * n + c) * 3 + m
+
+    dp = [None] * total_states
+    prev_state = [None] * total_states
+    prev_move = [None] * total_states
+
+    start = idx(0, 0, 0)
+    dp[start] = grid[0][0]
+
+    # Process cells in increasing order of r+c so all predecessors are ready.
+    for s in range(2 * n - 1):
+        r_min = max(0, s - (n - 1))
+        r_max = min(n - 1, s)
+        for r in range(r_min, r_max + 1):
+            c = s - r
+            for m in range(3):
+                cur = dp[idx(r, c, m)]
+                if cur is None:
+                    continue
+
+                diag_possible = (r + 1 < n and c + 1 < n)
+
+                # m is the number of moves already taken modulo 3.
+                # The next move is forced diagonal iff the next move number
+                # is a multiple of 3, which corresponds to m == 2.
+                if m == 2 and diag_possible:
+                    moves = [('X', r + 1, c + 1)]
+                else:
+                    moves = []
+                    if c + 1 < n:
+                        moves.append(('R', r, c + 1))
+                    if r + 1 < n:
+                        moves.append(('D', r + 1, c))
+                    if diag_possible:
+                        moves.append(('X', r + 1, c + 1))
+
+                next_m = (m + 1) % 3
+                for move_char, nr, nc in moves:
+                    nid = idx(nr, nc, next_m)
+                    new_sum = cur + grid[nr][nc]
+                    if dp[nid] is None or new_sum > dp[nid]:
+                        dp[nid] = new_sum
+                        prev_state[nid] = idx(r, c, m)
+                        prev_move[nid] = move_char
+
+    best_sum = None
+    best_m = None
+    for m in range(3):
+        val = dp[idx(n - 1, n - 1, m)]
+        if val is not None and (best_sum is None or val > best_sum):
+            best_sum = val
+            best_m = m
+
+    if best_sum is None:
+        return (0, "")
+
+    # Reconstruct path from destination back to start.
+    sid = idx(n - 1, n - 1, best_m)
+    path_chars = []
+    while sid != start:
+        path_chars.append(prev_move[sid])
+        sid = prev_state[sid]
+
+    path_chars.reverse()
+    return (best_sum, ''.join(path_chars))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or len(grid[0]) == 0:
+        return (0, "")
+
+    total_states = n * n * 3
+
+    def idx(r: int, c: int, m: int) -> int:
+        return (r * n + c) * 3 + m
+
+    dp = [None] * total_states
+    prev_state = [None] * total_states
+    prev_move = [None] * total_states
+
+    start = idx(0, 0, 0)
+    dp[start] = grid[0][0]
+
+    # Process cells in increasing order of r+c so all predecessors are ready.
+    for s in range(2 * n - 1):
+        r_min = max(0, s - (n - 1))
+        r_max = min(n - 1, s)
+        for r in range(r_min, r_max + 1):
+            c = s - r
+            for m in range(3):
+                cur = dp[idx(r, c, m)]
+                if cur is None:
+                    continue
+
+                diag_possible = (r + 1 < n and c + 1 < n)
+
+                # m is the number of moves already taken modulo 3.
+                # The next move is forced diagonal iff the next move number
+                # is a multiple of 3, which corresponds to m == 2.
+                if m == 2 and diag_possible:
+                    moves = [('X', r + 1, c + 1)]
+                else:
+                    moves = []
+                    if c + 1 < n:
+                        moves.append(('R', r, c + 1))
+                    if r + 1 < n:
+                        moves.append(('D', r + 1, c))
+                    if diag_possible:
+                        moves.append(('X', r + 1, c + 1))
+
+                next_m = (m + 1) % 3
+                for move_char, nr, nc in moves:
+                    nid = idx(nr, nc, next_m)
+                    new_sum = cur + grid[nr][nc]
+                    if dp[nid] is None or new_sum > dp[nid]:
+                        dp[nid] = new_sum
+                        prev_state[nid] = idx(r, c, m)
+                        prev_move[nid] = move_char
+
+    best_sum = None
+    best_m = None
+    for m in range(3):
+        val = dp[idx(n - 1, n - 1, m)]
+        if val is not None and (best_sum is None or val > best_sum):
+            best_sum = val
+            best_m = m
+
+    if best_sum is None:
+        return (0, "")
+
+    # Reconstruct path from destination back to start.
+    sid = idx(n - 1, n - 1, best_m)
+    path_chars = []
+    while sid != start:
+        path_chars.append(prev_move[sid])
+        sid = prev_state[sid]
+
+    path_chars.reverse()
+    return (best_sum, ''.join(path_chars))
