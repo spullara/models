@@ -1,9 +1,9 @@
 Model: models/gemini-3.7-flash-video-understanding-eap
 Provider: gemini
-Evaluated: 2026-08-14T14:39:06.893344+00:00
+Evaluated: 2026-08-14T14:45:06.513944+00:00
 
 === TIMING ===
-Response time: 0.41s
+Response time: 0.35s
 
 === CODE EXTRACTION ===
 Method: None
