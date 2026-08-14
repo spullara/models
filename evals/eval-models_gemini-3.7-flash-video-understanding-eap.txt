@@ -1,9 +1,9 @@
 Model: models/gemini-3.7-flash-video-understanding-eap
 Provider: gemini
-Evaluated: 2026-08-14T14:36:25.757617+00:00
+Evaluated: 2026-08-14T14:39:06.893344+00:00
 
 === TIMING ===
-Response time: 0.18s
+Response time: 0.41s
 
 === CODE EXTRACTION ===
 Method: None
@@ -13,7 +13,7 @@ Syntax valid: NO
 API Error: HTTP 404: {
   "error": {
     "code": 404,
-    "message": "models/gemini-3.7-flash-video-understanding-eap is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "message": "Model not found: models/gemini-3.7-flash-video-understanding-eap",
     "status": "NOT_FOUND"
   }
 }
