@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-14 14:33:17
+Last updated: 2026-08-14 14:36:37
 
 ## Updates This Week (2026-08-08 to 2026-08-14)
 
@@ -9,11 +9,12 @@ Last updated: 2026-08-14 14:33:17
 
 **Added**
 
+- models/gemini-3.7-flash-video-understanding-eap (added: 2026-08-14)
 - models/gemini-3.7-flash (added: 2026-08-13)
 
 **Deleted**
 
-- models/gemini-3.7-flash-video-understanding-eap (deleted: 2026-08-14)
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-08-14)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-08-13)
 - models/gemini-2.0-flash (deleted: 2026-08-10)
 - models/gemini-2.0-flash-001 (deleted: 2026-08-10)
@@ -304,6 +305,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-3.7-flash-video-understanding-eap (added: 2026-08-14)
 - models/gemini-3.7-flash (added: 2026-08-13)
 - models/gemini-robotics-er-2-preview (added: 2026-07-30)
 - models/gemini-3.6-flash (added: 2026-07-21)
@@ -330,7 +332,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
-- models/gemini-2.5-flash-native-audio-preview-12-2025 (added: 2026-01-27)
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
@@ -357,7 +358,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- models/gemini-3.7-flash-video-understanding-eap (deleted: 2026-08-14)
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-08-14)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-08-13)
 - models/gemini-robotics-er-1.5-preview (deleted: 2026-08-10)
 - models/gemini-3-pro-preview (deleted: 2026-08-10)
