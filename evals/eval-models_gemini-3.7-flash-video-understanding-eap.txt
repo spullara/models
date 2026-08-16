@@ -1,26 +1,142 @@
 Model: models/gemini-3.7-flash-video-understanding-eap
 Provider: gemini
-Evaluated: 2026-08-14T14:45:06.513944+00:00
+Evaluated: 2026-08-16T03:53:06.119880+00:00
 
 === TIMING ===
-Response time: 0.35s
+Response time: 11.62s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: {
-  "error": {
-    "code": 404,
-    "message": "Model not found: models/gemini-3.7-flash-video-understanding-eap",
-    "status": "NOT_FOUND"
-  }
-}
-
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+An optimal and clean solution using dynamic programming. Since every move strictly increases $r + c$, the state space is a Directed Acyclic Graph (DAG) that can be solved efficiently in $O(N^2)$ time.
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return 0, ""
+    if n == 1:
+        return grid[0][0], ""
+
+    # dp[r][c][m] = (max_sum, path_string) from (r, c) to (n-1, n-1)
+    # where m is the number of moves made so far mod 3
+    dp: list[list[list[tuple[float, str]]]] = [
+        [[(-float("inf"), "") for _ in range(3)] for _ in range(n)] for _ in range(n)
+    ]
+
+    # Base case: at destination, 0 moves left needed from here
+    for m in range(3):
+        dp[n - 1][n - 1][m] = (grid[n - 1][n - 1], "")
+
+    # Iterate backwards by anti-diagonals (r + c)
+    for s in range(2 * n - 3, -1, -1):
+        for r in range(max(0, s - (n - 1)), min(n, s + 1)):
+            c = s - r
+            can_diag = r + 1 < n and c + 1 < n
+
+            for m in range(3):
+                # The next move will be move index (m + 1)
+                # Every 3rd move (i.e., when m == 2) requires diagonal if possible
+                is_forced_diag = m == 2
+
+                moves: list[tuple[str, int, int]] = []
+                if is_forced_diag and can_diag:
+                    moves.append(("X", r + 1, c + 1))
+                elif is_forced_diag and not can_diag:
+                    if c + 1 < n:
+                        moves.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        moves.append(("D", r + 1, c))
+                else:
+                    if c + 1 < n:
+                        moves.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        moves.append(("D", r + 1, c))
+                    if can_diag:
+                        moves.append(("X", r + 1, c + 1))
+
+                best_sum = -float("inf")
+                best_path = ""
+                next_m = (m + 1) % 3
+
+                for move_char, nr, nc in moves:
+                    sub_sum, sub_path = dp[nr][nc][next_m]
+                    if sub_sum > best_sum:
+                        best_sum = sub_sum
+                        best_path = move_char + sub_path
+
+                if best_sum != -float("inf"):
+                    dp[r][c][m] = (grid[r][c] + best_sum, best_path)
+
+    max_sum, path = dp[0][0][0]
+    return int(max_sum), path
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return 0, ""
+    if n == 1:
+        return grid[0][0], ""
+
+    # dp[r][c][m] = (max_sum, path_string) from (r, c) to (n-1, n-1)
+    # where m is the number of moves made so far mod 3
+    dp: list[list[list[tuple[float, str]]]] = [
+        [[(-float("inf"), "") for _ in range(3)] for _ in range(n)] for _ in range(n)
+    ]
+
+    # Base case: at destination, 0 moves left needed from here
+    for m in range(3):
+        dp[n - 1][n - 1][m] = (grid[n - 1][n - 1], "")
+
+    # Iterate backwards by anti-diagonals (r + c)
+    for s in range(2 * n - 3, -1, -1):
+        for r in range(max(0, s - (n - 1)), min(n, s + 1)):
+            c = s - r
+            can_diag = r + 1 < n and c + 1 < n
+
+            for m in range(3):
+                # The next move will be move index (m + 1)
+                # Every 3rd move (i.e., when m == 2) requires diagonal if possible
+                is_forced_diag = m == 2
+
+                moves: list[tuple[str, int, int]] = []
+                if is_forced_diag and can_diag:
+                    moves.append(("X", r + 1, c + 1))
+                elif is_forced_diag and not can_diag:
+                    if c + 1 < n:
+                        moves.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        moves.append(("D", r + 1, c))
+                else:
+                    if c + 1 < n:
+                        moves.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        moves.append(("D", r + 1, c))
+                    if can_diag:
+                        moves.append(("X", r + 1, c + 1))
+
+                best_sum = -float("inf")
+                best_path = ""
+                next_m = (m + 1) % 3
+
+                for move_char, nr, nc in moves:
+                    sub_sum, sub_path = dp[nr][nc][next_m]
+                    if sub_sum > best_sum:
+                        best_sum = sub_sum
+                        best_path = move_char + sub_path
+
+                if best_sum != -float("inf"):
+                    dp[r][c][m] = (grid[r][c] + best_sum, best_path)
+
+    max_sum, path = dp[0][0][0]
+    return int(max_sum), path
