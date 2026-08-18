@@ -9,4 +9,5 @@ z-ai/glm-5
 z-ai/glm-5-turbo
 z-ai/glm-5.1
 z-ai/glm-5.2
+z-ai/glm-5.3
 z-ai/glm-5v-turbo
