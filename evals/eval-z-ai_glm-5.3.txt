@@ -1,0 +1,19 @@
+Model: z-ai/glm-5.3
+Provider: openrouter
+Evaluated: 2026-08-18T21:07:06.763865+00:00
+
+=== TIMING ===
+Response time: 0.2s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: {"error":{"message":"No endpoints found for z-ai/glm-5.3.","code":404},"user_id":"user_30pzA1kgD0MJLxIyrSWXOSz3nvl"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
