@@ -1,0 +1,19 @@
+Model: ZHIPU/GLM-5.3
+Provider: qwen
+Evaluated: 2026-08-18T05:10:05.918239+00:00
+
+=== TIMING ===
+Response time: 0.77s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 500: {"error":{"message":"model is not supported in aliyun market","type":"internal_server_error","param":null,"code":"internal_server_error"},"request_id":"95911adf-54f4-9319-8a5c-697ac05f3f69"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
