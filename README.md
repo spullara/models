@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-19 06:35:17
+Last updated: 2026-08-19 08:04:21
 
 ## Updates This Week (2026-08-13 to 2026-08-19)
 
@@ -47,7 +47,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 12/21
 
-**Mistral**: 55/62
+**Mistral**: 56/61
 
 **DeepSeek**: 2/2
 
@@ -539,6 +539,7 @@ Model counts shown as: **Available/Deleted**
 - ministral-8b-latest (added: 2025-11-24)
 - ministral-3b-latest (added: 2025-11-24)
 - magistral-small-latest (added: 2025-11-24)
+- magistral-medium-latest (added: 2025-11-24)
 - devstral-medium-latest (added: 2025-11-24)
 - codestral-latest (added: 2025-11-24)
 - codestral-embed-2505 (added: 2025-11-24)
@@ -553,7 +554,6 @@ Model counts shown as: **Available/Deleted**
 - mistral-tiny-2407 (deleted: 2026-07-31)
 - mistral-small-2506 (deleted: 2026-07-31)
 - magistral-small-2509 (deleted: 2026-07-31)
-- magistral-medium-latest (deleted: 2026-07-31)
 - magistral-medium-2509 (deleted: 2026-07-31)
 - voxtral-mini-realtime-charente-2606-solutions (deleted: 2026-07-27)
 - deepseek-v4-flash (deleted: 2026-07-25)
