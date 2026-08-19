@@ -8,6 +8,7 @@ devstral-medium-latest
 glm-5-2
 labs-leanstral-1-5
 labs-leanstral-1-5-1
+magistral-medium-latest
 magistral-small-latest
 ministral-14b-2512
 ministral-14b-latest
