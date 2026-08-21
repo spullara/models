@@ -1,6 +1,6 @@
 Model: deepseek-v4-flash-vision-exp
 Provider: deepseek
-Evaluated: 2026-08-21T08:07:07.124228+00:00
+Evaluated: 2026-08-21T08:12:07.159637+00:00
 
 === TIMING ===
 Response time: 0.33s
