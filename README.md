@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-19 08:06:22
+Last updated: 2026-08-21 08:07:19
 
-## Updates This Week (2026-08-13 to 2026-08-19)
+## Updates This Week (2026-08-15 to 2026-08-21)
 
 ### Gemini
 
@@ -11,7 +11,6 @@ Last updated: 2026-08-19 08:06:22
 
 - models/gemini-3.5-live-translate-preview (added: 2026-08-17)
 - models/gemini-robotics-er-2-streaming-preview (added: 2026-08-17)
-- models/gemini-3.7-flash (added: 2026-08-13)
 
 **Deleted**
 
@@ -20,14 +19,18 @@ Last updated: 2026-08-19 08:06:22
 - models/imagen-4.0-ultra-generate-001 (deleted: 2026-08-17)
 - models/gemini-3.7-flash-video-understanding-eap (deleted: 2026-08-16)
 
+### DeepSeek
+
+**Added**
+
+- deepseek-v4-flash-vision-exp (added: 2026-08-21)
+
 ### Qwen
 
 **Added**
 
 - qwen3.8-27b (added: 2026-08-19)
 - ZHIPU/GLM-5.3 (added: 2026-08-18)
-- deepseek-v4-pro-0813 (added: 2026-08-14)
-- qwen3.8-2.4t-a95b (added: 2026-08-13)
 
 ### Z.AI
 
@@ -49,7 +52,7 @@ Model counts shown as: **Available/Deleted**
 
 **Mistral**: 56/61
 
-**DeepSeek**: 2/2
+**DeepSeek**: 3/2
 
 **Kimi**: 12/6
 
@@ -614,6 +617,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- deepseek-v4-flash-vision-exp (added: 2026-08-21)
 - deepseek-v4-pro (added: 2026-04-24)
 - deepseek-v4-flash (added: 2026-04-24)
 
