@@ -1,12 +1,12 @@
 Model: kimi-k3
-Provider: kimi
-Evaluated: 2026-07-16T14:58:07.225734+00:00
+Provider: qwen
+Evaluated: 2026-08-21T12:15:06.954476+00:00
 
 === TIMING ===
-Response time: 122.19s
+Response time: 283.26s
 
 === CODE EXTRACTION ===
-Method: direct
+Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
@@ -16,68 +16,83 @@ Sum matches: YES
 Path valid: YES
 
 === RAW RESPONSE ===
+```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 0:
         return (0, "")
 
-    # dp[i][j][m] = (best_sum, first_move) from cell (i, j) to (n-1, n-1),
-    # where m = (number of moves made so far) mod 3.
-    dp = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    # best[i][j][r] = maximum sum reaching (i, j) after a number of moves
+    # congruent to r mod 3. taken stores the move used to enter that state.
+    best = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    taken = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    best[0][0][0] = grid[0][0]
 
-    for s in range(2 * (n - 1), -1, -1):
-        lo = max(0, s - (n - 1))
-        hi = min(n - 1, s)
-        for i in range(lo, hi + 1):
-            j = s - i
-            for m in range(3):
-                if i == n - 1 and j == n - 1:
-                    dp[i][j][m] = (grid[i][j], "")
+    for i in range(n):
+        for j in range(n):
+            can_r = j + 1 < n
+            can_d = i + 1 < n
+            can_x = can_r and can_d
+
+            for mod in range(3):
+                cur = best[i][j][mod]
+                if cur is None:
                     continue
 
-                diag_ok = i + 1 < n and j + 1 < n
-                if m == 2 and diag_ok:
-                    # Next move is move number 3, 6, 9, ... -> must be diagonal.
-                    cands = (("X", i + 1, j + 1),)
+                if mod == 2:  # next move is 3rd, 6th, 9th, ...
+                    if can_x:
+                        moves = ("X",)
+                    else:
+                        moves = tuple(
+                            m for m, ok in (("R", can_r), ("D", can_d)) if ok
+                        )
                 else:
-                    cands = []
-                    if j + 1 < n:
-                        cands.append(("R", i, j + 1))
-                    if i + 1 < n:
-                        cands.append(("D", i + 1, j))
-                    if diag_ok:
-                        cands.append(("X", i + 1, j + 1))
+                    moves = tuple(
+                        m for m, ok in (("R", can_r), ("D", can_d), ("X", can_x)) if ok
+                    )
 
-                nm = (m + 1) % 3
-                base = grid[i][j]
-                best = None
-                for ch, ni, nj in cands:
-                    sub = dp[ni][nj][nm]
-                    if sub is None:
-                        continue
-                    val = base + sub[0]
-                    if best is None or val > best[0]:
-                        best = (val, ch)
-                dp[i][j][m] = best
+                nmod = (mod + 1) % 3
+                for m in moves:
+                    if m == "R":
+                        ni, nj = i, j + 1
+                    elif m == "D":
+                        ni, nj = i + 1, j
+                    else:
+                        ni, nj = i + 1, j + 1
 
-    total = dp[0][0][0][0]
+                    cand = cur + grid[ni][nj]
+                    if best[ni][nj][nmod] is None or cand > best[ni][nj][nmod]:
+                        best[ni][nj][nmod] = cand
+                        taken[ni][nj][nmod] = m
 
-    # Reconstruct the path.
-    chars = []
-    i = j = m = 0
-    while i != n - 1 or j != n - 1:
-        ch = dp[i][j][m][1]
-        chars.append(ch)
-        if ch == "R":
-            j += 1
-        elif ch == "D":
-            i += 1
+    end_i = end_j = n - 1
+    total = None
+    end_mod = 0
+    for mod in range(3):
+        val = best[end_i][end_j][mod]
+        if val is not None and (total is None or val > total):
+            total = val
+            end_mod = mod
+
+    if total is None:
+        return (0, "")
+
+    rev_moves = []
+    i, j, mod = end_i, end_j, end_mod
+    while i != 0 or j != 0 or mod != 0:
+        m = taken[i][j][mod]
+        rev_moves.append(m)
+        if m == "R":
+            j -= 1
+        elif m == "D":
+            i -= 1
         else:
-            i += 1
-            j += 1
-        m = (m + 1) % 3
+            i -= 1
+            j -= 1
+        mod = (mod - 1) % 3
 
-    return (total, "".join(chars))
+    return (total, "".join(reversed(rev_moves)))
+```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
@@ -85,60 +100,73 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    # dp[i][j][m] = (best_sum, first_move) from cell (i, j) to (n-1, n-1),
-    # where m = (number of moves made so far) mod 3.
-    dp = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    # best[i][j][r] = maximum sum reaching (i, j) after a number of moves
+    # congruent to r mod 3. taken stores the move used to enter that state.
+    best = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    taken = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    best[0][0][0] = grid[0][0]
 
-    for s in range(2 * (n - 1), -1, -1):
-        lo = max(0, s - (n - 1))
-        hi = min(n - 1, s)
-        for i in range(lo, hi + 1):
-            j = s - i
-            for m in range(3):
-                if i == n - 1 and j == n - 1:
-                    dp[i][j][m] = (grid[i][j], "")
+    for i in range(n):
+        for j in range(n):
+            can_r = j + 1 < n
+            can_d = i + 1 < n
+            can_x = can_r and can_d
+
+            for mod in range(3):
+                cur = best[i][j][mod]
+                if cur is None:
                     continue
 
-                diag_ok = i + 1 < n and j + 1 < n
-                if m == 2 and diag_ok:
-                    # Next move is move number 3, 6, 9, ... -> must be diagonal.
-                    cands = (("X", i + 1, j + 1),)
+                if mod == 2:  # next move is 3rd, 6th, 9th, ...
+                    if can_x:
+                        moves = ("X",)
+                    else:
+                        moves = tuple(
+                            m for m, ok in (("R", can_r), ("D", can_d)) if ok
+                        )
                 else:
-                    cands = []
-                    if j + 1 < n:
-                        cands.append(("R", i, j + 1))
-                    if i + 1 < n:
-                        cands.append(("D", i + 1, j))
-                    if diag_ok:
-                        cands.append(("X", i + 1, j + 1))
+                    moves = tuple(
+                        m for m, ok in (("R", can_r), ("D", can_d), ("X", can_x)) if ok
+                    )
 
-                nm = (m + 1) % 3
-                base = grid[i][j]
-                best = None
-                for ch, ni, nj in cands:
-                    sub = dp[ni][nj][nm]
-                    if sub is None:
-                        continue
-                    val = base + sub[0]
-                    if best is None or val > best[0]:
-                        best = (val, ch)
-                dp[i][j][m] = best
+                nmod = (mod + 1) % 3
+                for m in moves:
+                    if m == "R":
+                        ni, nj = i, j + 1
+                    elif m == "D":
+                        ni, nj = i + 1, j
+                    else:
+                        ni, nj = i + 1, j + 1
 
-    total = dp[0][0][0][0]
+                    cand = cur + grid[ni][nj]
+                    if best[ni][nj][nmod] is None or cand > best[ni][nj][nmod]:
+                        best[ni][nj][nmod] = cand
+                        taken[ni][nj][nmod] = m
 
-    # Reconstruct the path.
-    chars = []
-    i = j = m = 0
-    while i != n - 1 or j != n - 1:
-        ch = dp[i][j][m][1]
-        chars.append(ch)
-        if ch == "R":
-            j += 1
-        elif ch == "D":
-            i += 1
+    end_i = end_j = n - 1
+    total = None
+    end_mod = 0
+    for mod in range(3):
+        val = best[end_i][end_j][mod]
+        if val is not None and (total is None or val > total):
+            total = val
+            end_mod = mod
+
+    if total is None:
+        return (0, "")
+
+    rev_moves = []
+    i, j, mod = end_i, end_j, end_mod
+    while i != 0 or j != 0 or mod != 0:
+        m = taken[i][j][mod]
+        rev_moves.append(m)
+        if m == "R":
+            j -= 1
+        elif m == "D":
+            i -= 1
         else:
-            i += 1
-            j += 1
-        m = (m + 1) % 3
+            i -= 1
+            j -= 1
+        mod = (mod - 1) % 3
 
-    return (total, "".join(chars))
+    return (total, "".join(reversed(rev_moves)))
