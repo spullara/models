@@ -1,0 +1,19 @@
+Model: deepseek-v4-flash-vision-exp
+Provider: deepseek
+Evaluated: 2026-08-21T08:07:07.124228+00:00
+
+=== TIMING ===
+Response time: 0.33s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"error":{"message":"The supported API model names are deepseek-v4-pro or deepseek-v4-flash, but you passed deepseek-v4-flash-vision-exp.","type":"invalid_request_error","param":null,"code":"invalid_request_error"}}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
