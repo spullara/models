@@ -1,166 +1,19 @@
 Model: zai-glm-5-2
 Provider: mistral
-Evaluated: 2026-08-11T11:19:10.421780+00:00
+Evaluated: 2026-08-26T20:24:08.000989+00:00
 
 === TIMING ===
-Response time: 3.86s
+Response time: 0.25s
 
 === CODE EXTRACTION ===
-Method: markdown_python
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 48
-Calculated sum: 48
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 403: {"object":"error","message":"This model is not available in your subscription tier","type":"tier_not_allowed","param":null,"code":"1910","raw_status_code":403}
 
 === RAW RESPONSE ===
-```python
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    
-    n = len(grid)
-    if n == 1:
-        return (grid[0][0], "")
-    
-    NEG_INF = float('-inf')
-    
-    # dp[r][c][1] stores the max sum and path to (r, c) where the next move is REQUIRED to be diagonal
-    # dp[r][c][0] stores the max sum and path to (r, c) where the next move can be anything (R, D, or X)
-    dp = [[[None, None] for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = (grid[0][0], "")
-    dp[0][0][1] = (grid[0][0], "")
-    
-    # Topologically process the grid
-    for r in range(n):
-        for c in range(n):
-            # If we are at a state where the next move must be diagonal, process the outgoing diagonal move
-            if dp[r][c][1] is not None:
-                s, p = dp[r][c][1]
-                nr, nc = r + 1, c + 1
-                if 0 <= nr < n and 0 <= nc < n:
-                    ns = s + grid[nr][nc]
-                    np_ = p + 'X'
-                    if dp[nr][nc][0] is None or ns > dp[nr][nc][0][0]:
-                        dp[nr][nc][0] = (ns, np_)
-                # If diagonal was not possible, the state naturally dies as no 'R' or 'D' is permitted from here.
-                    
-            # If we are at a state where the next move can be anything, process R, D, and X
-            if dp[r][c][0] is not None:
-                s, p = dp[r][c][0]
-                
-                # Move Right
-                nc = c + 1
-                if 0 <= r < n and 0 <= nc < n:
-                    ns = s + grid[r][nc]
-                    np_ = p + 'R'
-                    if dp[r][nc][1] is None or ns > dp[r][nc][1][0]:
-                        dp[r][nc][1] = (ns, np_)
-                        
-                # Move Down
-                nr = r + 1
-                if 0 <= nr < n and 0 <= c < n:
-                    ns = s + grid[nr][c]
-                    np_ = p + 'D'
-                    if dp[nr][c][1] is None or ns > dp[nr][c][1][0]:
-                        dp[nr][c][1] = (ns, np_)
-                        
-                # Move Diagonal (free choice)
-                nr, nc = r + 1, c + 1
-                if 0 <= nr < n and 0 <= nc < n:
-                    ns = s + grid[nr][nc]
-                    np_ = p + 'X'
-                    if dp[nr][nc][0] is None or ns > dp[nr][nc][0][0]:
-                        dp[nr][nc][0] = (ns, np_)
-
-    # At the destination, check the state where the next move must be diagonal, 
-    # and the state where the next move can be anything.
-    res1 = dp[n-1][n-1][1]
-    res2 = dp[n-1][n-1][0]
-    
-    ans = None
-    if res1 is not None and res2 is not None:
-        ans = res1 if res1[0] >= res2[0] else res2
-    elif res1 is not None:
-        ans = res1
-    elif res2 is not None:
-        ans = res2
-        
-    return ans if ans is not None else (0, "")
-```
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
-    
-    n = len(grid)
-    if n == 1:
-        return (grid[0][0], "")
-    
-    NEG_INF = float('-inf')
-    
-    # dp[r][c][1] stores the max sum and path to (r, c) where the next move is REQUIRED to be diagonal
-    # dp[r][c][0] stores the max sum and path to (r, c) where the next move can be anything (R, D, or X)
-    dp = [[[None, None] for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = (grid[0][0], "")
-    dp[0][0][1] = (grid[0][0], "")
-    
-    # Topologically process the grid
-    for r in range(n):
-        for c in range(n):
-            # If we are at a state where the next move must be diagonal, process the outgoing diagonal move
-            if dp[r][c][1] is not None:
-                s, p = dp[r][c][1]
-                nr, nc = r + 1, c + 1
-                if 0 <= nr < n and 0 <= nc < n:
-                    ns = s + grid[nr][nc]
-                    np_ = p + 'X'
-                    if dp[nr][nc][0] is None or ns > dp[nr][nc][0][0]:
-                        dp[nr][nc][0] = (ns, np_)
-                # If diagonal was not possible, the state naturally dies as no 'R' or 'D' is permitted from here.
-                    
-            # If we are at a state where the next move can be anything, process R, D, and X
-            if dp[r][c][0] is not None:
-                s, p = dp[r][c][0]
-                
-                # Move Right
-                nc = c + 1
-                if 0 <= r < n and 0 <= nc < n:
-                    ns = s + grid[r][nc]
-                    np_ = p + 'R'
-                    if dp[r][nc][1] is None or ns > dp[r][nc][1][0]:
-                        dp[r][nc][1] = (ns, np_)
-                        
-                # Move Down
-                nr = r + 1
-                if 0 <= nr < n and 0 <= c < n:
-                    ns = s + grid[nr][c]
-                    np_ = p + 'D'
-                    if dp[nr][c][1] is None or ns > dp[nr][c][1][0]:
-                        dp[nr][c][1] = (ns, np_)
-                        
-                # Move Diagonal (free choice)
-                nr, nc = r + 1, c + 1
-                if 0 <= nr < n and 0 <= nc < n:
-                    ns = s + grid[nr][nc]
-                    np_ = p + 'X'
-                    if dp[nr][nc][0] is None or ns > dp[nr][nc][0][0]:
-                        dp[nr][nc][0] = (ns, np_)
-
-    # At the destination, check the state where the next move must be diagonal, 
-    # and the state where the next move can be anything.
-    res1 = dp[n-1][n-1][1]
-    res2 = dp[n-1][n-1][0]
-    
-    ans = None
-    if res1 is not None and res2 is not None:
-        ans = res1 if res1[0] >= res2[0] else res2
-    elif res1 is not None:
-        ans = res1
-    elif res2 is not None:
-        ans = res2
-        
-    return ans if ans is not None else (0, "")
+(no code extracted)
