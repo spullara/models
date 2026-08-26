@@ -1,0 +1,19 @@
+Model: models/gemini-3.5-transcribe
+Provider: gemini
+Evaluated: 2026-08-26T16:30:06.897928+00:00
+
+=== TIMING ===
+Response time: 0.29s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: Failed to extract response text
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
