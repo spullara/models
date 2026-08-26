@@ -1,0 +1,19 @@
+Model: muse-image-1.0
+Provider: meta
+Evaluated: 2026-08-26T16:35:07.142049+00:00
+
+=== TIMING ===
+Response time: 33.89s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: Failed to extract response text
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
