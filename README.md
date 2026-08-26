@@ -1,9 +1,21 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-26 14:20:27
+Last updated: 2026-08-26 16:45:30
 
 ## Updates This Week (2026-08-20 to 2026-08-26)
+
+### Gemini
+
+**Added**
+
+- models/gemini-3.5-transcribe (added: 2026-08-26)
+- models/gemini-3.5-transcribe-live (added: 2026-08-26)
+
+**Deleted**
+
+- models/gemini-3.5-live-translate-preview (deleted: 2026-08-26)
+- models/gemini-robotics-er-2-streaming-preview (deleted: 2026-08-26)
 
 ### DeepSeek
 
@@ -15,7 +27,14 @@ Last updated: 2026-08-26 14:20:27
 
 **Added**
 
+- qwen3.8-flash (added: 2026-08-26)
 - kimi-k3 (added: 2026-08-21)
+
+### Meta
+
+**Added**
+
+- muse-image-1.0 (added: 2026-08-26)
 
 ### Z.AI
 
@@ -31,7 +50,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 10/13
 
-**Gemini**: 50/101
+**Gemini**: 50/103
 
 **Grok**: 12/21
 
@@ -41,9 +60,9 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 12/6
 
-**Qwen**: 162/24
+**Qwen**: 163/24
 
-**Meta**: 3/0
+**Meta**: 4/0
 
 **NVIDIA**: 4/0
 
@@ -277,8 +296,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- models/gemini-robotics-er-2-streaming-preview (added: 2026-08-17)
-- models/gemini-3.5-live-translate-preview (added: 2026-08-17)
+- models/gemini-3.5-transcribe-live (added: 2026-08-26)
+- models/gemini-3.5-transcribe (added: 2026-08-26)
 - models/gemini-3.7-flash (added: 2026-08-13)
 - models/gemini-robotics-er-2-preview (added: 2026-07-30)
 - models/gemini-3.6-flash (added: 2026-07-21)
@@ -330,6 +349,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/gemini-robotics-er-2-streaming-preview (deleted: 2026-08-26)
+- models/gemini-3.5-live-translate-preview (deleted: 2026-08-26)
 - models/imagen-4.0-ultra-generate-001 (deleted: 2026-08-17)
 - models/imagen-4.0-generate-001 (deleted: 2026-08-17)
 - models/imagen-4.0-fast-generate-001 (deleted: 2026-08-17)
@@ -641,6 +662,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- qwen3.8-flash (added: 2026-08-26)
 - kimi-k3 (added: 2026-08-21)
 - qwen3.8-27b (added: 2026-08-19)
 - ZHIPU/GLM-5.3 (added: 2026-08-18)
@@ -835,6 +857,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- muse-image-1.0 (added: 2026-08-26)
 - muse-spark-1.2-contributor (added: 2026-08-05)
 - muse-spark-1.2 (added: 2026-08-05)
 - muse-spark-1.1 (added: 2026-07-09)
