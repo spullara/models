@@ -27,7 +27,8 @@ models/gemini-3.1-pro-preview
 models/gemini-3.1-pro-preview-customtools
 models/gemini-3.5-flash
 models/gemini-3.5-flash-lite
-models/gemini-3.5-live-translate-preview
+models/gemini-3.5-transcribe
+models/gemini-3.5-transcribe-live
 models/gemini-3.6-flash
 models/gemini-3.7-flash
 models/gemini-embedding-001
@@ -39,7 +40,6 @@ models/gemini-omni-flash-preview
 models/gemini-pro-latest
 models/gemini-robotics-er-1.6-preview
 models/gemini-robotics-er-2-preview
-models/gemini-robotics-er-2-streaming-preview
 models/gemma-4-26b-a4b-it
 models/gemma-4-31b-it
 models/lyria-3-clip-preview
