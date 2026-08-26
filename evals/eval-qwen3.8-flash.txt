@@ -1,0 +1,19 @@
+Model: qwen3.8-flash
+Provider: qwen
+Evaluated: 2026-08-26T16:19:06.763469+00:00
+
+=== TIMING ===
+Response time: 300.54s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: Request timed out (5 min)
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
