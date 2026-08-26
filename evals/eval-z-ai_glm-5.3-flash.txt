@@ -1,0 +1,219 @@
+Model: z-ai/glm-5.3-flash
+Provider: openrouter
+Evaluated: 2026-08-26T14:19:06.611665+00:00
+
+=== TIMING ===
+Response time: 68.32s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 73
+Calculated sum: 15
+Sum matches: NO
+Path valid: NO
+Path error: Move 3 must be diagonal (X) but was D
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Finds the maximum-sum path from top-left to bottom-right of an N×N grid.
+
+    Moves: R (right), D (down), X (diagonal down-right).
+    Constraint: every 3rd move (3rd, 6th, 9th, ...) must be an X move
+    whenever a diagonal move is possible from the current position;
+    otherwise an R or D move may be used instead.
+
+    Returns (max_sum, path_string).
+
+    Uses dynamic programming over states (row, col, moves_so_far % 3),
+    tracking parents for path reconstruction. Complexity: O(N^2).
+    """
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    NEG = float('-inf')
+
+    # dp[i][j][r]: max sum to reach (i, j) having made k moves with k % 3 == r
+    # r == 2 means the NEXT move (numbered k+1) is a multiple of 3,
+    # hence must be diagonal if possible.
+    dp = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    # parent[i][j][r]: (prev_i, prev_j, prev_r, move_char)
+    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    dp[0][0][0] = grid[0][0]
+
+    for i in range(n):
+        for j in range(n):
+            for r in range(3):
+                cur = dp[i][j][r]
+                if cur == NEG:
+                    continue
+
+                # Determine allowed moves based on whether next move is forced diagonal
+                candidate_moves = []
+                if r == 2:
+                    # Next move index is divisible by 3 -> must be X if possible
+                    if i + 1 < n and j + 1 < n:
+                        candidate_moves.append(('X', 1, 1))
+                    # Diagonal not possible -> fall back to R / D
+                    if j + 1 < n:
+                        candidate_moves.append(('R', 0, 1))
+                    if i + 1 < n:
+                        candidate_moves.append(('D', 1, 0))
+                else:
+                    if j + 1 < n:
+                        candidate_moves.append(('R', 0, 1))
+                    if i + 1 < n:
+                        candidate_moves.append(('D', 1, 0))
+                    if i + 1 < n and j + 1 < n:
+                        candidate_moves.append(('X', 1, 1))
+
+                nr = (r + 1) % 3
+                for ch, di, dj in candidate_moves:
+                    ni, nj = i + di, j + dj
+                    val = cur + grid[ni][nj]
+                    if val > dp[ni][nj][nr]:
+                        dp[ni][nj][nr] = val
+                        parent[ni][nj][nr] = (i, j, r, ch)
+
+    # Pick best final state among residue classes
+    best_val = max(dp[n - 1][n - 1])
+    best_r = dp[n - 1][n - 1].index(best_val)
+
+    # Reconstruct path by walking parents back to the start
+    path_chars = []
+    ci, cj, cr = n - 1, n - 1, best_r
+    while not (ci == 0 and cj == 0):
+        pi, pj, pr, ch = parent[ci][cj][cr]
+        path_chars.append(ch)
+        ci, cj, cr = pi, pj, pr
+    path_chars.reverse()
+
+    return (best_val, "".join(path_chars))
+
+
+# ---------------------- quick sanity tests ----------------------
+if __name__ == "__main__":
+    # Simple examples
+    g1 = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+    ]
+    print(solve_grid(g1))  # explores paths honoring the forced-X-on-every-3rd-move rule
+
+    g2 = [[42]]
+    print(solve_grid(g2))  # (42, "")
+
+    g3 = [
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+    ]
+    print(solve_grid(g3))  # prefers longest path (no forced diagonals possible), e.g. "RRDD"
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Finds the maximum-sum path from top-left to bottom-right of an N×N grid.
+
+    Moves: R (right), D (down), X (diagonal down-right).
+    Constraint: every 3rd move (3rd, 6th, 9th, ...) must be an X move
+    whenever a diagonal move is possible from the current position;
+    otherwise an R or D move may be used instead.
+
+    Returns (max_sum, path_string).
+
+    Uses dynamic programming over states (row, col, moves_so_far % 3),
+    tracking parents for path reconstruction. Complexity: O(N^2).
+    """
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    NEG = float('-inf')
+
+    # dp[i][j][r]: max sum to reach (i, j) having made k moves with k % 3 == r
+    # r == 2 means the NEXT move (numbered k+1) is a multiple of 3,
+    # hence must be diagonal if possible.
+    dp = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    # parent[i][j][r]: (prev_i, prev_j, prev_r, move_char)
+    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    dp[0][0][0] = grid[0][0]
+
+    for i in range(n):
+        for j in range(n):
+            for r in range(3):
+                cur = dp[i][j][r]
+                if cur == NEG:
+                    continue
+
+                # Determine allowed moves based on whether next move is forced diagonal
+                candidate_moves = []
+                if r == 2:
+                    # Next move index is divisible by 3 -> must be X if possible
+                    if i + 1 < n and j + 1 < n:
+                        candidate_moves.append(('X', 1, 1))
+                    # Diagonal not possible -> fall back to R / D
+                    if j + 1 < n:
+                        candidate_moves.append(('R', 0, 1))
+                    if i + 1 < n:
+                        candidate_moves.append(('D', 1, 0))
+                else:
+                    if j + 1 < n:
+                        candidate_moves.append(('R', 0, 1))
+                    if i + 1 < n:
+                        candidate_moves.append(('D', 1, 0))
+                    if i + 1 < n and j + 1 < n:
+                        candidate_moves.append(('X', 1, 1))
+
+                nr = (r + 1) % 3
+                for ch, di, dj in candidate_moves:
+                    ni, nj = i + di, j + dj
+                    val = cur + grid[ni][nj]
+                    if val > dp[ni][nj][nr]:
+                        dp[ni][nj][nr] = val
+                        parent[ni][nj][nr] = (i, j, r, ch)
+
+    # Pick best final state among residue classes
+    best_val = max(dp[n - 1][n - 1])
+    best_r = dp[n - 1][n - 1].index(best_val)
+
+    # Reconstruct path by walking parents back to the start
+    path_chars = []
+    ci, cj, cr = n - 1, n - 1, best_r
+    while not (ci == 0 and cj == 0):
+        pi, pj, pr, ch = parent[ci][cj][cr]
+        path_chars.append(ch)
+        ci, cj, cr = pi, pj, pr
+    path_chars.reverse()
+
+    return (best_val, "".join(path_chars))
+
+
+# ---------------------- quick sanity tests ----------------------
+if __name__ == "__main__":
+    # Simple examples
+    g1 = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+    ]
+    print(solve_grid(g1))  # explores paths honoring the forced-X-on-every-3rd-move rule
+
+    g2 = [[42]]
+    print(solve_grid(g2))  # (42, "")
+
+    g3 = [
+        [1, 1, 1],
+        [1, 1, 1],
+        [1, 1, 1],
+    ]
+    print(solve_grid(g3))  # prefers longest path (no forced diagonals possible), e.g. "RRDD"
