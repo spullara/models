@@ -1,0 +1,19 @@
+Model: kimi/kimi-k3
+Provider: qwen
+Evaluated: 2026-08-28T06:08:06.285580+00:00
+
+=== TIMING ===
+Response time: 1.26s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"error":{"message":"The product is not activated, please confirm that you have activated products and try again after activation.","type":"invalid_request_error","param":null,"code":"invalid_parameter_error"},"request_id":"8e45df83-7fbf-98aa-a075-c94b7b502bf2"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
