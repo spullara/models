@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-27 15:00:24
+Last updated: 2026-08-28 06:08:18
 
-## Updates This Week (2026-08-21 to 2026-08-27)
+## Updates This Week (2026-08-22 to 2026-08-28)
 
 ### Gemini
 
@@ -26,18 +26,12 @@ Last updated: 2026-08-27 15:00:24
 - glm-5-2 (deleted: 2026-08-26)
 - zai-glm-5-2 (deleted: 2026-08-26)
 
-### DeepSeek
-
-**Added**
-
-- deepseek-v4-flash-vision-exp (added: 2026-08-21)
-
 ### Qwen
 
 **Added**
 
+- kimi/kimi-k3 (added: 2026-08-28)
 - qwen3.8-flash (added: 2026-08-26)
-- kimi-k3 (added: 2026-08-21)
 
 ### Meta
 
@@ -69,7 +63,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 12/6
 
-**Qwen**: 163/24
+**Qwen**: 164/24
 
 **Meta**: 4/0
 
@@ -672,6 +666,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- kimi/kimi-k3 (added: 2026-08-28)
 - qwen3.8-flash (added: 2026-08-26)
 - kimi-k3 (added: 2026-08-21)
 - qwen3.8-27b (added: 2026-08-19)
