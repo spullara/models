@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-31 13:19:41
+Last updated: 2026-08-31 13:21:48
 
 ## Updates This Week (2026-08-25 to 2026-08-31)
 
@@ -58,10 +58,6 @@ Last updated: 2026-08-31 13:19:41
 
 - muse-image-1.0 (added: 2026-08-26)
 
-**Deleted**
-
-- muse-spark-1.1 (deleted: 2026-08-31)
-
 ### Z.AI
 
 **Added**
@@ -88,7 +84,7 @@ Model counts shown as: **Available/Deleted**
 
 **Qwen**: 164/24
 
-**Meta**: 3/1
+**Meta**: 4/0
 
 **NVIDIA**: 4/0
 
@@ -888,10 +884,7 @@ Model counts shown as: **Available/Deleted**
 - muse-image-1.0 (added: 2026-08-26)
 - muse-spark-1.2-contributor (added: 2026-08-05)
 - muse-spark-1.2 (added: 2026-08-05)
-
-### Deleted Models
-
-- muse-spark-1.1 (deleted: 2026-08-31)
+- muse-spark-1.1 (added: 2026-07-09)
 
 ## NVIDIA
 
