@@ -1,12 +1,12 @@
 Model: muse-spark-1.1
 Provider: meta
-Evaluated: 2026-07-09T18:38:11.403490+00:00
+Evaluated: 2026-08-31T13:21:09.179328+00:00
 
 === TIMING ===
-Response time: 42.23s
+Response time: 28.3s
 
 === CODE EXTRACTION ===
-Method: direct
+Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
@@ -16,137 +16,181 @@ Sum matches: YES
 Path valid: YES
 
 === RAW RESPONSE ===
+```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
+
     R = len(grid)
     C = len(grid[0])
-    NEG = -10**30
-    dp = [[[NEG, NEG, NEG] for _ in range(C)] for _ in range(R)]
-    prev = [[[None, None, None] for _ in range(C)] for _ in range(R)]
-    dp[0][0][0] = grid[0][0]
+    NEG = -10**18
 
-    for i in range(R):
-        for j in range(C):
+    # dp_sum[r][c][m] = best sum from (r,c) to end inclusive,
+    # where m = moves taken to reach (r,c) mod 3
+    dp_sum = [[[NEG, NEG, NEG] for _ in range(C)] for _ in range(R)]
+    dp_next = [[[None, None, None] for _ in range(C)] for _ in range(R)]
+
+    for m in range(3):
+        dp_sum[R - 1][C - 1][m] = grid[R - 1][C - 1]
+        dp_next[R - 1][C - 1][m] = None  # end
+
+    # iterate by total = r + c decreasing (DAG)
+    for total in range(R + C - 2, -1, -1):
+        for r in range(R):
+            c = total - r
+            if c < 0 or c >= C:
+                continue
+            if r == R - 1 and c == C - 1:
+                continue
             for mod in range(3):
-                cur = dp[i][j][mod]
-                if cur == NEG:
-                    continue
-                if i == R - 1 and j == C - 1:
-                    continue
-                canR = j + 1 < C
-                canD = i + 1 < R
-                canX = canR and canD
-                nxt_mod = (mod + 1) % 3
-                moves = []
-                if mod == 2:
-                    if canX:
-                        moves.append(('X', i + 1, j + 1))
+                forced = (mod == 2)  # next move number % 3 == 0
+                candidates = []
+                if forced:
+                    if r + 1 < R and c + 1 < C:
+                        candidates.append('X')
                     else:
-                        if canR:
-                            moves.append(('R', i, j + 1))
-                        if canD:
-                            moves.append(('D', i + 1, j))
+                        if c + 1 < C:
+                            candidates.append('R')
+                        if r + 1 < R:
+                            candidates.append('D')
                 else:
-                    if canR:
-                        moves.append(('R', i, j + 1))
-                    if canD:
-                        moves.append(('D', i + 1, j))
-                    if canX:
-                        moves.append(('X', i + 1, j + 1))
-                for mv, ni, nj in moves:
-                    ns = cur + grid[ni][nj]
-                    if ns > dp[ni][nj][nxt_mod]:
-                        dp[ni][nj][nxt_mod] = ns
-                        prev[ni][nj][nxt_mod] = (i, j, mod, mv)
+                    if c + 1 < C:
+                        candidates.append('R')
+                    if r + 1 < R:
+                        candidates.append('D')
+                    if r + 1 < R and c + 1 < C:
+                        candidates.append('X')
 
-    best_mod = 0
-    best_val = dp[R - 1][C - 1][0]
-    for m in range(1, 3):
-        if dp[R - 1][C - 1][m] > best_val:
-            best_val = dp[R - 1][C - 1][m]
-            best_mod = m
+                best_sum = NEG
+                best_mv = None
+                for mv in candidates:
+                    if mv == 'R':
+                        nr, nc = r, c + 1
+                    elif mv == 'D':
+                        nr, nc = r + 1, c
+                    else:  # 'X'
+                        nr, nc = r + 1, c + 1
+                    nmod = (mod + 1) % 3
+                    sub = dp_sum[nr][nc][nmod]
+                    if sub == NEG:
+                        continue
+                    cur = grid[r][c] + sub
+                    if cur > best_sum:
+                        best_sum = cur
+                        best_mv = mv
 
-    if R == 1 and C == 1:
-        return (dp[0][0][0], "")
+                if best_mv is not None:
+                    dp_sum[r][c][mod] = best_sum
+                    dp_next[r][c][mod] = best_mv
 
-    chars = []
-    ci, cj, cm = R - 1, C - 1, best_mod
-    while not (ci == 0 and cj == 0):
-        p = prev[ci][cj][cm]
-        if p is None:
+    max_sum = dp_sum[0][0][0]
+    # reconstruct path
+    if max_sum == NEG:  # no feasible path (should not happen)
+        return (0, "")
+
+    path_chars = []
+    r, c, mod = 0, 0, 0
+    while not (r == R - 1 and c == C - 1):
+        mv = dp_next[r][c][mod]
+        if mv is None:  # unreachable
             break
-        pi, pj, pm, mv = p
-        chars.append(mv)
-        ci, cj, cm = pi, pj, pm
+        path_chars.append(mv)
+        if mv == 'R':
+            r, c = r, c + 1
+        elif mv == 'D':
+            r, c = r + 1, c
+        else:
+            r, c = r + 1, c + 1
+        mod = (mod + 1) % 3
 
-    chars.reverse()
-    return (best_val, "".join(chars))
+    return (max_sum, "".join(path_chars))
+```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
+
     R = len(grid)
     C = len(grid[0])
-    NEG = -10**30
-    dp = [[[NEG, NEG, NEG] for _ in range(C)] for _ in range(R)]
-    prev = [[[None, None, None] for _ in range(C)] for _ in range(R)]
-    dp[0][0][0] = grid[0][0]
+    NEG = -10**18
 
-    for i in range(R):
-        for j in range(C):
+    # dp_sum[r][c][m] = best sum from (r,c) to end inclusive,
+    # where m = moves taken to reach (r,c) mod 3
+    dp_sum = [[[NEG, NEG, NEG] for _ in range(C)] for _ in range(R)]
+    dp_next = [[[None, None, None] for _ in range(C)] for _ in range(R)]
+
+    for m in range(3):
+        dp_sum[R - 1][C - 1][m] = grid[R - 1][C - 1]
+        dp_next[R - 1][C - 1][m] = None  # end
+
+    # iterate by total = r + c decreasing (DAG)
+    for total in range(R + C - 2, -1, -1):
+        for r in range(R):
+            c = total - r
+            if c < 0 or c >= C:
+                continue
+            if r == R - 1 and c == C - 1:
+                continue
             for mod in range(3):
-                cur = dp[i][j][mod]
-                if cur == NEG:
-                    continue
-                if i == R - 1 and j == C - 1:
-                    continue
-                canR = j + 1 < C
-                canD = i + 1 < R
-                canX = canR and canD
-                nxt_mod = (mod + 1) % 3
-                moves = []
-                if mod == 2:
-                    if canX:
-                        moves.append(('X', i + 1, j + 1))
+                forced = (mod == 2)  # next move number % 3 == 0
+                candidates = []
+                if forced:
+                    if r + 1 < R and c + 1 < C:
+                        candidates.append('X')
                     else:
-                        if canR:
-                            moves.append(('R', i, j + 1))
-                        if canD:
-                            moves.append(('D', i + 1, j))
+                        if c + 1 < C:
+                            candidates.append('R')
+                        if r + 1 < R:
+                            candidates.append('D')
                 else:
-                    if canR:
-                        moves.append(('R', i, j + 1))
-                    if canD:
-                        moves.append(('D', i + 1, j))
-                    if canX:
-                        moves.append(('X', i + 1, j + 1))
-                for mv, ni, nj in moves:
-                    ns = cur + grid[ni][nj]
-                    if ns > dp[ni][nj][nxt_mod]:
-                        dp[ni][nj][nxt_mod] = ns
-                        prev[ni][nj][nxt_mod] = (i, j, mod, mv)
+                    if c + 1 < C:
+                        candidates.append('R')
+                    if r + 1 < R:
+                        candidates.append('D')
+                    if r + 1 < R and c + 1 < C:
+                        candidates.append('X')
 
-    best_mod = 0
-    best_val = dp[R - 1][C - 1][0]
-    for m in range(1, 3):
-        if dp[R - 1][C - 1][m] > best_val:
-            best_val = dp[R - 1][C - 1][m]
-            best_mod = m
+                best_sum = NEG
+                best_mv = None
+                for mv in candidates:
+                    if mv == 'R':
+                        nr, nc = r, c + 1
+                    elif mv == 'D':
+                        nr, nc = r + 1, c
+                    else:  # 'X'
+                        nr, nc = r + 1, c + 1
+                    nmod = (mod + 1) % 3
+                    sub = dp_sum[nr][nc][nmod]
+                    if sub == NEG:
+                        continue
+                    cur = grid[r][c] + sub
+                    if cur > best_sum:
+                        best_sum = cur
+                        best_mv = mv
 
-    if R == 1 and C == 1:
-        return (dp[0][0][0], "")
+                if best_mv is not None:
+                    dp_sum[r][c][mod] = best_sum
+                    dp_next[r][c][mod] = best_mv
 
-    chars = []
-    ci, cj, cm = R - 1, C - 1, best_mod
-    while not (ci == 0 and cj == 0):
-        p = prev[ci][cj][cm]
-        if p is None:
+    max_sum = dp_sum[0][0][0]
+    # reconstruct path
+    if max_sum == NEG:  # no feasible path (should not happen)
+        return (0, "")
+
+    path_chars = []
+    r, c, mod = 0, 0, 0
+    while not (r == R - 1 and c == C - 1):
+        mv = dp_next[r][c][mod]
+        if mv is None:  # unreachable
             break
-        pi, pj, pm, mv = p
-        chars.append(mv)
-        ci, cj, cm = pi, pj, pm
+        path_chars.append(mv)
+        if mv == 'R':
+            r, c = r, c + 1
+        elif mv == 'D':
+            r, c = r + 1, c
+        else:
+            r, c = r + 1, c + 1
+        mod = (mod + 1) % 3
 
-    chars.reverse()
-    return (best_val, "".join(chars))
+    return (max_sum, "".join(path_chars))
