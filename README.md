@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-28 06:08:18
+Last updated: 2026-08-31 08:02:18
 
-## Updates This Week (2026-08-22 to 2026-08-28)
+## Updates This Week (2026-08-25 to 2026-08-31)
 
 ### Gemini
 
@@ -25,6 +25,19 @@ Last updated: 2026-08-28 06:08:18
 
 - glm-5-2 (deleted: 2026-08-26)
 - zai-glm-5-2 (deleted: 2026-08-26)
+
+### Kimi
+
+**Deleted**
+
+- kimi-k2.5 (deleted: 2026-08-31)
+- moonshot-v1-128k (deleted: 2026-08-31)
+- moonshot-v1-128k-vision-preview (deleted: 2026-08-31)
+- moonshot-v1-32k (deleted: 2026-08-31)
+- moonshot-v1-32k-vision-preview (deleted: 2026-08-31)
+- moonshot-v1-8k (deleted: 2026-08-31)
+- moonshot-v1-8k-vision-preview (deleted: 2026-08-31)
+- moonshot-v1-auto (deleted: 2026-08-31)
 
 ### Qwen
 
@@ -61,7 +74,7 @@ Model counts shown as: **Available/Deleted**
 
 **DeepSeek**: 3/2
 
-**Kimi**: 12/6
+**Kimi**: 4/14
 
 **Qwen**: 164/24
 
@@ -644,17 +657,17 @@ Model counts shown as: **Available/Deleted**
 - kimi-k2.7-code-highspeed (added: 2026-06-15)
 - kimi-k2.7-code (added: 2026-06-12)
 - kimi-k2.6 (added: 2026-04-20)
-- kimi-k2.5 (added: 2026-01-27)
-- moonshot-v1-auto (added: 2025-12-18)
-- moonshot-v1-8k-vision-preview (added: 2025-12-18)
-- moonshot-v1-8k (added: 2025-12-18)
-- moonshot-v1-32k-vision-preview (added: 2025-12-18)
-- moonshot-v1-32k (added: 2025-12-18)
-- moonshot-v1-128k-vision-preview (added: 2025-12-18)
-- moonshot-v1-128k (added: 2025-12-18)
 
 ### Deleted Models
 
+- moonshot-v1-auto (deleted: 2026-08-31)
+- moonshot-v1-8k-vision-preview (deleted: 2026-08-31)
+- moonshot-v1-8k (deleted: 2026-08-31)
+- moonshot-v1-32k-vision-preview (deleted: 2026-08-31)
+- moonshot-v1-32k (deleted: 2026-08-31)
+- moonshot-v1-128k-vision-preview (deleted: 2026-08-31)
+- moonshot-v1-128k (deleted: 2026-08-31)
+- kimi-k2.5 (deleted: 2026-08-31)
 - kimi-k2-turbo-preview (deleted: 2026-04-20)
 - kimi-k2-thinking-turbo (deleted: 2026-04-20)
 - kimi-k2-thinking (deleted: 2026-04-20)
