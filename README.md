@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-08-31 08:02:18
+Last updated: 2026-08-31 12:00:27
 
 ## Updates This Week (2026-08-25 to 2026-08-31)
 
@@ -23,6 +23,12 @@ Last updated: 2026-08-31 08:02:18
 
 **Deleted**
 
+- devstral-2512 (deleted: 2026-08-31)
+- devstral-latest (deleted: 2026-08-31)
+- devstral-medium-latest (deleted: 2026-08-31)
+- mistral-code-agent-latest (deleted: 2026-08-31)
+- mistral-medium-2505 (deleted: 2026-08-31)
+- mistral-medium-2508 (deleted: 2026-08-31)
 - glm-5-2 (deleted: 2026-08-26)
 - zai-glm-5-2 (deleted: 2026-08-26)
 
@@ -70,7 +76,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 12/21
 
-**Mistral**: 54/63
+**Mistral**: 48/69
 
 **DeepSeek**: 3/2
 
@@ -524,7 +530,6 @@ Model counts shown as: **Available/Deleted**
 - mistral-ocr-3 (added: 2026-06-16)
 - mistral-code-latest (added: 2026-06-02)
 - mistral-code-fim-latest (added: 2026-06-02)
-- mistral-code-agent-latest (added: 2026-06-02)
 - mistral-medium-3-5 (added: 2026-04-21)
 - mistral-medium-3.5 (added: 2026-04-09)
 - mistral-medium-3 (added: 2026-04-09)
@@ -540,9 +545,7 @@ Model counts shown as: **Available/Deleted**
 - voxtral-mini-2602 (added: 2026-02-04)
 - mistral-vibe-cli-with-tools (added: 2026-02-04)
 - mistral-ocr-2512 (added: 2025-12-15)
-- devstral-latest (added: 2025-12-15)
 - mistral-vibe-cli-latest (added: 2025-12-09)
-- devstral-2512 (added: 2025-12-09)
 - mistral-large-2512 (added: 2025-12-02)
 - ministral-8b-2512 (added: 2025-12-02)
 - ministral-3b-2512 (added: 2025-12-02)
@@ -554,8 +557,6 @@ Model counts shown as: **Available/Deleted**
 - mistral-small-latest (added: 2025-11-24)
 - mistral-ocr-latest (added: 2025-11-24)
 - mistral-medium-latest (added: 2025-11-24)
-- mistral-medium-2508 (added: 2025-11-24)
-- mistral-medium-2505 (added: 2025-11-24)
 - mistral-medium (added: 2025-11-24)
 - mistral-large-latest (added: 2025-11-24)
 - mistral-embed-2312 (added: 2025-11-24)
@@ -564,7 +565,6 @@ Model counts shown as: **Available/Deleted**
 - ministral-3b-latest (added: 2025-11-24)
 - magistral-small-latest (added: 2025-11-24)
 - magistral-medium-latest (added: 2025-11-24)
-- devstral-medium-latest (added: 2025-11-24)
 - codestral-latest (added: 2025-11-24)
 - codestral-embed-2505 (added: 2025-11-24)
 - codestral-embed (added: 2025-11-24)
@@ -572,6 +572,12 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- mistral-medium-2508 (deleted: 2026-08-31)
+- mistral-medium-2505 (deleted: 2026-08-31)
+- mistral-code-agent-latest (deleted: 2026-08-31)
+- devstral-medium-latest (deleted: 2026-08-31)
+- devstral-latest (deleted: 2026-08-31)
+- devstral-2512 (deleted: 2026-08-31)
 - zai-glm-5-2 (deleted: 2026-08-26)
 - glm-5-2 (deleted: 2026-08-26)
 - open-mistral-nemo-2407 (deleted: 2026-07-31)
