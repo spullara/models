@@ -1,6 +1,6 @@
 Model: models/gemini-3.1-flash-live-preview
 Provider: gemini
-Evaluated: 2026-08-31T21:14:10.062736+00:00
+Evaluated: 2026-08-31T21:17:06.903335+00:00
 
 === TIMING ===
 Response time: 0.18s
