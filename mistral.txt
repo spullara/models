@@ -2,9 +2,6 @@ codestral-2508
 codestral-embed
 codestral-embed-2505
 codestral-latest
-devstral-2512
-devstral-latest
-devstral-medium-latest
 labs-leanstral-1-5
 labs-leanstral-1-5-1
 magistral-medium-latest
@@ -15,7 +12,6 @@ ministral-3b-2512
 ministral-3b-latest
 ministral-8b-2512
 ministral-8b-latest
-mistral-code-agent-latest
 mistral-code-fim-latest
 mistral-code-latest
 mistral-embed
@@ -23,8 +19,6 @@ mistral-embed-2312
 mistral-large-2512
 mistral-large-latest
 mistral-medium
-mistral-medium-2505
-mistral-medium-2508
 mistral-medium-2604
 mistral-medium-3
 mistral-medium-3-5
