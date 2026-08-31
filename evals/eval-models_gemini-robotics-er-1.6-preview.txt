@@ -1,16 +1,23 @@
 Model: models/gemini-robotics-er-1.6-preview
 Provider: gemini
-Evaluated: 2026-04-14T15:00:06.949643+00:00
+Evaluated: 2026-08-31T21:07:08.544856+00:00
 
 === TIMING ===
-Response time: 0.13s
+Response time: 0.17s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 404: 
+API Error: HTTP 404: {
+  "error": {
+    "code": 404,
+    "message": "models/gemini-robotics-er-1.6-preview is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
+    "status": "NOT_FOUND"
+  }
+}
+
 
 === RAW RESPONSE ===
 (no response)
