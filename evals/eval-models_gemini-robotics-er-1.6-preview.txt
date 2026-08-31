@@ -1,26 +1,183 @@
 Model: models/gemini-robotics-er-1.6-preview
 Provider: gemini
-Evaluated: 2026-08-31T21:15:07.716702+00:00
+Evaluated: 2026-08-31T21:19:06.287670+00:00
 
 === TIMING ===
-Response time: 0.2s
+Response time: 12.88s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: {
-  "error": {
-    "code": 404,
-    "message": "models/gemini-robotics-er-1.6-preview is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "status": "NOT_FOUND"
-  }
-}
-
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+import sys
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Finds the maximum sum path from (0, 0) to (N-1, N-1) given constraints on 
+    diagonal moves occurring every 3rd step.
+    """
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    
+    # Memoization dictionary to store (r, c, move_rem) -> (max_sum, path_string)
+    # move_rem is the count of moves taken so far modulo 3.
+    memo = {}
+    
+    # Increase recursion depth for larger grids
+    sys.setrecursionlimit(20000)
+
+    def dp(r, c, move_rem):
+        # Base Case: Reached the destination
+        if r == N - 1 and c == N - 1:
+            return (0, "")
+        
+        state = (r, c, move_rem)
+        if state in memo:
+            return memo[state]
+        
+        # move_idx is the current step number we are taking (1st, 2nd, 3rd...)
+        # Every 3rd move (3, 6, 9...) corresponds to move_rem == 2 since indices start at 0
+        move_idx = move_rem + 1
+        
+        can_X = (r + 1 < N and c + 1 < N)
+        can_R = (c + 1 < N)
+        can_D = (r + 1 < N)
+        
+        options = []
+        
+        if move_idx % 3 == 0:
+            # Mandatory diagonal if possible
+            if can_X:
+                res_val, res_path = dp(r + 1, c + 1, 0)
+                if res_val != -float('inf'):
+                    options.append((grid[r+1][c+1] + res_val, "X" + res_path))
+            else:
+                # Diagonal not possible, permitted to move R or D
+                if can_R:
+                    res_val, res_path = dp(r, c + 1, 0)
+                    if res_val != -float('inf'):
+                        options.append((grid[r][c+1] + res_val, "R" + res_path))
+                if can_D:
+                    res_val, res_path = dp(r + 1, c, 0)
+                    if res_val != -float('inf'):
+                        options.append((grid[r+1][c] + res_val, "D" + res_path))
+        else:
+            # Regular choice of R, D, or X
+            if can_X:
+                res_val, res_path = dp(r + 1, c + 1, move_idx % 3)
+                if res_val != -float('inf'):
+                    options.append((grid[r+1][c+1] + res_val, "X" + res_path))
+            if can_R:
+                res_val, res_path = dp(r, c + 1, move_idx % 3)
+                if res_val != -float('inf'):
+                    options.append((grid[r][c+1] + res_val, "R" + res_path))
+            if can_D:
+                res_val, res_path = dp(r + 1, c, move_idx % 3)
+                if res_val != -float('inf'):
+                    options.append((grid[r+1][c] + res_val, "D" + res_path))
+
+        if not options:
+            result = (-float('inf'), "")
+        else:
+            # Find the path with the maximum sum
+            result = max(options, key=lambda x: x[0])
+            
+        memo[state] = result
+        return result
+
+    # Compute final sum starting from grid[0][0]
+    total_val, total_path = dp(0, 0, 0)
+    return (total_val + grid[0][0], total_path)
+
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+import sys
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Finds the maximum sum path from (0, 0) to (N-1, N-1) given constraints on 
+    diagonal moves occurring every 3rd step.
+    """
+    N = len(grid)
+    if N == 0:
+        return (0, "")
+    
+    # Memoization dictionary to store (r, c, move_rem) -> (max_sum, path_string)
+    # move_rem is the count of moves taken so far modulo 3.
+    memo = {}
+    
+    # Increase recursion depth for larger grids
+    sys.setrecursionlimit(20000)
+
+    def dp(r, c, move_rem):
+        # Base Case: Reached the destination
+        if r == N - 1 and c == N - 1:
+            return (0, "")
+        
+        state = (r, c, move_rem)
+        if state in memo:
+            return memo[state]
+        
+        # move_idx is the current step number we are taking (1st, 2nd, 3rd...)
+        # Every 3rd move (3, 6, 9...) corresponds to move_rem == 2 since indices start at 0
+        move_idx = move_rem + 1
+        
+        can_X = (r + 1 < N and c + 1 < N)
+        can_R = (c + 1 < N)
+        can_D = (r + 1 < N)
+        
+        options = []
+        
+        if move_idx % 3 == 0:
+            # Mandatory diagonal if possible
+            if can_X:
+                res_val, res_path = dp(r + 1, c + 1, 0)
+                if res_val != -float('inf'):
+                    options.append((grid[r+1][c+1] + res_val, "X" + res_path))
+            else:
+                # Diagonal not possible, permitted to move R or D
+                if can_R:
+                    res_val, res_path = dp(r, c + 1, 0)
+                    if res_val != -float('inf'):
+                        options.append((grid[r][c+1] + res_val, "R" + res_path))
+                if can_D:
+                    res_val, res_path = dp(r + 1, c, 0)
+                    if res_val != -float('inf'):
+                        options.append((grid[r+1][c] + res_val, "D" + res_path))
+        else:
+            # Regular choice of R, D, or X
+            if can_X:
+                res_val, res_path = dp(r + 1, c + 1, move_idx % 3)
+                if res_val != -float('inf'):
+                    options.append((grid[r+1][c+1] + res_val, "X" + res_path))
+            if can_R:
+                res_val, res_path = dp(r, c + 1, move_idx % 3)
+                if res_val != -float('inf'):
+                    options.append((grid[r][c+1] + res_val, "R" + res_path))
+            if can_D:
+                res_val, res_path = dp(r + 1, c, move_idx % 3)
+                if res_val != -float('inf'):
+                    options.append((grid[r+1][c] + res_val, "D" + res_path))
+
+        if not options:
+            result = (-float('inf'), "")
+        else:
+            # Find the path with the maximum sum
+            result = max(options, key=lambda x: x[0])
+            
+        memo[state] = result
+        return result
+
+    # Compute final sum starting from grid[0][0]
+    total_val, total_path = dp(0, 0, 0)
+    return (total_val + grid[0][0], total_path)
