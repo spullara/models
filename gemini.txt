@@ -21,6 +21,7 @@ models/gemini-3.1-flash-image-preview
 models/gemini-3.1-flash-lite
 models/gemini-3.1-flash-lite-image
 models/gemini-3.1-flash-lite-preview
+models/gemini-3.1-flash-live-preview
 models/gemini-3.1-flash-tts-preview
 models/gemini-3.1-pro-preview
 models/gemini-3.1-pro-preview-customtools
@@ -30,7 +31,6 @@ models/gemini-3.5-transcribe
 models/gemini-3.5-transcribe-live
 models/gemini-3.6-flash
 models/gemini-3.7-flash
-models/gemini-3.8-flash
 models/gemini-embedding-001
 models/gemini-embedding-2
 models/gemini-embedding-2-preview
