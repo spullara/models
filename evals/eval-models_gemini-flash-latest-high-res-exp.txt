@@ -1,0 +1,178 @@
+Model: models/gemini-flash-latest-high-res-exp
+Provider: gemini
+Evaluated: 2026-09-02T16:01:06.590986+00:00
+
+=== TIMING ===
+Response time: 64.95s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+An optimal solution using dynamic programming. Since every move increases $r + c$, the state space forms a Directed Acyclic Graph (DAG), and we can process cells in reverse order of $r + c$.
+
+The state is represented by $(r, c, k)$, where:
+- $(r, c)$ is the current cell in the $N \times N$ grid.
+- $k \in \{0, 1, 2\}$ is the number of moves made so far modulo 3. The next move is a required diagonal move if and only if $k = 2$.
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+
+    # dp[r][c][k] will store the maximum sum from (r, c) to (n-1, n-1)
+    # given that k moves have been made so far (mod 3).
+    # move_choice[r][c][k] stores the optimal move ('R', 'D', or 'X').
+    dp = [[[float("-inf")] * 3 for _ in range(n)] for _ in range(n)]
+    move_choice = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+
+    # Base case: at the destination cell (n-1, n-1)
+    for k in range(3):
+        dp[n - 1][n - 1][k] = grid[n - 1][n - 1]
+
+    # Iterate backwards by sum of coordinates s = r + c
+    for s in range(2 * n - 3, -1, -1):
+        r_min = max(0, s - (n - 1))
+        r_max = min(n - 1, s)
+        for r in range(r_min, r_max + 1):
+            c = s - r
+            for k in range(3):
+                next_k = (k + 1) % 3
+                diag_possible = r + 1 < n and c + 1 < n
+
+                # Determine valid moves according to the rules
+                if k == 2:
+                    # Every 3rd move MUST be diagonal if possible
+                    if diag_possible:
+                        moves = [("X", r + 1, c + 1)]
+                    else:
+                        moves = []
+                        if c + 1 < n:
+                            moves.append(("R", r, c + 1))
+                        if r + 1 < n:
+                            moves.append(("D", r + 1, c))
+                else:
+                    # Normal moves
+                    moves = []
+                    if c + 1 < n:
+                        moves.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        moves.append(("D", r + 1, c))
+                    if diag_possible:
+                        moves.append(("X", r + 1, c + 1))
+
+                best_val = float("-inf")
+                best_move = ""
+                for m, nr, nc in moves:
+                    val = grid[r][c] + dp[nr][nc][next_k]
+                    if val > best_val:
+                        best_val = val
+                        best_move = m
+
+                dp[r][c][k] = best_val
+                move_choice[r][c][k] = best_move
+
+    # Reconstruct the optimal path starting from (0, 0) with 0 moves made
+    r, c, k = 0, 0, 0
+    path = []
+    while (r, c) != (n - 1, n - 1):
+        m = move_choice[r][c][k]
+        path.append(m)
+        if m == "R":
+            c += 1
+        elif m == "D":
+            r += 1
+        elif m == "X":
+            r += 1
+            c += 1
+        k = (k + 1) % 3
+
+    return (dp[0][0][0], "".join(path))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+
+    # dp[r][c][k] will store the maximum sum from (r, c) to (n-1, n-1)
+    # given that k moves have been made so far (mod 3).
+    # move_choice[r][c][k] stores the optimal move ('R', 'D', or 'X').
+    dp = [[[float("-inf")] * 3 for _ in range(n)] for _ in range(n)]
+    move_choice = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+
+    # Base case: at the destination cell (n-1, n-1)
+    for k in range(3):
+        dp[n - 1][n - 1][k] = grid[n - 1][n - 1]
+
+    # Iterate backwards by sum of coordinates s = r + c
+    for s in range(2 * n - 3, -1, -1):
+        r_min = max(0, s - (n - 1))
+        r_max = min(n - 1, s)
+        for r in range(r_min, r_max + 1):
+            c = s - r
+            for k in range(3):
+                next_k = (k + 1) % 3
+                diag_possible = r + 1 < n and c + 1 < n
+
+                # Determine valid moves according to the rules
+                if k == 2:
+                    # Every 3rd move MUST be diagonal if possible
+                    if diag_possible:
+                        moves = [("X", r + 1, c + 1)]
+                    else:
+                        moves = []
+                        if c + 1 < n:
+                            moves.append(("R", r, c + 1))
+                        if r + 1 < n:
+                            moves.append(("D", r + 1, c))
+                else:
+                    # Normal moves
+                    moves = []
+                    if c + 1 < n:
+                        moves.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        moves.append(("D", r + 1, c))
+                    if diag_possible:
+                        moves.append(("X", r + 1, c + 1))
+
+                best_val = float("-inf")
+                best_move = ""
+                for m, nr, nc in moves:
+                    val = grid[r][c] + dp[nr][nc][next_k]
+                    if val > best_val:
+                        best_val = val
+                        best_move = m
+
+                dp[r][c][k] = best_val
+                move_choice[r][c][k] = best_move
+
+    # Reconstruct the optimal path starting from (0, 0) with 0 moves made
+    r, c, k = 0, 0, 0
+    path = []
+    while (r, c) != (n - 1, n - 1):
+        m = move_choice[r][c][k]
+        path.append(m)
+        if m == "R":
+            c += 1
+        elif m == "D":
+            r += 1
+        elif m == "X":
+            r += 1
+            c += 1
+        k = (k + 1) % 3
+
+    return (dp[0][0][0], "".join(path))
