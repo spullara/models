@@ -1,26 +1,185 @@
 Model: models/gemini-flash-latest-high-res-exp
 Provider: gemini
-Evaluated: 2026-09-02T16:06:07.695142+00:00
+Evaluated: 2026-09-02T16:08:09.774678+00:00
 
 === TIMING ===
-Response time: 0.19s
+Response time: 105.38s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: {
-  "error": {
-    "code": 404,
-    "message": "models/gemini-flash-latest-high-res-exp is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "status": "NOT_FOUND"
-  }
-}
-
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+An optimal and complete solution using dynamic programming.
+
+### Method Explanation
+
+The problem asks for the maximum-sum path from $(0, 0)$ to $(N-1, N-1)$ in an $N \times N$ grid under specific move constraints:
+1. Valid moves are Right (`R`), Down (`D`), and Diagonal (`X`).
+2. Every 3rd move (moves 3, 6, 9...) must be diagonal (`X`) if within grid bounds.
+3. If diagonal is not possible on a required diagonal move, `R` or `D` may be used.
+
+Because $r + c$ strictly increases with every move, the state space is a Directed Acyclic Graph (DAG). The validity of moves at any step depends only on the current position $(r, c)$ and the move count modulo 3 (`m = moves_made % 3`). This allows us to define the state as $(r, c, m)$ with only $3 \times N^2$ possible states.
+
+We compute the maximum sum from each state using memoized dynamic programming, tracking the best move from each state to reconstruct the path string in $O(N)$ time.
+
+### Python 3 Solution
+
+```python
+import sys
+
+# Increase recursion depth for larger grids
+sys.setrecursionlimit(300000)
+
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+
+    n = len(grid)
+    if n == 1:
+        return grid[0][0], ""
+
+    # dp_table[(r, c, m)] = (max_sum_from_here, move_char, next_r, next_c, next_m)
+    # m is (moves_made % 3)
+    memo = {}
+
+    def get_best(r: int, c: int, m: int):
+        if r == n - 1 and c == n - 1:
+            return 0, None
+
+        state = (r, c, m)
+        if state in memo:
+            return memo[state]
+
+        # The next move will be move number (moves_made + 1)
+        next_m = (m + 1) % 3
+        is_required_diagonal = next_m == 0
+        diag_possible = r + 1 < n and c + 1 < n
+
+        candidate_moves = []
+        if is_required_diagonal:
+            if diag_possible:
+                candidate_moves.append(("X", r + 1, c + 1))
+            else:
+                if c + 1 < n:
+                    candidate_moves.append(("R", r, c + 1))
+                if r + 1 < n:
+                    candidate_moves.append(("D", r + 1, c))
+        else:
+            if c + 1 < n:
+                candidate_moves.append(("R", r, c + 1))
+            if r + 1 < n:
+                candidate_moves.append(("D", r + 1, c))
+            if diag_possible:
+                candidate_moves.append(("X", r + 1, c + 1))
+
+        best_score = -float("inf")
+        best_transition = None
+
+        for move_char, nr, nc in candidate_moves:
+            future_score, _ = get_best(nr, nc, next_m)
+            total_score = grid[nr][nc] + future_score
+            if total_score > best_score:
+                best_score = total_score
+                best_transition = (move_char, nr, nc, next_m)
+
+        memo[state] = (best_score, best_transition)
+        return memo[state]
+
+    max_future_sum, _ = get_best(0, 0, 0)
+    total_max_sum = grid[0][0] + max_future_sum
+
+    # Reconstruct path string
+    path = []
+    curr = (0, 0, 0)
+    while curr[0] != n - 1 or curr[1] != n - 1:
+        _, transition = memo[curr]
+        move_char, nr, nc, next_m = transition
+        path.append(move_char)
+        curr = (nr, nc, next_m)
+
+    return total_max_sum, "".join(path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+import sys
+
+# Increase recursion depth for larger grids
+sys.setrecursionlimit(300000)
+
+
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+
+    n = len(grid)
+    if n == 1:
+        return grid[0][0], ""
+
+    # dp_table[(r, c, m)] = (max_sum_from_here, move_char, next_r, next_c, next_m)
+    # m is (moves_made % 3)
+    memo = {}
+
+    def get_best(r: int, c: int, m: int):
+        if r == n - 1 and c == n - 1:
+            return 0, None
+
+        state = (r, c, m)
+        if state in memo:
+            return memo[state]
+
+        # The next move will be move number (moves_made + 1)
+        next_m = (m + 1) % 3
+        is_required_diagonal = next_m == 0
+        diag_possible = r + 1 < n and c + 1 < n
+
+        candidate_moves = []
+        if is_required_diagonal:
+            if diag_possible:
+                candidate_moves.append(("X", r + 1, c + 1))
+            else:
+                if c + 1 < n:
+                    candidate_moves.append(("R", r, c + 1))
+                if r + 1 < n:
+                    candidate_moves.append(("D", r + 1, c))
+        else:
+            if c + 1 < n:
+                candidate_moves.append(("R", r, c + 1))
+            if r + 1 < n:
+                candidate_moves.append(("D", r + 1, c))
+            if diag_possible:
+                candidate_moves.append(("X", r + 1, c + 1))
+
+        best_score = -float("inf")
+        best_transition = None
+
+        for move_char, nr, nc in candidate_moves:
+            future_score, _ = get_best(nr, nc, next_m)
+            total_score = grid[nr][nc] + future_score
+            if total_score > best_score:
+                best_score = total_score
+                best_transition = (move_char, nr, nc, next_m)
+
+        memo[state] = (best_score, best_transition)
+        return memo[state]
+
+    max_future_sum, _ = get_best(0, 0, 0)
+    total_max_sum = grid[0][0] + max_future_sum
+
+    # Reconstruct path string
+    path = []
+    curr = (0, 0, 0)
+    while curr[0] != n - 1 or curr[1] != n - 1:
+        _, transition = memo[curr]
+        move_char, nr, nc, next_m = transition
+        path.append(move_char)
+        curr = (nr, nc, next_m)
+
+    return total_max_sum, "".join(path)
