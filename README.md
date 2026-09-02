@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-02 16:03:19
+Last updated: 2026-09-02 16:06:20
 
 ## Updates This Week (2026-08-27 to 2026-09-02)
 
@@ -16,12 +16,13 @@ Last updated: 2026-09-02 16:03:19
 **Added**
 
 - models/gemini-3.8-flash (added: 2026-09-02)
+- models/gemini-flash-latest-high-res-exp (added: 2026-09-02)
 - models/gemini-omni-1.1-flash (added: 2026-08-27)
 
 **Deleted**
 
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-09-02)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-09-02)
-- models/gemini-flash-latest-high-res-exp (deleted: 2026-09-02)
 - models/gemini-robotics-er-1.6-preview (deleted: 2026-08-31)
 
 ### Mistral
@@ -316,6 +317,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-flash-latest-high-res-exp (added: 2026-09-02)
 - models/gemini-3.8-flash (added: 2026-09-02)
 - models/gemini-omni-1.1-flash (added: 2026-08-27)
 - models/gemini-3.5-transcribe-live (added: 2026-08-26)
@@ -345,7 +347,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
-- models/gemini-2.5-flash-native-audio-preview-12-2025 (added: 2026-01-27)
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
@@ -369,8 +370,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- models/gemini-flash-latest-high-res-exp (deleted: 2026-09-02)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-09-02)
+- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-09-02)
 - models/gemini-robotics-er-1.6-preview (deleted: 2026-08-31)
 - models/gemini-robotics-er-2-streaming-preview (deleted: 2026-08-26)
 - models/gemini-3.5-live-translate-preview (deleted: 2026-08-26)
