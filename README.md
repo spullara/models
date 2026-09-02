@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-02 01:38:19
+Last updated: 2026-09-02 13:46:20
 
 ## Updates This Week (2026-08-27 to 2026-09-02)
 
@@ -19,6 +19,7 @@ Last updated: 2026-09-02 01:38:19
 
 **Deleted**
 
+- models/gemini-3.8-flash (deleted: 2026-09-02)
 - models/gemini-robotics-er-1.6-preview (deleted: 2026-08-31)
 
 ### Mistral
@@ -66,7 +67,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 11/13
 
-**Gemini**: 50/104
+**Gemini**: 50/105
 
 **Grok**: 12/21
 
@@ -366,6 +367,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/gemini-3.8-flash (deleted: 2026-09-02)
 - models/gemini-robotics-er-1.6-preview (deleted: 2026-08-31)
 - models/gemini-robotics-er-2-streaming-preview (deleted: 2026-08-26)
 - models/gemini-3.5-live-translate-preview (deleted: 2026-08-26)
