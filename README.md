@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-01 17:53:39
+Last updated: 2026-09-02 01:34:16
 
-## Updates This Week (2026-08-26 to 2026-09-01)
+## Updates This Week (2026-08-27 to 2026-09-02)
 
 ### Anthropic
 
@@ -16,14 +16,10 @@ Last updated: 2026-09-01 17:53:39
 **Added**
 
 - models/gemini-omni-1.1-flash (added: 2026-08-27)
-- models/gemini-3.5-transcribe (added: 2026-08-26)
-- models/gemini-3.5-transcribe-live (added: 2026-08-26)
 
 **Deleted**
 
 - models/gemini-robotics-er-1.6-preview (deleted: 2026-08-31)
-- models/gemini-3.5-live-translate-preview (deleted: 2026-08-26)
-- models/gemini-robotics-er-2-streaming-preview (deleted: 2026-08-26)
 
 ### Mistral
 
@@ -35,8 +31,6 @@ Last updated: 2026-09-01 17:53:39
 - mistral-code-agent-latest (deleted: 2026-08-31)
 - mistral-medium-2505 (deleted: 2026-08-31)
 - mistral-medium-2508 (deleted: 2026-08-31)
-- glm-5-2 (deleted: 2026-08-26)
-- zai-glm-5-2 (deleted: 2026-08-26)
 
 ### Kimi
 
@@ -55,21 +49,14 @@ Last updated: 2026-09-01 17:53:39
 
 **Added**
 
+- qwen3.8-max-0902 (added: 2026-09-02)
 - kimi/kimi-k3 (added: 2026-08-28)
-- qwen3.8-flash (added: 2026-08-26)
 
 ### Meta
 
 **Added**
 
 - muse-voice-transcribe-1.0 (added: 2026-09-01)
-- muse-image-1.0 (added: 2026-08-26)
-
-### Z.AI
-
-**Added**
-
-- z-ai/glm-5.3-flash (added: 2026-08-26)
 
 ## Summary
 
@@ -89,7 +76,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 4/14
 
-**Qwen**: 164/24
+**Qwen**: 165/24
 
 **Meta**: 5/0
 
@@ -693,6 +680,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- qwen3.8-max-0902 (added: 2026-09-02)
 - kimi/kimi-k3 (added: 2026-08-28)
 - qwen3.8-flash (added: 2026-08-26)
 - kimi-k3 (added: 2026-08-21)
