@@ -1,0 +1,19 @@
+Model: nvidia/nemotron-3.5-content-safety
+Provider: openrouter
+Evaluated: 2026-09-03T23:40:07.397810+00:00
+
+=== TIMING ===
+Response time: 0.2s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: {"error":{"message":"No endpoints found for nvidia/nemotron-3.5-content-safety.","code":404},"user_id":"user_30pzA1kgD0MJLxIyrSWXOSz3nvl"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
