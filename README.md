@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-03 15:01:06
+Last updated: 2026-09-03 17:36:20
 
 ## Updates This Week (2026-08-28 to 2026-09-03)
 
@@ -30,6 +30,8 @@ Last updated: 2026-09-03 15:01:06
 
 **Deleted**
 
+- mistral-large-2512 (deleted: 2026-09-03)
+- mistral-large-latest (deleted: 2026-09-03)
 - devstral-2512 (deleted: 2026-08-31)
 - devstral-latest (deleted: 2026-08-31)
 - devstral-medium-latest (deleted: 2026-08-31)
@@ -77,7 +79,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 12/21
 
-**Mistral**: 48/69
+**Mistral**: 46/71
 
 **DeepSeek**: 3/2
 
@@ -551,7 +553,6 @@ Model counts shown as: **Available/Deleted**
 - mistral-vibe-cli-with-tools (added: 2026-02-04)
 - mistral-ocr-2512 (added: 2025-12-15)
 - mistral-vibe-cli-latest (added: 2025-12-09)
-- mistral-large-2512 (added: 2025-12-02)
 - ministral-8b-2512 (added: 2025-12-02)
 - ministral-3b-2512 (added: 2025-12-02)
 - ministral-14b-latest (added: 2025-12-02)
@@ -563,7 +564,6 @@ Model counts shown as: **Available/Deleted**
 - mistral-ocr-latest (added: 2025-11-24)
 - mistral-medium-latest (added: 2025-11-24)
 - mistral-medium (added: 2025-11-24)
-- mistral-large-latest (added: 2025-11-24)
 - mistral-embed-2312 (added: 2025-11-24)
 - mistral-embed (added: 2025-11-24)
 - ministral-8b-latest (added: 2025-11-24)
@@ -577,6 +577,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- mistral-large-latest (deleted: 2026-09-03)
+- mistral-large-2512 (deleted: 2026-09-03)
 - mistral-medium-2508 (deleted: 2026-08-31)
 - mistral-medium-2505 (deleted: 2026-08-31)
 - mistral-code-agent-latest (deleted: 2026-08-31)
