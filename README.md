@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-03 22:11:24
+Last updated: 2026-09-03 22:12:18
 
 ## Updates This Week (2026-08-28 to 2026-09-03)
 
@@ -17,11 +17,10 @@ Last updated: 2026-09-03 22:11:24
 
 - models/lyria-3.5 (added: 2026-09-03)
 - models/gemini-3.8-flash (added: 2026-09-02)
-- models/gemini-flash-latest-high-res-exp (added: 2026-09-02)
 
 **Deleted**
 
-- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-09-03)
+- models/gemini-flash-latest-high-res-exp (deleted: 2026-09-03)
 - models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-09-02)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-09-02)
 - models/gemini-robotics-er-1.6-preview (deleted: 2026-08-31)
@@ -323,7 +322,6 @@ Model counts shown as: **Available/Deleted**
 ### Current Models
 
 - models/lyria-3.5 (added: 2026-09-03)
-- models/gemini-flash-latest-high-res-exp (added: 2026-09-02)
 - models/gemini-3.8-flash (added: 2026-09-02)
 - models/gemini-omni-1.1-flash (added: 2026-08-27)
 - models/gemini-3.5-transcribe-live (added: 2026-08-26)
@@ -353,6 +351,7 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
+- models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
 - models/gemini-2.5-flash-native-audio-latest (added: 2025-12-10)
@@ -375,7 +374,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-09-03)
+- models/gemini-flash-latest-high-res-exp (deleted: 2026-09-03)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-09-02)
 - models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-09-02)
 - models/gemini-robotics-er-1.6-preview (deleted: 2026-08-31)
