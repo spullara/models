@@ -1,9 +1,9 @@
 Model: models/gemini-flash-latest-high-res-exp
 Provider: gemini
-Evaluated: 2026-09-03T22:13:08.168247+00:00
+Evaluated: 2026-09-03T22:15:06.747058+00:00
 
 === TIMING ===
-Response time: 113.92s
+Response time: 132.99s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -16,184 +16,153 @@ Sum matches: YES
 Path valid: YES
 
 === RAW RESPONSE ===
-An optimal and clean solution using dynamic programming.
-
-### Method Explanation
-
-The problem asks for the path from $(0, 0)$ to $(N-1, N-1)$ maximizing the collected sum, where:
-- Moves are Right (`R`), Down (`D`), and Diagonal (`X`).
-- Every 3rd move (moves 3, 6, 9, ...) is required to be diagonal (`X`) if within grid bounds.
-- If diagonal is not possible on a required diagonal move (i.e. already at the rightmost column or bottom row), we can use `R` or `D`.
-
-Since every move strictly increases $r + c$ (by 1 for `R`/`D`, and by 2 for `X`), the grid forms a Directed Acyclic Graph (DAG). The state at any cell depends only on:
-1. Current position $(r, c)$
-2. Moves made so far modulo 3, $m \in \{0, 1, 2\}$
-
-We can compute the maximum sum iteratively by working backwards from $s = r + c = 2N - 3$ down to $0$. Storing the best move at each state allows reconstructing the optimal path in $O(N)$ time, keeping total time and space complexity at $O(N^2)$.
-
-### Python 3 Solution
-
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+
     n = len(grid)
-    if n == 0:
-        return (0, "")
     if n == 1:
-        return (grid[0][0], "")
+        return grid[0][0], ""
 
-    # dp[r][c][m]: max sum achievable from (r, c) to (n-1, n-1)
-    # when m moves have been made so far (mod 3).
-    # best_move[r][c][m]: the move ('R', 'D', 'X') chosen from that state.
     INF = float("inf")
-    dp = [[[-INF] * 3 for _ in range(n)] for _ in range(n)]
-    best_move = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+    # max_val[r][c][m] stores max sum reaching (r, c) with (moves_count % 3) == m
+    max_val = [[[-INF] * 3 for _ in range(n)] for _ in range(n)]
+    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
 
-    # Base case: at destination, 0 additional cost to reach end
-    for m in range(3):
-        dp[n - 1][n - 1][m] = 0
+    max_val[0][0][0] = grid[0][0]
 
-    # Process diagonals in reverse order of (r + c)
-    for s in range(2 * n - 3, -1, -1):
-        r_min = max(0, s - (n - 1))
-        r_max = min(n - 1, s)
-        for r in range(r_min, r_max + 1):
+    # Process states in topological order by sum of coordinates (r + c)
+    for s in range(2 * n - 2):
+        for r in range(max(0, s - (n - 1)), min(n, s + 1)):
             c = s - r
             for m in range(3):
-                is_third_move = (m + 1) % 3 == 0
-
-                if is_third_move:
-                    # Must move diagonal if possible; otherwise use R or D
-                    if r + 1 < n and c + 1 < n:
-                        candidate_moves = [("X", r + 1, c + 1)]
-                    else:
-                        candidate_moves = []
-                        if c + 1 < n:
-                            candidate_moves.append(("R", r, c + 1))
-                        if r + 1 < n:
-                            candidate_moves.append(("D", r + 1, c))
-                else:
-                    # Any valid move is allowed
-                    candidate_moves = []
-                    if c + 1 < n:
-                        candidate_moves.append(("R", r, c + 1))
-                    if r + 1 < n:
-                        candidate_moves.append(("D", r + 1, c))
-                    if r + 1 < n and c + 1 < n:
-                        candidate_moves.append(("X", r + 1, c + 1))
+                val = max_val[r][c][m]
+                if val == -INF:
+                    continue
 
                 next_m = (m + 1) % 3
-                best_val = -INF
-                chosen_move = ""
 
-                for move_char, nr, nc in candidate_moves:
-                    val_after = dp[nr][nc][next_m]
-                    if val_after != -INF:
-                        total_val = grid[nr][nc] + val_after
-                        if total_val > best_val:
-                            best_val = total_val
-                            chosen_move = move_char
+                # Move rules:
+                # Every 3rd move (when m == 2, next move is 3rd move) MUST be diagonal if possible.
+                # If diagonal is not possible, R or D may be used.
+                # Otherwise, valid moves are R or D.
+                if m == 2:
+                    if r + 1 < n and c + 1 < n:
+                        moves = [("X", r + 1, c + 1)]
+                    else:
+                        moves = []
+                        if c + 1 < n:
+                            moves.append(("R", r, c + 1))
+                        if r + 1 < n:
+                            moves.append(("D", r + 1, c))
+                else:
+                    moves = []
+                    if c + 1 < n:
+                        moves.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        moves.append(("D", r + 1, c))
 
-                dp[r][c][m] = best_val
-                best_move[r][c][m] = chosen_move
+                for move_char, nr, nc in moves:
+                    new_val = val + grid[nr][nc]
+                    if new_val > max_val[nr][nc][next_m]:
+                        max_val[nr][nc][next_m] = new_val
+                        parent[nr][nc][next_m] = (r, c, m, move_char)
 
-    # Reconstruct the optimal path from (0, 0)
-    total_sum = grid[0][0] + dp[0][0][0]
+    # Find the maximum sum reaching (n - 1, n - 1) across all m
+    best_val = -INF
+    best_m = -1
+    for m in range(3):
+        if max_val[n - 1][n - 1][m] > best_val:
+            best_val = max_val[n - 1][n - 1][m]
+            best_m = m
+
+    if best_m == -1:
+        return 0, ""
+
+    # Reconstruct the path
     path = []
-    r, c, m = 0, 0, 0
+    curr_r, curr_c, curr_m = n - 1, n - 1, best_m
+    while (curr_r, curr_c, curr_m) != (0, 0, 0):
+        pr, pc, pm, move_char = parent[curr_r][curr_c][curr_m]
+        path.append(move_char)
+        curr_r, curr_c, curr_m = pr, pc, pm
 
-    while (r, c) != (n - 1, n - 1):
-        move = best_move[r][c][m]
-        path.append(move)
-        if move == "R":
-            c += 1
-        elif move == "D":
-            r += 1
-        elif move == "X":
-            r += 1
-            c += 1
-        m = (m + 1) % 3
-
-    return (total_sum, "".join(path))
+    path.reverse()
+    return best_val, "".join(path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+
     n = len(grid)
-    if n == 0:
-        return (0, "")
     if n == 1:
-        return (grid[0][0], "")
+        return grid[0][0], ""
 
-    # dp[r][c][m]: max sum achievable from (r, c) to (n-1, n-1)
-    # when m moves have been made so far (mod 3).
-    # best_move[r][c][m]: the move ('R', 'D', 'X') chosen from that state.
     INF = float("inf")
-    dp = [[[-INF] * 3 for _ in range(n)] for _ in range(n)]
-    best_move = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+    # max_val[r][c][m] stores max sum reaching (r, c) with (moves_count % 3) == m
+    max_val = [[[-INF] * 3 for _ in range(n)] for _ in range(n)]
+    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
 
-    # Base case: at destination, 0 additional cost to reach end
-    for m in range(3):
-        dp[n - 1][n - 1][m] = 0
+    max_val[0][0][0] = grid[0][0]
 
-    # Process diagonals in reverse order of (r + c)
-    for s in range(2 * n - 3, -1, -1):
-        r_min = max(0, s - (n - 1))
-        r_max = min(n - 1, s)
-        for r in range(r_min, r_max + 1):
+    # Process states in topological order by sum of coordinates (r + c)
+    for s in range(2 * n - 2):
+        for r in range(max(0, s - (n - 1)), min(n, s + 1)):
             c = s - r
             for m in range(3):
-                is_third_move = (m + 1) % 3 == 0
-
-                if is_third_move:
-                    # Must move diagonal if possible; otherwise use R or D
-                    if r + 1 < n and c + 1 < n:
-                        candidate_moves = [("X", r + 1, c + 1)]
-                    else:
-                        candidate_moves = []
-                        if c + 1 < n:
-                            candidate_moves.append(("R", r, c + 1))
-                        if r + 1 < n:
-                            candidate_moves.append(("D", r + 1, c))
-                else:
-                    # Any valid move is allowed
-                    candidate_moves = []
-                    if c + 1 < n:
-                        candidate_moves.append(("R", r, c + 1))
-                    if r + 1 < n:
-                        candidate_moves.append(("D", r + 1, c))
-                    if r + 1 < n and c + 1 < n:
-                        candidate_moves.append(("X", r + 1, c + 1))
+                val = max_val[r][c][m]
+                if val == -INF:
+                    continue
 
                 next_m = (m + 1) % 3
-                best_val = -INF
-                chosen_move = ""
 
-                for move_char, nr, nc in candidate_moves:
-                    val_after = dp[nr][nc][next_m]
-                    if val_after != -INF:
-                        total_val = grid[nr][nc] + val_after
-                        if total_val > best_val:
-                            best_val = total_val
-                            chosen_move = move_char
+                # Move rules:
+                # Every 3rd move (when m == 2, next move is 3rd move) MUST be diagonal if possible.
+                # If diagonal is not possible, R or D may be used.
+                # Otherwise, valid moves are R or D.
+                if m == 2:
+                    if r + 1 < n and c + 1 < n:
+                        moves = [("X", r + 1, c + 1)]
+                    else:
+                        moves = []
+                        if c + 1 < n:
+                            moves.append(("R", r, c + 1))
+                        if r + 1 < n:
+                            moves.append(("D", r + 1, c))
+                else:
+                    moves = []
+                    if c + 1 < n:
+                        moves.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        moves.append(("D", r + 1, c))
 
-                dp[r][c][m] = best_val
-                best_move[r][c][m] = chosen_move
+                for move_char, nr, nc in moves:
+                    new_val = val + grid[nr][nc]
+                    if new_val > max_val[nr][nc][next_m]:
+                        max_val[nr][nc][next_m] = new_val
+                        parent[nr][nc][next_m] = (r, c, m, move_char)
 
-    # Reconstruct the optimal path from (0, 0)
-    total_sum = grid[0][0] + dp[0][0][0]
+    # Find the maximum sum reaching (n - 1, n - 1) across all m
+    best_val = -INF
+    best_m = -1
+    for m in range(3):
+        if max_val[n - 1][n - 1][m] > best_val:
+            best_val = max_val[n - 1][n - 1][m]
+            best_m = m
+
+    if best_m == -1:
+        return 0, ""
+
+    # Reconstruct the path
     path = []
-    r, c, m = 0, 0, 0
+    curr_r, curr_c, curr_m = n - 1, n - 1, best_m
+    while (curr_r, curr_c, curr_m) != (0, 0, 0):
+        pr, pc, pm, move_char = parent[curr_r][curr_c][curr_m]
+        path.append(move_char)
+        curr_r, curr_c, curr_m = pr, pc, pm
 
-    while (r, c) != (n - 1, n - 1):
-        move = best_move[r][c][m]
-        path.append(move)
-        if move == "R":
-            c += 1
-        elif move == "D":
-            r += 1
-        elif move == "X":
-            r += 1
-            c += 1
-        m = (m + 1) % 3
-
-    return (total_sum, "".join(path))
+    path.reverse()
+    return best_val, "".join(path)
