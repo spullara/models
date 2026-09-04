@@ -1,0 +1,138 @@
+Model: gpt-6-astra
+Provider: openai_responses
+Evaluated: 2026-09-04T19:01:07.315642+00:00
+
+=== TIMING ===
+Response time: 14.48s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Return the maximum path sum (including both endpoints) and its moves.
+
+    Every third move must be diagonal when a diagonal move is possible.
+    Time: O(N^2). Space: O(N^2).
+    """
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a nonempty square grid")
+
+    # dp[r][c][phase]: best remaining sum, including grid[r][c],
+    # when the number of moves already taken is phase modulo 3.
+    dp = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+    next_move = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                dp[r][c] = [grid[r][c]] * 3
+                continue
+
+            moves = []
+            if c + 1 < n:
+                moves.append((r, c + 1, "R"))
+            if r + 1 < n:
+                moves.append((r + 1, c, "D"))
+
+            diagonal_possible = r + 1 < n and c + 1 < n
+            if diagonal_possible:
+                moves.append((r + 1, c + 1, "X"))
+
+            for phase in range(3):
+                if phase == 2 and diagonal_possible:
+                    allowed = [(r + 1, c + 1, "X")]
+                else:
+                    allowed = moves
+
+                next_phase = (phase + 1) % 3
+                best_sum, move = max(
+                    (dp[nr][nc][next_phase], symbol)
+                    for nr, nc, symbol in allowed
+                )
+                dp[r][c][phase] = grid[r][c] + best_sum
+                next_move[r][c][phase] = move
+
+    path = []
+    r = c = phase = 0
+    while r != n - 1 or c != n - 1:
+        move = next_move[r][c][phase]
+        path.append(move)
+        if move in ("D", "X"):
+            r += 1
+        if move in ("R", "X"):
+            c += 1
+        phase = (phase + 1) % 3
+
+    return dp[0][0][0], "".join(path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Return the maximum path sum (including both endpoints) and its moves.
+
+    Every third move must be diagonal when a diagonal move is possible.
+    Time: O(N^2). Space: O(N^2).
+    """
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a nonempty square grid")
+
+    # dp[r][c][phase]: best remaining sum, including grid[r][c],
+    # when the number of moves already taken is phase modulo 3.
+    dp = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+    next_move = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                dp[r][c] = [grid[r][c]] * 3
+                continue
+
+            moves = []
+            if c + 1 < n:
+                moves.append((r, c + 1, "R"))
+            if r + 1 < n:
+                moves.append((r + 1, c, "D"))
+
+            diagonal_possible = r + 1 < n and c + 1 < n
+            if diagonal_possible:
+                moves.append((r + 1, c + 1, "X"))
+
+            for phase in range(3):
+                if phase == 2 and diagonal_possible:
+                    allowed = [(r + 1, c + 1, "X")]
+                else:
+                    allowed = moves
+
+                next_phase = (phase + 1) % 3
+                best_sum, move = max(
+                    (dp[nr][nc][next_phase], symbol)
+                    for nr, nc, symbol in allowed
+                )
+                dp[r][c][phase] = grid[r][c] + best_sum
+                next_move[r][c][phase] = move
+
+    path = []
+    r = c = phase = 0
+    while r != n - 1 or c != n - 1:
+        move = next_move[r][c][phase]
+        path.append(move)
+        if move in ("D", "X"):
+            r += 1
+        if move in ("R", "X"):
+            c += 1
+        phase = (phase + 1) % 3
+
+    return dp[0][0][0], "".join(path)
