@@ -1,35 +1,26 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-04 19:01:37
+Last updated: 2026-09-09 17:06:24
 
-## Updates This Week (2026-08-29 to 2026-09-04)
+## Updates This Week (2026-09-03 to 2026-09-09)
 
 ### OpenAI
 
 **Added**
 
+- gpt-image-2.5-flare (added: 2026-09-09)
 - gpt-6-astra (added: 2026-09-04)
-
-### Anthropic
-
-**Added**
-
-- claude-fable-5-1 (added: 2026-09-01)
 
 ### Gemini
 
 **Added**
 
 - models/lyria-3.5 (added: 2026-09-03)
-- models/gemini-3.8-flash (added: 2026-09-02)
 
 **Deleted**
 
 - models/gemini-flash-latest-high-res-exp (deleted: 2026-09-03)
-- models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-09-02)
-- models/gemini-3.1-flash-live-preview (deleted: 2026-09-02)
-- models/gemini-robotics-er-1.6-preview (deleted: 2026-08-31)
 
 ### Mistral
 
@@ -37,39 +28,6 @@ Last updated: 2026-09-04 19:01:37
 
 - mistral-large-2512 (deleted: 2026-09-03)
 - mistral-large-latest (deleted: 2026-09-03)
-- devstral-2512 (deleted: 2026-08-31)
-- devstral-latest (deleted: 2026-08-31)
-- devstral-medium-latest (deleted: 2026-08-31)
-- mistral-code-agent-latest (deleted: 2026-08-31)
-- mistral-medium-2505 (deleted: 2026-08-31)
-- mistral-medium-2508 (deleted: 2026-08-31)
-
-### Kimi
-
-**Deleted**
-
-- kimi-k2.5 (deleted: 2026-08-31)
-- moonshot-v1-128k (deleted: 2026-08-31)
-- moonshot-v1-128k-vision-preview (deleted: 2026-08-31)
-- moonshot-v1-32k (deleted: 2026-08-31)
-- moonshot-v1-32k-vision-preview (deleted: 2026-08-31)
-- moonshot-v1-8k (deleted: 2026-08-31)
-- moonshot-v1-8k-vision-preview (deleted: 2026-08-31)
-- moonshot-v1-auto (deleted: 2026-08-31)
-
-### Qwen
-
-**Added**
-
-- qwen3.8-max-0902 (added: 2026-09-02)
-
-### Meta
-
-**Added**
-
-- muse-spark-1.3 (added: 2026-09-02)
-- muse-spark-1.3-contributor (added: 2026-09-02)
-- muse-voice-transcribe-1.0 (added: 2026-09-01)
 
 ### NVIDIA
 
@@ -81,7 +39,7 @@ Last updated: 2026-09-04 19:01:37
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 133/52
+**OpenAI**: 134/52
 
 **Anthropic**: 11/13
 
@@ -108,6 +66,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- gpt-image-2.5-flare (added: 2026-09-09)
 - gpt-6-astra (added: 2026-09-04)
 - gpt-transcribe (added: 2026-07-28)
 - gpt-live-transcribe (added: 2026-07-28)
