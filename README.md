@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-09 17:07:20
+Last updated: 2026-09-10 01:30:19
 
-## Updates This Week (2026-09-03 to 2026-09-09)
+## Updates This Week (2026-09-04 to 2026-09-10)
 
 ### OpenAI
 
@@ -15,28 +15,16 @@ Last updated: 2026-09-09 17:07:20
 - gpt-image-2.5-sunburst-2026-09-08 (added: 2026-09-09)
 - gpt-6-astra (added: 2026-09-04)
 
-### Gemini
+### DeepSeek
 
 **Added**
 
-- models/lyria-3.5 (added: 2026-09-03)
+- deepseek-flash (added: 2026-09-10)
 
 **Deleted**
 
-- models/gemini-flash-latest-high-res-exp (deleted: 2026-09-03)
-
-### Mistral
-
-**Deleted**
-
-- mistral-large-2512 (deleted: 2026-09-03)
-- mistral-large-latest (deleted: 2026-09-03)
-
-### NVIDIA
-
-**Added**
-
-- nvidia/nemotron-3.5-content-safety (added: 2026-09-03)
+- deepseek-v4-flash (deleted: 2026-09-10)
+- deepseek-v4-flash-vision-exp (deleted: 2026-09-10)
 
 ## Summary
 
@@ -52,7 +40,7 @@ Model counts shown as: **Available/Deleted**
 
 **Mistral**: 46/71
 
-**DeepSeek**: 3/2
+**DeepSeek**: 2/4
 
 **Kimi**: 4/14
 
@@ -629,12 +617,13 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- deepseek-v4-flash-vision-exp (added: 2026-08-21)
+- deepseek-flash (added: 2026-09-10)
 - deepseek-v4-pro (added: 2026-04-24)
-- deepseek-v4-flash (added: 2026-04-24)
 
 ### Deleted Models
 
+- deepseek-v4-flash-vision-exp (deleted: 2026-09-10)
+- deepseek-v4-flash (deleted: 2026-09-10)
 - deepseek-reasoner (deleted: 2026-04-24)
 - deepseek-chat (deleted: 2026-04-24)
 
