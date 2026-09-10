@@ -1,0 +1,208 @@
+Model: deepseek-flash
+Provider: deepseek
+Evaluated: 2026-09-10T01:29:06.598692+00:00
+
+=== TIMING ===
+Response time: 96.34s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    # dp[m][r][c] = maximum sum from (r, c) to the bottom-right,
+    # given that the number of moves already taken modulo 3 is m.
+    dp = [[[None] * n for _ in range(n)] for _ in range(3)]
+
+    # Base case: bottom-right cell
+    for m in range(3):
+        dp[m][n - 1][n - 1] = grid[n - 1][n - 1]
+
+    # Fill DP table backwards
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                continue
+
+            for m in range(3):
+                best = None
+                required = (m == 2)          # next move is 3rd, 6th, 9th, ...
+                diag_possible = (r + 1 < n and c + 1 < n)
+
+                # Move R
+                if c + 1 < n and not (required and diag_possible):
+                    nm = (m + 1) % 3
+                    if dp[nm][r][c + 1] is not None:
+                        cand = grid[r][c] + dp[nm][r][c + 1]
+                        if best is None or cand > best:
+                            best = cand
+
+                # Move D
+                if r + 1 < n and not (required and diag_possible):
+                    nm = (m + 1) % 3
+                    if dp[nm][r + 1][c] is not None:
+                        cand = grid[r][c] + dp[nm][r + 1][c]
+                        if best is None or cand > best:
+                            best = cand
+
+                # Move X
+                if r + 1 < n and c + 1 < n:
+                    nm = (m + 1) % 3
+                    if dp[nm][r + 1][c + 1] is not None:
+                        cand = grid[r][c] + dp[nm][r + 1][c + 1]
+                        if best is None or cand > best:
+                            best = cand
+
+                dp[m][r][c] = best
+
+    max_sum = dp[0][0][0]
+
+    # Reconstruct the path.
+    # Tie-break: prefer 'R', then 'D', then 'X'.
+    r, c, m = 0, 0, 0
+    path = []
+
+    while not (r == n - 1 and c == n - 1):
+        required = (m == 2)
+        diag_possible = (r + 1 < n and c + 1 < n)
+
+        # Try R
+        if c + 1 < n and not (required and diag_possible):
+            nm = (m + 1) % 3
+            if dp[nm][r][c + 1] is not None and dp[m][r][c] == grid[r][c] + dp[nm][r][c + 1]:
+                path.append('R')
+                c += 1
+                m = nm
+                continue
+
+        # Try D
+        if r + 1 < n and not (required and diag_possible):
+            nm = (m + 1) % 3
+            if dp[nm][r + 1][c] is not None and dp[m][r][c] == grid[r][c] + dp[nm][r + 1][c]:
+                path.append('D')
+                r += 1
+                m = nm
+                continue
+
+        # Try X
+        if r + 1 < n and c + 1 < n:
+            nm = (m + 1) % 3
+            if dp[nm][r + 1][c + 1] is not None and dp[m][r][c] == grid[r][c] + dp[nm][r + 1][c + 1]:
+                path.append('X')
+                r += 1
+                c += 1
+                m = nm
+                continue
+
+        # Should never be reached if the DP table is correct
+        break
+
+    return (max_sum, ''.join(path))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    # dp[m][r][c] = maximum sum from (r, c) to the bottom-right,
+    # given that the number of moves already taken modulo 3 is m.
+    dp = [[[None] * n for _ in range(n)] for _ in range(3)]
+
+    # Base case: bottom-right cell
+    for m in range(3):
+        dp[m][n - 1][n - 1] = grid[n - 1][n - 1]
+
+    # Fill DP table backwards
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                continue
+
+            for m in range(3):
+                best = None
+                required = (m == 2)          # next move is 3rd, 6th, 9th, ...
+                diag_possible = (r + 1 < n and c + 1 < n)
+
+                # Move R
+                if c + 1 < n and not (required and diag_possible):
+                    nm = (m + 1) % 3
+                    if dp[nm][r][c + 1] is not None:
+                        cand = grid[r][c] + dp[nm][r][c + 1]
+                        if best is None or cand > best:
+                            best = cand
+
+                # Move D
+                if r + 1 < n and not (required and diag_possible):
+                    nm = (m + 1) % 3
+                    if dp[nm][r + 1][c] is not None:
+                        cand = grid[r][c] + dp[nm][r + 1][c]
+                        if best is None or cand > best:
+                            best = cand
+
+                # Move X
+                if r + 1 < n and c + 1 < n:
+                    nm = (m + 1) % 3
+                    if dp[nm][r + 1][c + 1] is not None:
+                        cand = grid[r][c] + dp[nm][r + 1][c + 1]
+                        if best is None or cand > best:
+                            best = cand
+
+                dp[m][r][c] = best
+
+    max_sum = dp[0][0][0]
+
+    # Reconstruct the path.
+    # Tie-break: prefer 'R', then 'D', then 'X'.
+    r, c, m = 0, 0, 0
+    path = []
+
+    while not (r == n - 1 and c == n - 1):
+        required = (m == 2)
+        diag_possible = (r + 1 < n and c + 1 < n)
+
+        # Try R
+        if c + 1 < n and not (required and diag_possible):
+            nm = (m + 1) % 3
+            if dp[nm][r][c + 1] is not None and dp[m][r][c] == grid[r][c] + dp[nm][r][c + 1]:
+                path.append('R')
+                c += 1
+                m = nm
+                continue
+
+        # Try D
+        if r + 1 < n and not (required and diag_possible):
+            nm = (m + 1) % 3
+            if dp[nm][r + 1][c] is not None and dp[m][r][c] == grid[r][c] + dp[nm][r + 1][c]:
+                path.append('D')
+                r += 1
+                m = nm
+                continue
+
+        # Try X
+        if r + 1 < n and c + 1 < n:
+            nm = (m + 1) % 3
+            if dp[nm][r + 1][c + 1] is not None and dp[m][r][c] == grid[r][c] + dp[nm][r + 1][c + 1]:
+                path.append('X')
+                r += 1
+                c += 1
+                m = nm
+                continue
+
+        # Should never be reached if the DP table is correct
+        break
+
+    return (max_sum, ''.join(path))
