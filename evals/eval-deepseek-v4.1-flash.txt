@@ -1,0 +1,218 @@
+Model: deepseek-v4.1-flash
+Provider: qwen
+Evaluated: 2026-09-13T16:25:07.034220+00:00
+
+=== TIMING ===
+Response time: 39.88s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    # dp[r][c][k] = max sum from (r, c) to bottom-right,
+    # where k = number of moves already made modulo 3.
+    dp = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                for k in range(3):
+                    dp[r][c][k] = grid[r][c]
+                continue
+
+            for k in range(3):
+                nk = (k + 1) % 3
+                best = None
+
+                # Next move is 3rd, 6th, 9th, ...
+                if k == 2:
+                    if r + 1 < n and c + 1 < n:
+                        # Diagonal is required when possible.
+                        best = dp[r + 1][c + 1][nk]
+                    else:
+                        # Otherwise R or D is allowed.
+                        if c + 1 < n:
+                            best = dp[r][c + 1][nk]
+                        if r + 1 < n:
+                            val = dp[r + 1][c][nk]
+                            if best is None or val > best:
+                                best = val
+                else:
+                    # Normal moves: R, D, X. Keep R > D > X on ties.
+                    if c + 1 < n:
+                        best = dp[r][c + 1][nk]
+                    if r + 1 < n:
+                        val = dp[r + 1][c][nk]
+                        if best is None or val > best:
+                            best = val
+                    if r + 1 < n and c + 1 < n:
+                        val = dp[r + 1][c + 1][nk]
+                        if best is None or val > best:
+                            best = val
+
+                dp[r][c][k] = grid[r][c] + best
+
+    total = dp[0][0][0]
+
+    # Reconstruct the path using the same tie-breaking rules.
+    r = c = 0
+    k = 0
+    path = []
+
+    while not (r == n - 1 and c == n - 1):
+        nk = (k + 1) % 3
+        target = dp[r][c][k] - grid[r][c]
+
+        if k == 2:
+            if r + 1 < n and c + 1 < n:
+                path.append('X')
+                r += 1
+                c += 1
+                k = nk
+                continue
+            else:
+                if c + 1 < n and dp[r][c + 1][nk] == target:
+                    path.append('R')
+                    c += 1
+                    k = nk
+                    continue
+                if r + 1 < n and dp[r + 1][c][nk] == target:
+                    path.append('D')
+                    r += 1
+                    k = nk
+                    continue
+        else:
+            if c + 1 < n and dp[r][c + 1][nk] == target:
+                path.append('R')
+                c += 1
+                k = nk
+                continue
+            if r + 1 < n and dp[r + 1][c][nk] == target:
+                path.append('D')
+                r += 1
+                k = nk
+                continue
+            if r + 1 < n and c + 1 < n and dp[r + 1][c + 1][nk] == target:
+                path.append('X')
+                r += 1
+                c += 1
+                k = nk
+                continue
+
+        break
+
+    return (total, ''.join(path))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    # dp[r][c][k] = max sum from (r, c) to bottom-right,
+    # where k = number of moves already made modulo 3.
+    dp = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                for k in range(3):
+                    dp[r][c][k] = grid[r][c]
+                continue
+
+            for k in range(3):
+                nk = (k + 1) % 3
+                best = None
+
+                # Next move is 3rd, 6th, 9th, ...
+                if k == 2:
+                    if r + 1 < n and c + 1 < n:
+                        # Diagonal is required when possible.
+                        best = dp[r + 1][c + 1][nk]
+                    else:
+                        # Otherwise R or D is allowed.
+                        if c + 1 < n:
+                            best = dp[r][c + 1][nk]
+                        if r + 1 < n:
+                            val = dp[r + 1][c][nk]
+                            if best is None or val > best:
+                                best = val
+                else:
+                    # Normal moves: R, D, X. Keep R > D > X on ties.
+                    if c + 1 < n:
+                        best = dp[r][c + 1][nk]
+                    if r + 1 < n:
+                        val = dp[r + 1][c][nk]
+                        if best is None or val > best:
+                            best = val
+                    if r + 1 < n and c + 1 < n:
+                        val = dp[r + 1][c + 1][nk]
+                        if best is None or val > best:
+                            best = val
+
+                dp[r][c][k] = grid[r][c] + best
+
+    total = dp[0][0][0]
+
+    # Reconstruct the path using the same tie-breaking rules.
+    r = c = 0
+    k = 0
+    path = []
+
+    while not (r == n - 1 and c == n - 1):
+        nk = (k + 1) % 3
+        target = dp[r][c][k] - grid[r][c]
+
+        if k == 2:
+            if r + 1 < n and c + 1 < n:
+                path.append('X')
+                r += 1
+                c += 1
+                k = nk
+                continue
+            else:
+                if c + 1 < n and dp[r][c + 1][nk] == target:
+                    path.append('R')
+                    c += 1
+                    k = nk
+                    continue
+                if r + 1 < n and dp[r + 1][c][nk] == target:
+                    path.append('D')
+                    r += 1
+                    k = nk
+                    continue
+        else:
+            if c + 1 < n and dp[r][c + 1][nk] == target:
+                path.append('R')
+                c += 1
+                k = nk
+                continue
+            if r + 1 < n and dp[r + 1][c][nk] == target:
+                path.append('D')
+                r += 1
+                k = nk
+                continue
+            if r + 1 < n and c + 1 < n and dp[r + 1][c + 1][nk] == target:
+                path.append('X')
+                r += 1
+                c += 1
+                k = nk
+                continue
+
+        break
+
+    return (total, ''.join(path))
