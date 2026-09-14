@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-14 09:52:28
+Last updated: 2026-09-14 09:54:17
 
 ## Updates This Week (2026-09-08 to 2026-09-14)
 
@@ -17,9 +17,13 @@ Last updated: 2026-09-14 09:52:28
 
 ### Gemini
 
+**Added**
+
+- models/antigravity-preview-09-2026 (added: 2026-09-14)
+
 **Deleted**
 
-- models/antigravity-preview-09-2026 (deleted: 2026-09-14)
+- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-09-14)
 
 ### DeepSeek
 
@@ -299,6 +303,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/antigravity-preview-09-2026 (added: 2026-09-14)
 - models/lyria-3.5 (added: 2026-09-03)
 - models/gemini-3.8-flash (added: 2026-09-02)
 - models/gemini-omni-1.1-flash (added: 2026-08-27)
@@ -329,7 +334,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
-- models/gemini-2.5-flash-native-audio-preview-09-2025 (added: 2026-01-27)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
 - models/gemini-2.5-flash-native-audio-latest (added: 2025-12-10)
@@ -352,7 +356,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- models/antigravity-preview-09-2026 (deleted: 2026-09-14)
+- models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-09-14)
 - models/gemini-flash-latest-high-res-exp (deleted: 2026-09-03)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-09-02)
 - models/gemini-2.5-flash-native-audio-preview-12-2025 (deleted: 2026-09-02)
