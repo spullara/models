@@ -1,0 +1,19 @@
+Model: glm-5.3
+Provider: qwen
+Evaluated: 2026-09-15T04:45:07.084338+00:00
+
+=== TIMING ===
+Response time: 0.88s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 500: {"error":{"message":"There are no suitable services in forward clusters.","type":"BalanceError","param":null,"code":"BalanceError"},"id":"chatcmpl-87513ca5-0088-9a02-83c3-7d50f0fa6ec8","request_id":"87513ca5-0088-9a02-83c3-7d50f0fa6ec8"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
