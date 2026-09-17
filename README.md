@@ -1,19 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-15 18:37:31
+Last updated: 2026-09-17 10:21:20
 
-## Updates This Week (2026-09-09 to 2026-09-15)
-
-### OpenAI
-
-**Added**
-
-- gpt-live-1 (added: 2026-09-10)
-- gpt-image-2.5-flare (added: 2026-09-09)
-- gpt-image-2.5-flare-2026-09-08 (added: 2026-09-09)
-- gpt-image-2.5-sunburst (added: 2026-09-09)
-- gpt-image-2.5-sunburst-2026-09-08 (added: 2026-09-09)
+## Updates This Week (2026-09-11 to 2026-09-17)
 
 ### Gemini
 
@@ -25,21 +15,11 @@ Last updated: 2026-09-15 18:37:31
 
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-09-14)
 
-### DeepSeek
-
-**Added**
-
-- deepseek-flash (added: 2026-09-10)
-
-**Deleted**
-
-- deepseek-v4-flash (deleted: 2026-09-10)
-- deepseek-v4-flash-vision-exp (deleted: 2026-09-10)
-
 ### Qwen
 
 **Added**
 
+- qwen3.8-livetranslate-flash-realtime (added: 2026-09-17)
 - glm-5.3 (added: 2026-09-15)
 - deepseek-v4.1-flash (added: 2026-09-13)
 
@@ -61,7 +41,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 4/14
 
-**Qwen**: 167/24
+**Qwen**: 168/24
 
 **Meta**: 7/0
 
@@ -676,6 +656,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- qwen3.8-livetranslate-flash-realtime (added: 2026-09-17)
 - glm-5.3 (added: 2026-09-15)
 - deepseek-v4.1-flash (added: 2026-09-13)
 - qwen3.8-max-0902 (added: 2026-09-02)
