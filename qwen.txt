@@ -155,6 +155,7 @@ qwen3.7-text-embedding
 qwen3.8-2.4t-a95b
 qwen3.8-27b
 qwen3.8-flash
+qwen3.8-livetranslate-flash-realtime
 qwen3.8-max
 qwen3.8-max-0902
 qwq-plus
