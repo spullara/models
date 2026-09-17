@@ -1,0 +1,19 @@
+Model: qwen3.8-livetranslate-flash-realtime
+Provider: qwen
+Evaluated: 2026-09-17T10:21:06.987445+00:00
+
+=== TIMING ===
+Response time: 0.86s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 500: {"error":{"message":"An internal error has occured, please try again later or contact service support.","type":"internal_error","param":null,"code":"internal_error"},"request_id":"bdb4ac53-0bef-99c8-b64c-dc72d45db07e"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
