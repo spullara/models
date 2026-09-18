@@ -1,6 +1,6 @@
 Model: grok-imagine-image-quality
 Provider: grok
-Evaluated: 2026-09-15T18:37:07.550898+00:00
+Evaluated: 2026-09-18T06:06:06.847311+00:00
 
 === TIMING ===
 Response time: 0.11s
@@ -10,7 +10,7 @@ Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 400: {"code":"invalid-argument","error":"Model not found: grok-imagine-image-quality"}
+API Error: HTTP 400: {"code":"invalid-argument","error":"The model grok-imagine-image-quality is an image model and is therefore not available on this endpoint. Please use a compatible endpoint such as https://api.x.ai/v1/images/generations. For more information, see https://docs.x.ai/docs/api-reference#image-generation"}
 
 === RAW RESPONSE ===
 (no response)
