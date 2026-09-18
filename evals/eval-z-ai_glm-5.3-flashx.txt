@@ -1,0 +1,150 @@
+Model: z-ai/glm-5.3-flashx
+Provider: openrouter
+Evaluated: 2026-09-18T16:55:07.425981+00:00
+
+=== TIMING ===
+Response time: 31.27s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Finds the maximum-sum path from top-left to bottom-right of an N x N grid.
+    Moves: R (right), D (down), X (diagonal down-right).
+    Constraint: every 3rd move (3rd, 6th, 9th, ...) must be X if X is possible
+    from the current position; otherwise R or D may be used.
+
+    Returns (max_sum, path_string), where max_sum includes the start cell.
+    """
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+
+    NEG = float("-inf")
+    # dp[k][r][c] = (max_sum, path) where k = number of moves made so far (mod 3)
+    dp = [[[(NEG, "") for _ in range(n)] for _ in range(n)] for _ in range(3)]
+    dp[0][0][0] = (grid[0][0], "")
+
+    best_sum, best_path = NEG, ""
+
+    # Row-major order is valid: every move goes to a strictly later cell,
+    # and k always transitions k -> (k+1) % 3 at a different cell.
+    for r in range(n):
+        for c in range(n):
+            for k in range(3):
+                s, p = dp[k][r][c]
+                if s == NEG:
+                    continue
+
+                if r == n - 1 and c == n - 1:
+                    if s > best_sum:
+                        best_sum, best_path = s, p
+                    continue
+
+                next_move_index = k + 1  # 1-based index of the move we're about to make
+                must_diagonal = (next_move_index % 3 == 0)
+
+                moves = []
+                if must_diagonal:
+                    if r + 1 < n and c + 1 < n:
+                        moves.append(("X", r + 1, c + 1))
+                    else:
+                        # Diagonal not possible -> R or D allowed
+                        if c + 1 < n:
+                            moves.append(("R", r, c + 1))
+                        if r + 1 < n:
+                            moves.append(("D", r + 1, c))
+                else:
+                    if c + 1 < n:
+                        moves.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        moves.append(("D", r + 1, c))
+                    if r + 1 < n and c + 1 < n:
+                        moves.append(("X", r + 1, c + 1))
+
+                nk = next_move_index % 3
+                for ch, nr, nc in moves:
+                    val = s + grid[nr][nc]
+                    if val > dp[nk][nr][nc][0]:
+                        dp[nk][nr][nc] = (val, p + ch)
+
+    return (best_sum, best_path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Finds the maximum-sum path from top-left to bottom-right of an N x N grid.
+    Moves: R (right), D (down), X (diagonal down-right).
+    Constraint: every 3rd move (3rd, 6th, 9th, ...) must be X if X is possible
+    from the current position; otherwise R or D may be used.
+
+    Returns (max_sum, path_string), where max_sum includes the start cell.
+    """
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+
+    NEG = float("-inf")
+    # dp[k][r][c] = (max_sum, path) where k = number of moves made so far (mod 3)
+    dp = [[[(NEG, "") for _ in range(n)] for _ in range(n)] for _ in range(3)]
+    dp[0][0][0] = (grid[0][0], "")
+
+    best_sum, best_path = NEG, ""
+
+    # Row-major order is valid: every move goes to a strictly later cell,
+    # and k always transitions k -> (k+1) % 3 at a different cell.
+    for r in range(n):
+        for c in range(n):
+            for k in range(3):
+                s, p = dp[k][r][c]
+                if s == NEG:
+                    continue
+
+                if r == n - 1 and c == n - 1:
+                    if s > best_sum:
+                        best_sum, best_path = s, p
+                    continue
+
+                next_move_index = k + 1  # 1-based index of the move we're about to make
+                must_diagonal = (next_move_index % 3 == 0)
+
+                moves = []
+                if must_diagonal:
+                    if r + 1 < n and c + 1 < n:
+                        moves.append(("X", r + 1, c + 1))
+                    else:
+                        # Diagonal not possible -> R or D allowed
+                        if c + 1 < n:
+                            moves.append(("R", r, c + 1))
+                        if r + 1 < n:
+                            moves.append(("D", r + 1, c))
+                else:
+                    if c + 1 < n:
+                        moves.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        moves.append(("D", r + 1, c))
+                    if r + 1 < n and c + 1 < n:
+                        moves.append(("X", r + 1, c + 1))
+
+                nk = next_move_index % 3
+                for ch, nr, nc in moves:
+                    val = s + grid[nr][nc]
+                    if val > dp[nk][nr][nc][0]:
+                        dp[nk][nr][nc] = (val, p + ch)
+
+    return (best_sum, best_path)
