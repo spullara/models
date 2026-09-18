@@ -6,4 +6,3 @@ muse-spark-1.3
 muse-spark-1.3-contributor
 muse-voice-transcribe-1.0
 sam-3.1
-sam-3.1-contributor
