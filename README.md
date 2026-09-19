@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-18 17:02:18
+Last updated: 2026-09-19 03:19:25
 
-## Updates This Week (2026-09-12 to 2026-09-18)
+## Updates This Week (2026-09-13 to 2026-09-19)
 
 ### Gemini
 
@@ -36,9 +36,9 @@ Last updated: 2026-09-18 17:02:18
 
 ### Z.AI
 
-**Deleted**
+**Added**
 
-- z-ai/glm-5.3-flashx (deleted: 2026-09-18)
+- z-ai/glm-5.3-flashx (added: 2026-09-18)
 
 ## Summary
 
@@ -64,7 +64,7 @@ Model counts shown as: **Available/Deleted**
 
 **NVIDIA**: 5/0
 
-**Z.AI**: 14/1
+**Z.AI**: 15/0
 
 
 ## OpenAI
@@ -901,6 +901,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- z-ai/glm-5.3-flashx (added: 2026-09-18)
 - z-ai/glm-5.3-flash (added: 2026-08-26)
 - z-ai/glm-5.3 (added: 2026-08-18)
 - z-ai/glm-5v-turbo (added: 2026-07-27)
@@ -915,8 +916,4 @@ Model counts shown as: **Available/Deleted**
 - z-ai/glm-4.5v (added: 2026-07-27)
 - z-ai/glm-4.5-air (added: 2026-07-27)
 - z-ai/glm-4.5 (added: 2026-07-27)
-
-### Deleted Models
-
-- z-ai/glm-5.3-flashx (deleted: 2026-09-18)
 
