@@ -1,0 +1,19 @@
+Model: qwen-audio-3.1-realtime-plus
+Provider: qwen
+Evaluated: 2026-09-20T04:14:06.939357+00:00
+
+=== TIMING ===
+Response time: 0.94s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 500: {"error":{"message":"An internal error has occured, please try again later or contact service support.","type":"internal_error","param":null,"code":"internal_error"},"request_id":"26be75ac-48dc-97c4-9edd-0f1d723d4fe1"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
