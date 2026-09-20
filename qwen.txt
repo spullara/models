@@ -15,6 +15,7 @@ kimi-k3
 kimi/kimi-k3
 qvq-max
 qwen-audio-3.0-asr-flash
+qwen-audio-3.1-realtime-plus
 qwen-coder-plus
 qwen-flash
 qwen-flash-character
