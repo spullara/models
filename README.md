@@ -1,15 +1,19 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-21 20:20:18
+Last updated: 2026-09-21 20:21:17
 
 ## Updates This Week (2026-09-15 to 2026-09-21)
 
 ### Gemini
 
+**Added**
+
+- models/antigravity-preview-latest (added: 2026-09-21)
+
 **Deleted**
 
-- models/antigravity-preview-latest (deleted: 2026-09-21)
+- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-09-21)
 
 ### Grok
 
@@ -305,6 +309,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/antigravity-preview-latest (added: 2026-09-21)
 - models/antigravity-preview-09-2026 (added: 2026-09-14)
 - models/lyria-3.5 (added: 2026-09-03)
 - models/gemini-3.8-flash (added: 2026-09-02)
@@ -338,7 +343,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
-- models/gemini-2.5-flash-native-audio-latest (added: 2025-12-10)
 - models/veo-3.1-fast-generate-preview (added: 2025-12-09)
 - models/veo-3.1-generate-preview (added: 2025-12-05)
 - models/nano-banana-pro-preview (added: 2025-11-20)
@@ -358,7 +362,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- models/antigravity-preview-latest (deleted: 2026-09-21)
+- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-09-21)
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-09-14)
 - models/gemini-flash-latest-high-res-exp (deleted: 2026-09-03)
 - models/gemini-3.1-flash-live-preview (deleted: 2026-09-02)
