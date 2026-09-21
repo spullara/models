@@ -1,0 +1,180 @@
+Model: glm-5.3-prime
+Provider: qwen
+Evaluated: 2026-09-21T03:26:07.089432+00:00
+
+=== TIMING ===
+Response time: 209.35s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Find the maximum-sum path from the top-left to the bottom-right cell.
+
+    Moves: R = right (i, j+1), D = down (i+1, j), X = diagonal down-right (i+1, j+1).
+    Every 3rd move (move numbers 3, 6, 9, ...) MUST be diagonal ('X') whenever
+    the diagonal move stays inside the grid. If the diagonal is not possible
+    on such a required move, R or D may be used instead.
+
+    Returns (max_sum, path_string); the sum counts every visited cell,
+    including the start and end cells.
+    """
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)        # number of rows
+    m = len(grid[0])     # number of columns
+    goal_i, goal_j = n - 1, m - 1
+
+    NEG = float("-inf")
+
+    def candidate_moves(i: int, j: int, r: int) -> list:
+        """Legal moves for the upcoming move, given moves_so_far % 3 == r.
+
+        The upcoming move number is moves_so_far + 1; it is a forced
+        diagonal move exactly when (moves_so_far + 1) % 3 == 0, i.e. r == 2.
+        """
+        forced = (r == 2)
+        diag_ok = (i + 1 < n and j + 1 < m)
+        if forced and diag_ok:
+            return [("X", i + 1, j + 1)]           # diagonal is mandatory
+        moves = []
+        if j + 1 < m:
+            moves.append(("R", i, j + 1))
+        if i + 1 < n:
+            moves.append(("D", i + 1, j))
+        if not forced and diag_ok:
+            moves.append(("X", i + 1, j + 1))
+        return moves
+
+    # F[r][i][j] = best achievable sum from cell (i, j) to the goal,
+    # given that the number of moves made so far satisfies k % 3 == r.
+    # (The forced-diagonal rule depends only on k mod 3, so 3 layers suffice.)
+    F = [[[NEG] * m for _ in range(n)] for _ in range(3)]
+
+    # Process cells by decreasing (i + j) so all successors are already solved.
+    for s in range(n + m - 2, -1, -1):
+        i_hi = min(n - 1, s)
+        i_lo = max(0, s - (m - 1))
+        for i in range(i_hi, i_lo - 1, -1):
+            j = s - i
+            if i == goal_i and j == goal_j:
+                F[0][i][j] = F[1][i][j] = F[2][i][j] = grid[i][j]
+                continue
+            for r in range(3):
+                best_next = NEG
+                for _ch, ni, nj in candidate_moves(i, j, r):
+                    v = F[(r + 1) % 3][ni][nj]
+                    if v > best_next:
+                        best_next = v
+                F[r][i][j] = grid[i][j] + best_next
+
+    max_sum = F[0][0][0]
+
+    # Walk an optimal path forward from (0, 0); on ties prefer R, then D, then X.
+    i = j = 0
+    r = 0
+    path_chars = []
+    while not (i == goal_i and j == goal_j):
+        need = F[r][i][j] - grid[i][j]
+        for ch, ni, nj in candidate_moves(i, j, r):
+            if F[(r + 1) % 3][ni][nj] == need:
+                path_chars.append(ch)
+                i, j, r = ni, nj, (r + 1) % 3
+                break
+        else:
+            break  # defensive: never reached for valid input
+
+    return (max_sum, "".join(path_chars))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Find the maximum-sum path from the top-left to the bottom-right cell.
+
+    Moves: R = right (i, j+1), D = down (i+1, j), X = diagonal down-right (i+1, j+1).
+    Every 3rd move (move numbers 3, 6, 9, ...) MUST be diagonal ('X') whenever
+    the diagonal move stays inside the grid. If the diagonal is not possible
+    on such a required move, R or D may be used instead.
+
+    Returns (max_sum, path_string); the sum counts every visited cell,
+    including the start and end cells.
+    """
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)        # number of rows
+    m = len(grid[0])     # number of columns
+    goal_i, goal_j = n - 1, m - 1
+
+    NEG = float("-inf")
+
+    def candidate_moves(i: int, j: int, r: int) -> list:
+        """Legal moves for the upcoming move, given moves_so_far % 3 == r.
+
+        The upcoming move number is moves_so_far + 1; it is a forced
+        diagonal move exactly when (moves_so_far + 1) % 3 == 0, i.e. r == 2.
+        """
+        forced = (r == 2)
+        diag_ok = (i + 1 < n and j + 1 < m)
+        if forced and diag_ok:
+            return [("X", i + 1, j + 1)]           # diagonal is mandatory
+        moves = []
+        if j + 1 < m:
+            moves.append(("R", i, j + 1))
+        if i + 1 < n:
+            moves.append(("D", i + 1, j))
+        if not forced and diag_ok:
+            moves.append(("X", i + 1, j + 1))
+        return moves
+
+    # F[r][i][j] = best achievable sum from cell (i, j) to the goal,
+    # given that the number of moves made so far satisfies k % 3 == r.
+    # (The forced-diagonal rule depends only on k mod 3, so 3 layers suffice.)
+    F = [[[NEG] * m for _ in range(n)] for _ in range(3)]
+
+    # Process cells by decreasing (i + j) so all successors are already solved.
+    for s in range(n + m - 2, -1, -1):
+        i_hi = min(n - 1, s)
+        i_lo = max(0, s - (m - 1))
+        for i in range(i_hi, i_lo - 1, -1):
+            j = s - i
+            if i == goal_i and j == goal_j:
+                F[0][i][j] = F[1][i][j] = F[2][i][j] = grid[i][j]
+                continue
+            for r in range(3):
+                best_next = NEG
+                for _ch, ni, nj in candidate_moves(i, j, r):
+                    v = F[(r + 1) % 3][ni][nj]
+                    if v > best_next:
+                        best_next = v
+                F[r][i][j] = grid[i][j] + best_next
+
+    max_sum = F[0][0][0]
+
+    # Walk an optimal path forward from (0, 0); on ties prefer R, then D, then X.
+    i = j = 0
+    r = 0
+    path_chars = []
+    while not (i == goal_i and j == goal_j):
+        need = F[r][i][j] - grid[i][j]
+        for ch, ni, nj in candidate_moves(i, j, r):
+            if F[(r + 1) % 3][ni][nj] == need:
+                path_chars.append(ch)
+                i, j, r = ni, nj, (r + 1) % 3
+                break
+        else:
+            break  # defensive: never reached for valid input
+
+    return (max_sum, "".join(path_chars))
