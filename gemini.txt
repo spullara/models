@@ -1,5 +1,6 @@
 models/antigravity-preview-05-2026
 models/antigravity-preview-09-2026
+models/antigravity-preview-latest
 models/aqa
 models/deep-research-max-preview-04-2026
 models/deep-research-preview-04-2026
@@ -8,7 +9,6 @@ models/gemini-2.5-computer-use-preview-10-2025
 models/gemini-2.5-flash
 models/gemini-2.5-flash-image
 models/gemini-2.5-flash-lite
-models/gemini-2.5-flash-native-audio-latest
 models/gemini-2.5-flash-preview-tts
 models/gemini-2.5-pro
 models/gemini-2.5-pro-preview-tts
