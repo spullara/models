@@ -1,0 +1,188 @@
+Model: grok-4.7
+Provider: grok
+Evaluated: 2026-09-21T15:38:08.745840+00:00
+
+=== TIMING ===
+Response time: 54.15s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """Max-sum path from (0, 0) to (n-1, n-1).
+
+    Moves: R (right), D (down), X (diagonal down-right).
+    Move numbers 3, 6, 9, ... must be X when X stays inside the grid;
+    otherwise R or D may be used. Cell values along the path (including
+    the start) are summed. Among maximum sums, any optimal path is returned.
+    """
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    # best[r][c][mod] = max sum to reach (r, c) after (mod) moves mod 3
+    best: list[list[list[int | None]]] = [
+        [[None] * 3 for _ in range(n)] for _ in range(n)
+    ]
+    # parent[r][c][mod] = (prev_r, prev_c, prev_mod, move)
+    parent: list[list[list[tuple[int, int, int, str] | None]]] = [
+        [[None] * 3 for _ in range(n)] for _ in range(n)
+    ]
+    best[0][0][0] = grid[0][0]
+
+    # Every move increases r+c, so sweeping by Manhattan distance is topological.
+    for dist in range(2 * n - 1):
+        r_lo = max(0, dist - (n - 1))
+        r_hi = min(dist, n - 1)
+        for r in range(r_lo, r_hi + 1):
+            c = dist - r
+            for mod in range(3):
+                cur = best[r][c][mod]
+                if cur is None:
+                    continue
+
+                can_r = c + 1 < n
+                can_d = r + 1 < n
+                can_x = can_r and can_d
+                # Next move index is mod+1 (1-based length+1). Required when
+                # that index is a multiple of 3, i.e. mod == 2.
+                must_diag = mod == 2
+
+                if must_diag and can_x:
+                    options = (("X", r + 1, c + 1),)
+                else:
+                    options_list: list[tuple[str, int, int]] = []
+                    if can_r:
+                        options_list.append(("R", r, c + 1))
+                    if can_d:
+                        options_list.append(("D", r + 1, c))
+                    if can_x:
+                        options_list.append(("X", r + 1, c + 1))
+                    options = tuple(options_list)
+
+                for mv, nr, nc in options:
+                    nmod = (mod + 1) % 3
+                    nsum = cur + grid[nr][nc]
+                    prev = best[nr][nc][nmod]
+                    if prev is None or nsum > prev:
+                        best[nr][nc][nmod] = nsum
+                        parent[nr][nc][nmod] = (r, c, mod, mv)
+
+    end_r, end_c = n - 1, n - 1
+    end_mod = 0
+    ans = best[end_r][end_c][0]
+    for mod in range(1, 3):
+        val = best[end_r][end_c][mod]
+        if val is not None and (ans is None or val > ans):
+            ans = val
+            end_mod = mod
+
+    if ans is None:
+        return (0, "")
+
+    moves: list[str] = []
+    r, c, mod = end_r, end_c, end_mod
+    while (r, c, mod) != (0, 0, 0):
+        info = parent[r][c][mod]
+        if info is None:
+            break
+        pr, pc, pmod, mv = info
+        moves.append(mv)
+        r, c, mod = pr, pc, pmod
+    moves.reverse()
+    return (ans, "".join(moves))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """Max-sum path from (0, 0) to (n-1, n-1).
+
+    Moves: R (right), D (down), X (diagonal down-right).
+    Move numbers 3, 6, 9, ... must be X when X stays inside the grid;
+    otherwise R or D may be used. Cell values along the path (including
+    the start) are summed. Among maximum sums, any optimal path is returned.
+    """
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    # best[r][c][mod] = max sum to reach (r, c) after (mod) moves mod 3
+    best: list[list[list[int | None]]] = [
+        [[None] * 3 for _ in range(n)] for _ in range(n)
+    ]
+    # parent[r][c][mod] = (prev_r, prev_c, prev_mod, move)
+    parent: list[list[list[tuple[int, int, int, str] | None]]] = [
+        [[None] * 3 for _ in range(n)] for _ in range(n)
+    ]
+    best[0][0][0] = grid[0][0]
+
+    # Every move increases r+c, so sweeping by Manhattan distance is topological.
+    for dist in range(2 * n - 1):
+        r_lo = max(0, dist - (n - 1))
+        r_hi = min(dist, n - 1)
+        for r in range(r_lo, r_hi + 1):
+            c = dist - r
+            for mod in range(3):
+                cur = best[r][c][mod]
+                if cur is None:
+                    continue
+
+                can_r = c + 1 < n
+                can_d = r + 1 < n
+                can_x = can_r and can_d
+                # Next move index is mod+1 (1-based length+1). Required when
+                # that index is a multiple of 3, i.e. mod == 2.
+                must_diag = mod == 2
+
+                if must_diag and can_x:
+                    options = (("X", r + 1, c + 1),)
+                else:
+                    options_list: list[tuple[str, int, int]] = []
+                    if can_r:
+                        options_list.append(("R", r, c + 1))
+                    if can_d:
+                        options_list.append(("D", r + 1, c))
+                    if can_x:
+                        options_list.append(("X", r + 1, c + 1))
+                    options = tuple(options_list)
+
+                for mv, nr, nc in options:
+                    nmod = (mod + 1) % 3
+                    nsum = cur + grid[nr][nc]
+                    prev = best[nr][nc][nmod]
+                    if prev is None or nsum > prev:
+                        best[nr][nc][nmod] = nsum
+                        parent[nr][nc][nmod] = (r, c, mod, mv)
+
+    end_r, end_c = n - 1, n - 1
+    end_mod = 0
+    ans = best[end_r][end_c][0]
+    for mod in range(1, 3):
+        val = best[end_r][end_c][mod]
+        if val is not None and (ans is None or val > ans):
+            ans = val
+            end_mod = mod
+
+    if ans is None:
+        return (0, "")
+
+    moves: list[str] = []
+    r, c, mod = end_r, end_c, end_mod
+    while (r, c, mod) != (0, 0, 0):
+        info = parent[r][c][mod]
+        if info is None:
+            break
+        pr, pc, pmod, mv = info
+        moves.append(mv)
+        r, c, mod = pr, pc, pmod
+    moves.reverse()
+    return (ans, "".join(moves))
