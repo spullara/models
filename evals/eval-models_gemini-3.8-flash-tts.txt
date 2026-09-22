@@ -1,9 +1,9 @@
 Model: models/gemini-3.8-flash-tts
 Provider: gemini
-Evaluated: 2026-09-22T17:57:06.942302+00:00
+Evaluated: 2026-09-22T18:07:07.571352+00:00
 
 === TIMING ===
-Response time: 12.86s
+Response time: 13.78s
 
 === CODE EXTRACTION ===
 Method: None
