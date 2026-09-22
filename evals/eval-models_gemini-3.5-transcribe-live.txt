@@ -1,9 +1,9 @@
 Model: models/gemini-3.5-transcribe-live
 Provider: gemini
-Evaluated: 2026-09-22T18:06:06.913882+00:00
+Evaluated: 2026-09-22T18:09:07.004096+00:00
 
 === TIMING ===
-Response time: 0.2s
+Response time: 0.18s
 
 === CODE EXTRACTION ===
 Method: None
