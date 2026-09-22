@@ -1,0 +1,132 @@
+Model: gpt-6-luna
+Provider: openai_responses
+Evaluated: 2026-09-22T17:59:06.668323+00:00
+
+=== TIMING ===
+Response time: 8.0s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a non-empty square")
+
+    # Scores and chosen moves are indexed by row, column, and moves_so_far % 3.
+    scores = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    choices = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    for remainder in range(3):
+        scores[n - 1][n - 1][remainder] = grid[n - 1][n - 1]
+
+    for i in range(n - 1, -1, -1):
+        for j in range(n - 1, -1, -1):
+            if i == n - 1 and j == n - 1:
+                continue
+
+            for remainder in range(3):
+                if remainder == 2 and i + 1 < n and j + 1 < n:
+                    moves = [("X", i + 1, j + 1)]
+                else:
+                    moves = []
+                    if j + 1 < n:
+                        moves.append(("R", i, j + 1))
+                    if i + 1 < n:
+                        moves.append(("D", i + 1, j))
+                    if i + 1 < n and j + 1 < n:
+                        moves.append(("X", i + 1, j + 1))
+
+                next_remainder = (remainder + 1) % 3
+                best_score, best_move = max(
+                    (
+                        scores[ni][nj][next_remainder] + grid[i][j],
+                        move,
+                    )
+                    for move, ni, nj in moves
+                )
+                scores[i][j][remainder] = best_score
+                choices[i][j][remainder] = best_move
+
+    path = []
+    i = j = remainder = 0
+    while i != n - 1 or j != n - 1:
+        move = choices[i][j][remainder]
+        path.append(move)
+        if move == "R":
+            j += 1
+        elif move == "D":
+            i += 1
+        else:
+            i += 1
+            j += 1
+        remainder = (remainder + 1) % 3
+
+    return scores[0][0][0], "".join(path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a non-empty square")
+
+    # Scores and chosen moves are indexed by row, column, and moves_so_far % 3.
+    scores = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    choices = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    for remainder in range(3):
+        scores[n - 1][n - 1][remainder] = grid[n - 1][n - 1]
+
+    for i in range(n - 1, -1, -1):
+        for j in range(n - 1, -1, -1):
+            if i == n - 1 and j == n - 1:
+                continue
+
+            for remainder in range(3):
+                if remainder == 2 and i + 1 < n and j + 1 < n:
+                    moves = [("X", i + 1, j + 1)]
+                else:
+                    moves = []
+                    if j + 1 < n:
+                        moves.append(("R", i, j + 1))
+                    if i + 1 < n:
+                        moves.append(("D", i + 1, j))
+                    if i + 1 < n and j + 1 < n:
+                        moves.append(("X", i + 1, j + 1))
+
+                next_remainder = (remainder + 1) % 3
+                best_score, best_move = max(
+                    (
+                        scores[ni][nj][next_remainder] + grid[i][j],
+                        move,
+                    )
+                    for move, ni, nj in moves
+                )
+                scores[i][j][remainder] = best_score
+                choices[i][j][remainder] = best_move
+
+    path = []
+    i = j = remainder = 0
+    while i != n - 1 or j != n - 1:
+        move = choices[i][j][remainder]
+        path.append(move)
+        if move == "R":
+            j += 1
+        elif move == "D":
+            i += 1
+        else:
+            i += 1
+            j += 1
+        remainder = (remainder + 1) % 3
+
+    return scores[0][0][0], "".join(path)
