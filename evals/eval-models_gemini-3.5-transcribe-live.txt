@@ -1,6 +1,6 @@
 Model: models/gemini-3.5-transcribe-live
 Provider: gemini
-Evaluated: 2026-09-22T17:55:07.492873+00:00
+Evaluated: 2026-09-22T18:06:06.913882+00:00
 
 === TIMING ===
 Response time: 0.2s
