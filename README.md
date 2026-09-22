@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-22 16:25:35
+Last updated: 2026-09-22 17:55:20
 
 ## Updates This Week (2026-09-16 to 2026-09-22)
 
@@ -15,14 +15,12 @@ Last updated: 2026-09-22 16:25:35
 
 **Added**
 
-- models/gemini-3.8-flash-lite-tts (added: 2026-09-22)
-- models/gemini-3.8-flash-tts (added: 2026-09-22)
 - models/antigravity-preview-latest (added: 2026-09-21)
 
 **Deleted**
 
-- models/gemini-3.5-transcribe-live (deleted: 2026-09-22)
-- models/veo-3.1-lite-generate-preview (deleted: 2026-09-22)
+- models/gemini-3.8-flash-lite-tts (deleted: 2026-09-22)
+- models/gemini-3.8-flash-tts (deleted: 2026-09-22)
 - models/gemini-2.5-flash-native-audio-latest (deleted: 2026-09-21)
 
 ### Grok
@@ -319,13 +317,12 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- models/gemini-3.8-flash-tts (added: 2026-09-22)
-- models/gemini-3.8-flash-lite-tts (added: 2026-09-22)
 - models/antigravity-preview-latest (added: 2026-09-21)
 - models/antigravity-preview-09-2026 (added: 2026-09-14)
 - models/lyria-3.5 (added: 2026-09-03)
 - models/gemini-3.8-flash (added: 2026-09-02)
 - models/gemini-omni-1.1-flash (added: 2026-08-27)
+- models/gemini-3.5-transcribe-live (added: 2026-08-26)
 - models/gemini-3.5-transcribe (added: 2026-08-26)
 - models/gemini-3.7-flash (added: 2026-08-13)
 - models/gemini-robotics-er-2-preview (added: 2026-07-30)
@@ -344,6 +341,7 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-flash-tts-preview (added: 2026-04-15)
 - models/gemma-4-31b-it (added: 2026-04-02)
 - models/gemma-4-26b-a4b-it (added: 2026-04-02)
+- models/veo-3.1-lite-generate-preview (added: 2026-03-31)
 - models/lyria-3-pro-preview (added: 2026-03-25)
 - models/lyria-3-clip-preview (added: 2026-03-25)
 - models/gemini-embedding-2-preview (added: 2026-03-10)
@@ -372,8 +370,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- models/veo-3.1-lite-generate-preview (deleted: 2026-09-22)
-- models/gemini-3.5-transcribe-live (deleted: 2026-09-22)
+- models/gemini-3.8-flash-tts (deleted: 2026-09-22)
+- models/gemini-3.8-flash-lite-tts (deleted: 2026-09-22)
 - models/gemini-2.5-flash-native-audio-latest (deleted: 2026-09-21)
 - models/gemini-2.5-flash-native-audio-preview-09-2025 (deleted: 2026-09-14)
 - models/gemini-flash-latest-high-res-exp (deleted: 2026-09-03)
