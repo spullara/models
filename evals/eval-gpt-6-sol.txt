@@ -1,26 +1,114 @@
 Model: gpt-6-sol
 Provider: openai_responses
-Evaluated: 2026-09-22T17:59:14.702166+00:00
+Evaluated: 2026-09-22T18:14:20.705433+00:00
 
 === TIMING ===
-Response time: 0.25s
+Response time: 9.5s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: {
-  "error": {
-    "message": "The model `gpt-6-sol` does not exist or you do not have access to it.",
-    "type": "invalid_request_error",
-    "param": null,
-    "code": "model_not_found"
-  }
-}
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a nonempty square grid")
+
+    # dp[r][c][m] is the best sum from (r, c) to the destination,
+    # including grid[r][c], after a number of moves congruent to m mod 3.
+    dp = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    choice = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                for m in range(3):
+                    dp[r][c][m] = grid[r][c]
+                continue
+
+            for m in range(3):
+                diagonal_possible = r + 1 < n and c + 1 < n
+
+                if m == 2 and diagonal_possible:
+                    moves = (("X", r + 1, c + 1),)
+                else:
+                    moves = (
+                        ("R", r, c + 1),
+                        ("D", r + 1, c),
+                    )
+                    if m != 2:
+                        moves += (("X", r + 1, c + 1),)
+
+                for letter, nr, nc in moves:
+                    if nr >= n or nc >= n:
+                        continue
+                    total = grid[r][c] + dp[nr][nc][(m + 1) % 3]
+                    if dp[r][c][m] is None or total > dp[r][c][m]:
+                        dp[r][c][m] = total
+                        choice[r][c][m] = (letter, nr, nc)
+
+    path = []
+    r = c = m = 0
+    while (r, c) != (n - 1, n - 1):
+        letter, r, c = choice[r][c][m]
+        path.append(letter)
+        m = (m + 1) % 3
+
+    return dp[0][0][0], "".join(path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a nonempty square grid")
+
+    # dp[r][c][m] is the best sum from (r, c) to the destination,
+    # including grid[r][c], after a number of moves congruent to m mod 3.
+    dp = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    choice = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                for m in range(3):
+                    dp[r][c][m] = grid[r][c]
+                continue
+
+            for m in range(3):
+                diagonal_possible = r + 1 < n and c + 1 < n
+
+                if m == 2 and diagonal_possible:
+                    moves = (("X", r + 1, c + 1),)
+                else:
+                    moves = (
+                        ("R", r, c + 1),
+                        ("D", r + 1, c),
+                    )
+                    if m != 2:
+                        moves += (("X", r + 1, c + 1),)
+
+                for letter, nr, nc in moves:
+                    if nr >= n or nc >= n:
+                        continue
+                    total = grid[r][c] + dp[nr][nc][(m + 1) % 3]
+                    if dp[r][c][m] is None or total > dp[r][c][m]:
+                        dp[r][c][m] = total
+                        choice[r][c][m] = (letter, nr, nc)
+
+    path = []
+    r = c = m = 0
+    while (r, c) != (n - 1, n - 1):
+        letter, r, c = choice[r][c][m]
+        path.append(letter)
+        m = (m + 1) % 3
+
+    return dp[0][0][0], "".join(path)
