@@ -1,0 +1,19 @@
+Model: models/gemini-3.8-flash-tts
+Provider: gemini
+Evaluated: 2026-09-22T16:00:18.413802+00:00
+
+=== TIMING ===
+Response time: 13.72s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: Failed to extract response text
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
