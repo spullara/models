@@ -1,23 +1,16 @@
 Model: models/gemini-3.8-flash-lite-tts
 Provider: gemini
-Evaluated: 2026-09-22T18:12:07.227897+00:00
+Evaluated: 2026-09-23T14:00:07.546272+00:00
 
 === TIMING ===
-Response time: 0.19s
+Response time: 7.81s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 404: {
-  "error": {
-    "code": 404,
-    "message": "models/gemini-3.8-flash-lite-tts is not found for API version v1beta, or is not supported for generateContent. Call ModelService.ListModels to see the list of available models and their supported methods.",
-    "status": "NOT_FOUND"
-  }
-}
-
+API Error: Failed to extract response text
 
 === RAW RESPONSE ===
 (no response)
