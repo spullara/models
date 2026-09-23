@@ -12,4 +12,5 @@ z-ai/glm-5.2
 z-ai/glm-5.3
 z-ai/glm-5.3-flash
 z-ai/glm-5.3-flashx
+z-ai/glm-5.3-prime
 z-ai/glm-5v-turbo
