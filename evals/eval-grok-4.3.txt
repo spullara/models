@@ -1,19 +1,104 @@
 Model: grok-4.3
 Provider: grok
-Evaluated: 2026-07-16T07:19:06.752327+00:00
+Evaluated: 2026-09-28T11:09:05.781265+00:00
 
 === TIMING ===
-Response time: 0.15s
+Response time: 9.55s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 1:
+        return grid[0][0], ""
+    
+    best = [-float('inf'), ""]
+    
+    def dfs(r: int, c: int, moves: int, total: int, path: str):
+        if r == N - 1 and c == N - 1:
+            if total > best[0]:
+                best[0] = total
+                best[1] = path
+            return
+        if r >= N or c >= N:
+            return
+        
+        move_num = moves + 1
+        must_x = (move_num % 3 == 0)
+        
+        candidates = []
+        if must_x:
+            if r + 1 < N and c + 1 < N:
+                candidates.append(('X', 1, 1))
+            else:
+                candidates.append(('R', 0, 1))
+                candidates.append(('D', 1, 0))
+        else:
+            if r + 1 < N and c + 1 < N:
+                candidates.append(('X', 1, 1))
+            if c + 1 < N:
+                candidates.append(('R', 0, 1))
+            if r + 1 < N:
+                candidates.append(('D', 1, 0))
+        
+        for move, dr, dc in candidates:
+            nr, nc = r + dr, c + dc
+            if nr < N and nc < N:
+                dfs(nr, nc, moves + 1, total + grid[nr][nc], path + move)
+    
+    dfs(0, 0, 0, grid[0][0], "")
+    return best[0], best[1]
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    N = len(grid)
+    if N == 1:
+        return grid[0][0], ""
+    
+    best = [-float('inf'), ""]
+    
+    def dfs(r: int, c: int, moves: int, total: int, path: str):
+        if r == N - 1 and c == N - 1:
+            if total > best[0]:
+                best[0] = total
+                best[1] = path
+            return
+        if r >= N or c >= N:
+            return
+        
+        move_num = moves + 1
+        must_x = (move_num % 3 == 0)
+        
+        candidates = []
+        if must_x:
+            if r + 1 < N and c + 1 < N:
+                candidates.append(('X', 1, 1))
+            else:
+                candidates.append(('R', 0, 1))
+                candidates.append(('D', 1, 0))
+        else:
+            if r + 1 < N and c + 1 < N:
+                candidates.append(('X', 1, 1))
+            if c + 1 < N:
+                candidates.append(('R', 0, 1))
+            if r + 1 < N:
+                candidates.append(('D', 1, 0))
+        
+        for move, dr, dc in candidates:
+            nr, nc = r + dr, c + dc
+            if nr < N and nc < N:
+                dfs(nr, nc, moves + 1, total + grid[nr][nc], path + move)
+    
+    dfs(0, 0, 0, grid[0][0], "")
+    return best[0], best[1]
