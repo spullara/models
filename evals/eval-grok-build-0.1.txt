@@ -1,9 +1,9 @@
 Model: grok-build-0.1
 Provider: grok
-Evaluated: 2026-09-28T11:12:52.741936+00:00
+Evaluated: 2026-09-28T16:42:36.743824+00:00
 
 === TIMING ===
-Response time: 68.7s
+Response time: 89.62s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -20,105 +20,123 @@ Path valid: YES
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
-    N = len(grid)
-    if N == 1:
+    n = len(grid)
+    if n == 1:
         return grid[0][0], ""
-    MAX_K = 2 * (N - 1) + 1
+    max_moves = 2 * (n - 1)
     INF = float('-inf')
-    dp = [[[INF] * MAX_K for _ in range(N)] for _ in range(N)]
-    path_dp = [[[""] * MAX_K for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    path_dp[0][0][0] = ""
-    for k in range(MAX_K - 1):
-        for i in range(N):
-            for j in range(N):
-                if dp[i][j][k] == INF:
+    max_sum = [[[INF] * (max_moves + 1) for _ in range(n)] for _ in range(n)]
+    paths = [[[""] * (max_moves + 1) for _ in range(n)] for _ in range(n)]
+    max_sum[0][0][0] = grid[0][0]
+    paths[0][0][0] = ""
+    for m in range(max_moves):
+        for r in range(n):
+            for c in range(n):
+                if max_sum[r][c][m] == INF:
                     continue
-                move_num = k + 1
-                must_x = (move_num % 3 == 0)
+                curr_sum = max_sum[r][c][m]
+                curr_path = paths[r][c][m]
+                next_m = m + 1
+                next_move_num = next_m
+                must_diagonal = (next_move_num % 3 == 0)
                 candidates = []
-                if must_x:
-                    if i < N - 1 and j < N - 1:
-                        candidates.append(('X', i + 1, j + 1))
+                if must_diagonal:
+                    if r < n - 1 and c < n - 1:
+                        candidates = ['X']
                     else:
-                        if j < N - 1:
-                            candidates.append(('R', i, j + 1))
-                        if i < N - 1:
-                            candidates.append(('D', i + 1, j))
+                        if c < n - 1:
+                            candidates.append('R')
+                        if r < n - 1:
+                            candidates.append('D')
                 else:
-                    if j < N - 1:
-                        candidates.append(('R', i, j + 1))
-                    if i < N - 1:
-                        candidates.append(('D', i + 1, j))
-                    if i < N - 1 and j < N - 1:
-                        candidates.append(('X', i + 1, j + 1))
-                for move, ni, nj in candidates:
-                    if ni >= N or nj >= N:
-                        continue
-                    new_sum = dp[i][j][k] + grid[ni][nj]
-                    if new_sum > dp[ni][nj][k + 1]:
-                        dp[ni][nj][k + 1] = new_sum
-                        path_dp[ni][nj][k + 1] = path_dp[i][j][k] + move
-    max_sum = INF
+                    if c < n - 1:
+                        candidates.append('R')
+                    if r < n - 1:
+                        candidates.append('D')
+                    if r < n - 1 and c < n - 1:
+                        candidates.append('X')
+                for move in candidates:
+                    if move == 'R':
+                        nr, nc = r, c + 1
+                    elif move == 'D':
+                        nr, nc = r + 1, c
+                    else:
+                        nr, nc = r + 1, c + 1
+                    if nr < n and nc < n:
+                        new_sum = curr_sum + grid[nr][nc]
+                        new_path = curr_path + move
+                        if new_sum > max_sum[nr][nc][next_m]:
+                            max_sum[nr][nc][next_m] = new_sum
+                            paths[nr][nc][next_m] = new_path
+    best_sum = INF
     best_path = ""
-    for k in range(MAX_K):
-        if dp[N - 1][N - 1][k] > max_sum:
-            max_sum = dp[N - 1][N - 1][k]
-            best_path = path_dp[N - 1][N - 1][k]
-    if max_sum == INF:
+    for m in range(max_moves + 1):
+        if max_sum[n - 1][n - 1][m] > best_sum:
+            best_sum = max_sum[n - 1][n - 1][m]
+            best_path = paths[n - 1][n - 1][m]
+    if best_sum == INF:
         return 0, ""
-    return max_sum, best_path
+    return best_sum, best_path
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return 0, ""
-    N = len(grid)
-    if N == 1:
+    n = len(grid)
+    if n == 1:
         return grid[0][0], ""
-    MAX_K = 2 * (N - 1) + 1
+    max_moves = 2 * (n - 1)
     INF = float('-inf')
-    dp = [[[INF] * MAX_K for _ in range(N)] for _ in range(N)]
-    path_dp = [[[""] * MAX_K for _ in range(N)] for _ in range(N)]
-    dp[0][0][0] = grid[0][0]
-    path_dp[0][0][0] = ""
-    for k in range(MAX_K - 1):
-        for i in range(N):
-            for j in range(N):
-                if dp[i][j][k] == INF:
+    max_sum = [[[INF] * (max_moves + 1) for _ in range(n)] for _ in range(n)]
+    paths = [[[""] * (max_moves + 1) for _ in range(n)] for _ in range(n)]
+    max_sum[0][0][0] = grid[0][0]
+    paths[0][0][0] = ""
+    for m in range(max_moves):
+        for r in range(n):
+            for c in range(n):
+                if max_sum[r][c][m] == INF:
                     continue
-                move_num = k + 1
-                must_x = (move_num % 3 == 0)
+                curr_sum = max_sum[r][c][m]
+                curr_path = paths[r][c][m]
+                next_m = m + 1
+                next_move_num = next_m
+                must_diagonal = (next_move_num % 3 == 0)
                 candidates = []
-                if must_x:
-                    if i < N - 1 and j < N - 1:
-                        candidates.append(('X', i + 1, j + 1))
+                if must_diagonal:
+                    if r < n - 1 and c < n - 1:
+                        candidates = ['X']
                     else:
-                        if j < N - 1:
-                            candidates.append(('R', i, j + 1))
-                        if i < N - 1:
-                            candidates.append(('D', i + 1, j))
+                        if c < n - 1:
+                            candidates.append('R')
+                        if r < n - 1:
+                            candidates.append('D')
                 else:
-                    if j < N - 1:
-                        candidates.append(('R', i, j + 1))
-                    if i < N - 1:
-                        candidates.append(('D', i + 1, j))
-                    if i < N - 1 and j < N - 1:
-                        candidates.append(('X', i + 1, j + 1))
-                for move, ni, nj in candidates:
-                    if ni >= N or nj >= N:
-                        continue
-                    new_sum = dp[i][j][k] + grid[ni][nj]
-                    if new_sum > dp[ni][nj][k + 1]:
-                        dp[ni][nj][k + 1] = new_sum
-                        path_dp[ni][nj][k + 1] = path_dp[i][j][k] + move
-    max_sum = INF
+                    if c < n - 1:
+                        candidates.append('R')
+                    if r < n - 1:
+                        candidates.append('D')
+                    if r < n - 1 and c < n - 1:
+                        candidates.append('X')
+                for move in candidates:
+                    if move == 'R':
+                        nr, nc = r, c + 1
+                    elif move == 'D':
+                        nr, nc = r + 1, c
+                    else:
+                        nr, nc = r + 1, c + 1
+                    if nr < n and nc < n:
+                        new_sum = curr_sum + grid[nr][nc]
+                        new_path = curr_path + move
+                        if new_sum > max_sum[nr][nc][next_m]:
+                            max_sum[nr][nc][next_m] = new_sum
+                            paths[nr][nc][next_m] = new_path
+    best_sum = INF
     best_path = ""
-    for k in range(MAX_K):
-        if dp[N - 1][N - 1][k] > max_sum:
-            max_sum = dp[N - 1][N - 1][k]
-            best_path = path_dp[N - 1][N - 1][k]
-    if max_sum == INF:
+    for m in range(max_moves + 1):
+        if max_sum[n - 1][n - 1][m] > best_sum:
+            best_sum = max_sum[n - 1][n - 1][m]
+            best_path = paths[n - 1][n - 1][m]
+    if best_sum == INF:
         return 0, ""
-    return max_sum, best_path
+    return best_sum, best_path
