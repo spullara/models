@@ -1,9 +1,9 @@
 Model: grok-4.7
 Provider: grok
-Evaluated: 2026-09-28T11:11:38.337525+00:00
+Evaluated: 2026-09-28T16:41:07.505080+00:00
 
 === TIMING ===
-Response time: 74.37s
+Response time: 89.21s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -22,65 +22,53 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    # best[r][c][mod] = (max sum from (r, c) to end, including grid[r][c], path)
-    # mod = number of moves already taken % 3
+    # best[r][c][phase] = (path_sum, path) after reaching (r, c) in `phase` moves (mod 3).
+    # phase == 2 means the next move is the 3rd, 6th, 9th, ... and must be diagonal if in bounds.
     best: list[list[list[tuple[int, str] | None]]] = [
-        [[None] * 3 for _ in range(n)] for _ in range(n)
+        [[None, None, None] for _ in range(n)] for _ in range(n)
     ]
-    for mod in range(3):
-        best[n - 1][n - 1][mod] = (grid[n - 1][n - 1], "")
+    best[0][0][0] = (grid[0][0], "")
 
-    cells = [(r, c) for r in range(n) for c in range(n) if (r, c) != (n - 1, n - 1)]
-    cells.sort(key=lambda rc: -(rc[0] + rc[1]))
-
-    for r, c in cells:
-        for mod in range(3):
-            must_diagonal = ((mod + 1) % 3 == 0)
-            can_x = r + 1 < n and c + 1 < n
-            can_r = c + 1 < n
-            can_d = r + 1 < n
-
-            if must_diagonal and can_x:
-                candidates = [("X", r + 1, c + 1)]
-            elif must_diagonal:
-                candidates = []
-                if can_r:
-                    candidates.append(("R", r, c + 1))
-                if can_d:
-                    candidates.append(("D", r + 1, c))
-            else:
-                candidates = []
-                if can_r:
-                    candidates.append(("R", r, c + 1))
-                if can_d:
-                    candidates.append(("D", r + 1, c))
-                if can_x:
-                    candidates.append(("X", r + 1, c + 1))
-
-            best_sum = None
-            best_path = None
-            next_mod = (mod + 1) % 3
-            for move, nr, nc in candidates:
-                sub = best[nr][nc][next_mod]
-                if sub is None:
+    for r in range(n):
+        for c in range(n):
+            for phase in range(3):
+                state = best[r][c][phase]
+                if state is None or (r == n - 1 and c == n - 1):
                     continue
-                total = grid[r][c] + sub[0]
-                path = move + sub[1]
-                if (
-                    best_sum is None
-                    or total > best_sum
-                    or (total == best_sum and path < best_path)
-                ):
-                    best_sum = total
-                    best_path = path
 
-            if best_sum is not None:
-                best[r][c][mod] = (best_sum, best_path)
+                cur_sum, cur_path = state
+                can_x = r + 1 < n and c + 1 < n
+                if phase == 2 and can_x:
+                    options = [("X", r + 1, c + 1)]
+                else:
+                    options = []
+                    if c + 1 < n:
+                        options.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        options.append(("D", r + 1, c))
+                    if can_x:
+                        options.append(("X", r + 1, c + 1))
 
-    result = best[0][0][0]
-    if result is None:
-        return (grid[0][0], "")
-    return result
+                for move, nr, nc in options:
+                    nphase = (phase + 1) % 3
+                    nsum = cur_sum + grid[nr][nc]
+                    npath = cur_path + move
+                    prev = best[nr][nc][nphase]
+                    if (
+                        prev is None
+                        or nsum > prev[0]
+                        or (nsum == prev[0] and npath < prev[1])
+                    ):
+                        best[nr][nc][nphase] = (nsum, npath)
+
+    end_states = [
+        best[n - 1][n - 1][phase]
+        for phase in range(3)
+        if best[n - 1][n - 1][phase] is not None
+    ]
+    max_sum = max(total for total, _ in end_states)
+    path = min(p for total, p in end_states if total == max_sum)
+    return (max_sum, path)
 ```
 
 === EXTRACTED CODE ===
@@ -89,62 +77,50 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    # best[r][c][mod] = (max sum from (r, c) to end, including grid[r][c], path)
-    # mod = number of moves already taken % 3
+    # best[r][c][phase] = (path_sum, path) after reaching (r, c) in `phase` moves (mod 3).
+    # phase == 2 means the next move is the 3rd, 6th, 9th, ... and must be diagonal if in bounds.
     best: list[list[list[tuple[int, str] | None]]] = [
-        [[None] * 3 for _ in range(n)] for _ in range(n)
+        [[None, None, None] for _ in range(n)] for _ in range(n)
     ]
-    for mod in range(3):
-        best[n - 1][n - 1][mod] = (grid[n - 1][n - 1], "")
+    best[0][0][0] = (grid[0][0], "")
 
-    cells = [(r, c) for r in range(n) for c in range(n) if (r, c) != (n - 1, n - 1)]
-    cells.sort(key=lambda rc: -(rc[0] + rc[1]))
-
-    for r, c in cells:
-        for mod in range(3):
-            must_diagonal = ((mod + 1) % 3 == 0)
-            can_x = r + 1 < n and c + 1 < n
-            can_r = c + 1 < n
-            can_d = r + 1 < n
-
-            if must_diagonal and can_x:
-                candidates = [("X", r + 1, c + 1)]
-            elif must_diagonal:
-                candidates = []
-                if can_r:
-                    candidates.append(("R", r, c + 1))
-                if can_d:
-                    candidates.append(("D", r + 1, c))
-            else:
-                candidates = []
-                if can_r:
-                    candidates.append(("R", r, c + 1))
-                if can_d:
-                    candidates.append(("D", r + 1, c))
-                if can_x:
-                    candidates.append(("X", r + 1, c + 1))
-
-            best_sum = None
-            best_path = None
-            next_mod = (mod + 1) % 3
-            for move, nr, nc in candidates:
-                sub = best[nr][nc][next_mod]
-                if sub is None:
+    for r in range(n):
+        for c in range(n):
+            for phase in range(3):
+                state = best[r][c][phase]
+                if state is None or (r == n - 1 and c == n - 1):
                     continue
-                total = grid[r][c] + sub[0]
-                path = move + sub[1]
-                if (
-                    best_sum is None
-                    or total > best_sum
-                    or (total == best_sum and path < best_path)
-                ):
-                    best_sum = total
-                    best_path = path
 
-            if best_sum is not None:
-                best[r][c][mod] = (best_sum, best_path)
+                cur_sum, cur_path = state
+                can_x = r + 1 < n and c + 1 < n
+                if phase == 2 and can_x:
+                    options = [("X", r + 1, c + 1)]
+                else:
+                    options = []
+                    if c + 1 < n:
+                        options.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        options.append(("D", r + 1, c))
+                    if can_x:
+                        options.append(("X", r + 1, c + 1))
 
-    result = best[0][0][0]
-    if result is None:
-        return (grid[0][0], "")
-    return result
+                for move, nr, nc in options:
+                    nphase = (phase + 1) % 3
+                    nsum = cur_sum + grid[nr][nc]
+                    npath = cur_path + move
+                    prev = best[nr][nc][nphase]
+                    if (
+                        prev is None
+                        or nsum > prev[0]
+                        or (nsum == prev[0] and npath < prev[1])
+                    ):
+                        best[nr][nc][nphase] = (nsum, npath)
+
+    end_states = [
+        best[n - 1][n - 1][phase]
+        for phase in range(3)
+        if best[n - 1][n - 1][phase] is not None
+    ]
+    max_sum = max(total for total, _ in end_states)
+    path = min(p for total, p in end_states if total == max_sum)
+    return (max_sum, path)
