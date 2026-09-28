@@ -1,19 +1,100 @@
 Model: grok-4.20-multi-agent-0309
 Provider: grok
-Evaluated: 2026-07-16T07:19:06.583251+00:00
+Evaluated: 2026-09-28T11:07:33.036747+00:00
 
 === TIMING ===
-Response time: 0.17s
+Response time: 92.71s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    N = len(grid)
+    best = {}
+    best[(0, 0, 0)] = (grid[0][0], "")
+    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+    max_moves = 2 * (N - 1)
+    for moves in range(max_moves):
+        for i in range(N):
+            for j in range(N):
+                state = (i, j, moves)
+                if state not in best:
+                    continue
+                curr_sum, curr_path = best[state]
+                next_move_num = moves + 1
+                must_diagonal = (next_move_num % 3 == 0)
+                x_possible_from_here = (i + 1 < N and j + 1 < N)
+                for dchar, di, dj in directions:
+                    ni = i + di
+                    nj = j + dj
+                    if ni >= N or nj >= N:
+                        continue
+                    if must_diagonal and dchar != 'X' and x_possible_from_here:
+                        continue
+                    new_sum = curr_sum + grid[ni][nj]
+                    new_path = curr_path + dchar
+                    new_state = (ni, nj, moves + 1)
+                    if new_state not in best or new_sum > best[new_state][0]:
+                        best[new_state] = (new_sum, new_path)
+    # Find best at end
+    max_sum = float('-inf')
+    best_path = ""
+    for m in range(max_moves + 1):
+        state = (N - 1, N - 1, m)
+        if state in best and best[state][0] > max_sum:
+            max_sum = best[state][0]
+            best_path = best[state][1]
+    return int(max_sum), best_path
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
+    N = len(grid)
+    best = {}
+    best[(0, 0, 0)] = (grid[0][0], "")
+    directions = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
+    max_moves = 2 * (N - 1)
+    for moves in range(max_moves):
+        for i in range(N):
+            for j in range(N):
+                state = (i, j, moves)
+                if state not in best:
+                    continue
+                curr_sum, curr_path = best[state]
+                next_move_num = moves + 1
+                must_diagonal = (next_move_num % 3 == 0)
+                x_possible_from_here = (i + 1 < N and j + 1 < N)
+                for dchar, di, dj in directions:
+                    ni = i + di
+                    nj = j + dj
+                    if ni >= N or nj >= N:
+                        continue
+                    if must_diagonal and dchar != 'X' and x_possible_from_here:
+                        continue
+                    new_sum = curr_sum + grid[ni][nj]
+                    new_path = curr_path + dchar
+                    new_state = (ni, nj, moves + 1)
+                    if new_state not in best or new_sum > best[new_state][0]:
+                        best[new_state] = (new_sum, new_path)
+    # Find best at end
+    max_sum = float('-inf')
+    best_path = ""
+    for m in range(max_moves + 1):
+        state = (N - 1, N - 1, m)
+        if state in best and best[state][0] > max_sum:
+            max_sum = best[state][0]
+            best_path = best[state][1]
+    return int(max_sum), best_path
