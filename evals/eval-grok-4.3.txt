@@ -1,9 +1,9 @@
 Model: grok-4.3
 Provider: grok
-Evaluated: 2026-09-28T11:09:05.781265+00:00
+Evaluated: 2026-09-28T16:39:06.831598+00:00
 
 === TIMING ===
-Response time: 9.55s
+Response time: 9.93s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,87 +18,105 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
     N = len(grid)
     if N == 1:
         return grid[0][0], ""
-    
-    best = [-float('inf'), ""]
-    
-    def dfs(r: int, c: int, moves: int, total: int, path: str):
+
+    from functools import lru_cache
+
+    @lru_cache(None)
+    def dp(r: int, c: int, moves: int) -> tuple[int, str]:
         if r == N - 1 and c == N - 1:
-            if total > best[0]:
-                best[0] = total
-                best[1] = path
-            return
-        if r >= N or c >= N:
-            return
-        
-        move_num = moves + 1
-        must_x = (move_num % 3 == 0)
-        
+            return grid[r][c], ""
+        best_sum = float("-inf")
+        best_path = ""
+        move_num = moves + 1  # 1-based move number
+        must_diag = (move_num % 3 == 0)
+
         candidates = []
-        if must_x:
+        if must_diag:
             if r + 1 < N and c + 1 < N:
-                candidates.append(('X', 1, 1))
-            else:
-                candidates.append(('R', 0, 1))
-                candidates.append(('D', 1, 0))
+                candidates.append(("X", 1, 1))
         else:
-            if r + 1 < N and c + 1 < N:
-                candidates.append(('X', 1, 1))
             if c + 1 < N:
-                candidates.append(('R', 0, 1))
+                candidates.append(("R", 0, 1))
             if r + 1 < N:
-                candidates.append(('D', 1, 0))
-        
+                candidates.append(("D", 1, 0))
+            if r + 1 < N and c + 1 < N:
+                candidates.append(("X", 1, 1))
+
+        if must_diag and not candidates:
+            # fallback to R or D
+            if c + 1 < N:
+                candidates.append(("R", 0, 1))
+            if r + 1 < N:
+                candidates.append(("D", 1, 0))
+
         for move, dr, dc in candidates:
             nr, nc = r + dr, c + dc
-            if nr < N and nc < N:
-                dfs(nr, nc, moves + 1, total + grid[nr][nc], path + move)
-    
-    dfs(0, 0, 0, grid[0][0], "")
-    return best[0], best[1]
+            sub_sum, sub_path = dp(nr, nc, moves + 1)
+            if sub_sum > float("-inf"):
+                total = grid[r][c] + sub_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = move + sub_path
+
+        return best_sum, best_path
+
+    total, path = dp(0, 0, 0)
+    return total, path
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return 0, ""
     N = len(grid)
     if N == 1:
         return grid[0][0], ""
-    
-    best = [-float('inf'), ""]
-    
-    def dfs(r: int, c: int, moves: int, total: int, path: str):
+
+    from functools import lru_cache
+
+    @lru_cache(None)
+    def dp(r: int, c: int, moves: int) -> tuple[int, str]:
         if r == N - 1 and c == N - 1:
-            if total > best[0]:
-                best[0] = total
-                best[1] = path
-            return
-        if r >= N or c >= N:
-            return
-        
-        move_num = moves + 1
-        must_x = (move_num % 3 == 0)
-        
+            return grid[r][c], ""
+        best_sum = float("-inf")
+        best_path = ""
+        move_num = moves + 1  # 1-based move number
+        must_diag = (move_num % 3 == 0)
+
         candidates = []
-        if must_x:
+        if must_diag:
             if r + 1 < N and c + 1 < N:
-                candidates.append(('X', 1, 1))
-            else:
-                candidates.append(('R', 0, 1))
-                candidates.append(('D', 1, 0))
+                candidates.append(("X", 1, 1))
         else:
-            if r + 1 < N and c + 1 < N:
-                candidates.append(('X', 1, 1))
             if c + 1 < N:
-                candidates.append(('R', 0, 1))
+                candidates.append(("R", 0, 1))
             if r + 1 < N:
-                candidates.append(('D', 1, 0))
-        
+                candidates.append(("D", 1, 0))
+            if r + 1 < N and c + 1 < N:
+                candidates.append(("X", 1, 1))
+
+        if must_diag and not candidates:
+            # fallback to R or D
+            if c + 1 < N:
+                candidates.append(("R", 0, 1))
+            if r + 1 < N:
+                candidates.append(("D", 1, 0))
+
         for move, dr, dc in candidates:
             nr, nc = r + dr, c + dc
-            if nr < N and nc < N:
-                dfs(nr, nc, moves + 1, total + grid[nr][nc], path + move)
-    
-    dfs(0, 0, 0, grid[0][0], "")
-    return best[0], best[1]
+            sub_sum, sub_path = dp(nr, nc, moves + 1)
+            if sub_sum > float("-inf"):
+                total = grid[r][c] + sub_sum
+                if total > best_sum:
+                    best_sum = total
+                    best_path = move + sub_path
+
+        return best_sum, best_path
+
+    total, path = dp(0, 0, 0)
+    return total, path

@@ -1,9 +1,9 @@
 Model: grok-4.5
 Provider: grok
-Evaluated: 2026-09-28T11:09:15.359735+00:00
+Evaluated: 2026-09-28T16:39:16.789321+00:00
 
 === TIMING ===
-Response time: 70.54s
+Response time: 29.04s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,171 +18,123 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
     n = len(grid)
+    if n == 0:
+        return (0, "")
     if n == 1:
         return (grid[0][0], "")
 
-    from functools import lru_cache
+    def valid(r, c):
+        return 0 <= r < n and 0 <= c < n
 
-    @lru_cache(maxsize=None)
-    def max_sum(i: int, j: int, moves: int) -> int:
-        if i == n - 1 and j == n - 1:
-            return grid[i][j]
+    memo = {}
 
-        next_num = moves + 1
-        must_x = (next_num % 3 == 0)
-        can_x = i + 1 < n and j + 1 < n
-        can_r = j + 1 < n
-        can_d = i + 1 < n
+    def dfs(r, c, moves_made):
+        key = (r, c, moves_made)
+        if key in memo:
+            return memo[key]
 
-        opts = []
-        if must_x:
-            if can_x:
-                opts.append((i + 1, j + 1))
-            else:
-                if can_r:
-                    opts.append((i, j + 1))
-                if can_d:
-                    opts.append((i + 1, j))
+        if r == n - 1 and c == n - 1:
+            return (grid[r][c], "")
+
+        next_move = moves_made + 1
+        must_x = next_move % 3 == 0
+
+        can_r = valid(r, c + 1)
+        can_d = valid(r + 1, c)
+        can_x = valid(r + 1, c + 1)
+
+        options = []
+        if must_x and can_x:
+            options = [("X", r + 1, c + 1)]
         else:
             if can_r:
-                opts.append((i, j + 1))
+                options.append(("R", r, c + 1))
             if can_d:
-                opts.append((i + 1, j))
-            if can_x:
-                opts.append((i + 1, j + 1))
+                options.append(("D", r + 1, c))
+            if can_x and not must_x:
+                options.append(("X", r + 1, c + 1))
+            elif can_x and must_x and not can_x:
+                pass
+            # when must_x but X impossible: R/D only (already added)
 
-        best = float("-inf")
-        for ni, nj in opts:
-            best = max(best, max_sum(ni, nj, moves + 1))
-        if best == float("-inf"):
-            return float("-inf")
-        return grid[i][j] + best
+        if not options:
+            result = (float("-inf"), "")
+            memo[key] = result
+            return result
 
-    def reconstruct() -> str:
-        path = []
-        i = j = moves = 0
-        while (i, j) != (n - 1, n - 1):
-            next_num = moves + 1
-            must_x = (next_num % 3 == 0)
-            can_x = i + 1 < n and j + 1 < n
-            can_r = j + 1 < n
-            can_d = i + 1 < n
+        best_sum = float("-inf")
+        best_path = ""
+        for ch, nr, nc in options:
+            sub_sum, sub_path = dfs(nr, nc, moves_made + 1)
+            total = grid[r][c] + sub_sum
+            if total > best_sum:
+                best_sum = total
+                best_path = ch + sub_path
 
-            opts = []
-            if must_x:
-                if can_x:
-                    opts.append(("X", i + 1, j + 1))
-                else:
-                    if can_r:
-                        opts.append(("R", i, j + 1))
-                    if can_d:
-                        opts.append(("D", i + 1, j))
-            else:
-                if can_r:
-                    opts.append(("R", i, j + 1))
-                if can_d:
-                    opts.append(("D", i + 1, j))
-                if can_x:
-                    opts.append(("X", i + 1, j + 1))
+        memo[key] = (best_sum, best_path)
+        return memo[key]
 
-            need = max_sum(i, j, moves) - grid[i][j]
-            for ch, ni, nj in opts:
-                if max_sum(ni, nj, moves + 1) == need:
-                    path.append(ch)
-                    i, j, moves = ni, nj, moves + 1
-                    break
-        return "".join(path)
-
-    total = max_sum(0, 0, 0)
-    if total == float("-inf"):
-        return (0, "")
-    return (int(total), reconstruct())
+    return dfs(0, 0, 0)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
-        return (0, "")
     n = len(grid)
+    if n == 0:
+        return (0, "")
     if n == 1:
         return (grid[0][0], "")
 
-    from functools import lru_cache
+    def valid(r, c):
+        return 0 <= r < n and 0 <= c < n
 
-    @lru_cache(maxsize=None)
-    def max_sum(i: int, j: int, moves: int) -> int:
-        if i == n - 1 and j == n - 1:
-            return grid[i][j]
+    memo = {}
 
-        next_num = moves + 1
-        must_x = (next_num % 3 == 0)
-        can_x = i + 1 < n and j + 1 < n
-        can_r = j + 1 < n
-        can_d = i + 1 < n
+    def dfs(r, c, moves_made):
+        key = (r, c, moves_made)
+        if key in memo:
+            return memo[key]
 
-        opts = []
-        if must_x:
-            if can_x:
-                opts.append((i + 1, j + 1))
-            else:
-                if can_r:
-                    opts.append((i, j + 1))
-                if can_d:
-                    opts.append((i + 1, j))
+        if r == n - 1 and c == n - 1:
+            return (grid[r][c], "")
+
+        next_move = moves_made + 1
+        must_x = next_move % 3 == 0
+
+        can_r = valid(r, c + 1)
+        can_d = valid(r + 1, c)
+        can_x = valid(r + 1, c + 1)
+
+        options = []
+        if must_x and can_x:
+            options = [("X", r + 1, c + 1)]
         else:
             if can_r:
-                opts.append((i, j + 1))
+                options.append(("R", r, c + 1))
             if can_d:
-                opts.append((i + 1, j))
-            if can_x:
-                opts.append((i + 1, j + 1))
+                options.append(("D", r + 1, c))
+            if can_x and not must_x:
+                options.append(("X", r + 1, c + 1))
+            elif can_x and must_x and not can_x:
+                pass
+            # when must_x but X impossible: R/D only (already added)
 
-        best = float("-inf")
-        for ni, nj in opts:
-            best = max(best, max_sum(ni, nj, moves + 1))
-        if best == float("-inf"):
-            return float("-inf")
-        return grid[i][j] + best
+        if not options:
+            result = (float("-inf"), "")
+            memo[key] = result
+            return result
 
-    def reconstruct() -> str:
-        path = []
-        i = j = moves = 0
-        while (i, j) != (n - 1, n - 1):
-            next_num = moves + 1
-            must_x = (next_num % 3 == 0)
-            can_x = i + 1 < n and j + 1 < n
-            can_r = j + 1 < n
-            can_d = i + 1 < n
+        best_sum = float("-inf")
+        best_path = ""
+        for ch, nr, nc in options:
+            sub_sum, sub_path = dfs(nr, nc, moves_made + 1)
+            total = grid[r][c] + sub_sum
+            if total > best_sum:
+                best_sum = total
+                best_path = ch + sub_path
 
-            opts = []
-            if must_x:
-                if can_x:
-                    opts.append(("X", i + 1, j + 1))
-                else:
-                    if can_r:
-                        opts.append(("R", i, j + 1))
-                    if can_d:
-                        opts.append(("D", i + 1, j))
-            else:
-                if can_r:
-                    opts.append(("R", i, j + 1))
-                if can_d:
-                    opts.append(("D", i + 1, j))
-                if can_x:
-                    opts.append(("X", i + 1, j + 1))
+        memo[key] = (best_sum, best_path)
+        return memo[key]
 
-            need = max_sum(i, j, moves) - grid[i][j]
-            for ch, ni, nj in opts:
-                if max_sum(ni, nj, moves + 1) == need:
-                    path.append(ch)
-                    i, j, moves = ni, nj, moves + 1
-                    break
-        return "".join(path)
-
-    total = max_sum(0, 0, 0)
-    if total == float("-inf"):
-        return (0, "")
-    return (int(total), reconstruct())
+    return dfs(0, 0, 0)
