@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-09-23 22:14:52
+Last updated: 2026-09-28 11:05:52
 
-## Updates This Week (2026-09-17 to 2026-09-23)
+## Updates This Week (2026-09-22 to 2026-09-28)
 
 ### OpenAI
 
@@ -24,46 +24,30 @@ Last updated: 2026-09-23 22:14:52
 
 - models/gemini-3.8-flash-lite-tts (added: 2026-09-22)
 - models/gemini-3.8-flash-tts (added: 2026-09-22)
-- models/antigravity-preview-latest (added: 2026-09-21)
 
 **Deleted**
 
 - models/gemini-3.5-transcribe-live (deleted: 2026-09-23)
 - models/veo-3.1-lite-generate-preview (deleted: 2026-09-23)
-- models/gemini-2.5-flash-native-audio-latest (deleted: 2026-09-21)
 
 ### Grok
 
-**Added**
-
-- grok-4.7 (added: 2026-09-21)
-
-### Qwen
-
-**Added**
-
-- glm-5.3-prime (added: 2026-09-21)
-- qwen3.8-omni-flash-realtime (added: 2026-09-21)
-- qwen-audio-3.1-realtime-plus (added: 2026-09-20)
-- qwen3.8-livetranslate-flash-realtime (added: 2026-09-17)
-- qwen3.8-omni-flash (added: 2026-09-17)
-
-### Meta
-
-**Added**
-
-- sam-3.1 (added: 2026-09-18)
-
 **Deleted**
 
-- sam-3.1-contributor (deleted: 2026-09-18)
+- grok-4.20-0309-non-reasoning (deleted: 2026-09-28)
+- grok-4.20-0309-reasoning (deleted: 2026-09-28)
+- grok-4.20-multi-agent-0309 (deleted: 2026-09-28)
+- grok-4.3 (deleted: 2026-09-28)
+- grok-4.5 (deleted: 2026-09-28)
+- grok-4.6 (deleted: 2026-09-28)
+- grok-4.7 (deleted: 2026-09-28)
+- grok-build-0.1 (deleted: 2026-09-28)
 
 ### Z.AI
 
 **Added**
 
 - z-ai/glm-5.3-prime (added: 2026-09-23)
-- z-ai/glm-5.3-flashx (added: 2026-09-18)
 
 ## Summary
 
@@ -75,7 +59,7 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 50/111
 
-**Grok**: 13/21
+**Grok**: 5/29
 
 **Mistral**: 46/71
 
@@ -498,22 +482,22 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- grok-4.7 (added: 2026-09-21)
-- grok-4.6 (added: 2026-08-12)
 - grok-imagine-image-2.0 (added: 2026-08-11)
-- grok-4.5 (added: 2026-07-08)
 - grok-imagine-video-1.5 (added: 2026-06-17)
-- grok-build-0.1 (added: 2026-05-20)
 - grok-imagine-image-quality (added: 2026-05-06)
-- grok-4.3 (added: 2026-04-30)
-- grok-4.20-multi-agent-0309 (added: 2026-03-19)
-- grok-4.20-0309-reasoning (added: 2026-03-19)
-- grok-4.20-0309-non-reasoning (added: 2026-03-19)
 - grok-imagine-video (added: 2026-01-29)
 - grok-imagine-image (added: 2026-01-29)
 
 ### Deleted Models
 
+- grok-build-0.1 (deleted: 2026-09-28)
+- grok-4.7 (deleted: 2026-09-28)
+- grok-4.6 (deleted: 2026-09-28)
+- grok-4.5 (deleted: 2026-09-28)
+- grok-4.3 (deleted: 2026-09-28)
+- grok-4.20-multi-agent-0309 (deleted: 2026-09-28)
+- grok-4.20-0309-reasoning (deleted: 2026-09-28)
+- grok-4.20-0309-non-reasoning (deleted: 2026-09-28)
 - grok-imagine-video-0428 (deleted: 2026-06-26)
 - grok-imagine-video-1.5-preview (deleted: 2026-06-17)
 - grok-imagine-image-pro (deleted: 2026-05-15)
