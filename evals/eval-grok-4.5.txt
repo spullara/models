@@ -1,19 +1,188 @@
 Model: grok-4.5
 Provider: grok
-Evaluated: 2026-07-16T07:19:06.902765+00:00
+Evaluated: 2026-09-28T11:09:15.359735+00:00
 
 === TIMING ===
-Response time: 0.15s
+Response time: 70.54s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 503: upstream connect error or disconnect/reset before headers. reset reason: remote connection failure, transport failure reason: delayed connect error: Connection refused
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
+    def max_sum(i: int, j: int, moves: int) -> int:
+        if i == n - 1 and j == n - 1:
+            return grid[i][j]
+
+        next_num = moves + 1
+        must_x = (next_num % 3 == 0)
+        can_x = i + 1 < n and j + 1 < n
+        can_r = j + 1 < n
+        can_d = i + 1 < n
+
+        opts = []
+        if must_x:
+            if can_x:
+                opts.append((i + 1, j + 1))
+            else:
+                if can_r:
+                    opts.append((i, j + 1))
+                if can_d:
+                    opts.append((i + 1, j))
+        else:
+            if can_r:
+                opts.append((i, j + 1))
+            if can_d:
+                opts.append((i + 1, j))
+            if can_x:
+                opts.append((i + 1, j + 1))
+
+        best = float("-inf")
+        for ni, nj in opts:
+            best = max(best, max_sum(ni, nj, moves + 1))
+        if best == float("-inf"):
+            return float("-inf")
+        return grid[i][j] + best
+
+    def reconstruct() -> str:
+        path = []
+        i = j = moves = 0
+        while (i, j) != (n - 1, n - 1):
+            next_num = moves + 1
+            must_x = (next_num % 3 == 0)
+            can_x = i + 1 < n and j + 1 < n
+            can_r = j + 1 < n
+            can_d = i + 1 < n
+
+            opts = []
+            if must_x:
+                if can_x:
+                    opts.append(("X", i + 1, j + 1))
+                else:
+                    if can_r:
+                        opts.append(("R", i, j + 1))
+                    if can_d:
+                        opts.append(("D", i + 1, j))
+            else:
+                if can_r:
+                    opts.append(("R", i, j + 1))
+                if can_d:
+                    opts.append(("D", i + 1, j))
+                if can_x:
+                    opts.append(("X", i + 1, j + 1))
+
+            need = max_sum(i, j, moves) - grid[i][j]
+            for ch, ni, nj in opts:
+                if max_sum(ni, nj, moves + 1) == need:
+                    path.append(ch)
+                    i, j, moves = ni, nj, moves + 1
+                    break
+        return "".join(path)
+
+    total = max_sum(0, 0, 0)
+    if total == float("-inf"):
+        return (0, "")
+    return (int(total), reconstruct())
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
+    def max_sum(i: int, j: int, moves: int) -> int:
+        if i == n - 1 and j == n - 1:
+            return grid[i][j]
+
+        next_num = moves + 1
+        must_x = (next_num % 3 == 0)
+        can_x = i + 1 < n and j + 1 < n
+        can_r = j + 1 < n
+        can_d = i + 1 < n
+
+        opts = []
+        if must_x:
+            if can_x:
+                opts.append((i + 1, j + 1))
+            else:
+                if can_r:
+                    opts.append((i, j + 1))
+                if can_d:
+                    opts.append((i + 1, j))
+        else:
+            if can_r:
+                opts.append((i, j + 1))
+            if can_d:
+                opts.append((i + 1, j))
+            if can_x:
+                opts.append((i + 1, j + 1))
+
+        best = float("-inf")
+        for ni, nj in opts:
+            best = max(best, max_sum(ni, nj, moves + 1))
+        if best == float("-inf"):
+            return float("-inf")
+        return grid[i][j] + best
+
+    def reconstruct() -> str:
+        path = []
+        i = j = moves = 0
+        while (i, j) != (n - 1, n - 1):
+            next_num = moves + 1
+            must_x = (next_num % 3 == 0)
+            can_x = i + 1 < n and j + 1 < n
+            can_r = j + 1 < n
+            can_d = i + 1 < n
+
+            opts = []
+            if must_x:
+                if can_x:
+                    opts.append(("X", i + 1, j + 1))
+                else:
+                    if can_r:
+                        opts.append(("R", i, j + 1))
+                    if can_d:
+                        opts.append(("D", i + 1, j))
+            else:
+                if can_r:
+                    opts.append(("R", i, j + 1))
+                if can_d:
+                    opts.append(("D", i + 1, j))
+                if can_x:
+                    opts.append(("X", i + 1, j + 1))
+
+            need = max_sum(i, j, moves) - grid[i][j]
+            for ch, ni, nj in opts:
+                if max_sum(ni, nj, moves + 1) == need:
+                    path.append(ch)
+                    i, j, moves = ni, nj, moves + 1
+                    break
+        return "".join(path)
+
+    total = max_sum(0, 0, 0)
+    if total == float("-inf"):
+        return (0, "")
+    return (int(total), reconstruct())
