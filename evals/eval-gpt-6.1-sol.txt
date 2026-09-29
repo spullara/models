@@ -1,0 +1,142 @@
+Model: gpt-6.1-sol
+Provider: openai_responses
+Evaluated: 2026-09-29T17:12:07.642063+00:00
+
+=== TIMING ===
+Response time: 10.51s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """Return the maximum path sum and its moves.
+
+    Both the starting and ending cells count toward the sum.
+    Time: O(N²). Space: O(N²).
+    """
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a nonempty square grid")
+
+    # dp[r][c][phase]: maximum remaining sum, including grid[r][c],
+    # when the number of moves already made is phase modulo 3.
+    dp = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+    choice = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                dp[r][c] = [grid[r][c]] * 3
+                continue
+
+            moves = []
+            if c + 1 < n:
+                moves.append(("R", r, c + 1))
+            if r + 1 < n:
+                moves.append(("D", r + 1, c))
+            diagonal_possible = r + 1 < n and c + 1 < n
+            if diagonal_possible:
+                moves.append(("X", r + 1, c + 1))
+
+            for phase in range(3):
+                # phase == 2 means the next move is a multiple of 3.
+                allowed = (
+                    [("X", r + 1, c + 1)]
+                    if phase == 2 and diagonal_possible
+                    else moves
+                )
+                next_phase = (phase + 1) % 3
+                best_sum = None
+
+                for move, nr, nc in allowed:
+                    candidate = grid[r][c] + dp[nr][nc][next_phase]
+                    if best_sum is None or candidate > best_sum:
+                        best_sum = candidate
+                        choice[r][c][phase] = move
+
+                dp[r][c][phase] = best_sum
+
+    path = []
+    r = c = phase = 0
+    while r != n - 1 or c != n - 1:
+        move = choice[r][c][phase]
+        path.append(move)
+        if move in ("D", "X"):
+            r += 1
+        if move in ("R", "X"):
+            c += 1
+        phase = (phase + 1) % 3
+
+    return dp[0][0][0], "".join(path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """Return the maximum path sum and its moves.
+
+    Both the starting and ending cells count toward the sum.
+    Time: O(N²). Space: O(N²).
+    """
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a nonempty square grid")
+
+    # dp[r][c][phase]: maximum remaining sum, including grid[r][c],
+    # when the number of moves already made is phase modulo 3.
+    dp = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+    choice = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                dp[r][c] = [grid[r][c]] * 3
+                continue
+
+            moves = []
+            if c + 1 < n:
+                moves.append(("R", r, c + 1))
+            if r + 1 < n:
+                moves.append(("D", r + 1, c))
+            diagonal_possible = r + 1 < n and c + 1 < n
+            if diagonal_possible:
+                moves.append(("X", r + 1, c + 1))
+
+            for phase in range(3):
+                # phase == 2 means the next move is a multiple of 3.
+                allowed = (
+                    [("X", r + 1, c + 1)]
+                    if phase == 2 and diagonal_possible
+                    else moves
+                )
+                next_phase = (phase + 1) % 3
+                best_sum = None
+
+                for move, nr, nc in allowed:
+                    candidate = grid[r][c] + dp[nr][nc][next_phase]
+                    if best_sum is None or candidate > best_sum:
+                        best_sum = candidate
+                        choice[r][c][phase] = move
+
+                dp[r][c][phase] = best_sum
+
+    path = []
+    r = c = phase = 0
+    while r != n - 1 or c != n - 1:
+        move = choice[r][c][phase]
+        path.append(move)
+        if move in ("D", "X"):
+            r += 1
+        if move in ("R", "X"):
+            c += 1
+        phase = (phase + 1) % 3
+
+    return dp[0][0][0], "".join(path)
