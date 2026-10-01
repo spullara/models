@@ -1,0 +1,19 @@
+Model: grok-imagine-video-1.5-lite
+Provider: grok
+Evaluated: 2026-10-01T19:01:07.017273+00:00
+
+=== TIMING ===
+Response time: 0.13s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: {"code":"not-found","error":"The model grok-imagine-video-1.5-lite does not exist or your team 4e0859c1-4ce2-4198-b0c9-49b52ca20612 does not have access to it. If you believe this is a mistake, please contact support and quote your team ID and the model name."}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
