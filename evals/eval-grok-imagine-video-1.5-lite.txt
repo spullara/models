@@ -1,6 +1,6 @@
 Model: grok-imagine-video-1.5-lite
 Provider: grok
-Evaluated: 2026-10-01T19:05:06.658918+00:00
+Evaluated: 2026-10-01T19:09:07.245085+00:00
 
 === TIMING ===
 Response time: 0.12s
