@@ -1,0 +1,232 @@
+Model: nvidia/switchyard
+Provider: openrouter
+Evaluated: 2026-10-02T21:31:07.839649+00:00
+
+=== TIMING ===
+Response time: 192.51s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+
+    # choice[r][c * 3 + rem] stores the chosen move as an ASCII code.
+    choice = [bytearray(n * 3) for _ in range(n)]
+
+    next0 = [0] * n
+    next1 = [0] * n
+    next2 = [0] * n
+
+    for r in range(n - 1, -1, -1):
+        cur0 = [0] * n
+        cur1 = [0] * n
+        cur2 = [0] * n
+
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                v = grid[r][c]
+                cur0[c] = cur1[c] = cur2[c] = v
+                continue
+
+            diag_possible = (r + 1 < n and c + 1 < n)
+
+            for rem in range(3):
+                required = (rem == 2)
+                best = None
+                best_ch = ""
+
+                if required and diag_possible:
+                    moves = ("X",)
+                else:
+                    moves = []
+                    if c + 1 < n:
+                        moves.append("R")
+                    if r + 1 < n:
+                        moves.append("D")
+                    if diag_possible:
+                        moves.append("X")
+
+                nrem = (rem + 1) % 3
+
+                for ch in moves:
+                    if ch == "R":
+                        if nrem == 0:
+                            cand = cur0[c + 1]
+                        elif nrem == 1:
+                            cand = cur1[c + 1]
+                        else:
+                            cand = cur2[c + 1]
+                    elif ch == "D":
+                        if nrem == 0:
+                            cand = next0[c]
+                        elif nrem == 1:
+                            cand = next1[c]
+                        else:
+                            cand = next2[c]
+                    else:  # "X"
+                        if nrem == 0:
+                            cand = next0[c + 1]
+                        elif nrem == 1:
+                            cand = next1[c + 1]
+                        else:
+                            cand = next2[c + 1]
+
+                    if best is None or cand > best:
+                        best = cand
+                        best_ch = ch
+
+                value = grid[r][c] + best
+                if rem == 0:
+                    cur0[c] = value
+                elif rem == 1:
+                    cur1[c] = value
+                else:
+                    cur2[c] = value
+
+                choice[r][c * 3 + rem] = ord(best_ch)
+
+        next0, next1, next2 = cur0, cur1, cur2
+
+    max_sum = next0[0]
+
+    path = []
+    r = c = 0
+    rem = 0
+
+    while not (r == n - 1 and c == n - 1):
+        ch = chr(choice[r][c * 3 + rem])
+        path.append(ch)
+
+        if ch == "R":
+            c += 1
+        elif ch == "D":
+            r += 1
+        else:
+            r += 1
+            c += 1
+
+        rem = (rem + 1) % 3
+
+    return (max_sum, "".join(path))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+
+    # choice[r][c * 3 + rem] stores the chosen move as an ASCII code.
+    choice = [bytearray(n * 3) for _ in range(n)]
+
+    next0 = [0] * n
+    next1 = [0] * n
+    next2 = [0] * n
+
+    for r in range(n - 1, -1, -1):
+        cur0 = [0] * n
+        cur1 = [0] * n
+        cur2 = [0] * n
+
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                v = grid[r][c]
+                cur0[c] = cur1[c] = cur2[c] = v
+                continue
+
+            diag_possible = (r + 1 < n and c + 1 < n)
+
+            for rem in range(3):
+                required = (rem == 2)
+                best = None
+                best_ch = ""
+
+                if required and diag_possible:
+                    moves = ("X",)
+                else:
+                    moves = []
+                    if c + 1 < n:
+                        moves.append("R")
+                    if r + 1 < n:
+                        moves.append("D")
+                    if diag_possible:
+                        moves.append("X")
+
+                nrem = (rem + 1) % 3
+
+                for ch in moves:
+                    if ch == "R":
+                        if nrem == 0:
+                            cand = cur0[c + 1]
+                        elif nrem == 1:
+                            cand = cur1[c + 1]
+                        else:
+                            cand = cur2[c + 1]
+                    elif ch == "D":
+                        if nrem == 0:
+                            cand = next0[c]
+                        elif nrem == 1:
+                            cand = next1[c]
+                        else:
+                            cand = next2[c]
+                    else:  # "X"
+                        if nrem == 0:
+                            cand = next0[c + 1]
+                        elif nrem == 1:
+                            cand = next1[c + 1]
+                        else:
+                            cand = next2[c + 1]
+
+                    if best is None or cand > best:
+                        best = cand
+                        best_ch = ch
+
+                value = grid[r][c] + best
+                if rem == 0:
+                    cur0[c] = value
+                elif rem == 1:
+                    cur1[c] = value
+                else:
+                    cur2[c] = value
+
+                choice[r][c * 3 + rem] = ord(best_ch)
+
+        next0, next1, next2 = cur0, cur1, cur2
+
+    max_sum = next0[0]
+
+    path = []
+    r = c = 0
+    rem = 0
+
+    while not (r == n - 1 and c == n - 1):
+        ch = chr(choice[r][c * 3 + rem])
+        path.append(ch)
+
+        if ch == "R":
+            c += 1
+        elif ch == "D":
+            r += 1
+        else:
+            r += 1
+            c += 1
+
+        rem = (rem + 1) % 3
+
+    return (max_sum, "".join(path))
