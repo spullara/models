@@ -1,9 +1,9 @@
 Model: grok-4.5
 Provider: grok
-Evaluated: 2026-09-28T16:39:16.789321+00:00
+Evaluated: 2026-10-03T11:40:24.838407+00:00
 
 === TIMING ===
-Response time: 29.04s
+Response time: 29.84s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -24,58 +24,46 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
 
-    def valid(r, c):
-        return 0 <= r < n and 0 <= c < n
-
+    dirs = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
     memo = {}
 
-    def dfs(r, c, moves_made):
-        key = (r, c, moves_made)
-        if key in memo:
-            return memo[key]
-
+    def dfs(r, c, move_num):
         if r == n - 1 and c == n - 1:
             return (grid[r][c], "")
 
-        next_move = moves_made + 1
-        must_x = next_move % 3 == 0
+        key = (r, c, move_num)
+        if key in memo:
+            return memo[key]
 
-        can_r = valid(r, c + 1)
-        can_d = valid(r + 1, c)
-        can_x = valid(r + 1, c + 1)
-
-        options = []
-        if must_x and can_x:
-            options = [("X", r + 1, c + 1)]
+        must_x = (move_num % 3 == 0)
+        if must_x:
+            nr, nc = r + 1, c + 1
+            if 0 <= nr < n and 0 <= nc < n:
+                candidates = ['X']
+            else:
+                candidates = ['R', 'D']
         else:
-            if can_r:
-                options.append(("R", r, c + 1))
-            if can_d:
-                options.append(("D", r + 1, c))
-            if can_x and not must_x:
-                options.append(("X", r + 1, c + 1))
-            elif can_x and must_x and not can_x:
-                pass
-            # when must_x but X impossible: R/D only (already added)
+            candidates = ['R', 'D', 'X']
 
-        if not options:
-            result = (float("-inf"), "")
-            memo[key] = result
-            return result
+        best_s = None
+        best_p = ""
 
-        best_sum = float("-inf")
-        best_path = ""
-        for ch, nr, nc in options:
-            sub_sum, sub_path = dfs(nr, nc, moves_made + 1)
-            total = grid[r][c] + sub_sum
-            if total > best_sum:
-                best_sum = total
-                best_path = ch + sub_path
+        for m in candidates:
+            dr, dc = dirs[m]
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < n and 0 <= nc < n:
+                sub_s, sub_p = dfs(nr, nc, move_num + 1)
+                if sub_s is not None:
+                    total = grid[r][c] + sub_s
+                    if best_s is None or total > best_s:
+                        best_s = total
+                        best_p = m + sub_p
 
-        memo[key] = (best_sum, best_path)
+        memo[key] = (best_s, best_p)
         return memo[key]
 
-    return dfs(0, 0, 0)
+    s, p = dfs(0, 0, 1)
+    return (s if s is not None else 0, p)
 ```
 
 === EXTRACTED CODE ===
@@ -86,55 +74,43 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
 
-    def valid(r, c):
-        return 0 <= r < n and 0 <= c < n
-
+    dirs = {'R': (0, 1), 'D': (1, 0), 'X': (1, 1)}
     memo = {}
 
-    def dfs(r, c, moves_made):
-        key = (r, c, moves_made)
-        if key in memo:
-            return memo[key]
-
+    def dfs(r, c, move_num):
         if r == n - 1 and c == n - 1:
             return (grid[r][c], "")
 
-        next_move = moves_made + 1
-        must_x = next_move % 3 == 0
+        key = (r, c, move_num)
+        if key in memo:
+            return memo[key]
 
-        can_r = valid(r, c + 1)
-        can_d = valid(r + 1, c)
-        can_x = valid(r + 1, c + 1)
-
-        options = []
-        if must_x and can_x:
-            options = [("X", r + 1, c + 1)]
+        must_x = (move_num % 3 == 0)
+        if must_x:
+            nr, nc = r + 1, c + 1
+            if 0 <= nr < n and 0 <= nc < n:
+                candidates = ['X']
+            else:
+                candidates = ['R', 'D']
         else:
-            if can_r:
-                options.append(("R", r, c + 1))
-            if can_d:
-                options.append(("D", r + 1, c))
-            if can_x and not must_x:
-                options.append(("X", r + 1, c + 1))
-            elif can_x and must_x and not can_x:
-                pass
-            # when must_x but X impossible: R/D only (already added)
+            candidates = ['R', 'D', 'X']
 
-        if not options:
-            result = (float("-inf"), "")
-            memo[key] = result
-            return result
+        best_s = None
+        best_p = ""
 
-        best_sum = float("-inf")
-        best_path = ""
-        for ch, nr, nc in options:
-            sub_sum, sub_path = dfs(nr, nc, moves_made + 1)
-            total = grid[r][c] + sub_sum
-            if total > best_sum:
-                best_sum = total
-                best_path = ch + sub_path
+        for m in candidates:
+            dr, dc = dirs[m]
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < n and 0 <= nc < n:
+                sub_s, sub_p = dfs(nr, nc, move_num + 1)
+                if sub_s is not None:
+                    total = grid[r][c] + sub_s
+                    if best_s is None or total > best_s:
+                        best_s = total
+                        best_p = m + sub_p
 
-        memo[key] = (best_sum, best_path)
+        memo[key] = (best_s, best_p)
         return memo[key]
 
-    return dfs(0, 0, 0)
+    s, p = dfs(0, 0, 1)
+    return (s if s is not None else 0, p)
