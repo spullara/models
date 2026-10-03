@@ -1,9 +1,9 @@
 Model: grok-4.7
 Provider: grok
-Evaluated: 2026-09-28T16:41:07.505080+00:00
+Evaluated: 2026-10-03T11:41:57.168890+00:00
 
 === TIMING ===
-Response time: 89.21s
+Response time: 53.18s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -22,53 +22,59 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    # best[r][c][phase] = (path_sum, path) after reaching (r, c) in `phase` moves (mod 3).
-    # phase == 2 means the next move is the 3rd, 6th, 9th, ... and must be diagonal if in bounds.
-    best: list[list[list[tuple[int, str] | None]]] = [
-        [[None, None, None] for _ in range(n)] for _ in range(n)
-    ]
-    best[0][0][0] = (grid[0][0], "")
+    # Best sum from (r, c) including grid[r][c], plus the path string.
+    # Move-constraint state depends only on how many moves have been taken mod 3.
+    memo: dict[tuple[int, int, int], tuple[int, str]] = {}
 
-    for r in range(n):
-        for c in range(n):
-            for phase in range(3):
-                state = best[r][c][phase]
-                if state is None or (r == n - 1 and c == n - 1):
-                    continue
+    def dfs(r: int, c: int, moves_taken: int) -> tuple[int, str]:
+        if r == n - 1 and c == n - 1:
+            return (grid[r][c], "")
 
-                cur_sum, cur_path = state
-                can_x = r + 1 < n and c + 1 < n
-                if phase == 2 and can_x:
-                    options = [("X", r + 1, c + 1)]
-                else:
-                    options = []
-                    if c + 1 < n:
-                        options.append(("R", r, c + 1))
-                    if r + 1 < n:
-                        options.append(("D", r + 1, c))
-                    if can_x:
-                        options.append(("X", r + 1, c + 1))
+        key = (r, c, moves_taken % 3)
+        if key in memo:
+            return memo[key]
 
-                for move, nr, nc in options:
-                    nphase = (phase + 1) % 3
-                    nsum = cur_sum + grid[nr][nc]
-                    npath = cur_path + move
-                    prev = best[nr][nc][nphase]
-                    if (
-                        prev is None
-                        or nsum > prev[0]
-                        or (nsum == prev[0] and npath < prev[1])
-                    ):
-                        best[nr][nc][nphase] = (nsum, npath)
+        next_move = moves_taken + 1
+        require_diag = next_move % 3 == 0
 
-    end_states = [
-        best[n - 1][n - 1][phase]
-        for phase in range(3)
-        if best[n - 1][n - 1][phase] is not None
-    ]
-    max_sum = max(total for total, _ in end_states)
-    path = min(p for total, p in end_states if total == max_sum)
-    return (max_sum, path)
+        can_r = c + 1 < n
+        can_d = r + 1 < n
+        can_x = can_r and can_d
+
+        options: list[tuple[str, int, int]] = []
+        if require_diag and can_x:
+            # Moves 3, 6, 9, ... must be diagonal when it stays in bounds.
+            options.append(("X", r + 1, c + 1))
+        else:
+            if can_r:
+                options.append(("R", r, c + 1))
+            if can_d:
+                options.append(("D", r + 1, c))
+            if can_x:
+                options.append(("X", r + 1, c + 1))
+
+        best_sum: int | None = None
+        best_path = ""
+        for label, nr, nc in options:
+            sub_sum, sub_path = dfs(nr, nc, moves_taken + 1)
+            total = grid[r][c] + sub_sum
+            path = label + sub_path
+            if (
+                best_sum is None
+                or total > best_sum
+                or (total == best_sum and path < best_path)
+            ):
+                best_sum = total
+                best_path = path
+
+        if best_sum is None:
+            best_sum = grid[r][c]
+            best_path = ""
+
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+
+    return dfs(0, 0, 0)
 ```
 
 === EXTRACTED CODE ===
@@ -77,50 +83,56 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    # best[r][c][phase] = (path_sum, path) after reaching (r, c) in `phase` moves (mod 3).
-    # phase == 2 means the next move is the 3rd, 6th, 9th, ... and must be diagonal if in bounds.
-    best: list[list[list[tuple[int, str] | None]]] = [
-        [[None, None, None] for _ in range(n)] for _ in range(n)
-    ]
-    best[0][0][0] = (grid[0][0], "")
+    # Best sum from (r, c) including grid[r][c], plus the path string.
+    # Move-constraint state depends only on how many moves have been taken mod 3.
+    memo: dict[tuple[int, int, int], tuple[int, str]] = {}
 
-    for r in range(n):
-        for c in range(n):
-            for phase in range(3):
-                state = best[r][c][phase]
-                if state is None or (r == n - 1 and c == n - 1):
-                    continue
+    def dfs(r: int, c: int, moves_taken: int) -> tuple[int, str]:
+        if r == n - 1 and c == n - 1:
+            return (grid[r][c], "")
 
-                cur_sum, cur_path = state
-                can_x = r + 1 < n and c + 1 < n
-                if phase == 2 and can_x:
-                    options = [("X", r + 1, c + 1)]
-                else:
-                    options = []
-                    if c + 1 < n:
-                        options.append(("R", r, c + 1))
-                    if r + 1 < n:
-                        options.append(("D", r + 1, c))
-                    if can_x:
-                        options.append(("X", r + 1, c + 1))
+        key = (r, c, moves_taken % 3)
+        if key in memo:
+            return memo[key]
 
-                for move, nr, nc in options:
-                    nphase = (phase + 1) % 3
-                    nsum = cur_sum + grid[nr][nc]
-                    npath = cur_path + move
-                    prev = best[nr][nc][nphase]
-                    if (
-                        prev is None
-                        or nsum > prev[0]
-                        or (nsum == prev[0] and npath < prev[1])
-                    ):
-                        best[nr][nc][nphase] = (nsum, npath)
+        next_move = moves_taken + 1
+        require_diag = next_move % 3 == 0
 
-    end_states = [
-        best[n - 1][n - 1][phase]
-        for phase in range(3)
-        if best[n - 1][n - 1][phase] is not None
-    ]
-    max_sum = max(total for total, _ in end_states)
-    path = min(p for total, p in end_states if total == max_sum)
-    return (max_sum, path)
+        can_r = c + 1 < n
+        can_d = r + 1 < n
+        can_x = can_r and can_d
+
+        options: list[tuple[str, int, int]] = []
+        if require_diag and can_x:
+            # Moves 3, 6, 9, ... must be diagonal when it stays in bounds.
+            options.append(("X", r + 1, c + 1))
+        else:
+            if can_r:
+                options.append(("R", r, c + 1))
+            if can_d:
+                options.append(("D", r + 1, c))
+            if can_x:
+                options.append(("X", r + 1, c + 1))
+
+        best_sum: int | None = None
+        best_path = ""
+        for label, nr, nc in options:
+            sub_sum, sub_path = dfs(nr, nc, moves_taken + 1)
+            total = grid[r][c] + sub_sum
+            path = label + sub_path
+            if (
+                best_sum is None
+                or total > best_sum
+                or (total == best_sum and path < best_path)
+            ):
+                best_sum = total
+                best_path = path
+
+        if best_sum is None:
+            best_sum = grid[r][c]
+            best_path = ""
+
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+
+    return dfs(0, 0, 0)
