@@ -1,27 +1,22 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-03 11:44:16
+Last updated: 2026-10-06 12:48:21
 
-## Updates This Week (2026-09-27 to 2026-10-03)
-
-### OpenAI
-
-**Added**
-
-- gpt-6.1-sol (added: 2026-09-29)
-
-### Anthropic
-
-**Added**
-
-- claude-sonnet-5-5 (added: 2026-09-28)
+## Updates This Week (2026-09-30 to 2026-10-06)
 
 ### Grok
 
 **Added**
 
 - grok-imagine-video-1.5-lite (added: 2026-10-01)
+
+### Mistral
+
+**Added**
+
+- mistral-large-4 (added: 2026-10-06)
+- mistral-large-4-0 (added: 2026-10-06)
 
 ### NVIDIA
 
@@ -41,7 +36,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 14/21
 
-**Mistral**: 46/71
+**Mistral**: 48/71
 
 **DeepSeek**: 2/4
 
@@ -507,6 +502,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- mistral-large-4-0 (added: 2026-10-06)
+- mistral-large-4 (added: 2026-10-06)
 - mistral-ocr-4-1 (added: 2026-08-04)
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
