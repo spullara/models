@@ -36,6 +36,7 @@ models/gemini-embedding-2
 models/gemini-embedding-2-preview
 models/gemini-flash-latest
 models/gemini-flash-lite-latest
+models/gemini-nano-banana-2.1
 models/gemini-omni-1.1-flash
 models/gemini-omni-flash-preview
 models/gemini-pro-latest
@@ -46,5 +47,4 @@ models/lyria-3-clip-preview
 models/lyria-3-pro-preview
 models/lyria-3.5
 models/nano-banana-pro-preview
-models/veo-3.1-fast-generate-preview
 models/veo-3.1-generate-preview
