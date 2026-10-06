@@ -1,0 +1,19 @@
+Model: mistral-large-4
+Provider: mistral
+Evaluated: 2026-10-06T12:48:08.027377+00:00
+
+=== TIMING ===
+Response time: 0.29s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"object":"error","message":"Invalid model: mistral-large-4","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
