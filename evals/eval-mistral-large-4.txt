@@ -1,19 +1,515 @@
 Model: mistral-large-4
 Provider: mistral
-Evaluated: 2026-10-06T12:48:08.027377+00:00
+Evaluated: 2026-10-06T12:50:07.192401+00:00
 
 === TIMING ===
-Response time: 0.29s
+Response time: 43.88s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 400: {"object":"error","message":"Invalid model: mistral-large-4","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
+Returned sum: 73
+Calculated sum: 15
+Sum matches: NO
+Path valid: NO
+Path error: Move 3 must be diagonal (X) but was D
 
 === RAW RESPONSE ===
-(no response)
+Looking at this problem, I need to find the maximum sum path from top-left to bottom-right with constraints on every 3rd move.
+
+Let me think about the approach:
+- This is a dynamic programming problem with state tracking
+- State needs to include: position (i, j), move count (to know if next move is constrained), and the path
+- Since we need the actual path, I'll need to track paths or reconstruct them
+
+Actually, for efficiency with path reconstruction, I'll use DP where each state stores the best sum and the path to reach it.
+
+State: dp[i][j][k] where k = move_count % 3 (0, 1, or 2), representing how many moves made so far mod 3.
+- When k == 2, the next move (3rd, 6th, etc.) must be diagonal if possible
+
+Wait, let me re-read: "Every 3rd move (3, 6, 9...) MUST be diagonal". So moves 3, 6, 9... are constrained. That means when we're about to make move number 3, 6, 9..., i.e., when (move_count + 1) % 3 == 0, or equivalently move_count % 3 == 2.
+
+Let me define: after making `m` moves, we're at some position. The next move is move number `m+1`. If `(m+1) % 3 == 0`, i.e., `m % 3 == 2`, then this move must be diagonal if possible.
+
+So state: (i, j, m % 3) where m is number of moves made so far.
+
+For each state, I need to track: max sum to reach here, and the path string.
+
+Let me implement this with DP:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    m = len(grid[0])
+
+    # dp[i][j][k] = (max_sum, path) where k = moves_made % 3
+    # Initialize with -infinity
+    dp = [[[(-float('inf'), "") for _ in range(3)] for _ in range(m)] for _ in range(n)]
+
+    # Start at (0, 0) with 0 moves made, sum = grid[0][0]
+    dp[0][0][0] = (grid[0][0], "")
+
+    for i in range(n):
+        for j in range(m):
+            for k in range(3):
+                curr_sum, curr_path = dp[i][j][k]
+                if curr_sum == -float('inf'):
+                    continue
+
+                moves_made = k  # This is moves_made % 3, but we need actual count for constraint
+                # Actually we need to know: is the NEXT move a 3rd move?
+                # Next move number = (actual moves made) + 1
+                # We need (actual moves made + 1) % 3 == 0, i.e., actual moves made % 3 == 2
+
+                # The issue: k = moves_made % 3, so if k == 2, next move is 3rd, 6th, etc.
+                must_diagonal = (k == 2)
+
+                # Try all three moves
+                # Right: (i, j+1)
+                if j + 1 < m:
+                    new_sum = curr_sum + grid[i][j+1]
+                    new_k = (k + 1) % 3
+                    new_path = curr_path + "R"
+                    if not must_diagonal or True:  # R is always allowed as fallback
+                        if new_sum > dp[i][j+1][new_k][0]:
+                            dp[i][j+1][new_k] = (new_sum, new_path)
+
+                # Down: (i+1, j)
+                if i + 1 < n:
+                    new_sum = curr_sum + grid[i+1][j]
+                    new_k = (k + 1) % 3
+                    new_path = curr_path + "D"
+                    if not must_diagonal or True:  # D is always allowed as fallback
+                        if new_sum > dp[i+1][j][new_k][0]:
+                            dp[i+1][j][new_k] = (new_sum, new_path)
+
+                # Diagonal: (i+1, j+1)
+                if i + 1 < n and j + 1 < m:
+                    new_sum = curr_sum + grid[i+1][j+1]
+                    new_k = (k + 1) % 3
+                    new_path = curr_path + "X"
+                    # Diagonal is always allowed, and required when must_diagonal
+                    if new_sum > dp[i+1][j+1][new_k][0]:
+                        dp[i+1][j+1][new_k] = (new_sum, new_path)
+
+    # Find best result at (n-1, m-1) across all k values
+    best_sum = -float('inf')
+    best_path = ""
+
+    for k in range(3):
+        s, p = dp[n-1][m-1][k]
+        if s > best_sum:
+            best_sum = s
+            best_path = p
+
+    return (best_sum, best_path)
+```
+
+Wait, I need to re-check the constraint logic. The problem says "Every 3rd move (3, 6, 9...) MUST be diagonal if possible". This means:
+- Move 1: free choice
+- Move 2: free choice
+- Move 3: MUST be diagonal if possible, else R or D
+- Move 4: free choice
+- Move 5: free choice
+- Move 6: MUST be diagonal if possible, else R or D
+
+So when we're at a state with `moves_made` moves completed, the next move is move number `moves_made + 1`. This is a "3rd move" if `(moves_made + 1) % 3 == 0`, i.e., `moves_made % 3 == 2`.
+
+In my DP, `k = moves_made % 3`. So when `k == 2`, the next move must be diagonal if possible.
+
+But in my code above, I allowed R and D always, which is wrong when `must_diagonal` is true and diagonal IS possible. Let me fix:
+
+When `must_diagonal` is true (k == 2):
+- If diagonal is possible (i+1 < n and j+1 < m), we MUST use diagonal, cannot use R or D
+- If diagonal is not possible, we can use R or D
+
+Let me rewrite:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    m = len(grid[0])
+
+    # dp[i][j][k] = (max_sum, path) where k = moves_made % 3
+    dp = [[[(-float('inf'), "") for _ in range(3)] for _ in range(m)] for _ in range(n)]
+
+    # Start at (0, 0) with 0 moves made, sum = grid[0][0]
+    dp[0][0][0] = (grid[0][0], "")
+
+    for i in range(n):
+        for j in range(m):
+            for k in range(3):
+                curr_sum, curr_path = dp[i][j][k]
+                if curr_sum == -float('inf'):
+                    continue
+
+                # Check if next move must be diagonal
+                # Next move number = (actual moves) + 1. We know moves % 3 = k
+                # Next move is 3rd, 6th, etc. if (moves + 1) % 3 == 0, i.e., k == 2
+                must_diagonal = (k == 2)
+
+                # Check if diagonal is possible
+                diag_possible = (i + 1 < n and j + 1 < m)
+
+                if must_diagonal and diag_possible:
+                    # MUST use diagonal
+                    new_sum = curr_sum + grid[i+1][j+1]
+                    new_k = (k + 1) % 3
+                    new_path = curr_path + "X"
+                    if new_sum > dp[i+1][j+1][new_k][0]:
+                        dp[i+1][j+1][new_k] = (new_sum, new_path)
+                else:
+                    # Can use any move (R, D, or X)
+                    # Right
+                    if j + 1 < m:
+                        new_sum = curr_sum + grid[i][j+1]
+                        new_k = (k + 1) % 3
+                        new_path = curr_path + "R"
+                        if new_sum > dp[i][j+1][new_k][0]:
+                            dp[i][j+1][new_k] = (new_sum, new_path)
+
+                    # Down
+                    if i + 1 < n:
+                        new_sum = curr_sum + grid[i+1][j]
+                        new_k = (k + 1) % 3
+                        new_path = curr_path + "D"
+                        if new_sum > dp[i+1][j][new_k][0]:
+                            dp[i+1][j][new_k] = (new_sum, new_path)
+
+                    # Diagonal
+                    if diag_possible:
+                        new_sum = curr_sum + grid[i+1][j+1]
+                        new_k = (k + 1) % 3
+                        new_path = curr_path + "X"
+                        if new_sum > dp[i+1][j+1][new_k][0]:
+                            dp[i+1][j+1][new_k] = (new_sum, new_path)
+
+    # Find best result at (n-1, m-1) across all k values
+    best_sum = -float('inf')
+    best_path = ""
+
+    for k in range(3):
+        s, p = dp[n-1][m-1][k]
+        if s > best_sum:
+            best_sum = s
+            best_path = p
+
+    return (best_sum, best_path)
+```
+
+Let me trace through a small example to verify. Grid: [[1, 2], [3, 4]]
+
+Start: dp[0][0][0] = (1, "")
+
+From (0,0), k=0, must_diagonal=False, diag_possible=True (1<2, 1<2)
+- R to (0,1): sum=1+2=3, k=1, path="R"
+- D to (1,0): sum=1+3=4, k=1, path="D"
+- X to (1,1): sum=1+4=5, k=1, path="X"
+
+dp[0][1][1] = (3, "R")
+dp[1][0][1] = (4, "D")
+dp[1][1][1] = (5, "X")
+
+From (0,1), k=1, must_diagonal=False (k!=2), diag_possible=False (i+1=1<2 but j+1=2 not <2)
+- R: j+1=2 not < 2, invalid
+- D to (1,1): sum=3+4=7, k=2, path="RD"
+- X: not possible
+
+dp[1][1][2] = (7, "RD")
+
+From (1,0), k=1, must_diagonal=False, diag_possible=False (i+1=2 not <2)
+- R to (1,1): sum=4+4=8, k=2, path="DR"
+- D: invalid
+- X: invalid
+
+dp[1][1][2] = max((7,"RD"), (8,"DR")) = (8, "DR")
+
+From (1,1), k=1: already at destination, no moves needed
+
+Now from (1,1) with k=2 (from "RD" or "DR"): we're at destination, done.
+
+Wait, I need to process (1,1) with k=2 as well. But we're at destination, so no outgoing moves.
+
+Final check at (1,1):
+- k=0: -inf
+- k=1: (5, "X")
+- k=2: (8, "DR")
+
+Best is (8, "DR"). Let me verify: 1 + 3 + 4 = 8, path D then R. Moves: 1st=D, 2nd=R. No 3rd move needed. Correct!
+
+Another check: what about path "X"? Sum=5, only 1 move. Also valid but less.
+
+What about a 3x3 grid where we need a 3rd move?
+
+Grid: [[1,1,1],[1,1,1],[1,1,1]]
+
+Path RRD: positions (0,0)->(0,1)->(0,2)->(1,2). Sum=1+1+1+1=4. Moves: R,R,D. 3rd move is D, but must be diagonal if possible. From (0,2), diagonal to (1,3) is invalid (j+1=3 not <3). So D is allowed. Sum=4.
+
+Path RDX: (0,0)->(0,1)->(1,1)->(2,2). Sum=1+1+1+1=4. Moves: R,D,X. 3rd move is X (diagonal), good.
+
+Path XX: (0,0)->(1,1)->(2,2). Sum=1+1+1=3. Only 2 moves.
+
+Path RXX: invalid, only 2 moves to get to (2,2) from (0,0) with X,X? No wait: (0,0)->(0,1)->(1,2)->(2,2)? That's R, X? No, (0,1) to (1,2) is diagonal? i+1=1, j+1=2, yes that's diagonal. Then (1,2) to (2,2) is D. So R,X,D. 3rd move is D. From (1,2), diagonal to (2,3) invalid, so D is OK.
+
+Actually let me check: from (0,0), R to (0,1), X to (1,2), then need to get to (2,2). From (1,2), can go D to (2,2). That's 3 moves: R, X, D. 3rd move is D. Is diagonal possible from (1,2)? i+1=2<3, j+1=3 not <3. No. So D is allowed.
+
+Sum = 1+1+1+1 = 4.
+
+What about path with 3rd move being diagonal? Like R,R,X? (0,0)->(0,1)->(0,2)->(1,3) invalid.
+
+Or D,D,X? (0,0)->(1,0)->(2,0)->(3,1) invalid.
+
+Or R,D,X? (0,0)->(0,1)->(1,1)->(2,2). Sum=4. Moves: R,D,X. 3rd is X, diagonal, good!
+
+Or D,R,X? (0,0)->(1,0)->(1,1)->(2,2). Sum=4. Moves: D,R,X. 3rd is X, good!
+
+So max sum is 4 with paths like "RDX", "DRX", "RRD" (if valid), etc.
+
+Let me check "RRD": (0,0)->(0,1)->(0,2)->(1,2). From (0,2), 3rd move. Diagonal to (1,3) invalid. So D to (1,2) is OK. Sum=4. But we're at (1,2), not (2,2). Need another move! So "RRD" only gets to (1,2), not destination.
+
+To get to (2,2) from (0,0) in a 3x3 grid: minimum moves is 2 (XX), or 3 (like RDX, DRX, RRD? no RRD gets to (1,2)), or 4 (like RRDD, etc.).
+
+Actually with 3 moves: need to go from (0,0) to (2,2). Each move changes i+j by 1 (R or D) or 2 (X). So after 3 moves, max i+j is 6 (if all X), min is 3 (if all R or D). We need i+j=4. So possible: two moves of +1 and one of +2, i.e., two R/D and one X. Like R,D,X in some order.
+
+R,D,X: (0,0)->(0,1)->(1,1)->(2,2). Check: R (i+j=1), D (i+j=2), X (i+j=4). Yes! 3rd move is X, diagonal, good.
+
+D,R,X: (0,0)->(1,0)->(1,1)->(2,2). 3rd move X, good.
+
+R,X,D: (0,0)->(0,1)->(1,2)->(2,2). Moves: R (1), X (3), D (4). 3rd move is D. From (1,2), diagonal to (2,3) invalid, so D is OK.
+
+X,R,D: (0,0)->(1,1)->(1,2)->(2,2). Moves: X (2), R (3), D (4). 3rd move is D. From (1,2), diagonal invalid, so D is OK.
+
+X,D,R: (0,0)->(1,1)->(2,1)->(2,2). 3rd move R. From (2,1), diagonal to (3,2) invalid, so R is OK.
+
+D,X,R: (0,0)->(1,0)->(2,1)->(2,2). 3rd move R. From (2,1), diagonal invalid, so R is OK.
+
+All give sum 4.
+
+With 4 moves: e.g., R,R,D,D: (0,0)->(0,1)->(0,2)->(1,2)->(2,2). Moves: R,R,D,D. 3rd move is D. From (0,2), diagonal to (1,3) invalid, so D is OK. Sum=5.
+
+Wait, that's sum 5! 1+1+1+1+1 = 5. Better than 4!
+
+Let me verify: grid is all 1s. Start at (0,0)=1. R to (0,1)=1, sum=2. R to (0,2)=1, sum=3. D to (1,2)=1, sum=4. D to (2,2)=1, sum=5. Yes!
+
+And 3rd move is D (from (0,2) to (1,2)). Is diagonal possible from (0,2)? i+1=1<3, j+1=3 not <3. No! So D is allowed.
+
+So max sum is 5 with path "RRDD" or "DDRR" or "RDRD" etc.
+
+Let me check "RDRD": (0,0)->(0,1)->(1,1)->(1,2)->(2,2). Moves: R,D,R,D. 3rd move is R. From (1,1), diagonal to (2,2) IS possible! So 3rd move MUST be diagonal. But we used R. Invalid!
+
+So "RDRD" is invalid. What about "RDDR"? (0,0)->(0,1)->(1,1)->(2,1)->(2,2). Moves: R,D,D,R. 3rd move is D. From (1,1), diagonal to (2,2) is possible! So must use X. Invalid!
+
+What about "DRRD"? (0,0)->(1,0)->(1,1)->(1,2)->(2,2). Moves: D,R,R,D. 3rd move is R. From (1,1), diagonal possible. Must use X. Invalid!
+
+What about "DDRR"? (0,0)->(1,0)->(2,0)->(2,1)->(2,2). Moves: D,D,R,R. 3rd move is R. From (2,0), diagonal to (3,1) invalid. So R is OK. Sum=5. Valid!
+
+What about "RRDD"? (0,0)->(0,1)->(0,2)->(1,2)->(2,2). 3rd move D. From (0,2), diagonal invalid. OK. Sum=5. Valid!
+
+What about "RDD R"? Already checked, invalid.
+
+What about paths with X? "RDXD"? That's 4 moves. (0,0)->(0,1)->(1,1)->(2,1)->(2,2)? No wait, X from (0,1) goes to (1,2). Let me recalculate: R to (0,1), D to (1,1), X to (2,2). That's 3 moves, at destination. Sum=4.
+
+For 4 moves with X: e.g., "RXRD"? (0,0)->(0,1)->(1,2)->(1,3) invalid.
+
+"RXDR"? (0,0)->(0,1)->(1,2)->(2,2)->(2,3) invalid.
+
+"XRRD"? (0,0)->(1,1)->(1,2)->(1,3) invalid.
+
+"XRDR"? (0,0)->(1,1)->(1,2)->(2,2)->(2,3) invalid.
+
+"XDRR"? (0,0)->(1,1)->(2,1)->(2,2)->(2,3) invalid.
+
+"DRXR"? (0,0)->(1,0)->(2,0)->(2,1)->(2,2)? No, X from (2,0) goes to (3,1) invalid.
+
+Hmm, seems like with X we can't easily do 4 moves in 3x3. Let me think... from (0,0), X to (1,1). Then we need 3 more moves to get to (2,2). From (1,1), we can go R to (1,2), D to (2,1), or X to (2,2). If X, we're done in 2 moves. If R, then from (1,2) we can go D to (2,2). That's X,R,D = 3 moves. If D, then from (2,1) we can go R to (2,2). That's X,D,R = 3 moves.
+
+So with X, minimum is 2 moves, and we can't do 4 moves because we'd overshoot or something? Actually we could do X,R,D,R? No, from (2,2) we can't move further if we're at destination.
+
+Actually we can revisit? No, the problem doesn't say we can't revisit, but typically in grid path problems we don't revisit. But actually, looking at the moves, we can only go right, down, or diagonal down-right, so we can never decrease i or j. So we can't revisit cells.
+
+So in 3x3, from (0,0) to (2,2), the number of moves can be 2 (XX), 3 (two of R/D and one X), or 4 (all R/D, specifically 2 R and 2 D in some order).
+
+For 4 moves (all R/D): we need exactly 2 R and 2 D. The constraint is on the 3rd move. If the 3rd move is at a position where diagonal is possible, we must use diagonal. But we're using R or D, so we need diagonal to NOT be possible at that position.
+
+When is diagonal not possible? When i+1 >= n or j+1 >= m, i.e., i = n-1 or j = m-1.
+
+In 3x3, n=m=3. So diagonal not possible when i=2 or j=2.
+
+For a 4-move path with 2 R and 2 D: after 2 moves, where are we?
+- RR: at (0,2), j=2, diagonal not possible. 3rd move can be D. Then 4th move D to (2,2). Path: RRDD. Valid!
+- RD: at (1,1), diagonal possible. 3rd move must be X. But we want R or D. Invalid for 4-move path.
+- DR: at (1,1), diagonal possible. 3rd move must be X. Invalid.
+- DD: at (2,0), i=2, diagonal not possible. 3rd move can be R. Then 4th move R to (2,2). Path: DDRR. Valid!
+
+So valid 4-move paths: RRDD, DDRR. Both sum to 5.
+
+And 3-move paths with X: sum to 4.
+
+And 2-move path XX: sum to 3.
+
+So max is 5 with "RRDD" or "DDRR".
+
+My DP should find this. Let me trace through more carefully for the 3x3 all-1s case.
+
+Actually, I realize I should just run the code mentally or trust the logic. Let me re-verify the logic once more.
+
+In my code, when `must_diagonal` is true and `diag_possible` is true, I only allow diagonal. Otherwise, I allow all three moves. This seems correct.
+
+One edge case: what if `must_diagonal` is true but `diag_possible` is false? Then I allow R, D, and X (but X is not possible anyway since diag_possible is false). So effectively R and D. Correct.
+
+Let me also check: what if we're at (0,0) and k=2? That means we made 2, 5, 8... moves to get to (0,0). But we start at (0,0) with 0 moves. Can we return to (0,0)? No, because moves only increase i or j or both. So dp[0][0][2] will remain -inf. That's fine.
+
+I think the code is correct. Let me write it cleanly:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    m = len(grid[0])
+
+    # dp[i][j][k] = (max_sum, path) where k = moves_made % 3
+    dp = [[[(-float('inf'), "") for _ in range(3)] for _ in range(m)] for _ in range(n)]
+
+    # Start at (0, 0) with 0 moves made, sum = grid[0][0]
+    dp[0][0][0] = (grid[0][0], "")
+
+    for i in range(n):
+        for j in range(m):
+            for k in range(3):
+                curr_sum, curr_path = dp[i][j][k]
+                if curr_sum == -float('inf'):
+                    continue
+
+                # Next move is the (moves_made + 1)-th move
+                # It's a "3rd move" (3, 6, 9...) if (moves_made + 1) % 3 == 0
+                # Since k = moves_made % 3, this is when k == 2
+                must_diagonal = (k == 2)
+
+                # Check if diagonal is possible from current position
+                diag_possible = (i + 1 < n and j + 1 < m)
+
+                if must_diagonal and diag_possible:
+                    # MUST use diagonal - no other choice
+                    new_sum = curr_sum + grid[i+1][j+1]
+                    new_k = (k + 1) % 3
+                    new_path = curr_path + "X"
+                    if new_sum > dp[i+1][j+1][new_k][0]:
+                        dp[i+1][j+1][new_k] = (new_sum, new_path)
+                else:
+                    # Can use any available move
+                    # Right
+                    if j + 1 < m:
+                        new_sum = curr_sum + grid[i][j+1]
+                        new_k = (k + 1) % 3
+                        new_path = curr_path + "R"
+                        if new_sum > dp[i][j+1][new_k][0]:
+                            dp[i][j+1][new_k] = (new_sum, new_path)
+
+                    # Down
+                    if i + 1 < n:
+                        new_sum = curr_sum + grid[i+1][j]
+                        new_k = (k + 1) % 3
+                        new_path = curr_path + "D"
+                        if new_sum > dp[i+1][j][new_k][0]:
+                            dp[i+1][j][new_k] = (new_sum, new_path)
+
+                    # Diagonal
+                    if diag_possible:
+                        new_sum = curr_sum + grid[i+1][j+1]
+                        new_k = (k + 1) % 3
+                        new_path = curr_path + "X"
+                        if new_sum > dp[i+1][j+1][new_k][0]:
+                            dp[i+1][j+1][new_k] = (new_sum, new_path)
+
+    # Find best result at bottom-right corner across all move counts mod 3
+    best_sum = -float('inf')
+    best_path = ""
+
+    for k in range(3):
+        s, p = dp[n-1][m-1][k]
+        if s > best_sum:
+            best_sum = s
+            best_path = p
+
+    return (best_sum, best_path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    m = len(grid[0])
+
+    # dp[i][j][k] = (max_sum, path) where k = moves_made % 3
+    # Initialize with -infinity
+    dp = [[[(-float('inf'), "") for _ in range(3)] for _ in range(m)] for _ in range(n)]
+
+    # Start at (0, 0) with 0 moves made, sum = grid[0][0]
+    dp[0][0][0] = (grid[0][0], "")
+
+    for i in range(n):
+        for j in range(m):
+            for k in range(3):
+                curr_sum, curr_path = dp[i][j][k]
+                if curr_sum == -float('inf'):
+                    continue
+
+                moves_made = k  # This is moves_made % 3, but we need actual count for constraint
+                # Actually we need to know: is the NEXT move a 3rd move?
+                # Next move number = (actual moves made) + 1
+                # We need (actual moves made + 1) % 3 == 0, i.e., actual moves made % 3 == 2
+
+                # The issue: k = moves_made % 3, so if k == 2, next move is 3rd, 6th, etc.
+                must_diagonal = (k == 2)
+
+                # Try all three moves
+                # Right: (i, j+1)
+                if j + 1 < m:
+                    new_sum = curr_sum + grid[i][j+1]
+                    new_k = (k + 1) % 3
+                    new_path = curr_path + "R"
+                    if not must_diagonal or True:  # R is always allowed as fallback
+                        if new_sum > dp[i][j+1][new_k][0]:
+                            dp[i][j+1][new_k] = (new_sum, new_path)
+
+                # Down: (i+1, j)
+                if i + 1 < n:
+                    new_sum = curr_sum + grid[i+1][j]
+                    new_k = (k + 1) % 3
+                    new_path = curr_path + "D"
+                    if not must_diagonal or True:  # D is always allowed as fallback
+                        if new_sum > dp[i+1][j][new_k][0]:
+                            dp[i+1][j][new_k] = (new_sum, new_path)
+
+                # Diagonal: (i+1, j+1)
+                if i + 1 < n and j + 1 < m:
+                    new_sum = curr_sum + grid[i+1][j+1]
+                    new_k = (k + 1) % 3
+                    new_path = curr_path + "X"
+                    # Diagonal is always allowed, and required when must_diagonal
+                    if new_sum > dp[i+1][j+1][new_k][0]:
+                        dp[i+1][j+1][new_k] = (new_sum, new_path)
+
+    # Find best result at (n-1, m-1) across all k values
+    best_sum = -float('inf')
+    best_path = ""
+
+    for k in range(3):
+        s, p = dp[n-1][m-1][k]
+        if s > best_sum:
+            best_sum = s
+            best_path = p
+
+    return (best_sum, best_path)
