@@ -1,19 +1,550 @@
 Model: mistral-large-4-0
 Provider: mistral
-Evaluated: 2026-10-06T12:48:08.322716+00:00
+Evaluated: 2026-10-06T12:50:51.099838+00:00
 
 === TIMING ===
-Response time: 0.33s
+Response time: 45.18s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 400: {"object":"error","message":"Invalid model: mistral-large-4-0","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+Looking at this problem, I need to find the maximum sum path from top-left to bottom-right with constraints on every 3rd move.
+
+Let me think about the approach:
+- Use dynamic programming where state includes: position (i, j), number of moves made so far (to determine if next move must be diagonal)
+- The move count determines if we need a diagonal: moves 3, 6, 9... (1-indexed) means after 2, 5, 8... moves (0-indexed), the next move must be diagonal if possible
+
+Actually, let me re-read: "Every 3rd move (3, 6, 9...) MUST be diagonal". So move #3, #6, #9, etc. must be diagonal. That means when we're about to make move k (1-indexed), if k % 3 == 0, we must use diagonal if possible.
+
+So if we've made `moves` moves so far, the next move is move number `moves + 1`. If `(moves + 1) % 3 == 0`, we need diagonal.
+
+State: (i, j, moves_made) -> (max_sum, path_string)
+
+Let me implement this with memoization or DP. Since we need the path string too, I'll use recursion with memoization.
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    from functools import lru_cache
+
+    # State: (i, j, moves_made) -> (max_sum, best_path)
+    # moves_made: number of moves made so far to reach (i,j)
+    # Next move number is moves_made + 1
+
+    @lru_cache(maxsize=None)
+    def dp(i, j, moves_made):
+        # Current cell value is already counted when we arrived here
+        # Actually, let's count grid[i][j] when we leave or arrive
+
+        # Base case: reached destination
+        if i == n - 1 and j == n - 1:
+            return (0, "")  # No more moves needed, sum of future is 0
+
+        next_move_num = moves_made + 1
+        must_be_diagonal = (next_move_num % 3 == 0)
+
+        best_sum = float('-inf')
+        best_path = ""
+
+        # Possible moves: R (right), D (down), X (diagonal)
+        # Check which moves are valid
+        moves = []
+
+        # Right: (i, j+1)
+        if j + 1 < n:
+            moves.append(('R', i, j + 1, True))  # True = always allowed
+
+        # Down: (i+1, j)
+        if i + 1 < n:
+            moves.append(('D', i + 1, j, True))
+
+        # Diagonal: (i+1, j+1)
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1, True))
+
+        # Filter moves based on constraint
+        valid_moves = []
+        diagonal_possible = any(m[0] == 'X' for m in moves)
+
+        for move_char, ni, nj, _ in moves:
+            if must_be_diagonal:
+                if move_char == 'X':
+                    valid_moves.append((move_char, ni, nj))
+                # If diagonal not possible, R or D allowed
+                elif not diagonal_possible:
+                    valid_moves.append((move_char, ni, nj))
+            else:
+                valid_moves.append((move_char, ni, nj))
+
+        # If no valid moves (shouldn't happen if grid is valid and we're not at end)
+        if not valid_moves:
+            return (float('-inf'), "")
+
+        for move_char, ni, nj in valid_moves:
+            future_sum, future_path = dp(ni, nj, moves_made + 1)
+            if future_sum == float('-inf'):
+                continue
+            total_sum = grid[ni][nj] + future_sum
+            if total_sum > best_sum or (total_sum == best_sum and (best_path == "" or move_char + future_path < best_path)):
+                best_sum = total_sum
+                best_path = move_char + future_path
+
+        return (best_sum, best_path)
+
+    # Start at (0,0), 0 moves made, count grid[0][0]
+    result_sum, result_path = dp(0, 0, 0)
+    return (grid[0][0] + result_sum, result_path)
+```
+
+Wait, I need to be more careful. Let me trace through: we start at (0,0), we've made 0 moves. The value grid[0][0] should be counted. Then we make moves.
+
+Actually in my dp, I return the sum of future cells. So total is grid[0][0] + dp(0,0,0). That seems right.
+
+But let me verify the move counting. Start at (0,0), moves_made = 0.
+- Move 1: moves_made becomes 1, next_move_num was 1, 1%3 != 0, no constraint
+- Move 2: moves_made becomes 2, next_move_num was 2, 2%3 != 0, no constraint
+- Move 3: moves_made becomes 3, next_move_num was 3, 3%3 == 0, MUST be diagonal
+
+Yes, that's correct. Every 3rd move (3, 6, 9...) must be diagonal.
+
+Let me also handle the tie-breaking: if sums are equal, we need to return the path. The problem doesn't specify tie-breaking, but typically we might want lexicographically smallest or any valid path. I'll use lexicographically smallest for determinism.
+
+Actually, let me re-check: when must_be_diagonal and diagonal is possible, we can ONLY use diagonal. When must_be_diagonal and diagonal is NOT possible, we can use R or D.
+
+Let me verify my logic:
+- `diagonal_possible = any(m[0] == 'X' for m in moves)` - checks if X is in possible moves
+- If `must_be_diagonal`:
+  - If move is 'X', it's valid
+  - If move is 'R' or 'D', it's valid only if `not diagonal_possible`
+
+That's correct!
+
+Let me also make sure about the base case and initial call. At (n-1, n-1), we return (0, "") since no more cells to add. The sum accumulates as we go.
+
+Actually, I realize I should double-check: when we call dp(0,0,0), we haven't counted grid[0][0] yet in the dp. The dp returns sum of cells we'll visit after (0,0). So total is grid[0][0] + dp_result. That's correct.
+
+Let me test with a small example mentally:
+Grid: [[1, 2], [3, 4]]
+Paths from (0,0) to (1,1):
+- R then D: 1 + 2 + 4 = 7, moves: R, D (move 1=R, move 2=D, no constraint)
+- D then R: 1 + 3 + 4 = 8, moves: D, R
+- X: 1 + 4 = 5, moves: X (move 1=X)
+
+Wait, X is one move. So move 1 is X. No constraint on move 1.
+
+Max is 8 with "DR".
+
+Let me trace my code:
+dp(0,0,0): next_move_num=1, not must_be_diagonal
+- R to (0,1): dp(0,1,1) -> next_move_num=2, not must_be_diagonal
+  - D to (1,1): dp(1,1,2) -> base case, return (0, "")
+  - So dp(0,1,1) = grid[1][1] + 0 = 4, path "D"
+  - Total for R: grid[0][1] + 4 = 2 + 4 = 6, path "RD"
+- D to (1,0): dp(1,0,1) -> next_move_num=2, not must_be_diagonal
+  - R to (1,1): dp(1,1,2) -> (0, "")
+  - So dp(1,0,1) = grid[1][1] + 0 = 4, path "R"
+  - Total for D: grid[1][0] + 4 = 3 + 4 = 7, path "DR"
+- X to (1,1): dp(1,1,1) -> base case, return (0, "")
+  - Total for X: grid[1][1] + 0 = 4, path "X"
+
+Best is 7 with "DR". Total = grid[0][0] + 7 = 1 + 7 = 8. Correct!
+
+Now let me test with a 3x3 grid where move 3 must be diagonal.
+
+Grid:
+```
+1 2 3
+4 5 6
+7 8 9
+```
+
+Path R,R,X: (0,0)->(0,1)->(0,2)->(1,2)? No wait, X from (0,2) goes to (1,3) which is out of bounds.
+
+Let me think of a valid path with 3 moves: need to reach (2,2) in 3 moves.
+- R, R, D: ends at (1,2), not (2,2)
+- Actually need exactly 4 moves for 3x3? No wait, from (0,0) to (2,2):
+  - Minimum moves: 2 (X, X) or (R,D) in some order with X... actually X,X gets there in 2 moves
+  - Maximum moves: 4 (R,R,D,D or any order)
+
+For 3 moves: R, D, X or permutations. R,D,X: (0,0)->(0,1)->(1,1)->(2,2). Yes! 3 moves.
+
+Move 3 must be diagonal. So R,D,X is valid (move 3 is X).
+R,X,D: (0,0)->(0,1)->(1,2)->(2,2)? D from (1,2) goes to (2,2). Yes! But move 2 is X, move 3 is D. Move 3 must be diagonal, but D is not diagonal. Invalid!
+
+D,R,X: (0,0)->(1,0)->(1,1)->(2,2). Move 3 is X. Valid!
+D,X,R: (0,0)->(1,0)->(2,1)->(2,2)? R from (2,1) goes to (2,2). Move 2 is X, move 3 is R. Invalid!
+X,R,D: (0,0)->(1,1)->(1,2)->(2,2). Move 1 is X, move 2 is R, move 3 is D. Invalid!
+X,D,R: (0,0)->(1,1)->(2,1)->(2,2). Move 1 is X, move 2 is D, move 3 is R. Invalid!
+
+So valid 3-move paths: R,D,X and D,R,X.
+
+R,D,X: 1 + 2 + 5 + 9 = 17
+D,R,X: 1 + 4 + 5 + 9 = 19
+
+Also 2-move path X,X: 1 + 5 + 9 = 15
+4-move paths: various, e.g., R,R,D,D: 1+2+3+6+9 = 21, but move 3 must be diagonal. R,R,D: move 3 is D, not diagonal. Invalid!
+
+R,R,X,D? That's 4 moves, ends at (2,3) out of bounds.
+
+For 4 moves to (2,2): need net +2 row, +2 col. With 4 moves, possibilities: R,R,D,D (in some order), or R,D,X,? wait X is +1,+1.
+
+Actually with X: R,D,X is 3 moves. For 4 moves: R,R,D,D or R,D,R,D etc, or R,X,D,? no that's 3 moves to (2,2).
+
+Wait: R,X gives (1,2). Then need to get to (2,2), so D. That's 3 moves.
+
+For 4 moves: must use only R and D (no X), since X reduces move count. R,R,D,D in some order.
+
+Move 3 must be diagonal. But if we only use R and D, no diagonal possible. So move 3 can be R or D (since diagonal not possible).
+
+R,R,D,D: moves are R,R,D,D. Move 3 is D. Diagonal not possible (we're not using X), so D is allowed.
+Sum: 1+2+3+6+9 = 21? Wait: (0,0)=1, (0,1)=2, (0,2)=3, (1,2)=6, (2,2)=9. Sum = 1+2+3+6+9 = 21.
+
+R,D,R,D: (0,0)=1, (0,1)=2, (1,1)=5, (1,2)=6, (2,2)=9. Sum = 1+2+5+6+9 = 23. Move 3 is R. Diagonal not possible? From (1,1), diagonal to (2,2) is possible! So move 3 MUST be diagonal. But we're using R. Invalid!
+
+D,R,R,D: (0,0)=1, (1,0)=4, (1,1)=5, (1,2)=6, (2,2)=9. Sum = 1+4+5+6+9 = 25. Move 3 is R. From (1,1), diagonal to (2,2) is possible. Must be diagonal. Invalid!
+
+D,D,R,R: (0,0)=1, (1,0)=4, (2,0)=7, (2,1)=8, (2,2)=9. Sum = 1+4+7+8+9 = 29. Move 3 is R. From (2,0), diagonal to (3,1) is out of bounds. So diagonal not possible. R is allowed! Valid!
+
+So D,D,R,R gives 29.
+
+Let me verify with my code logic. At (2,0) with moves_made=2, next_move_num=3, must_be_diagonal.
+From (2,0): R to (2,1), D to (3,0) invalid, X to (3,1) invalid.
+diagonal_possible = False (no X possible).
+So valid moves: R (since not diagonal_possible, R is allowed).
+
+Yes! So D,D,R,R is valid with sum 29.
+
+Is there better? D,D,R,R = 29.
+What about paths with X?
+
+X,X: 1+5+9 = 15 (2 moves)
+R,D,X: 1+2+5+9 = 17 (3 moves, valid)
+D,R,X: 1+4+5+9 = 19 (3 moves, valid)
+
+What about 4 moves with X? Like R,X,D,? No that's 3 moves to (2,2).
+
+Actually can we do X,R,D? (0,0)->(1,1)->(1,2)->(2,2). That's 3 moves. Move 3 is D. From (1,2), diagonal to (2,3) is out of bounds. So diagonal not possible. D is allowed! Sum: 1+5+6+9 = 21.
+
+X,D,R: (0,0)->(1,1)->(2,1)->(2,2). Move 3 is R. From (2,1), diagonal to (3,2) out of bounds. R allowed. Sum: 1+5+8+9 = 23.
+
+R,X,D: (0,0)->(0,1)->(1,2)->(2,2). Move 3 is D. From (1,2), diagonal out of bounds. D allowed. Sum: 1+2+6+9 = 18.
+
+D,X,R: (0,0)->(1,0)->(2,1)->(2,2). Move 3 is R. From (2,1), diagonal out of bounds. R allowed. Sum: 1+4+8+9 = 22.
+
+So best so far is D,D,R,R = 29.
+
+Wait, can we do 5 moves? No, max is 4 moves for 3x3 (need +2 row, +2 col, each move gives at most +1 row and +1 col, so min 2 moves, max 4 moves with only R and D).
+
+Actually wait, I need to recheck. Can we revisit cells? No, path implies no revisiting, and moves only go right, down, or diagonal down-right, so we always increase i+j, no cycles possible.
+
+So max is 29 with "DDRR".
+
+Let me verify my code would find this. I'll trust the logic for now.
+
+One more check: what if grid is 1x1? Then we're already at destination. Return (grid[0][0], "").
+
+My code: dp(0,0,0) -> i==n-1 and j==n-1, return (0, ""). Total = grid[0][0] + 0 = grid[0][0]. Path "". Correct!
+
+Let me also handle the case where no path exists (though with these moves, there's always a path in a grid).
+
+Actually, I want to make sure about the tie-breaking. The problem says "Return (max_sum, path_string)". If there are multiple paths with same max sum, any should be fine, but I'll use lexicographically smallest for determinism.
+
+In my code, I have: `if total_sum > best_sum or (total_sum == best_sum and (best_path == "" or move_char + future_path < best_path))`
+
+This picks lexicographically smallest path when sums are equal. Good.
+
+Let me also optimize: the state space is O(n² × moves), where moves is at most 2n. So O(n³) states, which is fine for reasonable n.
+
+Actually, moves_made can be at most 2n-2 (all R and D). So states are O(n³). For n=100, that's 1,000,000 states, which is fine.
+
+Let me write the final clean version:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
+    def dp(i, j, moves_made):
+        # Returns (max_sum_from_here, best_path_from_here)
+        # Sum includes grid[i][j] and all future cells
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+
+        next_move_num = moves_made + 1
+        must_be_diagonal = (next_move_num % 3 == 0)
+
+        # Check possible moves
+        can_right = (j + 1 < n)
+        can_down = (i + 1 < n)
+        can_diag = (i + 1 < n and j + 1 < n)
+
+        diagonal_possible = can_diag
+
+        best_sum = float('-inf')
+        best_path = ""
+
+        # Try each valid move
+        # Right
+        if can_right:
+            if not must_be_diagonal or not diagonal_possible:
+                future_sum, future_path = dp(i, j + 1, moves_made + 1)
+                total = grid[i][j] + future_sum
+                path = "R" + future_path
+                if total > best_sum or (total == best_sum and path < best_path):
+                    best_sum = total
+                    best_path = path
+
+        # Down
+        if can_down:
+            if not must_be_diagonal or not diagonal_possible:
+                future_sum, future_path = dp(i + 1, j, moves_made + 1)
+                total = grid[i][j] + future_sum
+                path = "D" + future_path
+                if total > best_sum or (total == best_sum and path < best_path):
+                    best_sum = total
+                    best_path = path
+
+        # Diagonal
+        if can_diag:
+            # Diagonal is always allowed (it's the preferred move when required)
+            future_sum, future_path = dp(i + 1, j + 1, moves_made + 1)
+            total = grid[i][j] + future_sum
+            path = "X" + future_path
+            if total > best_sum or (total == best_sum and path < best_path):
+                best_sum = total
+                best_path = path
+
+        return (best_sum, best_path)
+
+    return dp(0, 0, 0)
+```
+
+Wait, I changed the logic. Now dp includes grid[i][j] in the sum. Let me verify:
+- Base case: at destination, return (grid[i][j], "")
+- Recursive: total = grid[i][j] + future_sum, where future_sum includes the next cell and beyond
+
+So dp(0,0,0) returns sum including grid[0][0]. That's cleaner!
+
+Let me verify with 2x2 example [[1,2],[3,4]]:
+dp(0,0,0): not at end, moves_made=0, next_move_num=1, not must_be_diagonal
+- R: dp(0,1,1). At (0,1), not at end, moves_made=1, next_move_num=2, not must_be_diagonal
+  - D: dp(1,1,2). At end, return (4, "")
+  - So dp(0,1,1) = grid[0][1] + 4 = 2 + 4 = 6, path "D"
+  - Total for R: grid[0][0] + 6 = 1 + 6 = 7, path "RD"
+- D: dp(1,0,1). At (1,0), not at end, moves_made=1, next_move_num=2, not must_be_diagonal
+  - R: dp(1,1,2). At end, return (4, "")
+  - So dp(1,0,1) = grid[1][0] + 4 = 3 + 4 = 7, path "R"
+  - Total for D: grid[0][0] + 7 = 1 + 7 = 8, path "DR"
+- X: dp(1,1,1). At end, return (4, "")
+  - Total for X: grid[0][0] + 4 = 1 + 4 = 5, path "X"
+
+Best is 8 with "DR". Correct!
+
+Now let me verify the 3x3 case with D,D,R,R:
+dp(0,0,0): moves_made=0, next=1, not must_diag
+- D: dp(1,0,1): moves_made=1, next=2, not must_diag
+  - D: dp(2,0,2): moves_made=2, next=3, MUST_DIAG
+    - From (2,0): can_right=True, can_down=False, can_diag=False
+    - diagonal_possible = False
+    - R: allowed (not must_diag or not diag_possible -> True since not diag_possible)
+      - dp(2,1,3): moves_made=3, next=4, not must_diag
+        - R: dp(2,2,4): at end, return (9, "")
+        - So dp(2,1,3) = grid[2][1] + 9 = 8 + 9 = 17, path "R"
+      - Total: grid[2][0] + 17 = 7 + 17 = 24, path "RR"
+    - D: not possible
+    - X: not possible
+    - So dp(2,0,2) = 24, path "RR"
+  - Total for D: grid[1][0] + 24 = 4 + 24 = 28, path "DRR"
+  - Also check R from (1,0): dp(1,1,2): moves_made=2, next=3, MUST_DIAG
+    - From (1,1): can_right=True, can_down=True, can_diag=True
+    - diagonal_possible = True
+    - R: not allowed (must_diag and diag_possible)
+    - D: not allowed
+    - X: allowed! dp(2,2,3): at end, return (9, "")
+    - So dp(1,1,2) = grid[1][1] + 9 = 5 + 9 = 14, path "X"
+  - Total for R: grid[1][0] + 14 = 4 + 14 = 18, path "RX"
+  - So dp(1,0,1) = max(28, 18) = 28, path "DRR"
+- Total for D: grid[0][0] + 28 = 1 + 28 = 29, path "DDRR"
+
+Yes! 29 with "DDRR". Correct!
+
+The code looks good. Let me also make sure I handle the case where must_be_diagonal and diagonal is possible - we can ONLY use diagonal. In my code:
+- R: `if not must_be_diagonal or not diagonal_possible` -> if must_be_diagonal and diagonal_possible, this is False, so R is skipped. Correct!
+- D: same, skipped. Correct!
+- X: always checked. Correct!
+
+And when must_be_diagonal and diagonal is NOT possible:
+- R: `not must_be_diagonal or not diagonal_possible` -> `False or True` = True. Allowed! Correct!
+- D: same, allowed. Correct!
+- X: not possible anyway. Correct!
+
+And when not must_be_diagonal:
+- R: `True or ...` = True. Allowed. Correct!
+- D: allowed. Correct!
+- X: allowed. Correct!
+
+Perfect! The logic is correct.
+
+One final check: what if there's no valid move? This shouldn't happen in a valid grid since we can always go right or down until the end. But if we're at (n-1, n-1), we return early. If we're at (n-1, j) with j < n-1, we can go right. If we're at (i, n-1) with i < n-1, we can go down. So there's always at least one valid move unless we're at the end.
+
+Actually wait, what if must_be_diagonal and we're at (n-1, n-2)? We can go right to (n-1, n-1). Diagonal would be (n, n-1) which is out of bounds. So diagonal not possible, R is allowed. Good.
+
+What if we're at (n-2, n-1)? Can go down to (n-1, n-1). Diagonal out of bounds. D allowed. Good.
+
+What if we're at (n-2, n-2)? Can go right, down, or diagonal. If must_be_diagonal, must use diagonal to (n-1, n-1). Good.
+
+So the code is robust.
+
+Let me write the final version:
+
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+    if n == 1:
+        return (grid[0][0], "")
+
+    from functools import lru_cache
+
+    @lru_cache(maxsize=None)
+    def dp(i, j, moves_made):
+        # Returns (max_sum_including_current_cell, best_path_from_here)
+        if i == n - 1 and j == n - 1:
+            return (grid[i][j], "")
+
+        next_move_num = moves_made + 1
+        must_be_diagonal = (next_move_num % 3 == 0)
+
+        can_right = (j + 1 < n)
+        can_down = (i + 1 < n)
+        can_diag = (i + 1 < n and j + 1 < n)
+        diagonal_possible = can_diag
+
+        best_sum = float('-inf')
+        best_path = ""
+
+        # Try Right
+        if can_right and (not must_be_diagonal or not diagonal_possible):
+            future_sum, future_path = dp(i, j + 1, moves_made + 1)
+            total = grid[i][j] + future_sum
+            path = "R" + future_path
+            if total > best_sum or (total == best_sum and path < best_path):
+                best_sum = total
+                best_path = path
+
+        # Try Down
+        if can_down and (not must_be_diagonal or not diagonal_possible):
+            future_sum, future_path = dp(i + 1, j, moves_made + 1)
+            total = grid[i][j] + future_sum
+            path = "D" + future_path
+            if total > best_sum or (total == best_sum and path < best_path):
+                best_sum = total
+                best_path = path
+
+        # Try Diagonal (always allowed when possible)
+        if can_diag:
+            future_sum, future_path = dp(i + 1, j + 1, moves_made + 1)
+            total = grid[i][j] + future_sum
+            path = "X" + future_path
+            if total > best_sum or (total == best_sum and path < best_path):
+                best_sum = total
+                best_path = path
+
+        return (best_sum, best_path)
+
+    return dp(0, 0, 0)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    from functools import lru_cache
+
+    # State: (i, j, moves_made) -> (max_sum, best_path)
+    # moves_made: number of moves made so far to reach (i,j)
+    # Next move number is moves_made + 1
+
+    @lru_cache(maxsize=None)
+    def dp(i, j, moves_made):
+        # Current cell value is already counted when we arrived here
+        # Actually, let's count grid[i][j] when we leave or arrive
+
+        # Base case: reached destination
+        if i == n - 1 and j == n - 1:
+            return (0, "")  # No more moves needed, sum of future is 0
+
+        next_move_num = moves_made + 1
+        must_be_diagonal = (next_move_num % 3 == 0)
+
+        best_sum = float('-inf')
+        best_path = ""
+
+        # Possible moves: R (right), D (down), X (diagonal)
+        # Check which moves are valid
+        moves = []
+
+        # Right: (i, j+1)
+        if j + 1 < n:
+            moves.append(('R', i, j + 1, True))  # True = always allowed
+
+        # Down: (i+1, j)
+        if i + 1 < n:
+            moves.append(('D', i + 1, j, True))
+
+        # Diagonal: (i+1, j+1)
+        if i + 1 < n and j + 1 < n:
+            moves.append(('X', i + 1, j + 1, True))
+
+        # Filter moves based on constraint
+        valid_moves = []
+        diagonal_possible = any(m[0] == 'X' for m in moves)
+
+        for move_char, ni, nj, _ in moves:
+            if must_be_diagonal:
+                if move_char == 'X':
+                    valid_moves.append((move_char, ni, nj))
+                # If diagonal not possible, R or D allowed
+                elif not diagonal_possible:
+                    valid_moves.append((move_char, ni, nj))
+            else:
+                valid_moves.append((move_char, ni, nj))
+
+        # If no valid moves (shouldn't happen if grid is valid and we're not at end)
+        if not valid_moves:
+            return (float('-inf'), "")
+
+        for move_char, ni, nj in valid_moves:
+            future_sum, future_path = dp(ni, nj, moves_made + 1)
+            if future_sum == float('-inf'):
+                continue
+            total_sum = grid[ni][nj] + future_sum
+            if total_sum > best_sum or (total_sum == best_sum and (best_path == "" or move_char + future_path < best_path)):
+                best_sum = total_sum
+                best_path = move_char + future_path
+
+        return (best_sum, best_path)
+
+    # Start at (0,0), 0 moves made, count grid[0][0]
+    result_sum, result_path = dp(0, 0, 0)
+    return (grid[0][0] + result_sum, result_path)
