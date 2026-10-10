@@ -28,9 +28,7 @@ qwen-image-2.0-pro-2026-04-22
 qwen-image-2.0-pro-2026-06-22
 qwen-image-3.0
 qwen-image-3.0-pro
-qwen-image-edit-max
 qwen-image-edit-plus
-qwen-image-edit-plus-2025-12-15
 qwen-image-plus
 qwen-max
 qwen-mt-flash
@@ -67,8 +65,6 @@ qwen3-coder-480b-a35b-instruct
 qwen3-coder-flash
 qwen3-coder-next
 qwen3-coder-plus
-qwen3-coder-plus-2025-07-22
-qwen3-coder-plus-2025-09-23
 qwen3-livetranslate-flash
 qwen3-livetranslate-flash-2025-12-01
 qwen3-max
@@ -87,14 +83,8 @@ qwen3-tts-flash-2025-11-27
 qwen3-tts-flash-realtime
 qwen3-tts-flash-realtime-2025-11-27
 qwen3-tts-instruct-flash
-qwen3-tts-instruct-flash-2026-01-26
-qwen3-tts-instruct-flash-realtime
-qwen3-tts-instruct-flash-realtime-2026-01-22
 qwen3-tts-vc-2026-01-22
-qwen3-tts-vc-realtime-2025-11-27
 qwen3-tts-vc-realtime-2026-01-15
-qwen3-tts-vd-2026-01-26
-qwen3-tts-vd-realtime-2025-12-16
 qwen3-tts-vd-realtime-2026-01-15
 qwen3-vl-235b-a22b-instruct
 qwen3-vl-235b-a22b-thinking
