@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-07 17:52:37
+Last updated: 2026-10-10 04:18:18
 
-## Updates This Week (2026-10-01 to 2026-10-07)
+## Updates This Week (2026-10-04 to 2026-10-10)
 
 ### Anthropic
 
@@ -21,12 +21,6 @@ Last updated: 2026-10-07 17:52:37
 
 - models/veo-3.1-fast-generate-preview (deleted: 2026-10-06)
 
-### Grok
-
-**Added**
-
-- grok-imagine-video-1.5-lite (added: 2026-10-01)
-
 ### Mistral
 
 **Deleted**
@@ -34,11 +28,11 @@ Last updated: 2026-10-07 17:52:37
 - mistral-large-4 (deleted: 2026-10-06)
 - mistral-large-4-0 (deleted: 2026-10-06)
 
-### NVIDIA
+### Qwen
 
-**Added**
+**Deleted**
 
-- nvidia/switchyard (added: 2026-10-02)
+- qwen3-omni-30b-a3b-captioner (deleted: 2026-10-10)
 
 ## Summary
 
@@ -58,7 +52,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 4/14
 
-**Qwen**: 172/24
+**Qwen**: 171/25
 
 **Meta**: 8/1
 
@@ -807,7 +801,6 @@ Model counts shown as: **Available/Deleted**
 - qwen3-omni-flash-2025-12-01 (added: 2025-12-18)
 - qwen3-omni-flash-2025-09-15 (added: 2025-12-18)
 - qwen3-omni-flash (added: 2025-12-18)
-- qwen3-omni-30b-a3b-captioner (added: 2025-12-18)
 - qwen3-next-80b-a3b-thinking (added: 2025-12-18)
 - qwen3-next-80b-a3b-instruct (added: 2025-12-18)
 - qwen3-max-preview (added: 2025-12-18)
@@ -862,6 +855,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- qwen3-omni-30b-a3b-captioner (deleted: 2026-10-10)
 - kimi-k2.6 (deleted: 2026-06-10)
 - qwen3-4b (deleted: 2026-05-30)
 - qwen3-1.7b (deleted: 2026-05-30)
