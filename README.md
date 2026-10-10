@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-10 08:40:18
+Last updated: 2026-10-10 09:20:20
 
 ## Updates This Week (2026-10-04 to 2026-10-10)
 
@@ -32,6 +32,8 @@ Last updated: 2026-10-10 08:40:18
 
 **Deleted**
 
+- deepseek-v3.2 (deleted: 2026-10-10)
+- deepseek-v4-flash (deleted: 2026-10-10)
 - qvq-max (deleted: 2026-10-10)
 - qwen-coder-plus (deleted: 2026-10-10)
 - qwen-image-edit (deleted: 2026-10-10)
@@ -47,6 +49,7 @@ Last updated: 2026-10-10 08:40:18
 - qwen-mt-turbo (deleted: 2026-10-10)
 - qwen-omni-turbo (deleted: 2026-10-10)
 - qwen-plus-2025-09-11 (deleted: 2026-10-10)
+- qwen-turbo (deleted: 2026-10-10)
 - qwen-vl-max (deleted: 2026-10-10)
 - qwen-vl-plus (deleted: 2026-10-10)
 - qwen3-14b (deleted: 2026-10-10)
@@ -62,10 +65,13 @@ Last updated: 2026-10-10 08:40:18
 - qwen3-asr-flash-realtime-2025-10-27 (deleted: 2026-10-10)
 - qwen3-asr-flash-realtime-2026-02-10 (deleted: 2026-10-10)
 - qwen3-coder-480b-a35b-instruct (deleted: 2026-10-10)
+- qwen3-coder-next (deleted: 2026-10-10)
+- qwen3-coder-plus (deleted: 2026-10-10)
 - qwen3-coder-plus-2025-07-22 (deleted: 2026-10-10)
 - qwen3-coder-plus-2025-09-23 (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime-2025-09-22 (deleted: 2026-10-10)
+- qwen3-max (deleted: 2026-10-10)
 - qwen3-max-2025-09-23 (deleted: 2026-10-10)
 - qwen3-max-2026-01-23 (deleted: 2026-10-10)
 - qwen3-max-preview (deleted: 2026-10-10)
@@ -92,6 +98,7 @@ Last updated: 2026-10-10 08:40:18
 - qwen3-tts-vd-realtime-2026-01-15 (deleted: 2026-10-10)
 - qwen3-vl-235b-a22b-instruct (deleted: 2026-10-10)
 - qwen3-vl-235b-a22b-thinking (deleted: 2026-10-10)
+- qwen3-vl-flash (deleted: 2026-10-10)
 - qwen3-vl-flash-2025-10-15 (deleted: 2026-10-10)
 - qwen3-vl-flash-2026-01-22 (deleted: 2026-10-10)
 - qwen3-vl-plus-2025-09-23 (deleted: 2026-10-10)
@@ -117,7 +124,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 4/14
 
-**Qwen**: 106/90
+**Qwen**: 99/97
 
 **Meta**: 8/1
 
@@ -784,7 +791,6 @@ Model counts shown as: **Available/Deleted**
 - qwen3.5-livetranslate-flash-realtime-2026-05-19 (added: 2026-05-19)
 - qwen3.5-livetranslate-flash-realtime (added: 2026-05-19)
 - deepseek-v4-pro (added: 2026-05-11)
-- deepseek-v4-flash (added: 2026-05-11)
 - qwen3.6-27b (added: 2026-04-23)
 - qwen3.5-plus-2026-04-20 (added: 2026-04-23)
 - qwen-image-2.0-pro-2026-04-22 (added: 2026-04-23)
@@ -803,7 +809,6 @@ Model counts shown as: **Available/Deleted**
 - qwen3.5-omni-flash-realtime (added: 2026-03-30)
 - qwen3.5-omni-flash-2026-03-15 (added: 2026-03-30)
 - qwen3.5-omni-flash (added: 2026-03-30)
-- deepseek-v3.2 (added: 2026-03-20)
 - qwen-image-2.0-pro-2026-03-03 (added: 2026-03-03)
 - qwen-image-2.0-pro (added: 2026-03-03)
 - qwen-image-2.0-2026-03-03 (added: 2026-03-03)
@@ -813,7 +818,6 @@ Model counts shown as: **Available/Deleted**
 - qwen3.5-35b-a3b (added: 2026-02-24)
 - qwen3.5-27b (added: 2026-02-24)
 - qwen3.5-122b-a10b (added: 2026-02-24)
-- qwen3-coder-next (added: 2026-02-19)
 - qwen3.5-plus-2026-02-15 (added: 2026-02-16)
 - qwen3.5-plus (added: 2026-02-16)
 - qwen3.5-397b-a17b (added: 2026-02-16)
@@ -826,21 +830,17 @@ Model counts shown as: **Available/Deleted**
 - text-embedding-v3 (added: 2025-12-18)
 - qwq-plus-2025-03-05 (added: 2025-12-18)
 - qwen3-vl-plus (added: 2025-12-18)
-- qwen3-vl-flash (added: 2025-12-18)
 - qwen3-tts-flash-realtime (added: 2025-12-18)
 - qwen3-tts-flash (added: 2025-12-18)
 - qwen3-s2s-flash-realtime (added: 2025-12-18)
 - qwen3-omni-flash-realtime-2025-09-15 (added: 2025-12-18)
 - qwen3-omni-flash (added: 2025-12-18)
-- qwen3-max (added: 2025-12-18)
 - qwen3-livetranslate-flash-2025-12-01 (added: 2025-12-18)
 - qwen3-livetranslate-flash (added: 2025-12-18)
-- qwen3-coder-plus (added: 2025-12-18)
 - qwen3-coder-flash (added: 2025-12-18)
 - qwen3-asr-flash-realtime (added: 2025-12-18)
 - qwen2-7b-instruct (added: 2025-12-18)
 - qwen-vl-ocr-2025-11-20 (added: 2025-12-18)
-- qwen-turbo (added: 2025-12-18)
 - qwen-plus-latest (added: 2025-12-18)
 - qwen-plus-2025-12-01 (added: 2025-12-18)
 - qwen-plus-2025-07-14 (added: 2025-12-18)
@@ -861,6 +861,7 @@ Model counts shown as: **Available/Deleted**
 - qwen3-vl-plus-2025-09-23 (deleted: 2026-10-10)
 - qwen3-vl-flash-2026-01-22 (deleted: 2026-10-10)
 - qwen3-vl-flash-2025-10-15 (deleted: 2026-10-10)
+- qwen3-vl-flash (deleted: 2026-10-10)
 - qwen3-vl-235b-a22b-thinking (deleted: 2026-10-10)
 - qwen3-vl-235b-a22b-instruct (deleted: 2026-10-10)
 - qwen3-tts-vd-realtime-2026-01-15 (deleted: 2026-10-10)
@@ -887,10 +888,13 @@ Model counts shown as: **Available/Deleted**
 - qwen3-max-preview (deleted: 2026-10-10)
 - qwen3-max-2026-01-23 (deleted: 2026-10-10)
 - qwen3-max-2025-09-23 (deleted: 2026-10-10)
+- qwen3-max (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime-2025-09-22 (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime (deleted: 2026-10-10)
 - qwen3-coder-plus-2025-09-23 (deleted: 2026-10-10)
 - qwen3-coder-plus-2025-07-22 (deleted: 2026-10-10)
+- qwen3-coder-plus (deleted: 2026-10-10)
+- qwen3-coder-next (deleted: 2026-10-10)
 - qwen3-coder-480b-a35b-instruct (deleted: 2026-10-10)
 - qwen3-asr-flash-realtime-2026-02-10 (deleted: 2026-10-10)
 - qwen3-asr-flash-realtime-2025-10-27 (deleted: 2026-10-10)
@@ -906,6 +910,7 @@ Model counts shown as: **Available/Deleted**
 - qwen3-14b (deleted: 2026-10-10)
 - qwen-vl-plus (deleted: 2026-10-10)
 - qwen-vl-max (deleted: 2026-10-10)
+- qwen-turbo (deleted: 2026-10-10)
 - qwen-plus-2025-09-11 (deleted: 2026-10-10)
 - qwen-omni-turbo (deleted: 2026-10-10)
 - qwen-mt-turbo (deleted: 2026-10-10)
@@ -921,6 +926,8 @@ Model counts shown as: **Available/Deleted**
 - qwen-image-edit (deleted: 2026-10-10)
 - qwen-coder-plus (deleted: 2026-10-10)
 - qvq-max (deleted: 2026-10-10)
+- deepseek-v4-flash (deleted: 2026-10-10)
+- deepseek-v3.2 (deleted: 2026-10-10)
 - kimi-k2.6 (deleted: 2026-06-10)
 - qwen3-4b (deleted: 2026-05-30)
 - qwen3-1.7b (deleted: 2026-05-30)
