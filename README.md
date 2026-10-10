@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-10 04:50:17
+Last updated: 2026-10-10 05:46:19
 
 ## Updates This Week (2026-10-04 to 2026-10-10)
 
@@ -33,12 +33,16 @@ Last updated: 2026-10-10 04:50:17
 **Deleted**
 
 - qwen-image-edit (deleted: 2026-10-10)
+- qwen-image-edit-max (deleted: 2026-10-10)
 - qwen-image-edit-max-2026-01-16 (deleted: 2026-10-10)
 - qwen-image-edit-plus-2025-10-30 (deleted: 2026-10-10)
+- qwen-image-edit-plus-2025-12-15 (deleted: 2026-10-10)
 - qwen-image-max (deleted: 2026-10-10)
 - qwen-image-max-2025-12-30 (deleted: 2026-10-10)
 - qwen-image-plus-2026-01-09 (deleted: 2026-10-10)
 - qwen3-asr-flash-realtime-2025-10-27 (deleted: 2026-10-10)
+- qwen3-coder-plus-2025-07-22 (deleted: 2026-10-10)
+- qwen3-coder-plus-2025-09-23 (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime-2025-09-22 (deleted: 2026-10-10)
 - qwen3-omni-30b-a3b-captioner (deleted: 2026-10-10)
@@ -46,6 +50,12 @@ Last updated: 2026-10-10 04:50:17
 - qwen3-omni-flash-realtime-2025-12-01 (deleted: 2026-10-10)
 - qwen3-tts-flash-2025-09-18 (deleted: 2026-10-10)
 - qwen3-tts-flash-realtime-2025-09-18 (deleted: 2026-10-10)
+- qwen3-tts-instruct-flash-2026-01-26 (deleted: 2026-10-10)
+- qwen3-tts-instruct-flash-realtime (deleted: 2026-10-10)
+- qwen3-tts-instruct-flash-realtime-2026-01-22 (deleted: 2026-10-10)
+- qwen3-tts-vc-realtime-2025-11-27 (deleted: 2026-10-10)
+- qwen3-tts-vd-2026-01-26 (deleted: 2026-10-10)
+- qwen3-tts-vd-realtime-2025-12-16 (deleted: 2026-10-10)
 
 ## Summary
 
@@ -65,7 +75,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 4/14
 
-**Qwen**: 158/38
+**Qwen**: 148/48
 
 **Meta**: 8/1
 
@@ -768,16 +778,11 @@ Model counts shown as: **Available/Deleted**
 - qwen3.5-plus (added: 2026-02-16)
 - qwen3.5-397b-a17b (added: 2026-02-16)
 - qwen3-asr-flash-realtime-2026-02-10 (added: 2026-02-13)
-- qwen3-tts-vd-2026-01-26 (added: 2026-02-10)
 - qwen3-tts-vc-2026-01-22 (added: 2026-02-10)
-- qwen3-tts-instruct-flash-2026-01-26 (added: 2026-02-10)
 - qwen3-tts-instruct-flash (added: 2026-02-10)
-- qwen3-tts-instruct-flash-realtime-2026-01-22 (added: 2026-02-04)
-- qwen3-tts-instruct-flash-realtime (added: 2026-02-04)
 - qwen3-tts-vd-realtime-2026-01-15 (added: 2026-02-02)
 - qwen3-vl-flash-2026-01-22 (added: 2026-01-28)
 - qwen3-max-2026-01-23 (added: 2026-01-26)
-- qwen-image-edit-max (added: 2026-01-18)
 - qwen3-tts-vc-realtime-2026-01-15 (added: 2026-01-17)
 - qwen-plus-character (added: 2026-01-07)
 - qwen-flash-character (added: 2026-01-07)
@@ -795,8 +800,6 @@ Model counts shown as: **Available/Deleted**
 - qwen3-vl-flash (added: 2025-12-18)
 - qwen3-vl-235b-a22b-thinking (added: 2025-12-18)
 - qwen3-vl-235b-a22b-instruct (added: 2025-12-18)
-- qwen3-tts-vd-realtime-2025-12-16 (added: 2025-12-18)
-- qwen3-tts-vc-realtime-2025-11-27 (added: 2025-12-18)
 - qwen3-tts-flash-realtime-2025-11-27 (added: 2025-12-18)
 - qwen3-tts-flash-realtime (added: 2025-12-18)
 - qwen3-tts-flash-2025-11-27 (added: 2025-12-18)
@@ -813,8 +816,6 @@ Model counts shown as: **Available/Deleted**
 - qwen3-max (added: 2025-12-18)
 - qwen3-livetranslate-flash-2025-12-01 (added: 2025-12-18)
 - qwen3-livetranslate-flash (added: 2025-12-18)
-- qwen3-coder-plus-2025-09-23 (added: 2025-12-18)
-- qwen3-coder-plus-2025-07-22 (added: 2025-12-18)
 - qwen3-coder-plus (added: 2025-12-18)
 - qwen3-coder-flash (added: 2025-12-18)
 - qwen3-coder-480b-a35b-instruct (added: 2025-12-18)
@@ -847,7 +848,6 @@ Model counts shown as: **Available/Deleted**
 - qwen-mt-flash (added: 2025-12-18)
 - qwen-max (added: 2025-12-18)
 - qwen-image-plus (added: 2025-12-18)
-- qwen-image-edit-plus-2025-12-15 (added: 2025-12-18)
 - qwen-image-edit-plus (added: 2025-12-18)
 - qwen-coder-plus (added: 2025-12-18)
 - qvq-max (added: 2025-12-18)
@@ -855,6 +855,12 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- qwen3-tts-vd-realtime-2025-12-16 (deleted: 2026-10-10)
+- qwen3-tts-vd-2026-01-26 (deleted: 2026-10-10)
+- qwen3-tts-vc-realtime-2025-11-27 (deleted: 2026-10-10)
+- qwen3-tts-instruct-flash-realtime-2026-01-22 (deleted: 2026-10-10)
+- qwen3-tts-instruct-flash-realtime (deleted: 2026-10-10)
+- qwen3-tts-instruct-flash-2026-01-26 (deleted: 2026-10-10)
 - qwen3-tts-flash-realtime-2025-09-18 (deleted: 2026-10-10)
 - qwen3-tts-flash-2025-09-18 (deleted: 2026-10-10)
 - qwen3-omni-flash-realtime-2025-12-01 (deleted: 2026-10-10)
@@ -862,12 +868,16 @@ Model counts shown as: **Available/Deleted**
 - qwen3-omni-30b-a3b-captioner (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime-2025-09-22 (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime (deleted: 2026-10-10)
+- qwen3-coder-plus-2025-09-23 (deleted: 2026-10-10)
+- qwen3-coder-plus-2025-07-22 (deleted: 2026-10-10)
 - qwen3-asr-flash-realtime-2025-10-27 (deleted: 2026-10-10)
 - qwen-image-plus-2026-01-09 (deleted: 2026-10-10)
 - qwen-image-max-2025-12-30 (deleted: 2026-10-10)
 - qwen-image-max (deleted: 2026-10-10)
+- qwen-image-edit-plus-2025-12-15 (deleted: 2026-10-10)
 - qwen-image-edit-plus-2025-10-30 (deleted: 2026-10-10)
 - qwen-image-edit-max-2026-01-16 (deleted: 2026-10-10)
+- qwen-image-edit-max (deleted: 2026-10-10)
 - qwen-image-edit (deleted: 2026-10-10)
 - kimi-k2.6 (deleted: 2026-06-10)
 - qwen3-4b (deleted: 2026-05-30)
