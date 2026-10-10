@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-10 06:31:18
+Last updated: 2026-10-10 08:17:17
 
 ## Updates This Week (2026-10-04 to 2026-10-10)
 
@@ -53,6 +53,7 @@ Last updated: 2026-10-10 06:31:18
 - qwen3-coder-plus-2025-09-23 (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime-2025-09-22 (deleted: 2026-10-10)
+- qwen3-max-2026-01-23 (deleted: 2026-10-10)
 - qwen3-next-80b-a3b-thinking (deleted: 2026-10-10)
 - qwen3-omni-30b-a3b-captioner (deleted: 2026-10-10)
 - qwen3-omni-flash-2025-09-15 (deleted: 2026-10-10)
@@ -91,7 +92,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 4/14
 
-**Qwen**: 132/64
+**Qwen**: 131/65
 
 **Meta**: 8/1
 
@@ -794,7 +795,6 @@ Model counts shown as: **Available/Deleted**
 - qwen3.5-397b-a17b (added: 2026-02-16)
 - qwen3-tts-instruct-flash (added: 2026-02-10)
 - qwen3-vl-flash-2026-01-22 (added: 2026-01-28)
-- qwen3-max-2026-01-23 (added: 2026-01-26)
 - qwen3-tts-vc-realtime-2026-01-15 (added: 2026-01-17)
 - qwen-plus-character (added: 2026-01-07)
 - qwen-flash-character (added: 2026-01-07)
@@ -874,6 +874,7 @@ Model counts shown as: **Available/Deleted**
 - qwen3-omni-flash-2025-09-15 (deleted: 2026-10-10)
 - qwen3-omni-30b-a3b-captioner (deleted: 2026-10-10)
 - qwen3-next-80b-a3b-thinking (deleted: 2026-10-10)
+- qwen3-max-2026-01-23 (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime-2025-09-22 (deleted: 2026-10-10)
 - qwen3-livetranslate-flash-realtime (deleted: 2026-10-10)
 - qwen3-coder-plus-2025-09-23 (deleted: 2026-10-10)
