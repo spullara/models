@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-10 05:46:19
+Last updated: 2026-10-10 06:30:19
 
 ## Updates This Week (2026-10-04 to 2026-10-10)
 
@@ -53,6 +53,7 @@ Last updated: 2026-10-10 05:46:19
 - qwen3-tts-instruct-flash-2026-01-26 (deleted: 2026-10-10)
 - qwen3-tts-instruct-flash-realtime (deleted: 2026-10-10)
 - qwen3-tts-instruct-flash-realtime-2026-01-22 (deleted: 2026-10-10)
+- qwen3-tts-vc-2026-01-22 (deleted: 2026-10-10)
 - qwen3-tts-vc-realtime-2025-11-27 (deleted: 2026-10-10)
 - qwen3-tts-vd-2026-01-26 (deleted: 2026-10-10)
 - qwen3-tts-vd-realtime-2025-12-16 (deleted: 2026-10-10)
@@ -75,7 +76,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 4/14
 
-**Qwen**: 148/48
+**Qwen**: 147/49
 
 **Meta**: 8/1
 
@@ -778,7 +779,6 @@ Model counts shown as: **Available/Deleted**
 - qwen3.5-plus (added: 2026-02-16)
 - qwen3.5-397b-a17b (added: 2026-02-16)
 - qwen3-asr-flash-realtime-2026-02-10 (added: 2026-02-13)
-- qwen3-tts-vc-2026-01-22 (added: 2026-02-10)
 - qwen3-tts-instruct-flash (added: 2026-02-10)
 - qwen3-tts-vd-realtime-2026-01-15 (added: 2026-02-02)
 - qwen3-vl-flash-2026-01-22 (added: 2026-01-28)
@@ -858,6 +858,7 @@ Model counts shown as: **Available/Deleted**
 - qwen3-tts-vd-realtime-2025-12-16 (deleted: 2026-10-10)
 - qwen3-tts-vd-2026-01-26 (deleted: 2026-10-10)
 - qwen3-tts-vc-realtime-2025-11-27 (deleted: 2026-10-10)
+- qwen3-tts-vc-2026-01-22 (deleted: 2026-10-10)
 - qwen3-tts-instruct-flash-realtime-2026-01-22 (deleted: 2026-10-10)
 - qwen3-tts-instruct-flash-realtime (deleted: 2026-10-10)
 - qwen3-tts-instruct-flash-2026-01-26 (deleted: 2026-10-10)
