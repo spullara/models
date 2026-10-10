@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-10 08:18:16
+Last updated: 2026-10-10 08:40:18
 
 ## Updates This Week (2026-10-04 to 2026-10-10)
 
@@ -44,15 +44,20 @@ Last updated: 2026-10-10 08:18:16
 - qwen-image-max-2025-12-30 (deleted: 2026-10-10)
 - qwen-image-plus (deleted: 2026-10-10)
 - qwen-image-plus-2026-01-09 (deleted: 2026-10-10)
+- qwen-mt-turbo (deleted: 2026-10-10)
 - qwen-omni-turbo (deleted: 2026-10-10)
 - qwen-plus-2025-09-11 (deleted: 2026-10-10)
+- qwen-vl-max (deleted: 2026-10-10)
+- qwen-vl-plus (deleted: 2026-10-10)
 - qwen3-14b (deleted: 2026-10-10)
 - qwen3-235b-a22b (deleted: 2026-10-10)
+- qwen3-235b-a22b-instruct-2507 (deleted: 2026-10-10)
 - qwen3-235b-a22b-thinking-2507 (deleted: 2026-10-10)
 - qwen3-30b-a3b (deleted: 2026-10-10)
 - qwen3-30b-a3b-instruct-2507 (deleted: 2026-10-10)
 - qwen3-30b-a3b-thinking-2507 (deleted: 2026-10-10)
 - qwen3-32b (deleted: 2026-10-10)
+- qwen3-8b (deleted: 2026-10-10)
 - qwen3-asr-flash-2026-02-10 (deleted: 2026-10-10)
 - qwen3-asr-flash-realtime-2025-10-27 (deleted: 2026-10-10)
 - qwen3-asr-flash-realtime-2026-02-10 (deleted: 2026-10-10)
@@ -85,8 +90,11 @@ Last updated: 2026-10-10 08:18:16
 - qwen3-tts-vd-2026-01-26 (deleted: 2026-10-10)
 - qwen3-tts-vd-realtime-2025-12-16 (deleted: 2026-10-10)
 - qwen3-tts-vd-realtime-2026-01-15 (deleted: 2026-10-10)
+- qwen3-vl-235b-a22b-instruct (deleted: 2026-10-10)
 - qwen3-vl-235b-a22b-thinking (deleted: 2026-10-10)
+- qwen3-vl-flash-2025-10-15 (deleted: 2026-10-10)
 - qwen3-vl-flash-2026-01-22 (deleted: 2026-10-10)
+- qwen3-vl-plus-2025-09-23 (deleted: 2026-10-10)
 - qwen3-vl-plus-2025-12-19 (deleted: 2026-10-10)
 - qwen3.6-max-preview (deleted: 2026-10-10)
 - qwq-plus (deleted: 2026-10-10)
@@ -109,7 +117,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 4/14
 
-**Qwen**: 114/82
+**Qwen**: 106/90
 
 **Meta**: 8/1
 
@@ -817,11 +825,8 @@ Model counts shown as: **Available/Deleted**
 - text-embedding-v4 (added: 2025-12-18)
 - text-embedding-v3 (added: 2025-12-18)
 - qwq-plus-2025-03-05 (added: 2025-12-18)
-- qwen3-vl-plus-2025-09-23 (added: 2025-12-18)
 - qwen3-vl-plus (added: 2025-12-18)
-- qwen3-vl-flash-2025-10-15 (added: 2025-12-18)
 - qwen3-vl-flash (added: 2025-12-18)
-- qwen3-vl-235b-a22b-instruct (added: 2025-12-18)
 - qwen3-tts-flash-realtime (added: 2025-12-18)
 - qwen3-tts-flash (added: 2025-12-18)
 - qwen3-s2s-flash-realtime (added: 2025-12-18)
@@ -833,12 +838,8 @@ Model counts shown as: **Available/Deleted**
 - qwen3-coder-plus (added: 2025-12-18)
 - qwen3-coder-flash (added: 2025-12-18)
 - qwen3-asr-flash-realtime (added: 2025-12-18)
-- qwen3-8b (added: 2025-12-18)
-- qwen3-235b-a22b-instruct-2507 (added: 2025-12-18)
 - qwen2-7b-instruct (added: 2025-12-18)
-- qwen-vl-plus (added: 2025-12-18)
 - qwen-vl-ocr-2025-11-20 (added: 2025-12-18)
-- qwen-vl-max (added: 2025-12-18)
 - qwen-turbo (added: 2025-12-18)
 - qwen-plus-latest (added: 2025-12-18)
 - qwen-plus-2025-12-01 (added: 2025-12-18)
@@ -846,7 +847,6 @@ Model counts shown as: **Available/Deleted**
 - qwen-plus-2025-04-28 (added: 2025-12-18)
 - qwen-plus-2025-01-25 (added: 2025-12-18)
 - qwen-plus (added: 2025-12-18)
-- qwen-mt-turbo (added: 2025-12-18)
 - qwen-mt-plus (added: 2025-12-18)
 - qwen-mt-lite (added: 2025-12-18)
 - qwen-mt-flash (added: 2025-12-18)
@@ -858,8 +858,11 @@ Model counts shown as: **Available/Deleted**
 - qwq-plus (deleted: 2026-10-10)
 - qwen3.6-max-preview (deleted: 2026-10-10)
 - qwen3-vl-plus-2025-12-19 (deleted: 2026-10-10)
+- qwen3-vl-plus-2025-09-23 (deleted: 2026-10-10)
 - qwen3-vl-flash-2026-01-22 (deleted: 2026-10-10)
+- qwen3-vl-flash-2025-10-15 (deleted: 2026-10-10)
 - qwen3-vl-235b-a22b-thinking (deleted: 2026-10-10)
+- qwen3-vl-235b-a22b-instruct (deleted: 2026-10-10)
 - qwen3-tts-vd-realtime-2026-01-15 (deleted: 2026-10-10)
 - qwen3-tts-vd-realtime-2025-12-16 (deleted: 2026-10-10)
 - qwen3-tts-vd-2026-01-26 (deleted: 2026-10-10)
@@ -892,15 +895,20 @@ Model counts shown as: **Available/Deleted**
 - qwen3-asr-flash-realtime-2026-02-10 (deleted: 2026-10-10)
 - qwen3-asr-flash-realtime-2025-10-27 (deleted: 2026-10-10)
 - qwen3-asr-flash-2026-02-10 (deleted: 2026-10-10)
+- qwen3-8b (deleted: 2026-10-10)
 - qwen3-32b (deleted: 2026-10-10)
 - qwen3-30b-a3b-thinking-2507 (deleted: 2026-10-10)
 - qwen3-30b-a3b-instruct-2507 (deleted: 2026-10-10)
 - qwen3-30b-a3b (deleted: 2026-10-10)
 - qwen3-235b-a22b-thinking-2507 (deleted: 2026-10-10)
+- qwen3-235b-a22b-instruct-2507 (deleted: 2026-10-10)
 - qwen3-235b-a22b (deleted: 2026-10-10)
 - qwen3-14b (deleted: 2026-10-10)
+- qwen-vl-plus (deleted: 2026-10-10)
+- qwen-vl-max (deleted: 2026-10-10)
 - qwen-plus-2025-09-11 (deleted: 2026-10-10)
 - qwen-omni-turbo (deleted: 2026-10-10)
+- qwen-mt-turbo (deleted: 2026-10-10)
 - qwen-image-plus-2026-01-09 (deleted: 2026-10-10)
 - qwen-image-plus (deleted: 2026-10-10)
 - qwen-image-max-2025-12-30 (deleted: 2026-10-10)
