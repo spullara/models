@@ -86,7 +86,6 @@ qwen3-max-2026-01-23
 qwen3-max-preview
 qwen3-next-80b-a3b-instruct
 qwen3-next-80b-a3b-thinking
-qwen3-omni-30b-a3b-captioner
 qwen3-omni-flash
 qwen3-omni-flash-2025-09-15
 qwen3-omni-flash-2025-12-01
