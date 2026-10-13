@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-13 01:52:52
+Last updated: 2026-10-13 15:45:27
 
 ## Updates This Week (2026-10-07 to 2026-10-13)
 
@@ -10,6 +10,16 @@ Last updated: 2026-10-13 01:52:52
 **Added**
 
 - claude-haiku-5-5 (added: 2026-10-07)
+
+### Gemini
+
+**Added**
+
+- models/gemini-4-argon (added: 2026-10-13)
+
+**Deleted**
+
+- models/veo-3.1-generate-preview (deleted: 2026-10-13)
 
 ### Qwen
 
@@ -103,7 +113,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 14/13
 
-**Gemini**: 50/112
+**Gemini**: 50/113
 
 **Grok**: 14/21
 
@@ -362,6 +372,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-4-argon (added: 2026-10-13)
 - models/gemini-nano-banana-2.1 (added: 2026-10-06)
 - models/gemini-3.8-flash-tts (added: 2026-09-22)
 - models/gemini-3.8-flash-lite-tts (added: 2026-09-22)
@@ -397,7 +408,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
 - models/gemini-3-flash-preview (added: 2025-12-17)
 - models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
-- models/veo-3.1-generate-preview (added: 2025-12-05)
 - models/nano-banana-pro-preview (added: 2025-11-20)
 - models/gemini-3-pro-image-preview (added: 2025-11-20)
 - models/gemini-2.5-computer-use-preview-10-2025 (added: 2025-10-07)
@@ -415,6 +425,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/veo-3.1-generate-preview (deleted: 2026-10-13)
 - models/veo-3.1-fast-generate-preview (deleted: 2026-10-06)
 - models/veo-3.1-lite-generate-preview (deleted: 2026-09-23)
 - models/gemini-3.5-transcribe-live (deleted: 2026-09-23)
