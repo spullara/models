@@ -1,9 +1,9 @@
 Model: grok-4.6
 Provider: grok
-Evaluated: 2026-10-03T11:40:54.709325+00:00
+Evaluated: 2026-10-14T04:15:35.354801+00:00
 
 === TIMING ===
-Response time: 62.43s
+Response time: 74.18s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,97 +18,97 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
+    n = len(grid)
+    if n == 0:
         return (0, "")
 
-    n = len(grid)
     memo = {}
 
     def dfs(i, j, moves):
         key = (i, j, moves)
         if key in memo:
             return memo[key]
-
         if i == n - 1 and j == n - 1:
             memo[key] = (grid[i][j], "")
             return memo[key]
 
         must_x = ((moves + 1) % 3 == 0)
-        can_x = i + 1 < n and j + 1 < n
         can_r = j + 1 < n
         can_d = i + 1 < n
+        can_x = can_r and can_d
 
         options = []
+
+        def consider(ni, nj, ch):
+            s, p = dfs(ni, nj, moves + 1)
+            options.append((s, ch + p))
+
         if must_x and can_x:
-            options.append((i + 1, j + 1, "X"))
+            consider(i + 1, j + 1, "X")
         else:
             if can_r:
-                options.append((i, j + 1, "R"))
+                consider(i, j + 1, "R")
             if can_d:
-                options.append((i + 1, j, "D"))
-            if can_x and not must_x:
-                options.append((i + 1, j + 1, "X"))
+                consider(i + 1, j, "D")
+            if can_x:
+                consider(i + 1, j + 1, "X")
 
-        best_sum = None
-        best_path = ""
-        for ni, nj, ch in options:
-            s, p = dfs(ni, nj, moves + 1)
-            total = grid[i][j] + s
-            if best_sum is None or total > best_sum:
-                best_sum = total
-                best_path = ch + p
+        if not options:
+            memo[key] = (-10**18, "")
+            return memo[key]
 
-        result = (best_sum, best_path) if best_sum is not None else (grid[i][j], "")
-        memo[key] = result
-        return result
+        best_s, best_p = max(options, key=lambda t: t[0])
+        memo[key] = (grid[i][j] + best_s, best_p)
+        return memo[key]
 
-    return dfs(0, 0, 0)
+    total, path = dfs(0, 0, 0)
+    return (total, path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
+    n = len(grid)
+    if n == 0:
         return (0, "")
 
-    n = len(grid)
     memo = {}
 
     def dfs(i, j, moves):
         key = (i, j, moves)
         if key in memo:
             return memo[key]
-
         if i == n - 1 and j == n - 1:
             memo[key] = (grid[i][j], "")
             return memo[key]
 
         must_x = ((moves + 1) % 3 == 0)
-        can_x = i + 1 < n and j + 1 < n
         can_r = j + 1 < n
         can_d = i + 1 < n
+        can_x = can_r and can_d
 
         options = []
+
+        def consider(ni, nj, ch):
+            s, p = dfs(ni, nj, moves + 1)
+            options.append((s, ch + p))
+
         if must_x and can_x:
-            options.append((i + 1, j + 1, "X"))
+            consider(i + 1, j + 1, "X")
         else:
             if can_r:
-                options.append((i, j + 1, "R"))
+                consider(i, j + 1, "R")
             if can_d:
-                options.append((i + 1, j, "D"))
-            if can_x and not must_x:
-                options.append((i + 1, j + 1, "X"))
+                consider(i + 1, j, "D")
+            if can_x:
+                consider(i + 1, j + 1, "X")
 
-        best_sum = None
-        best_path = ""
-        for ni, nj, ch in options:
-            s, p = dfs(ni, nj, moves + 1)
-            total = grid[i][j] + s
-            if best_sum is None or total > best_sum:
-                best_sum = total
-                best_path = ch + p
+        if not options:
+            memo[key] = (-10**18, "")
+            return memo[key]
 
-        result = (best_sum, best_path) if best_sum is not None else (grid[i][j], "")
-        memo[key] = result
-        return result
+        best_s, best_p = max(options, key=lambda t: t[0])
+        memo[key] = (grid[i][j] + best_s, best_p)
+        return memo[key]
 
-    return dfs(0, 0, 0)
+    total, path = dfs(0, 0, 0)
+    return (total, path)
