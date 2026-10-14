@@ -1,15 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-13 15:45:27
+Last updated: 2026-10-14 04:12:49
 
-## Updates This Week (2026-10-07 to 2026-10-13)
-
-### Anthropic
-
-**Added**
-
-- claude-haiku-5-5 (added: 2026-10-07)
+## Updates This Week (2026-10-08 to 2026-10-14)
 
 ### Gemini
 
