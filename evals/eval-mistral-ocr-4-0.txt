@@ -1,6 +1,6 @@
 Model: mistral-ocr-4-0
 Provider: mistral
-Evaluated: 2026-10-14T15:49:07.280244+00:00
+Evaluated: 2026-10-14T15:52:07.473827+00:00
 
 === TIMING ===
 Response time: 0.3s
