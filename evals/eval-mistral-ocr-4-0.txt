@@ -1,9 +1,9 @@
 Model: mistral-ocr-4-0
 Provider: mistral
-Evaluated: 2026-10-14T15:17:09.707028+00:00
+Evaluated: 2026-10-14T15:27:06.317967+00:00
 
 === TIMING ===
-Response time: 0.3s
+Response time: 0.33s
 
 === CODE EXTRACTION ===
 Method: None
