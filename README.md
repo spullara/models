@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-14 16:57:20
+Last updated: 2026-10-15 16:28:42
 
-## Updates This Week (2026-10-08 to 2026-10-14)
+## Updates This Week (2026-10-09 to 2026-10-15)
 
 ### Gemini
 
@@ -105,6 +105,12 @@ Last updated: 2026-10-14 16:57:20
 
 - muse-wonder-1.0 (added: 2026-10-12)
 
+### NVIDIA
+
+**Added**
+
+- nvidia/nemotron-3.5-super-vl (added: 2026-10-15)
+
 ## Summary
 
 Model counts shown as: **Available/Deleted**
@@ -127,7 +133,7 @@ Model counts shown as: **Available/Deleted**
 
 **Meta**: 9/1
 
-**NVIDIA**: 6/0
+**NVIDIA**: 7/0
 
 **Z.AI**: 16/0
 
@@ -975,6 +981,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- nvidia/nemotron-3.5-super-vl (added: 2026-10-15)
 - nvidia/switchyard (added: 2026-10-02)
 - nvidia/nemotron-3.5-content-safety (added: 2026-09-03)
 - nvidia/nemotron-3.5-lightning (added: 2026-08-11)
