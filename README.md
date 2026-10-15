@@ -1,9 +1,15 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-15 16:28:42
+Last updated: 2026-10-15 18:21:27
 
 ## Updates This Week (2026-10-09 to 2026-10-15)
+
+### OpenAI
+
+**Added**
+
+- gpt-6-astra-api-priv-ev3 (added: 2026-10-15)
 
 ### Gemini
 
@@ -115,7 +121,7 @@ Last updated: 2026-10-15 16:28:42
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 141/52
+**OpenAI**: 142/52
 
 **Anthropic**: 14/13
 
@@ -142,6 +148,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- gpt-6-astra-api-priv-ev3 (added: 2026-10-15)
 - gpt-6.1-sol (added: 2026-09-29)
 - gpt-6-sol (added: 2026-09-22)
 - gpt-6-luna (added: 2026-09-22)
