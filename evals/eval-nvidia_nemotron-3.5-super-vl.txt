@@ -1,0 +1,146 @@
+Model: nvidia/nemotron-3.5-super-vl
+Provider: openrouter
+Evaluated: 2026-10-15T16:28:07.332015+00:00
+
+=== TIMING ===
+Response time: 22.73s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    NEG = -10**18
+    # dp[r][c][m] = maximum sum reaching cell (r,c) after a number of moves
+    # congruent to m modulo 3 (m = 0,1,2).  m==2 means the next move is a 3rd, 6th, … move.
+    dp = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    # parent[r][c][m] = (prev_r, prev_c, prev_m, move_char) for path reconstruction
+    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    dp[0][0][0] = grid[0][0]
+
+    # (delta_row, delta_col, move_character)
+    directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+
+    # Process cells in topological order (row by row, left to right).
+    for r in range(n):
+        for c in range(n):
+            for m in range(3):
+                cur_sum = dp[r][c][m]
+                if cur_sum == NEG:
+                    continue
+
+                required_diag = (m == 2)  # the next move is 3rd, 6th, 9th, …
+
+                for dr, dc, ch in directions:
+                    nr, nc = r + dr, c + dc
+                    if nr >= n or nc >= n:
+                        continue
+
+                    if required_diag and ch != 'X':
+                        # R or D is allowed on a required diagonal move only
+                        # when the diagonal move itself is impossible.
+                        if r + 1 < n and c + 1 < n:
+                            continue  # diagonal is possible, so it is mandatory
+
+                    new_sum = cur_sum + grid[nr][nc]
+                    new_m = (m + 1) % 3
+                    if new_sum > dp[nr][nc][new_m]:
+                        dp[nr][nc][new_m] = new_sum
+                        parent[nr][nc][new_m] = (r, c, m, ch)
+
+    # Best result at bottom‑right, over all possible move counts mod 3
+    best_sum = NEG
+    best_m = 0
+    for m in range(3):
+        if dp[n - 1][n - 1][m] > best_sum:
+            best_sum = dp[n - 1][n - 1][m]
+            best_m = m
+
+    # Reconstruct the path string
+    path_chars = []
+    r, c, m = n - 1, n - 1, best_m
+    while parent[r][c][m] is not None:
+        pr, pc, pm, ch = parent[r][c][m]
+        path_chars.append(ch)
+        r, c, m = pr, pc, pm
+    path = ''.join(reversed(path_chars))
+
+    return (best_sum, path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0:
+        return (0, "")
+
+    NEG = -10**18
+    # dp[r][c][m] = maximum sum reaching cell (r,c) after a number of moves
+    # congruent to m modulo 3 (m = 0,1,2).  m==2 means the next move is a 3rd, 6th, … move.
+    dp = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    # parent[r][c][m] = (prev_r, prev_c, prev_m, move_char) for path reconstruction
+    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    dp[0][0][0] = grid[0][0]
+
+    # (delta_row, delta_col, move_character)
+    directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+
+    # Process cells in topological order (row by row, left to right).
+    for r in range(n):
+        for c in range(n):
+            for m in range(3):
+                cur_sum = dp[r][c][m]
+                if cur_sum == NEG:
+                    continue
+
+                required_diag = (m == 2)  # the next move is 3rd, 6th, 9th, …
+
+                for dr, dc, ch in directions:
+                    nr, nc = r + dr, c + dc
+                    if nr >= n or nc >= n:
+                        continue
+
+                    if required_diag and ch != 'X':
+                        # R or D is allowed on a required diagonal move only
+                        # when the diagonal move itself is impossible.
+                        if r + 1 < n and c + 1 < n:
+                            continue  # diagonal is possible, so it is mandatory
+
+                    new_sum = cur_sum + grid[nr][nc]
+                    new_m = (m + 1) % 3
+                    if new_sum > dp[nr][nc][new_m]:
+                        dp[nr][nc][new_m] = new_sum
+                        parent[nr][nc][new_m] = (r, c, m, ch)
+
+    # Best result at bottom‑right, over all possible move counts mod 3
+    best_sum = NEG
+    best_m = 0
+    for m in range(3):
+        if dp[n - 1][n - 1][m] > best_sum:
+            best_sum = dp[n - 1][n - 1][m]
+            best_m = m
+
+    # Reconstruct the path string
+    path_chars = []
+    r, c, m = n - 1, n - 1, best_m
+    while parent[r][c][m] is not None:
+        pr, pc, pm, ch = parent[r][c][m]
+        path_chars.append(ch)
+        r, c, m = pr, pc, pm
+    path = ''.join(reversed(path_chars))
+
+    return (best_sum, path)
