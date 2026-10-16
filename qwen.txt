@@ -12,6 +12,7 @@ glm-5.3-prime
 kimi-k2.7-code
 kimi-k3
 kimi/kimi-k3
+pre-mock_new_gateway_session_affinity
 qwen-audio-3.0-asr-flash
 qwen-audio-3.1-realtime-plus
 qwen-flash
