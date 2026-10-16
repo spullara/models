@@ -1,6 +1,6 @@
 Model: grok-imagine-video-1.5-lite
 Provider: grok
-Evaluated: 2026-10-01T19:23:07.906090+00:00
+Evaluated: 2026-10-16T03:35:10.536114+00:00
 
 === TIMING ===
 Response time: 0.12s
@@ -10,7 +10,7 @@ Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 404: {"code":"not-found","error":"The model grok-imagine-video-1.5-lite does not exist or your team 4e0859c1-4ce2-4198-b0c9-49b52ca20612 does not have access to it. If you believe this is a mistake, please contact support and quote your team ID and the model name."}
+API Error: HTTP 400: {"code":"invalid-argument","error":"The model grok-imagine-video-1.5-lite is a video model and is therefore not available on this endpoint. Please use a compatible endpoint such as https://api.x.ai/v1/videos/generations. For more information, see https://docs.x.ai/docs/api-reference#video-generation"}
 
 === RAW RESPONSE ===
 (no response)
