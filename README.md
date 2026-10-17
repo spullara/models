@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-16 03:35:23
+Last updated: 2026-10-17 18:52:08
 
-## Updates This Week (2026-10-10 to 2026-10-16)
+## Updates This Week (2026-10-11 to 2026-10-17)
 
 ### OpenAI
 
@@ -31,83 +31,8 @@ Last updated: 2026-10-16 03:35:23
 
 **Added**
 
+- deepseek-v4.1-flash-1017 (added: 2026-10-17)
 - pre-mock_new_gateway_session_affinity (added: 2026-10-16)
-
-**Deleted**
-
-- deepseek-v3.2 (deleted: 2026-10-10)
-- deepseek-v4-flash (deleted: 2026-10-10)
-- qvq-max (deleted: 2026-10-10)
-- qwen-coder-plus (deleted: 2026-10-10)
-- qwen-image-edit (deleted: 2026-10-10)
-- qwen-image-edit-max (deleted: 2026-10-10)
-- qwen-image-edit-max-2026-01-16 (deleted: 2026-10-10)
-- qwen-image-edit-plus (deleted: 2026-10-10)
-- qwen-image-edit-plus-2025-10-30 (deleted: 2026-10-10)
-- qwen-image-edit-plus-2025-12-15 (deleted: 2026-10-10)
-- qwen-image-max (deleted: 2026-10-10)
-- qwen-image-max-2025-12-30 (deleted: 2026-10-10)
-- qwen-image-plus (deleted: 2026-10-10)
-- qwen-image-plus-2026-01-09 (deleted: 2026-10-10)
-- qwen-mt-turbo (deleted: 2026-10-10)
-- qwen-omni-turbo (deleted: 2026-10-10)
-- qwen-plus-2025-09-11 (deleted: 2026-10-10)
-- qwen-turbo (deleted: 2026-10-10)
-- qwen-vl-max (deleted: 2026-10-10)
-- qwen-vl-plus (deleted: 2026-10-10)
-- qwen3-14b (deleted: 2026-10-10)
-- qwen3-235b-a22b (deleted: 2026-10-10)
-- qwen3-235b-a22b-instruct-2507 (deleted: 2026-10-10)
-- qwen3-235b-a22b-thinking-2507 (deleted: 2026-10-10)
-- qwen3-30b-a3b (deleted: 2026-10-10)
-- qwen3-30b-a3b-instruct-2507 (deleted: 2026-10-10)
-- qwen3-30b-a3b-thinking-2507 (deleted: 2026-10-10)
-- qwen3-32b (deleted: 2026-10-10)
-- qwen3-8b (deleted: 2026-10-10)
-- qwen3-asr-flash-2026-02-10 (deleted: 2026-10-10)
-- qwen3-asr-flash-realtime-2025-10-27 (deleted: 2026-10-10)
-- qwen3-asr-flash-realtime-2026-02-10 (deleted: 2026-10-10)
-- qwen3-coder-480b-a35b-instruct (deleted: 2026-10-10)
-- qwen3-coder-next (deleted: 2026-10-10)
-- qwen3-coder-plus (deleted: 2026-10-10)
-- qwen3-coder-plus-2025-07-22 (deleted: 2026-10-10)
-- qwen3-coder-plus-2025-09-23 (deleted: 2026-10-10)
-- qwen3-livetranslate-flash-realtime (deleted: 2026-10-10)
-- qwen3-livetranslate-flash-realtime-2025-09-22 (deleted: 2026-10-10)
-- qwen3-max (deleted: 2026-10-10)
-- qwen3-max-2025-09-23 (deleted: 2026-10-10)
-- qwen3-max-2026-01-23 (deleted: 2026-10-10)
-- qwen3-max-preview (deleted: 2026-10-10)
-- qwen3-next-80b-a3b-instruct (deleted: 2026-10-10)
-- qwen3-next-80b-a3b-thinking (deleted: 2026-10-10)
-- qwen3-omni-30b-a3b-captioner (deleted: 2026-10-10)
-- qwen3-omni-flash-2025-09-15 (deleted: 2026-10-10)
-- qwen3-omni-flash-2025-12-01 (deleted: 2026-10-10)
-- qwen3-omni-flash-realtime (deleted: 2026-10-10)
-- qwen3-omni-flash-realtime-2025-12-01 (deleted: 2026-10-10)
-- qwen3-tts-flash-2025-09-18 (deleted: 2026-10-10)
-- qwen3-tts-flash-2025-11-27 (deleted: 2026-10-10)
-- qwen3-tts-flash-realtime-2025-09-18 (deleted: 2026-10-10)
-- qwen3-tts-flash-realtime-2025-11-27 (deleted: 2026-10-10)
-- qwen3-tts-instruct-flash (deleted: 2026-10-10)
-- qwen3-tts-instruct-flash-2026-01-26 (deleted: 2026-10-10)
-- qwen3-tts-instruct-flash-realtime (deleted: 2026-10-10)
-- qwen3-tts-instruct-flash-realtime-2026-01-22 (deleted: 2026-10-10)
-- qwen3-tts-vc-2026-01-22 (deleted: 2026-10-10)
-- qwen3-tts-vc-realtime-2025-11-27 (deleted: 2026-10-10)
-- qwen3-tts-vc-realtime-2026-01-15 (deleted: 2026-10-10)
-- qwen3-tts-vd-2026-01-26 (deleted: 2026-10-10)
-- qwen3-tts-vd-realtime-2025-12-16 (deleted: 2026-10-10)
-- qwen3-tts-vd-realtime-2026-01-15 (deleted: 2026-10-10)
-- qwen3-vl-235b-a22b-instruct (deleted: 2026-10-10)
-- qwen3-vl-235b-a22b-thinking (deleted: 2026-10-10)
-- qwen3-vl-flash (deleted: 2026-10-10)
-- qwen3-vl-flash-2025-10-15 (deleted: 2026-10-10)
-- qwen3-vl-flash-2026-01-22 (deleted: 2026-10-10)
-- qwen3-vl-plus-2025-09-23 (deleted: 2026-10-10)
-- qwen3-vl-plus-2025-12-19 (deleted: 2026-10-10)
-- qwen3.6-max-preview (deleted: 2026-10-10)
-- qwq-plus (deleted: 2026-10-10)
 
 ### Meta
 
@@ -139,7 +64,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 4/14
 
-**Qwen**: 100/97
+**Qwen**: 101/97
 
 **Meta**: 9/1
 
@@ -770,6 +695,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- deepseek-v4.1-flash-1017 (added: 2026-10-17)
 - pre-mock_new_gateway_session_affinity (added: 2026-10-16)
 - qwen3.8-omni-flash-realtime (added: 2026-09-21)
 - glm-5.3-prime (added: 2026-09-21)
