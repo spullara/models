@@ -1,5 +1,4 @@
 aurora-blue-alpha
-aurora-green-alpha
 aurora-red-alpha
 babbage-002
 chat-latest
