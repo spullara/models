@@ -1,19 +1,20 @@
 Model: grok-4.3
 Provider: grok
-Evaluated: 2026-10-14T04:14:37.437425+00:00
+Evaluated: 2026-10-19T20:13:35.105585+00:00
 
 === TIMING ===
-Response time: 22.44s
+Response time: 22.89s
 
 === CODE EXTRACTION ===
 Method: markdown_python
 Syntax valid: YES
 
 === EXECUTION ===
-Returned sum: 76
-Calculated sum: 60
-Sum matches: NO
-Path valid: YES
+Returned sum: 1
+Calculated sum: 1
+Sum matches: YES
+Path valid: NO
+Path error: Path ended at (0, 0) instead of (3, 3)
 
 === RAW RESPONSE ===
 ```python
@@ -21,46 +22,49 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
     N = len(grid)
-    if N == 1:
-        return (grid[0][0], "")
-    
-    from functools import lru_cache
-    
-    @lru_cache(None)
-    def dfs(i: int, j: int, moves: int) -> tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return (grid[i][j], "")
-        
-        must_diagonal = (moves + 1) % 3 == 0
-        candidates = []
-        
-        # Possible moves: X, R, D (order prefers X when must)
-        moves_list = [(1, 1, 'X'), (0, 1, 'R'), (1, 0, 'D')]
-        if must_diagonal:
-            moves_list = [(1, 1, 'X')] + [(0, 1, 'R'), (1, 0, 'D')]
-        
-        best_sum = float('-inf')
-        best_path = ""
-        
-        for di, dj, move in moves_list:
-            ni, nj = i + di, j + dj
-            if 0 <= ni < N and 0 <= nj < N:
-                if must_diagonal and move != 'X':
-                    # Only allow if X impossible
-                    if i + 1 < N and j + 1 < N:
+    INF = float('-inf')
+    dp = [[[(INF, "") for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = (grid[0][0], "")
+    directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+    for _ in range(2 * N):
+        updated = False
+        new_dp = [[[(INF, "") for _ in range(3)] for _ in range(N)] for _ in range(N)]
+        for i in range(N):
+            for j in range(N):
+                for m in range(3):
+                    if dp[i][j][m][0] == INF:
                         continue
-                sub_sum, sub_path = dfs(ni, nj, moves + 1)
-                if sub_sum > float('-inf'):
-                    total = grid[ni][nj] + sub_sum
-                    if total > best_sum:
-                        best_sum = total
-                        best_path = move + sub_path
-        
-        return (best_sum, best_path)
-    
-    total, path = dfs(0, 0, 0)
-    max_sum = grid[0][0] + total
-    return (max_sum, path)
+                    curr_sum, curr_path = dp[i][j][m]
+                    k = len(curr_path)
+                    must_x = (k + 1) % 3 == 0
+                    cands = [(1, 1, 'X')] if must_x else directions
+                    for di, dj, move in cands:
+                        ni, nj = i + di, j + dj
+                        if 0 <= ni < N and 0 <= nj < N:
+                            nsum = curr_sum + grid[ni][nj]
+                            npath = curr_path + move
+                            nm = (m + 1) % 3
+                            if nsum > new_dp[ni][nj][nm][0]:
+                                new_dp[ni][nj][nm] = (nsum, npath)
+                                updated = True
+                    if must_x and not (i + 1 < N and j + 1 < N):
+                        for di, dj, move in [(0, 1, 'R'), (1, 0, 'D')]:
+                            ni, nj = i + di, j + dj
+                            if 0 <= ni < N and 0 <= nj < N:
+                                nsum = curr_sum + grid[ni][nj]
+                                npath = curr_path + move
+                                nm = (m + 1) % 3
+                                if nsum > new_dp[ni][nj][nm][0]:
+                                    new_dp[ni][nj][nm] = (nsum, npath)
+                                    updated = True
+        dp = new_dp
+        if not updated:
+            break
+    best = (INF, "")
+    for m in range(3):
+        if dp[N-1][N-1][m][0] > best[0]:
+            best = dp[N-1][N-1][m]
+    return best if best[0] != INF else (grid[0][0], "")
 ```
 
 === EXTRACTED CODE ===
@@ -68,43 +72,46 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
     N = len(grid)
-    if N == 1:
-        return (grid[0][0], "")
-    
-    from functools import lru_cache
-    
-    @lru_cache(None)
-    def dfs(i: int, j: int, moves: int) -> tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return (grid[i][j], "")
-        
-        must_diagonal = (moves + 1) % 3 == 0
-        candidates = []
-        
-        # Possible moves: X, R, D (order prefers X when must)
-        moves_list = [(1, 1, 'X'), (0, 1, 'R'), (1, 0, 'D')]
-        if must_diagonal:
-            moves_list = [(1, 1, 'X')] + [(0, 1, 'R'), (1, 0, 'D')]
-        
-        best_sum = float('-inf')
-        best_path = ""
-        
-        for di, dj, move in moves_list:
-            ni, nj = i + di, j + dj
-            if 0 <= ni < N and 0 <= nj < N:
-                if must_diagonal and move != 'X':
-                    # Only allow if X impossible
-                    if i + 1 < N and j + 1 < N:
+    INF = float('-inf')
+    dp = [[[(INF, "") for _ in range(3)] for _ in range(N)] for _ in range(N)]
+    dp[0][0][0] = (grid[0][0], "")
+    directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+    for _ in range(2 * N):
+        updated = False
+        new_dp = [[[(INF, "") for _ in range(3)] for _ in range(N)] for _ in range(N)]
+        for i in range(N):
+            for j in range(N):
+                for m in range(3):
+                    if dp[i][j][m][0] == INF:
                         continue
-                sub_sum, sub_path = dfs(ni, nj, moves + 1)
-                if sub_sum > float('-inf'):
-                    total = grid[ni][nj] + sub_sum
-                    if total > best_sum:
-                        best_sum = total
-                        best_path = move + sub_path
-        
-        return (best_sum, best_path)
-    
-    total, path = dfs(0, 0, 0)
-    max_sum = grid[0][0] + total
-    return (max_sum, path)
+                    curr_sum, curr_path = dp[i][j][m]
+                    k = len(curr_path)
+                    must_x = (k + 1) % 3 == 0
+                    cands = [(1, 1, 'X')] if must_x else directions
+                    for di, dj, move in cands:
+                        ni, nj = i + di, j + dj
+                        if 0 <= ni < N and 0 <= nj < N:
+                            nsum = curr_sum + grid[ni][nj]
+                            npath = curr_path + move
+                            nm = (m + 1) % 3
+                            if nsum > new_dp[ni][nj][nm][0]:
+                                new_dp[ni][nj][nm] = (nsum, npath)
+                                updated = True
+                    if must_x and not (i + 1 < N and j + 1 < N):
+                        for di, dj, move in [(0, 1, 'R'), (1, 0, 'D')]:
+                            ni, nj = i + di, j + dj
+                            if 0 <= ni < N and 0 <= nj < N:
+                                nsum = curr_sum + grid[ni][nj]
+                                npath = curr_path + move
+                                nm = (m + 1) % 3
+                                if nsum > new_dp[ni][nj][nm][0]:
+                                    new_dp[ni][nj][nm] = (nsum, npath)
+                                    updated = True
+        dp = new_dp
+        if not updated:
+            break
+    best = (INF, "")
+    for m in range(3):
+        if dp[N-1][N-1][m][0] > best[0]:
+            best = dp[N-1][N-1][m]
+    return best if best[0] != INF else (grid[0][0], "")
