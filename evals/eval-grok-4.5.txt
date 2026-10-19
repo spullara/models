@@ -1,9 +1,9 @@
 Model: grok-4.5
 Provider: grok
-Evaluated: 2026-10-14T04:14:59.908677+00:00
+Evaluated: 2026-10-19T20:13:58.028287+00:00
 
 === TIMING ===
-Response time: 35.41s
+Response time: 46.15s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -24,55 +24,66 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
 
-    from functools import lru_cache
+    max_moves = 2 * (n - 1)
+    NEG = float("-inf")
 
-    def can(i, j, m):
-        if m == "R":
-            return j + 1 < n
-        if m == "D":
-            return i + 1 < n
-        if m == "X":
-            return i + 1 < n and j + 1 < n
-        return False
+    dp = [[[NEG for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
+    parent = [[[None for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
 
-    def nxt(i, j, m):
-        if m == "R":
-            return i, j + 1
-        if m == "D":
-            return i + 1, j
-        return i + 1, j + 1
+    dp[0][0][0] = grid[0][0]
 
-    @lru_cache(maxsize=None)
-    def max_from(i, j, moves_made):
-        if i == n - 1 and j == n - 1:
-            return (0, "")
+    for m in range(max_moves):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][m] == NEG:
+                    continue
+                if i == n - 1 and j == n - 1:
+                    continue
 
-        next_move_num = moves_made + 1
-        must_diag = next_move_num % 3 == 0
+                next_move_num = m + 1
+                must_diag = next_move_num % 3 == 0
 
-        if must_diag:
-            moves_to_try = ["X"] if can(i, j, "X") else ["R", "D"]
-        else:
-            moves_to_try = ["R", "D", "X"]
+                can_x = i + 1 < n and j + 1 < n
+                can_r = j + 1 < n
+                can_d = i + 1 < n
 
-        best_sum = float("-inf")
-        best_p = ""
+                moves = []
+                if must_diag and can_x:
+                    moves = [("X", i + 1, j + 1)]
+                else:
+                    if can_r:
+                        moves.append(("R", i, j + 1))
+                    if can_d:
+                        moves.append(("D", i + 1, j))
+                    if can_x and not must_diag:
+                        moves.append(("X", i + 1, j + 1))
 
-        for m in moves_to_try:
-            if can(i, j, m):
-                ni, nj = nxt(i, j, m)
-                sub_sum, sub_path = max_from(ni, nj, next_move_num)
-                total = grid[ni][nj] + sub_sum
-                if total > best_sum:
-                    best_sum = total
-                    best_p = m + sub_path
+                for ch, ni, nj in moves:
+                    nm = m + 1
+                    new_sum = dp[i][j][m] + grid[ni][nj]
+                    if new_sum > dp[ni][nj][nm]:
+                        dp[ni][nj][nm] = new_sum
+                        parent[ni][nj][nm] = (i, j, m, ch)
 
-        return (best_sum, best_p)
+    best_sum = NEG
+    best_m = -1
+    for m in range(max_moves + 1):
+        if dp[n - 1][n - 1][m] > best_sum:
+            best_sum = dp[n - 1][n - 1][m]
+            best_m = m
 
-    add_sum, path = max_from(0, 0, 0)
-    if add_sum == float("-inf"):
+    if best_m < 0:
         return (grid[0][0], "")
-    return (grid[0][0] + add_sum, path)
+
+    path_chars = []
+    i, j, m = n - 1, n - 1, best_m
+    while m > 0:
+        pi, pj, pm, ch = parent[i][j][m]
+        path_chars.append(ch)
+        i, j, m = pi, pj, pm
+    path_chars.reverse()
+
+    return (int(best_sum), "".join(path_chars))
 ```
 
 === EXTRACTED CODE ===
@@ -83,52 +94,63 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
 
-    from functools import lru_cache
+    max_moves = 2 * (n - 1)
+    NEG = float("-inf")
 
-    def can(i, j, m):
-        if m == "R":
-            return j + 1 < n
-        if m == "D":
-            return i + 1 < n
-        if m == "X":
-            return i + 1 < n and j + 1 < n
-        return False
+    dp = [[[NEG for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
+    parent = [[[None for _ in range(max_moves + 1)] for _ in range(n)] for _ in range(n)]
 
-    def nxt(i, j, m):
-        if m == "R":
-            return i, j + 1
-        if m == "D":
-            return i + 1, j
-        return i + 1, j + 1
+    dp[0][0][0] = grid[0][0]
 
-    @lru_cache(maxsize=None)
-    def max_from(i, j, moves_made):
-        if i == n - 1 and j == n - 1:
-            return (0, "")
+    for m in range(max_moves):
+        for i in range(n):
+            for j in range(n):
+                if dp[i][j][m] == NEG:
+                    continue
+                if i == n - 1 and j == n - 1:
+                    continue
 
-        next_move_num = moves_made + 1
-        must_diag = next_move_num % 3 == 0
+                next_move_num = m + 1
+                must_diag = next_move_num % 3 == 0
 
-        if must_diag:
-            moves_to_try = ["X"] if can(i, j, "X") else ["R", "D"]
-        else:
-            moves_to_try = ["R", "D", "X"]
+                can_x = i + 1 < n and j + 1 < n
+                can_r = j + 1 < n
+                can_d = i + 1 < n
 
-        best_sum = float("-inf")
-        best_p = ""
+                moves = []
+                if must_diag and can_x:
+                    moves = [("X", i + 1, j + 1)]
+                else:
+                    if can_r:
+                        moves.append(("R", i, j + 1))
+                    if can_d:
+                        moves.append(("D", i + 1, j))
+                    if can_x and not must_diag:
+                        moves.append(("X", i + 1, j + 1))
 
-        for m in moves_to_try:
-            if can(i, j, m):
-                ni, nj = nxt(i, j, m)
-                sub_sum, sub_path = max_from(ni, nj, next_move_num)
-                total = grid[ni][nj] + sub_sum
-                if total > best_sum:
-                    best_sum = total
-                    best_p = m + sub_path
+                for ch, ni, nj in moves:
+                    nm = m + 1
+                    new_sum = dp[i][j][m] + grid[ni][nj]
+                    if new_sum > dp[ni][nj][nm]:
+                        dp[ni][nj][nm] = new_sum
+                        parent[ni][nj][nm] = (i, j, m, ch)
 
-        return (best_sum, best_p)
+    best_sum = NEG
+    best_m = -1
+    for m in range(max_moves + 1):
+        if dp[n - 1][n - 1][m] > best_sum:
+            best_sum = dp[n - 1][n - 1][m]
+            best_m = m
 
-    add_sum, path = max_from(0, 0, 0)
-    if add_sum == float("-inf"):
+    if best_m < 0:
         return (grid[0][0], "")
-    return (grid[0][0] + add_sum, path)
+
+    path_chars = []
+    i, j, m = n - 1, n - 1, best_m
+    while m > 0:
+        pi, pj, pm, ch = parent[i][j][m]
+        path_chars.append(ch)
+        i, j, m = pi, pj, pm
+    path_chars.reverse()
+
+    return (int(best_sum), "".join(path_chars))
