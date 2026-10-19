@@ -1,9 +1,9 @@
 Model: grok-4.7
 Provider: grok
-Evaluated: 2026-10-14T04:16:49.562388+00:00
+Evaluated: 2026-10-19T20:16:19.371005+00:00
 
 === TIMING ===
-Response time: 117.98s
+Response time: 115.96s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -22,64 +22,48 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    # best_sum/best_path[r][c][k]: max sum (all cells on the path, including
-    # grid[r][c]) and the move string from (r, c) to the bottom-right corner,
-    # given that k == (moves already taken) % 3.
-    # Moves numbered 3, 6, 9, ... must be diagonal when that step stays in bounds,
-    # which is exactly when k == 2 and X is in range.
-    best_sum = [[[0] * 3 for _ in range(n)] for _ in range(n)]
-    best_path = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+    best = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    best[0][0][0] = grid[0][0]
 
-    for k in range(3):
-        best_sum[n - 1][n - 1][k] = grid[n - 1][n - 1]
-        best_path[n - 1][n - 1][k] = ""
-
-    for r in range(n - 1, -1, -1):
-        for c in range(n - 1, -1, -1):
-            if r == n - 1 and c == n - 1:
-                continue
-            for k in range(3):
-                must_x = k == 2
-                can_x = r + 1 < n and c + 1 < n
-                can_r = c + 1 < n
-                can_d = r + 1 < n
-
-                if must_x and can_x:
-                    options = ("X",)
+    for dist in range(2 * n - 1):
+        for r in range(max(0, dist - (n - 1)), min(dist, n - 1) + 1):
+            c = dist - r
+            for phase in range(3):
+                cur = best[r][c][phase]
+                if cur is None or (r == n - 1 and c == n - 1):
+                    continue
+                # phase == moves_made % 3; move 3, 6, 9, ... is required when phase == 2
+                if phase == 2 and r + 1 < n and c + 1 < n:
+                    options = ((1, 1, "X"),)
+                elif phase == 2:
+                    options = ((0, 1, "R"), (1, 0, "D"))
                 else:
-                    options = []
-                    if can_r:
-                        options.append("R")
-                    if can_d:
-                        options.append("D")
-                    if can_x:
-                        options.append("X")
+                    options = ((0, 1, "R"), (1, 0, "D"), (1, 1, "X"))
+                for dr, dc, ch in options:
+                    nr, nc = r + dr, c + dc
+                    if nr >= n or nc >= n:
+                        continue
+                    nsum = cur + grid[nr][nc]
+                    nphase = (phase + 1) % 3
+                    prev = best[nr][nc][nphase]
+                    if prev is None or nsum > prev:
+                        best[nr][nc][nphase] = nsum
+                        parent[nr][nc][nphase] = (r, c, phase, ch)
 
-                chosen_sum = None
-                chosen_path = None
-                nk = (k + 1) % 3
-                for move in options:
-                    if move == "R":
-                        nr, nc = r, c + 1
-                    elif move == "D":
-                        nr, nc = r + 1, c
-                    else:
-                        nr, nc = r + 1, c + 1
-                    total = grid[r][c] + best_sum[nr][nc][nk]
-                    path = move + best_path[nr][nc][nk]
-                    # Tie-break: lexicographically smallest path among max sums.
-                    if (
-                        chosen_sum is None
-                        or total > chosen_sum
-                        or (total == chosen_sum and path < chosen_path)
-                    ):
-                        chosen_sum = total
-                        chosen_path = path
+    end_phase = max(range(3), key=lambda p: best[n - 1][n - 1][p] if best[n - 1][n - 1][p] is not None else float("-inf"))
+    total = best[n - 1][n - 1][end_phase]
+    if total is None:
+        return (grid[0][0], "")
 
-                best_sum[r][c][k] = chosen_sum
-                best_path[r][c][k] = chosen_path
-
-    return (best_sum[0][0][0], best_path[0][0][0])
+    moves = []
+    r, c, phase = n - 1, n - 1, end_phase
+    while not (r == 0 and c == 0 and phase == 0):
+        pr, pc, pphase, ch = parent[r][c][phase]
+        moves.append(ch)
+        r, c, phase = pr, pc, pphase
+    moves.reverse()
+    return (total, "".join(moves))
 ```
 
 === EXTRACTED CODE ===
@@ -88,61 +72,45 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    # best_sum/best_path[r][c][k]: max sum (all cells on the path, including
-    # grid[r][c]) and the move string from (r, c) to the bottom-right corner,
-    # given that k == (moves already taken) % 3.
-    # Moves numbered 3, 6, 9, ... must be diagonal when that step stays in bounds,
-    # which is exactly when k == 2 and X is in range.
-    best_sum = [[[0] * 3 for _ in range(n)] for _ in range(n)]
-    best_path = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+    best = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    best[0][0][0] = grid[0][0]
 
-    for k in range(3):
-        best_sum[n - 1][n - 1][k] = grid[n - 1][n - 1]
-        best_path[n - 1][n - 1][k] = ""
-
-    for r in range(n - 1, -1, -1):
-        for c in range(n - 1, -1, -1):
-            if r == n - 1 and c == n - 1:
-                continue
-            for k in range(3):
-                must_x = k == 2
-                can_x = r + 1 < n and c + 1 < n
-                can_r = c + 1 < n
-                can_d = r + 1 < n
-
-                if must_x and can_x:
-                    options = ("X",)
+    for dist in range(2 * n - 1):
+        for r in range(max(0, dist - (n - 1)), min(dist, n - 1) + 1):
+            c = dist - r
+            for phase in range(3):
+                cur = best[r][c][phase]
+                if cur is None or (r == n - 1 and c == n - 1):
+                    continue
+                # phase == moves_made % 3; move 3, 6, 9, ... is required when phase == 2
+                if phase == 2 and r + 1 < n and c + 1 < n:
+                    options = ((1, 1, "X"),)
+                elif phase == 2:
+                    options = ((0, 1, "R"), (1, 0, "D"))
                 else:
-                    options = []
-                    if can_r:
-                        options.append("R")
-                    if can_d:
-                        options.append("D")
-                    if can_x:
-                        options.append("X")
+                    options = ((0, 1, "R"), (1, 0, "D"), (1, 1, "X"))
+                for dr, dc, ch in options:
+                    nr, nc = r + dr, c + dc
+                    if nr >= n or nc >= n:
+                        continue
+                    nsum = cur + grid[nr][nc]
+                    nphase = (phase + 1) % 3
+                    prev = best[nr][nc][nphase]
+                    if prev is None or nsum > prev:
+                        best[nr][nc][nphase] = nsum
+                        parent[nr][nc][nphase] = (r, c, phase, ch)
 
-                chosen_sum = None
-                chosen_path = None
-                nk = (k + 1) % 3
-                for move in options:
-                    if move == "R":
-                        nr, nc = r, c + 1
-                    elif move == "D":
-                        nr, nc = r + 1, c
-                    else:
-                        nr, nc = r + 1, c + 1
-                    total = grid[r][c] + best_sum[nr][nc][nk]
-                    path = move + best_path[nr][nc][nk]
-                    # Tie-break: lexicographically smallest path among max sums.
-                    if (
-                        chosen_sum is None
-                        or total > chosen_sum
-                        or (total == chosen_sum and path < chosen_path)
-                    ):
-                        chosen_sum = total
-                        chosen_path = path
+    end_phase = max(range(3), key=lambda p: best[n - 1][n - 1][p] if best[n - 1][n - 1][p] is not None else float("-inf"))
+    total = best[n - 1][n - 1][end_phase]
+    if total is None:
+        return (grid[0][0], "")
 
-                best_sum[r][c][k] = chosen_sum
-                best_path[r][c][k] = chosen_path
-
-    return (best_sum[0][0][0], best_path[0][0][0])
+    moves = []
+    r, c, phase = n - 1, n - 1, end_phase
+    while not (r == 0 and c == 0 and phase == 0):
+        pr, pc, pphase, ch = parent[r][c][phase]
+        moves.append(ch)
+        r, c, phase = pr, pc, pphase
+    moves.reverse()
+    return (total, "".join(moves))
