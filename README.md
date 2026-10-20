@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-19 20:19:19
+Last updated: 2026-10-20 13:32:24
 
-## Updates This Week (2026-10-13 to 2026-10-19)
+## Updates This Week (2026-10-14 to 2026-10-20)
 
 ### OpenAI
 
@@ -14,17 +14,18 @@ Last updated: 2026-10-19 20:19:19
 - aurora-red-alpha (deleted: 2026-10-18)
 - gpt-6-astra-api-priv-ev3 (deleted: 2026-10-15)
 
-### Gemini
+### Mistral
 
 **Added**
 
-- models/gemini-4-argon (added: 2026-10-13)
-
-**Deleted**
-
-- models/veo-3.1-generate-preview (deleted: 2026-10-13)
-
-### Mistral
+- voxtral-mini-transcribe-3 (added: 2026-10-20)
+- voxtral-mini-transcribe-3-0 (added: 2026-10-20)
+- voxtral-mini-transcribe-realtime-3 (added: 2026-10-20)
+- voxtral-mini-transcribe-realtime-3-0 (added: 2026-10-20)
+- voxtral-mini-tts-3 (added: 2026-10-20)
+- voxtral-mini-tts-3-0 (added: 2026-10-20)
+- voxtral-small-transcribe-3 (added: 2026-10-20)
+- voxtral-small-transcribe-3-0 (added: 2026-10-20)
 
 **Deleted**
 
@@ -55,7 +56,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 14/21
 
-**Mistral**: 45/74
+**Mistral**: 53/74
 
 **DeepSeek**: 2/4
 
@@ -528,6 +529,14 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- voxtral-small-transcribe-3-0 (added: 2026-10-20)
+- voxtral-small-transcribe-3 (added: 2026-10-20)
+- voxtral-mini-tts-3-0 (added: 2026-10-20)
+- voxtral-mini-tts-3 (added: 2026-10-20)
+- voxtral-mini-transcribe-realtime-3-0 (added: 2026-10-20)
+- voxtral-mini-transcribe-realtime-3 (added: 2026-10-20)
+- voxtral-mini-transcribe-3-0 (added: 2026-10-20)
+- voxtral-mini-transcribe-3 (added: 2026-10-20)
 - mistral-ocr-4-1 (added: 2026-08-04)
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
