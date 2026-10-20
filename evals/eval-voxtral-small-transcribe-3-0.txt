@@ -1,9 +1,9 @@
 Model: voxtral-small-transcribe-3-0
 Provider: mistral
-Evaluated: 2026-10-20T13:32:09.352926+00:00
+Evaluated: 2026-10-20T14:52:11.055189+00:00
 
 === TIMING ===
-Response time: 0.31s
+Response time: 0.32s
 
 === CODE EXTRACTION ===
 Method: None
