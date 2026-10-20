@@ -38,12 +38,8 @@ voxtral-mini-2602
 voxtral-mini-latest
 voxtral-mini-realtime-2602
 voxtral-mini-realtime-latest
-voxtral-mini-transcribe-3
-voxtral-mini-transcribe-3-0
 voxtral-mini-transcribe-realtime-2602
 voxtral-mini-tts-2603
 voxtral-mini-tts-latest
 voxtral-small-2507
 voxtral-small-latest
-voxtral-small-transcribe-3
-voxtral-small-transcribe-3-0
