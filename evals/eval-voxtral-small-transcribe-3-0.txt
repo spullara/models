@@ -1,0 +1,19 @@
+Model: voxtral-small-transcribe-3-0
+Provider: mistral
+Evaluated: 2026-10-20T13:32:09.352926+00:00
+
+=== TIMING ===
+Response time: 0.31s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 400: {"object":"error","message":"Invalid model: voxtral-small-transcribe-3-0","type":"invalid_model","param":null,"code":"1500","raw_status_code":400}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
