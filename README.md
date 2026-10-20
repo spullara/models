@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-20 14:00:28
+Last updated: 2026-10-20 14:52:31
 
 ## Updates This Week (2026-10-14 to 2026-10-20)
 
@@ -16,16 +16,19 @@ Last updated: 2026-10-20 14:00:28
 
 ### Mistral
 
+**Added**
+
+- voxtral-mini-transcribe-3 (added: 2026-10-20)
+- voxtral-mini-transcribe-3-0 (added: 2026-10-20)
+- voxtral-mini-transcribe-realtime-3 (added: 2026-10-20)
+- voxtral-mini-transcribe-realtime-3-0 (added: 2026-10-20)
+- voxtral-mini-tts-3 (added: 2026-10-20)
+- voxtral-mini-tts-3-0 (added: 2026-10-20)
+- voxtral-small-transcribe-3 (added: 2026-10-20)
+- voxtral-small-transcribe-3-0 (added: 2026-10-20)
+
 **Deleted**
 
-- voxtral-mini-transcribe-3 (deleted: 2026-10-20)
-- voxtral-mini-transcribe-3-0 (deleted: 2026-10-20)
-- voxtral-mini-transcribe-realtime-3 (deleted: 2026-10-20)
-- voxtral-mini-transcribe-realtime-3-0 (deleted: 2026-10-20)
-- voxtral-mini-tts-3 (deleted: 2026-10-20)
-- voxtral-mini-tts-3-0 (deleted: 2026-10-20)
-- voxtral-small-transcribe-3 (deleted: 2026-10-20)
-- voxtral-small-transcribe-3-0 (deleted: 2026-10-20)
 - mistral-ocr-4-0 (deleted: 2026-10-14)
 
 ### Qwen
@@ -53,7 +56,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 14/21
 
-**Mistral**: 45/82
+**Mistral**: 53/74
 
 **DeepSeek**: 2/4
 
@@ -526,6 +529,14 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- voxtral-small-transcribe-3-0 (added: 2026-10-20)
+- voxtral-small-transcribe-3 (added: 2026-10-20)
+- voxtral-mini-tts-3-0 (added: 2026-10-20)
+- voxtral-mini-tts-3 (added: 2026-10-20)
+- voxtral-mini-transcribe-realtime-3-0 (added: 2026-10-20)
+- voxtral-mini-transcribe-realtime-3 (added: 2026-10-20)
+- voxtral-mini-transcribe-3-0 (added: 2026-10-20)
+- voxtral-mini-transcribe-3 (added: 2026-10-20)
 - mistral-ocr-4-1 (added: 2026-08-04)
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
@@ -574,14 +585,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- voxtral-small-transcribe-3-0 (deleted: 2026-10-20)
-- voxtral-small-transcribe-3 (deleted: 2026-10-20)
-- voxtral-mini-tts-3-0 (deleted: 2026-10-20)
-- voxtral-mini-tts-3 (deleted: 2026-10-20)
-- voxtral-mini-transcribe-realtime-3-0 (deleted: 2026-10-20)
-- voxtral-mini-transcribe-realtime-3 (deleted: 2026-10-20)
-- voxtral-mini-transcribe-3-0 (deleted: 2026-10-20)
-- voxtral-mini-transcribe-3 (deleted: 2026-10-20)
 - mistral-ocr-4-0 (deleted: 2026-10-14)
 - mistral-large-4-0 (deleted: 2026-10-06)
 - mistral-large-4 (deleted: 2026-10-06)
