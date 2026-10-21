@@ -95,6 +95,7 @@ qwen3.8-omni-flash-realtime
 qwq-plus-2025-03-05
 text-embedding-v3
 text-embedding-v4
+tongyi-skynet-llm-fd
 tongyi-tingwu-slp
 wan2.7-image
 wan2.7-image-pro
