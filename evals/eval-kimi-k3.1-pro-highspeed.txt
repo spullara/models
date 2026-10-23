@@ -1,0 +1,160 @@
+Model: kimi-k3.1-pro-highspeed
+Provider: kimi
+Evaluated: 2026-10-23T16:28:28.540639+00:00
+
+=== TIMING ===
+Response time: 137.06s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return (0, "")
+
+    n = len(grid)
+
+    # dp[r][c][k] is the maximum sum upon reaching (r, c), where k is
+    # the number of moves made modulo 3. k == 2 means the next move
+    # must be diagonal when possible.
+    dp = [[[None for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    parent = {}
+    dp[0][0][0] = grid[0][0]
+
+    # Row-major order is topological: every predecessor of a cell is
+    # processed before the cell itself.
+    for r in range(n):
+        for c in range(n):
+            for k in range(3):
+                current_sum = dp[r][c][k]
+                if current_sum is None:
+                    continue
+
+                diagonal_possible = r + 1 < n and c + 1 < n
+
+                if k == 2:
+                    if diagonal_possible:
+                        options = ((1, 1, "X"),)
+                    else:
+                        options = ((0, 1, "R"), (1, 0, "D"))
+                else:
+                    options = (
+                        (0, 1, "R"),
+                        (1, 0, "D"),
+                        (1, 1, "X"),
+                    )
+
+                next_k = (k + 1) % 3
+
+                for dr, dc, move in options:
+                    nr, nc = r + dr, c + dc
+                    if nr >= n or nc >= n:
+                        continue
+
+                    candidate = current_sum + grid[nr][nc]
+                    previous_best = dp[nr][nc][next_k]
+
+                    if previous_best is None or candidate > previous_best:
+                        dp[nr][nc][next_k] = candidate
+                        parent[(nr, nc, next_k)] = ((r, c, k), move)
+
+    best_sum = None
+    best_k = 0
+    for k in range(3):
+        value = dp[n - 1][n - 1][k]
+        if value is not None and (best_sum is None or value > best_sum):
+            best_sum = value
+            best_k = k
+
+    # Reconstruct the optimal path by following parent pointers.
+    state = (n - 1, n - 1, best_k)
+    path = []
+
+    while state != (0, 0, 0):
+        previous_state, move = parent[state]
+        path.append(move)
+        state = previous_state
+
+    path.reverse()
+    return (best_sum, "".join(path))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid:
+        return (0, "")
+
+    n = len(grid)
+
+    # dp[r][c][k] is the maximum sum upon reaching (r, c), where k is
+    # the number of moves made modulo 3. k == 2 means the next move
+    # must be diagonal when possible.
+    dp = [[[None for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    parent = {}
+    dp[0][0][0] = grid[0][0]
+
+    # Row-major order is topological: every predecessor of a cell is
+    # processed before the cell itself.
+    for r in range(n):
+        for c in range(n):
+            for k in range(3):
+                current_sum = dp[r][c][k]
+                if current_sum is None:
+                    continue
+
+                diagonal_possible = r + 1 < n and c + 1 < n
+
+                if k == 2:
+                    if diagonal_possible:
+                        options = ((1, 1, "X"),)
+                    else:
+                        options = ((0, 1, "R"), (1, 0, "D"))
+                else:
+                    options = (
+                        (0, 1, "R"),
+                        (1, 0, "D"),
+                        (1, 1, "X"),
+                    )
+
+                next_k = (k + 1) % 3
+
+                for dr, dc, move in options:
+                    nr, nc = r + dr, c + dc
+                    if nr >= n or nc >= n:
+                        continue
+
+                    candidate = current_sum + grid[nr][nc]
+                    previous_best = dp[nr][nc][next_k]
+
+                    if previous_best is None or candidate > previous_best:
+                        dp[nr][nc][next_k] = candidate
+                        parent[(nr, nc, next_k)] = ((r, c, k), move)
+
+    best_sum = None
+    best_k = 0
+    for k in range(3):
+        value = dp[n - 1][n - 1][k]
+        if value is not None and (best_sum is None or value > best_sum):
+            best_sum = value
+            best_k = k
+
+    # Reconstruct the optimal path by following parent pointers.
+    state = (n - 1, n - 1, best_k)
+    path = []
+
+    while state != (0, 0, 0):
+        previous_state, move = parent[state]
+        path.append(move)
+        state = previous_state
+
+    path.reverse()
+    return (best_sum, "".join(path))
