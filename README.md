@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-21 03:19:24
+Last updated: 2026-10-23 16:26:19
 
-## Updates This Week (2026-10-15 to 2026-10-21)
+## Updates This Week (2026-10-17 to 2026-10-23)
 
 ### OpenAI
 
@@ -12,7 +12,6 @@ Last updated: 2026-10-21 03:19:24
 - aurora-blue-alpha (deleted: 2026-10-18)
 - aurora-green-alpha (deleted: 2026-10-18)
 - aurora-red-alpha (deleted: 2026-10-18)
-- gpt-6-astra-api-priv-ev3 (deleted: 2026-10-15)
 
 ### Mistral
 
@@ -27,19 +26,19 @@ Last updated: 2026-10-21 03:19:24
 - voxtral-small-transcribe-3 (added: 2026-10-20)
 - voxtral-small-transcribe-3-0 (added: 2026-10-20)
 
+### Kimi
+
+**Added**
+
+- kimi-k3.1-pro (added: 2026-10-23)
+- kimi-k3.1-pro-highspeed (added: 2026-10-23)
+
 ### Qwen
 
 **Added**
 
 - tongyi-skynet-llm-fd (added: 2026-10-21)
 - deepseek-v4.1-flash-1017 (added: 2026-10-17)
-- pre-mock_new_gateway_session_affinity (added: 2026-10-16)
-
-### NVIDIA
-
-**Added**
-
-- nvidia/nemotron-3.5-super-vl (added: 2026-10-15)
 
 ## Summary
 
@@ -57,7 +56,7 @@ Model counts shown as: **Available/Deleted**
 
 **DeepSeek**: 2/4
 
-**Kimi**: 4/14
+**Kimi**: 6/14
 
 **Qwen**: 102/97
 
@@ -675,6 +674,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- kimi-k3.1-pro-highspeed (added: 2026-10-23)
+- kimi-k3.1-pro (added: 2026-10-23)
 - kimi-k3 (added: 2026-07-16)
 - kimi-k2.7-code-highspeed (added: 2026-06-15)
 - kimi-k2.7-code (added: 2026-06-12)
