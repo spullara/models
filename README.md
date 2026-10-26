@@ -1,17 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-23 16:30:56
+Last updated: 2026-10-26 06:15:20
 
-## Updates This Week (2026-10-17 to 2026-10-23)
-
-### OpenAI
-
-**Deleted**
-
-- aurora-blue-alpha (deleted: 2026-10-18)
-- aurora-green-alpha (deleted: 2026-10-18)
-- aurora-red-alpha (deleted: 2026-10-18)
+## Updates This Week (2026-10-20 to 2026-10-26)
 
 ### Mistral
 
@@ -35,10 +27,9 @@ Last updated: 2026-10-23 16:30:56
 
 ### Qwen
 
-**Added**
+**Deleted**
 
-- tongyi-skynet-llm-fd (added: 2026-10-21)
-- deepseek-v4.1-flash-1017 (added: 2026-10-17)
+- tongyi-skynet-llm-fd (deleted: 2026-10-26)
 
 ## Summary
 
@@ -58,7 +49,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 6/14
 
-**Qwen**: 102/97
+**Qwen**: 101/98
 
 **Meta**: 9/1
 
@@ -702,7 +693,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- tongyi-skynet-llm-fd (added: 2026-10-21)
 - deepseek-v4.1-flash-1017 (added: 2026-10-17)
 - pre-mock_new_gateway_session_affinity (added: 2026-10-16)
 - qwen3.8-omni-flash-realtime (added: 2026-09-21)
@@ -807,6 +797,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- tongyi-skynet-llm-fd (deleted: 2026-10-26)
 - qwq-plus (deleted: 2026-10-10)
 - qwen3.6-max-preview (deleted: 2026-10-10)
 - qwen3-vl-plus-2025-12-19 (deleted: 2026-10-10)
