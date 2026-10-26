@@ -1,9 +1,9 @@
 Model: grok-build-0.1
 Provider: grok
-Evaluated: 2026-10-19T20:18:15.363435+00:00
+Evaluated: 2026-10-26T18:56:59.937095+00:00
 
 === TIMING ===
-Response time: 18.41s
+Response time: 59.91s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -19,114 +19,92 @@ Path valid: YES
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return (0, "")
+        return 0, ""
     n = len(grid)
-    MAX_M = 2 * n
+    if n == 1:
+        return grid[0][0], ""
     INF = float('-inf')
-    max_sum = [[[INF] * MAX_M for _ in range(n)] for _ in range(n)]
-    path_str = [[[''] * MAX_M for _ in range(n)] for _ in range(n)]
+    max_sum = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
+    best_path = [[[''] * 3 for _ in range(n)] for _ in range(n)]
     max_sum[0][0][0] = grid[0][0]
-    path_str[0][0][0] = ""
-    for m in range(MAX_M - 1):
-        for i in range(n):
-            for j in range(n):
-                if max_sum[i][j][m] == INF:
-                    continue
-                next_move = m + 1
-                is_third = (next_move % 3 == 0)
-                candidates = []
-                if is_third:
-                    if i < n - 1 and j < n - 1:
-                        candidates = ['X']
-                    else:
-                        if j < n - 1:
-                            candidates.append('R')
-                        if i < n - 1:
-                            candidates.append('D')
-                else:
-                    if j < n - 1:
-                        candidates.append('R')
-                    if i < n - 1:
-                        candidates.append('D')
-                    if i < n - 1 and j < n - 1:
-                        candidates.append('X')
-                for move in candidates:
-                    if move == 'R':
-                        ni, nj = i, j + 1
-                    elif move == 'D':
-                        ni, nj = i + 1, j
-                    else:
-                        ni, nj = i + 1, j + 1
-                    if ni >= n or nj >= n:
+    best_path[0][0][0] = ""
+    moves = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            for m in range(3):
+                for delta_i, delta_j, c in moves:
+                    prev_i = i - delta_i
+                    prev_j = j - delta_j
+                    if prev_i < 0 or prev_j < 0:
                         continue
-                    new_s = max_sum[i][j][m] + grid[ni][nj]
-                    if new_s > max_sum[ni][nj][m + 1]:
-                        max_sum[ni][nj][m + 1] = new_s
-                        path_str[ni][nj][m + 1] = path_str[i][j][m] + move
-    best_sum = INF
-    best_path = ""
-    for m in range(MAX_M):
-        if max_sum[n - 1][n - 1][m] > best_sum:
-            best_sum = max_sum[n - 1][n - 1][m]
-            best_path = path_str[n - 1][n - 1][m]
-    if best_sum == INF:
-        return (0, "")
-    return (best_sum, best_path)
+                    prev_m = (m - 1) % 3
+                    if max_sum[prev_i][prev_j][prev_m] == INF:
+                        continue
+                    is_must = ((prev_m + 1) % 3 == 0)
+                    diag_possible = (prev_i + 1 < n and prev_j + 1 < n)
+                    if is_must and diag_possible and c != 'X':
+                        continue
+                    if c == 'X' and not diag_possible:
+                        continue
+                    candidate = max_sum[prev_i][prev_j][prev_m] + grid[i][j]
+                    if candidate > max_sum[i][j][m]:
+                        max_sum[i][j][m] = candidate
+                        best_path[i][j][m] = best_path[prev_i][prev_j][prev_m] + c
+    max_total = INF
+    best_p = ""
+    for m in range(3):
+        if max_sum[n-1][n-1][m] > max_total:
+            max_total = max_sum[n-1][n-1][m]
+            best_p = best_path[n-1][n-1][m]
+    if max_total == INF:
+        return 0, ""
+    return max_total, best_p
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return (0, "")
+        return 0, ""
     n = len(grid)
-    MAX_M = 2 * n
+    if n == 1:
+        return grid[0][0], ""
     INF = float('-inf')
-    max_sum = [[[INF] * MAX_M for _ in range(n)] for _ in range(n)]
-    path_str = [[[''] * MAX_M for _ in range(n)] for _ in range(n)]
+    max_sum = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
+    best_path = [[[''] * 3 for _ in range(n)] for _ in range(n)]
     max_sum[0][0][0] = grid[0][0]
-    path_str[0][0][0] = ""
-    for m in range(MAX_M - 1):
-        for i in range(n):
-            for j in range(n):
-                if max_sum[i][j][m] == INF:
-                    continue
-                next_move = m + 1
-                is_third = (next_move % 3 == 0)
-                candidates = []
-                if is_third:
-                    if i < n - 1 and j < n - 1:
-                        candidates = ['X']
-                    else:
-                        if j < n - 1:
-                            candidates.append('R')
-                        if i < n - 1:
-                            candidates.append('D')
-                else:
-                    if j < n - 1:
-                        candidates.append('R')
-                    if i < n - 1:
-                        candidates.append('D')
-                    if i < n - 1 and j < n - 1:
-                        candidates.append('X')
-                for move in candidates:
-                    if move == 'R':
-                        ni, nj = i, j + 1
-                    elif move == 'D':
-                        ni, nj = i + 1, j
-                    else:
-                        ni, nj = i + 1, j + 1
-                    if ni >= n or nj >= n:
+    best_path[0][0][0] = ""
+    moves = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+    for i in range(n):
+        for j in range(n):
+            if i == 0 and j == 0:
+                continue
+            for m in range(3):
+                for delta_i, delta_j, c in moves:
+                    prev_i = i - delta_i
+                    prev_j = j - delta_j
+                    if prev_i < 0 or prev_j < 0:
                         continue
-                    new_s = max_sum[i][j][m] + grid[ni][nj]
-                    if new_s > max_sum[ni][nj][m + 1]:
-                        max_sum[ni][nj][m + 1] = new_s
-                        path_str[ni][nj][m + 1] = path_str[i][j][m] + move
-    best_sum = INF
-    best_path = ""
-    for m in range(MAX_M):
-        if max_sum[n - 1][n - 1][m] > best_sum:
-            best_sum = max_sum[n - 1][n - 1][m]
-            best_path = path_str[n - 1][n - 1][m]
-    if best_sum == INF:
-        return (0, "")
-    return (best_sum, best_path)
+                    prev_m = (m - 1) % 3
+                    if max_sum[prev_i][prev_j][prev_m] == INF:
+                        continue
+                    is_must = ((prev_m + 1) % 3 == 0)
+                    diag_possible = (prev_i + 1 < n and prev_j + 1 < n)
+                    if is_must and diag_possible and c != 'X':
+                        continue
+                    if c == 'X' and not diag_possible:
+                        continue
+                    candidate = max_sum[prev_i][prev_j][prev_m] + grid[i][j]
+                    if candidate > max_sum[i][j][m]:
+                        max_sum[i][j][m] = candidate
+                        best_path[i][j][m] = best_path[prev_i][prev_j][prev_m] + c
+    max_total = INF
+    best_p = ""
+    for m in range(3):
+        if max_sum[n-1][n-1][m] > max_total:
+            max_total = max_sum[n-1][n-1][m]
+            best_p = best_path[n-1][n-1][m]
+    if max_total == INF:
+        return 0, ""
+    return max_total, best_p
