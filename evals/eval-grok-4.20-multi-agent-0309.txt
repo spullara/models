@@ -1,9 +1,9 @@
 Model: grok-4.20-multi-agent-0309
 Provider: grok
-Evaluated: 2026-10-19T20:11:43.628534+00:00
+Evaluated: 2026-10-26T18:51:34.948481+00:00
 
 === TIMING ===
-Response time: 111.45s
+Response time: 86.6s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -19,80 +19,104 @@ Path valid: YES
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return (0, "")
+        return 0, ""
     N = len(grid)
     memo = {}
-    def dfs(r: int, c: int, moves: int) -> tuple[int, str]:
-        if r == N - 1 and c == N - 1:
-            return (grid[r][c], "")
-        key = (r, c, moves)
+    def dfs(i: int, j: int, moves: int) -> tuple[int, str]:
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        key = (i, j, moves)
         if key in memo:
             return memo[key]
-        is_must_x = ((moves + 1) % 3 == 0)
-        if is_must_x:
-            if r + 1 < N and c + 1 < N:
-                options = [('X', 1, 1)]
+        is_forced = ((moves + 1) % 3 == 0)
+        possible = []
+        can_diag = (i + 1 < N) and (j + 1 < N)
+        can_right = j + 1 < N
+        can_down = i + 1 < N
+        if is_forced:
+            if can_diag:
+                possible.append((i + 1, j + 1, 'X'))
             else:
-                options = [('R', 0, 1), ('D', 1, 0)]
+                if can_right:
+                    possible.append((i, j + 1, 'R'))
+                if can_down:
+                    possible.append((i + 1, j, 'D'))
         else:
-            options = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
-        candidates = []
-        for m, dr, dc in options:
-            nr = r + dr
-            nc = c + dc
-            if nr < N and nc < N:
-                next_total, next_path = dfs(nr, nc, moves + 1)
-                if next_total != float('-inf'):
-                    total = grid[r][c] + next_total
-                    candidates.append((total, m + next_path))
-        if not candidates:
-            best = (float('-inf'), "")
+            if can_right:
+                possible.append((i, j + 1, 'R'))
+            if can_down:
+                possible.append((i + 1, j, 'D'))
+            if can_diag:
+                possible.append((i + 1, j + 1, 'X'))
+        max_s = float('-inf')
+        best_p = ""
+        for ni, nj, ch in possible:
+            sub_s, sub_p = dfs(ni, nj, moves + 1)
+            if sub_s != float('-inf'):
+                curr_s = grid[i][j] + sub_s
+                if curr_s > max_s:
+                    max_s = curr_s
+                    best_p = ch + sub_p
+        if max_s == float('-inf'):
+            result = (float('-inf'), "")
         else:
-            best = max(candidates, key=lambda x: x[0])
-        memo[key] = best
-        return best
-    result = dfs(0, 0, 0)
-    if result[0] == float('-inf'):
-        return (0, "")
-    return result
+            result = (max_s, best_p)
+        memo[key] = result
+        return result
+    total, path = dfs(0, 0, 0)
+    if total == float('-inf'):
+        return 0, ""
+    return (total, path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
-        return (0, "")
+        return 0, ""
     N = len(grid)
     memo = {}
-    def dfs(r: int, c: int, moves: int) -> tuple[int, str]:
-        if r == N - 1 and c == N - 1:
-            return (grid[r][c], "")
-        key = (r, c, moves)
+    def dfs(i: int, j: int, moves: int) -> tuple[int, str]:
+        if i == N - 1 and j == N - 1:
+            return grid[i][j], ""
+        key = (i, j, moves)
         if key in memo:
             return memo[key]
-        is_must_x = ((moves + 1) % 3 == 0)
-        if is_must_x:
-            if r + 1 < N and c + 1 < N:
-                options = [('X', 1, 1)]
+        is_forced = ((moves + 1) % 3 == 0)
+        possible = []
+        can_diag = (i + 1 < N) and (j + 1 < N)
+        can_right = j + 1 < N
+        can_down = i + 1 < N
+        if is_forced:
+            if can_diag:
+                possible.append((i + 1, j + 1, 'X'))
             else:
-                options = [('R', 0, 1), ('D', 1, 0)]
+                if can_right:
+                    possible.append((i, j + 1, 'R'))
+                if can_down:
+                    possible.append((i + 1, j, 'D'))
         else:
-            options = [('R', 0, 1), ('D', 1, 0), ('X', 1, 1)]
-        candidates = []
-        for m, dr, dc in options:
-            nr = r + dr
-            nc = c + dc
-            if nr < N and nc < N:
-                next_total, next_path = dfs(nr, nc, moves + 1)
-                if next_total != float('-inf'):
-                    total = grid[r][c] + next_total
-                    candidates.append((total, m + next_path))
-        if not candidates:
-            best = (float('-inf'), "")
+            if can_right:
+                possible.append((i, j + 1, 'R'))
+            if can_down:
+                possible.append((i + 1, j, 'D'))
+            if can_diag:
+                possible.append((i + 1, j + 1, 'X'))
+        max_s = float('-inf')
+        best_p = ""
+        for ni, nj, ch in possible:
+            sub_s, sub_p = dfs(ni, nj, moves + 1)
+            if sub_s != float('-inf'):
+                curr_s = grid[i][j] + sub_s
+                if curr_s > max_s:
+                    max_s = curr_s
+                    best_p = ch + sub_p
+        if max_s == float('-inf'):
+            result = (float('-inf'), "")
         else:
-            best = max(candidates, key=lambda x: x[0])
-        memo[key] = best
-        return best
-    result = dfs(0, 0, 0)
-    if result[0] == float('-inf'):
-        return (0, "")
-    return result
+            result = (max_s, best_p)
+        memo[key] = result
+        return result
+    total, path = dfs(0, 0, 0)
+    if total == float('-inf'):
+        return 0, ""
+    return (total, path)
