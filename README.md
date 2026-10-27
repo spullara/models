@@ -1,28 +1,15 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-26 19:32:20
+Last updated: 2026-10-27 12:12:21
 
-## Updates This Week (2026-10-20 to 2026-10-26)
+## Updates This Week (2026-10-21 to 2026-10-27)
 
 ### OpenAI
 
 **Added**
 
 - gpt-6.1-terra (added: 2026-10-26)
-
-### Mistral
-
-**Added**
-
-- voxtral-mini-transcribe-3 (added: 2026-10-20)
-- voxtral-mini-transcribe-3-0 (added: 2026-10-20)
-- voxtral-mini-transcribe-realtime-3 (added: 2026-10-20)
-- voxtral-mini-transcribe-realtime-3-0 (added: 2026-10-20)
-- voxtral-mini-tts-3 (added: 2026-10-20)
-- voxtral-mini-tts-3-0 (added: 2026-10-20)
-- voxtral-small-transcribe-3 (added: 2026-10-20)
-- voxtral-small-transcribe-3-0 (added: 2026-10-20)
 
 ### Kimi
 
@@ -32,6 +19,10 @@ Last updated: 2026-10-26 19:32:20
 - kimi-k3.1-pro-highspeed (added: 2026-10-23)
 
 ### Qwen
+
+**Added**
+
+- qwen-audio-3.1-realtime-flash (added: 2026-10-27)
 
 **Deleted**
 
@@ -55,7 +46,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 6/14
 
-**Qwen**: 101/98
+**Qwen**: 102/98
 
 **Meta**: 9/1
 
@@ -700,6 +691,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- qwen-audio-3.1-realtime-flash (added: 2026-10-27)
 - deepseek-v4.1-flash-1017 (added: 2026-10-17)
 - pre-mock_new_gateway_session_affinity (added: 2026-10-16)
 - qwen3.8-omni-flash-realtime (added: 2026-09-21)
