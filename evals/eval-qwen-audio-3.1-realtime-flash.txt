@@ -1,0 +1,19 @@
+Model: qwen-audio-3.1-realtime-flash
+Provider: qwen
+Evaluated: 2026-10-27T12:12:07.989296+00:00
+
+=== TIMING ===
+Response time: 0.87s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access denied","type":"access_denied","param":null,"code":"access_denied"},"request_id":"bd6e5bbb-1945-9aaa-91e2-de9366b4534a"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
