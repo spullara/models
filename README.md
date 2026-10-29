@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-29 14:54:08
+Last updated: 2026-10-29 15:35:28
 
 ## Updates This Week (2026-10-23 to 2026-10-29)
 
@@ -13,15 +13,10 @@ Last updated: 2026-10-29 14:54:08
 
 ### Mistral
 
-**Added**
-
-- mistral-large-4-0-8 (added: 2026-10-29)
-- mistral-large-4-0-8-fp4 (added: 2026-10-29)
-
 **Deleted**
 
-- mistral-large-4 (deleted: 2026-10-29)
-- mistral-large-4-0 (deleted: 2026-10-29)
+- mistral-large-4-0-8 (deleted: 2026-10-29)
+- mistral-large-4-0-8-fp4 (deleted: 2026-10-29)
 
 ### Kimi
 
@@ -526,8 +521,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- mistral-large-4-0-8-fp4 (added: 2026-10-29)
-- mistral-large-4-0-8 (added: 2026-10-29)
 - voxtral-small-transcribe-3-0 (added: 2026-10-20)
 - voxtral-small-transcribe-3 (added: 2026-10-20)
 - voxtral-mini-tts-3-0 (added: 2026-10-20)
@@ -536,6 +529,8 @@ Model counts shown as: **Available/Deleted**
 - voxtral-mini-transcribe-realtime-3 (added: 2026-10-20)
 - voxtral-mini-transcribe-3-0 (added: 2026-10-20)
 - voxtral-mini-transcribe-3 (added: 2026-10-20)
+- mistral-large-4-0 (added: 2026-10-06)
+- mistral-large-4 (added: 2026-10-06)
 - mistral-ocr-4-1 (added: 2026-08-04)
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
@@ -584,8 +579,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- mistral-large-4-0 (deleted: 2026-10-29)
-- mistral-large-4 (deleted: 2026-10-29)
+- mistral-large-4-0-8-fp4 (deleted: 2026-10-29)
+- mistral-large-4-0-8 (deleted: 2026-10-29)
 - mistral-ocr-4-0 (deleted: 2026-10-14)
 - mistral-large-latest (deleted: 2026-09-03)
 - mistral-large-2512 (deleted: 2026-09-03)
