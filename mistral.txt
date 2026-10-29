@@ -16,6 +16,8 @@ mistral-code-fim-latest
 mistral-code-latest
 mistral-embed
 mistral-embed-2312
+mistral-large-4
+mistral-large-4-0
 mistral-medium
 mistral-medium-2604
 mistral-medium-3
