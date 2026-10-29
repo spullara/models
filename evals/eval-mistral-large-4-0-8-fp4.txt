@@ -1,0 +1,19 @@
+Model: mistral-large-4-0-8-fp4
+Provider: mistral
+Evaluated: 2026-10-29T14:53:50.907473+00:00
+
+=== TIMING ===
+Response time: 0.34s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 429: {"object":"error","message":"Rate limit exceeded","type":"rate_limited","param":null,"code":"1300","raw_status_code":429}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
