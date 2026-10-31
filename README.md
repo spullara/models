@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-10-29 15:44:24
+Last updated: 2026-10-31 08:33:37
 
-## Updates This Week (2026-10-23 to 2026-10-29)
+## Updates This Week (2026-10-25 to 2026-10-31)
 
 ### OpenAI
 
@@ -18,17 +18,22 @@ Last updated: 2026-10-29 15:44:24
 - mistral-large-4-0-8 (deleted: 2026-10-29)
 - mistral-large-4-0-8-fp4 (deleted: 2026-10-29)
 
-### Kimi
-
-**Added**
-
-- kimi-k3.1-pro (added: 2026-10-23)
-- kimi-k3.1-pro-highspeed (added: 2026-10-23)
-
 ### Qwen
 
 **Added**
 
+- pre-mock_ptu_auth_v2_base (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_cross_site_denied (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_deprecating_old (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_force_allowed (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_force_denied (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_green_always (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_postpay_allowed (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_quota_available (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_quota_exhausted (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_quota_only_free (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_unassociated (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_workspace_disabled (added: 2026-10-31)
 - qwen-audio-3.1-realtime-flash (added: 2026-10-27)
 
 **Deleted**
@@ -53,7 +58,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 6/14
 
-**Qwen**: 102/98
+**Qwen**: 114/98
 
 **Meta**: 9/1
 
@@ -700,6 +705,18 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- pre-mock_ptu_auth_v2_workspace_disabled (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_unassociated (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_quota_only_free (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_quota_exhausted (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_quota_available (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_postpay_allowed (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_green_always (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_force_denied (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_force_allowed (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_deprecating_old (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_cross_site_denied (added: 2026-10-31)
+- pre-mock_ptu_auth_v2_base (added: 2026-10-31)
 - qwen-audio-3.1-realtime-flash (added: 2026-10-27)
 - deepseek-v4.1-flash-1017 (added: 2026-10-17)
 - pre-mock_new_gateway_session_affinity (added: 2026-10-16)
