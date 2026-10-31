@@ -1,0 +1,19 @@
+Model: pre-mock_ptu_auth_v2_base
+Provider: qwen
+Evaluated: 2026-10-31T08:33:07.455338+00:00
+
+=== TIMING ===
+Response time: 0.9s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access to model denied. Please make sure you are eligible for using the model.","type":"AccessDenied.Unpurchased","param":null,"code":"AccessDenied.Unpurchased"},"request_id":"4a556274-dd22-99b9-a8e7-7dbaeea8c47a"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)

@@ -1,0 +1,19 @@
+Model: pre-mock_ptu_auth_v2_quota_available
+Provider: qwen
+Evaluated: 2026-10-31T08:33:13.659048+00:00
+
+=== TIMING ===
+Response time: 0.89s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Free allocated quota exceeded.","type":"insufficient_quota","param":null,"code":"insufficient_quota"},"request_id":"94330f54-ea12-9935-9320-a44c479b9490"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
