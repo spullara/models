@@ -1,0 +1,19 @@
+Model: z-ai/glm-5.3-flashx-legal
+Provider: openrouter
+Evaluated: 2026-11-02T13:45:07.523326+00:00
+
+=== TIMING ===
+Response time: 0.17s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 402: {"error":{"message":"This request requires more credits, or fewer max_tokens. You requested up to 32768 tokens, but can only afford 17167. To increase, visit https://openrouter.ai/settings/credits and add more credits","code":402,"metadata":{"limit_source":"openrouter_credits","remedy_hint":"Add credits at https://openrouter.ai/settings/credits, or lower max_tokens / prompt size to fit your remaining balance.","provider_name":null}},"user_id":"user_30pzA1kgD0MJLxIyrSWXOSz3nvl"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
