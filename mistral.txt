@@ -4,6 +4,7 @@ codestral-embed-2505
 codestral-latest
 labs-leanstral-1-5
 labs-leanstral-1-5-1
+magistral-medium-latest
 magistral-small-latest
 ministral-14b-2512
 ministral-14b-latest
@@ -15,6 +16,14 @@ mistral-code-fim-latest
 mistral-code-latest
 mistral-embed
 mistral-embed-2312
+mistral-large-4
+mistral-large-4-0
+mistral-medium
+mistral-medium-2604
+mistral-medium-3
+mistral-medium-3-5
+mistral-medium-3.5
+mistral-medium-latest
 mistral-moderation-2603
 mistral-ocr-2512
 mistral-ocr-3
@@ -25,6 +34,8 @@ mistral-ocr-latest
 mistral-small-2603
 mistral-small-latest
 mistral-vibe-cli-fast
+mistral-vibe-cli-latest
+mistral-vibe-cli-with-tools
 voxtral-mini-2602
 voxtral-mini-latest
 voxtral-mini-realtime-2602
