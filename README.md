@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-02 00:24:30
+Last updated: 2026-11-02 13:45:31
 
 ## Updates This Week (2026-10-27 to 2026-11-02)
 
@@ -30,6 +30,12 @@ Last updated: 2026-11-02 00:24:30
 - pre-mock_ptu_auth_v2_workspace_disabled (added: 2026-10-31)
 - qwen-audio-3.1-realtime-flash (added: 2026-10-27)
 
+### Z.AI
+
+**Added**
+
+- z-ai/glm-5.3-flashx-legal (added: 2026-11-02)
+
 ## Summary
 
 Model counts shown as: **Available/Deleted**
@@ -54,7 +60,7 @@ Model counts shown as: **Available/Deleted**
 
 **NVIDIA**: 7/0
 
-**Z.AI**: 16/0
+**Z.AI**: 17/0
 
 
 ## OpenAI
@@ -945,6 +951,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- z-ai/glm-5.3-flashx-legal (added: 2026-11-02)
 - z-ai/glm-5.3-prime (added: 2026-09-23)
 - z-ai/glm-5.3-flashx (added: 2026-09-18)
 - z-ai/glm-5.3-flash (added: 2026-08-26)
