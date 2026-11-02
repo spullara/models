@@ -1,90 +1,19 @@
 Model: mistral-medium-3.5
 Provider: mistral
-Evaluated: 2026-04-29T17:39:14.453219+00:00
+Evaluated: 2026-11-02T00:24:09.603964+00:00
 
 === TIMING ===
-Response time: 2.4s
+Response time: 0.31s
 
 === CODE EXTRACTION ===
-Method: direct
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 429: {"object":"error","message":"Rate limit exceeded","type":"rate_limited","param":null,"code":"1300","raw_status_code":429}
 
 === RAW RESPONSE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
-        return (0, "")
-
-    from functools import lru_cache
-
-    @lru_cache(maxsize=None)
-    def dp(i, j, step):
-        if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
-        max_sum = -1
-        best_path = ""
-        current_step = step + 1
-        moves = []
-        if j + 1 < n:
-            moves.append(('R', i, j + 1))
-        if i + 1 < n:
-            moves.append(('D', i + 1, j))
-        if i + 1 < n and j + 1 < n:
-            moves.append(('X', i + 1, j + 1))
-        if current_step % 3 == 0:
-            diag_moves = [m for m in moves if m[0] == 'X']
-            if diag_moves:
-                moves = diag_moves
-        for move, ni, nj in moves:
-            s, p = dp(ni, nj, current_step)
-            total = grid[i][j] + s
-            if total > max_sum or (total == max_sum and len(p) < len(best_path)):
-                max_sum = total
-                best_path = move + p
-        return (max_sum, best_path)
-
-    total, path = dp(0, 0, 0)
-    return (total, path)
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
-        return (0, "")
-
-    from functools import lru_cache
-
-    @lru_cache(maxsize=None)
-    def dp(i, j, step):
-        if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
-        max_sum = -1
-        best_path = ""
-        current_step = step + 1
-        moves = []
-        if j + 1 < n:
-            moves.append(('R', i, j + 1))
-        if i + 1 < n:
-            moves.append(('D', i + 1, j))
-        if i + 1 < n and j + 1 < n:
-            moves.append(('X', i + 1, j + 1))
-        if current_step % 3 == 0:
-            diag_moves = [m for m in moves if m[0] == 'X']
-            if diag_moves:
-                moves = diag_moves
-        for move, ni, nj in moves:
-            s, p = dp(ni, nj, current_step)
-            total = grid[i][j] + s
-            if total > max_sum or (total == max_sum and len(p) < len(best_path)):
-                max_sum = total
-                best_path = move + p
-        return (max_sum, best_path)
-
-    total, path = dp(0, 0, 0)
-    return (total, path)
+(no code extracted)

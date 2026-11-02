@@ -1,114 +1,19 @@
 Model: mistral-medium-3-5
 Provider: mistral
-Evaluated: 2026-04-29T17:39:10.798424+00:00
+Evaluated: 2026-11-02T00:24:09.319591+00:00
 
 === TIMING ===
-Response time: 3.62s
+Response time: 0.28s
 
 === CODE EXTRACTION ===
-Method: direct
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 60
-Calculated sum: 60
-Sum matches: YES
-Path valid: YES
+API Error: HTTP 403: {"object":"error","message":"This model is not available in your subscription tier","type":"tier_not_allowed","param":null,"code":"1910","raw_status_code":403}
 
 === RAW RESPONSE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
-        return (0, "")
-
-    from functools import lru_cache
-
-    @lru_cache(maxsize=None)
-    def dfs(i, j, step):
-        if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
-        current_val = grid[i][j]
-        max_sum = -1
-        best_path = ""
-
-        moves = []
-        if j + 1 < n:
-            moves.append(('R', i, j + 1))
-        if i + 1 < n:
-            moves.append(('D', i + 1, j))
-        if i + 1 < n and j + 1 < n:
-            moves.append(('X', i + 1, j + 1))
-
-        for move, ni, nj in moves:
-            next_step = step + 1
-            is_third = (next_step % 3 == 0)
-            if is_third and move != 'X':
-                continue
-            if not is_third or (is_third and move == 'X'):
-                s, p = dfs(ni, nj, next_step)
-                total = current_val + s
-                if total > max_sum or (total == max_sum and len(p) < len(best_path)):
-                    max_sum = total
-                    best_path = move + p
-
-        if max_sum == -1:
-            for move, ni, nj in moves:
-                s, p = dfs(ni, nj, next_step)
-                total = current_val + s
-                if total > max_sum or (total == max_sum and len(p) < len(best_path)):
-                    max_sum = total
-                    best_path = move + p
-
-        return (max_sum, best_path)
-
-    total_sum, path = dfs(0, 0, 0)
-    return (total_sum, path)
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
-        return (0, "")
-
-    from functools import lru_cache
-
-    @lru_cache(maxsize=None)
-    def dfs(i, j, step):
-        if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
-        current_val = grid[i][j]
-        max_sum = -1
-        best_path = ""
-
-        moves = []
-        if j + 1 < n:
-            moves.append(('R', i, j + 1))
-        if i + 1 < n:
-            moves.append(('D', i + 1, j))
-        if i + 1 < n and j + 1 < n:
-            moves.append(('X', i + 1, j + 1))
-
-        for move, ni, nj in moves:
-            next_step = step + 1
-            is_third = (next_step % 3 == 0)
-            if is_third and move != 'X':
-                continue
-            if not is_third or (is_third and move == 'X'):
-                s, p = dfs(ni, nj, next_step)
-                total = current_val + s
-                if total > max_sum or (total == max_sum and len(p) < len(best_path)):
-                    max_sum = total
-                    best_path = move + p
-
-        if max_sum == -1:
-            for move, ni, nj in moves:
-                s, p = dfs(ni, nj, next_step)
-                total = current_val + s
-                if total > max_sum or (total == max_sum and len(p) < len(best_path)):
-                    max_sum = total
-                    best_path = move + p
-
-        return (max_sum, best_path)
-
-    total_sum, path = dfs(0, 0, 0)
-    return (total_sum, path)
+(no code extracted)

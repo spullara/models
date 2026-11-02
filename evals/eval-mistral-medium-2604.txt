@@ -1,109 +1,19 @@
 Model: mistral-medium-2604
 Provider: mistral
-Evaluated: 2026-04-29T17:39:05.806856+00:00
+Evaluated: 2026-11-02T00:24:08.691290+00:00
 
 === TIMING ===
-Response time: 2.7s
+Response time: 0.28s
 
 === CODE EXTRACTION ===
-Method: direct
-Syntax valid: YES
+Method: None
+Syntax valid: NO
 
 === EXECUTION ===
-Returned sum: 73
-Calculated sum: 15
-Sum matches: NO
-Path valid: NO
-Path error: Move 3 must be diagonal (X) but was D
+API Error: HTTP 429: {"object":"error","message":"Rate limit exceeded","type":"rate_limited","param":null,"code":"1300","raw_status_code":429}
 
 === RAW RESPONSE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
-        return (0, "")
-
-    from functools import lru_cache
-
-    @lru_cache(maxsize=None)
-    def dp(i, j, move_count):
-        if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
-        max_sum = -1
-        best_path = ""
-        current_move = move_count + 1
-        is_third_move = (current_move % 3 == 0)
-
-        moves = []
-        if is_third_move:
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-        else:
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-
-        for direction, ni, nj in moves:
-            if 0 <= ni < n and 0 <= nj < n:
-                s, p = dp(ni, nj, current_move)
-                s += grid[i][j]
-                if s > max_sum:
-                    max_sum = s
-                    best_path = direction + p
-
-        return (max_sum, best_path)
-
-    total, path = dp(0, 0, 0)
-    return (total, path)
+(no response)
 
 === EXTRACTED CODE ===
-def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
-        return (0, "")
-
-    from functools import lru_cache
-
-    @lru_cache(maxsize=None)
-    def dp(i, j, move_count):
-        if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
-        max_sum = -1
-        best_path = ""
-        current_move = move_count + 1
-        is_third_move = (current_move % 3 == 0)
-
-        moves = []
-        if is_third_move:
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-        else:
-            if i + 1 < n and j + 1 < n:
-                moves.append(('X', i + 1, j + 1))
-            if i + 1 < n:
-                moves.append(('D', i + 1, j))
-            if j + 1 < n:
-                moves.append(('R', i, j + 1))
-
-        for direction, ni, nj in moves:
-            if 0 <= ni < n and 0 <= nj < n:
-                s, p = dp(ni, nj, current_move)
-                s += grid[i][j]
-                if s > max_sum:
-                    max_sum = s
-                    best_path = direction + p
-
-        return (max_sum, best_path)
-
-    total, path = dp(0, 0, 0)
-    return (total, path)
+(no code extracted)

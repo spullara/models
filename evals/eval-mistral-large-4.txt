@@ -1,16 +1,16 @@
 Model: mistral-large-4
 Provider: mistral
-Evaluated: 2026-10-29T15:34:07.386927+00:00
+Evaluated: 2026-11-02T00:24:07.888470+00:00
 
 === TIMING ===
-Response time: 300.16s
+Response time: 0.26s
 
 === CODE EXTRACTION ===
 Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: Request timed out (5 min)
+API Error: HTTP 403: {"object":"error","message":"This model is not available in your subscription tier","type":"tier_not_allowed","param":null,"code":"1910","raw_status_code":403}
 
 === RAW RESPONSE ===
 (no response)
