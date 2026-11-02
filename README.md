@@ -1,31 +1,14 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-01 19:43:22
+Last updated: 2026-11-02 00:24:30
 
-## Updates This Week (2026-10-26 to 2026-11-01)
-
-### OpenAI
-
-**Added**
-
-- gpt-6.1-terra (added: 2026-10-26)
+## Updates This Week (2026-10-27 to 2026-11-02)
 
 ### Mistral
 
 **Deleted**
 
-- magistral-medium-latest (deleted: 2026-11-01)
-- mistral-large-4 (deleted: 2026-11-01)
-- mistral-large-4-0 (deleted: 2026-11-01)
-- mistral-medium (deleted: 2026-11-01)
-- mistral-medium-2604 (deleted: 2026-11-01)
-- mistral-medium-3 (deleted: 2026-11-01)
-- mistral-medium-3-5 (deleted: 2026-11-01)
-- mistral-medium-3.5 (deleted: 2026-11-01)
-- mistral-medium-latest (deleted: 2026-11-01)
-- mistral-vibe-cli-latest (deleted: 2026-11-01)
-- mistral-vibe-cli-with-tools (deleted: 2026-11-01)
 - mistral-large-4-0-8 (deleted: 2026-10-29)
 - mistral-large-4-0-8-fp4 (deleted: 2026-10-29)
 
@@ -47,10 +30,6 @@ Last updated: 2026-11-01 19:43:22
 - pre-mock_ptu_auth_v2_workspace_disabled (added: 2026-10-31)
 - qwen-audio-3.1-realtime-flash (added: 2026-10-27)
 
-**Deleted**
-
-- tongyi-skynet-llm-fd (deleted: 2026-10-26)
-
 ## Summary
 
 Model counts shown as: **Available/Deleted**
@@ -63,7 +42,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 14/21
 
-**Mistral**: 44/85
+**Mistral**: 55/74
 
 **DeepSeek**: 2/4
 
@@ -545,6 +524,8 @@ Model counts shown as: **Available/Deleted**
 - voxtral-mini-transcribe-realtime-3 (added: 2026-10-20)
 - voxtral-mini-transcribe-3-0 (added: 2026-10-20)
 - voxtral-mini-transcribe-3 (added: 2026-10-20)
+- mistral-large-4-0 (added: 2026-10-06)
+- mistral-large-4 (added: 2026-10-06)
 - mistral-ocr-4-1 (added: 2026-08-04)
 - labs-leanstral-1-5-1 (added: 2026-06-30)
 - labs-leanstral-1-5 (added: 2026-06-30)
@@ -553,6 +534,10 @@ Model counts shown as: **Available/Deleted**
 - mistral-ocr-3 (added: 2026-06-16)
 - mistral-code-latest (added: 2026-06-02)
 - mistral-code-fim-latest (added: 2026-06-02)
+- mistral-medium-3-5 (added: 2026-04-21)
+- mistral-medium-3.5 (added: 2026-04-09)
+- mistral-medium-3 (added: 2026-04-09)
+- mistral-medium-2604 (added: 2026-04-09)
 - mistral-moderation-2603 (added: 2026-04-07)
 - voxtral-mini-tts-latest (added: 2026-03-23)
 - voxtral-mini-tts-2603 (added: 2026-03-23)
@@ -562,7 +547,9 @@ Model counts shown as: **Available/Deleted**
 - voxtral-mini-realtime-latest (added: 2026-03-13)
 - voxtral-mini-realtime-2602 (added: 2026-03-13)
 - voxtral-mini-2602 (added: 2026-02-04)
+- mistral-vibe-cli-with-tools (added: 2026-02-04)
 - mistral-ocr-2512 (added: 2025-12-15)
+- mistral-vibe-cli-latest (added: 2025-12-09)
 - ministral-8b-2512 (added: 2025-12-02)
 - ministral-3b-2512 (added: 2025-12-02)
 - ministral-14b-latest (added: 2025-12-02)
@@ -572,11 +559,14 @@ Model counts shown as: **Available/Deleted**
 - voxtral-mini-latest (added: 2025-11-24)
 - mistral-small-latest (added: 2025-11-24)
 - mistral-ocr-latest (added: 2025-11-24)
+- mistral-medium-latest (added: 2025-11-24)
+- mistral-medium (added: 2025-11-24)
 - mistral-embed-2312 (added: 2025-11-24)
 - mistral-embed (added: 2025-11-24)
 - ministral-8b-latest (added: 2025-11-24)
 - ministral-3b-latest (added: 2025-11-24)
 - magistral-small-latest (added: 2025-11-24)
+- magistral-medium-latest (added: 2025-11-24)
 - codestral-latest (added: 2025-11-24)
 - codestral-embed-2505 (added: 2025-11-24)
 - codestral-embed (added: 2025-11-24)
@@ -584,17 +574,6 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- mistral-vibe-cli-with-tools (deleted: 2026-11-01)
-- mistral-vibe-cli-latest (deleted: 2026-11-01)
-- mistral-medium-latest (deleted: 2026-11-01)
-- mistral-medium-3.5 (deleted: 2026-11-01)
-- mistral-medium-3-5 (deleted: 2026-11-01)
-- mistral-medium-3 (deleted: 2026-11-01)
-- mistral-medium-2604 (deleted: 2026-11-01)
-- mistral-medium (deleted: 2026-11-01)
-- mistral-large-4-0 (deleted: 2026-11-01)
-- mistral-large-4 (deleted: 2026-11-01)
-- magistral-medium-latest (deleted: 2026-11-01)
 - mistral-large-4-0-8-fp4 (deleted: 2026-10-29)
 - mistral-large-4-0-8 (deleted: 2026-10-29)
 - mistral-ocr-4-0 (deleted: 2026-10-14)
