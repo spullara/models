@@ -1,9 +1,15 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-02 23:01:23
+Last updated: 2026-11-03 18:41:30
 
-## Updates This Week (2026-10-27 to 2026-11-02)
+## Updates This Week (2026-10-28 to 2026-11-03)
+
+### OpenAI
+
+**Added**
+
+- rc-ada-or-vm (added: 2026-11-03)
 
 ### Grok
 
@@ -34,7 +40,6 @@ Last updated: 2026-11-02 23:01:23
 - pre-mock_ptu_auth_v2_quota_only_free (added: 2026-10-31)
 - pre-mock_ptu_auth_v2_unassociated (added: 2026-10-31)
 - pre-mock_ptu_auth_v2_workspace_disabled (added: 2026-10-31)
-- qwen-audio-3.1-realtime-flash (added: 2026-10-27)
 
 ### Z.AI
 
@@ -46,7 +51,7 @@ Last updated: 2026-11-02 23:01:23
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 142/56
+**OpenAI**: 143/56
 
 **Anthropic**: 14/13
 
@@ -73,6 +78,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- rc-ada-or-vm (added: 2026-11-03)
 - gpt-6.1-terra (added: 2026-10-26)
 - gpt-6.1-sol (added: 2026-09-29)
 - gpt-6-sol (added: 2026-09-22)
