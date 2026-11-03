@@ -1,0 +1,27 @@
+Model: rc-ada-or-vm
+Provider: openai
+Evaluated: 2026-11-03T18:41:09.117698+00:00
+
+=== TIMING ===
+Response time: 0.79s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 503: {
+    "error": {
+        "message": "No available capacity was found for the model",
+        "type": "invalid_request_error",
+        "param": null,
+        "code": null
+    }
+}
+
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
