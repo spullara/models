@@ -1,9 +1,9 @@
 Model: gpt-3.5-turbo-1106
 Provider: openai_responses
-Evaluated: 2026-11-04T23:20:11.897588+00:00
+Evaluated: 2026-11-04T23:23:08.911046+00:00
 
 === TIMING ===
-Response time: 0.24s
+Response time: 0.42s
 
 === CODE EXTRACTION ===
 Method: None
