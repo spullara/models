@@ -1,6 +1,6 @@
 Model: gpt-3.5-turbo-instruct-0914
 Provider: openai_completion
-Evaluated: 2026-11-04T23:10:11.814110+00:00
+Evaluated: 2026-11-04T23:20:12.613530+00:00
 
 === TIMING ===
 Response time: 0.21s
