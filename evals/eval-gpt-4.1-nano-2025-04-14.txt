@@ -1,9 +1,9 @@
 Model: gpt-4.1-nano-2025-04-14
 Provider: openai_responses
-Evaluated: 2026-11-04T23:02:12.135492+00:00
+Evaluated: 2026-11-04T23:10:14.768433+00:00
 
 === TIMING ===
-Response time: 0.62s
+Response time: 0.52s
 
 === CODE EXTRACTION ===
 Method: None

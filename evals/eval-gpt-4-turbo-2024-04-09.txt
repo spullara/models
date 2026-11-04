@@ -1,9 +1,9 @@
 Model: gpt-4-turbo-2024-04-09
 Provider: openai_responses
-Evaluated: 2026-11-04T23:02:11.436348+00:00
+Evaluated: 2026-11-04T23:10:12.871817+00:00
 
 === TIMING ===
-Response time: 0.26s
+Response time: 1.26s
 
 === CODE EXTRACTION ===
 Method: None
