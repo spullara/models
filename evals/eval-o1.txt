@@ -1,9 +1,9 @@
 Model: o1
 Provider: openai_responses
-Evaluated: 2026-11-04T23:30:17.692612+00:00
+Evaluated: 2026-11-04T23:36:17.019385+00:00
 
 === TIMING ===
-Response time: 1.78s
+Response time: 0.22s
 
 === CODE EXTRACTION ===
 Method: None

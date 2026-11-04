@@ -1,9 +1,9 @@
 Model: gpt-4
 Provider: openai_responses
-Evaluated: 2026-11-04T23:30:11.351966+00:00
+Evaluated: 2026-11-04T23:36:10.041624+00:00
 
 === TIMING ===
-Response time: 0.25s
+Response time: 0.46s
 
 === CODE EXTRACTION ===
 Method: None
