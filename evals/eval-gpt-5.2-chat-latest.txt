@@ -1,9 +1,9 @@
 Model: gpt-5.2-chat-latest
 Provider: openai_responses
-Evaluated: 2026-11-04T23:47:15.837122+00:00
+Evaluated: 2026-11-04T23:49:16.969726+00:00
 
 === TIMING ===
-Response time: 0.37s
+Response time: 0.26s
 
 === CODE EXTRACTION ===
 Method: None

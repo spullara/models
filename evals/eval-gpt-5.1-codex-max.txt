@@ -1,9 +1,9 @@
 Model: gpt-5.1-codex-max
 Provider: openai_responses
-Evaluated: 2026-11-04T23:47:15.392483+00:00
+Evaluated: 2026-11-04T23:49:16.037239+00:00
 
 === TIMING ===
-Response time: 0.2s
+Response time: 0.34s
 
 === CODE EXTRACTION ===
 Method: None

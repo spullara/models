@@ -1,6 +1,6 @@
 Model: gpt-3.5-turbo-1106
 Provider: openai_responses
-Evaluated: 2026-11-04T23:47:10.409600+00:00
+Evaluated: 2026-11-04T23:49:10.937426+00:00
 
 === TIMING ===
 Response time: 0.25s
