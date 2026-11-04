@@ -1,9 +1,9 @@
 Model: gpt-audio-mini-2025-10-06
 Provider: openai_responses
-Evaluated: 2026-11-04T22:29:17.930871+00:00
+Evaluated: 2026-11-04T22:32:15.752461+00:00
 
 === TIMING ===
-Response time: 0.3s
+Response time: 2.22s
 
 === CODE EXTRACTION ===
 Method: None

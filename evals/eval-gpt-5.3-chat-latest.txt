@@ -1,6 +1,6 @@
 Model: gpt-5.3-chat-latest
 Provider: openai_responses
-Evaluated: 2026-11-04T22:29:17.706686+00:00
+Evaluated: 2026-11-04T22:32:15.528126+00:00
 
 === TIMING ===
 Response time: 0.22s

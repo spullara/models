@@ -1,9 +1,9 @@
 Model: o3-deep-research
 Provider: openai_responses
-Evaluated: 2026-11-04T22:29:19.574881+00:00
+Evaluated: 2026-11-04T22:32:19.251616+00:00
 
 === TIMING ===
-Response time: 0.32s
+Response time: 0.25s
 
 === CODE EXTRACTION ===
 Method: None
