@@ -1,9 +1,9 @@
 Model: babbage-002
 Provider: openai_completion
-Evaluated: 2026-11-04T22:32:08.181335+00:00
+Evaluated: 2026-11-04T22:53:07.868830+00:00
 
 === TIMING ===
-Response time: 0.3s
+Response time: 0.47s
 
 === CODE EXTRACTION ===
 Method: None

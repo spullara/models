@@ -1,9 +1,9 @@
 Model: gpt-image-1
 Provider: openai_responses
-Evaluated: 2026-11-04T22:32:17.978771+00:00
+Evaluated: 2026-11-04T22:53:17.956621+00:00
 
 === TIMING ===
-Response time: 0.25s
+Response time: 0.23s
 
 === CODE EXTRACTION ===
 Method: None
