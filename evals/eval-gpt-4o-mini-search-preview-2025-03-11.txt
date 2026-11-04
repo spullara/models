@@ -1,6 +1,6 @@
 Model: gpt-4o-mini-search-preview-2025-03-11
 Provider: openai_responses
-Evaluated: 2026-11-04T23:43:14.132195+00:00
+Evaluated: 2026-11-04T23:47:13.641040+00:00
 
 === TIMING ===
 Response time: 0.3s
