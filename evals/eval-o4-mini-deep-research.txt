@@ -1,9 +1,9 @@
 Model: o4-mini-deep-research
 Provider: openai_responses
-Evaluated: 2026-11-04T23:23:19.685044+00:00
+Evaluated: 2026-11-04T23:30:21.688400+00:00
 
 === TIMING ===
-Response time: 0.24s
+Response time: 0.33s
 
 === CODE EXTRACTION ===
 Method: None

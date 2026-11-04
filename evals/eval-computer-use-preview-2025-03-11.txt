@@ -1,9 +1,9 @@
 Model: computer-use-preview-2025-03-11
 Provider: openai
-Evaluated: 2026-11-04T23:23:07.972095+00:00
+Evaluated: 2026-11-04T23:30:09.135965+00:00
 
 === TIMING ===
-Response time: 0.14s
+Response time: 0.2s
 
 === CODE EXTRACTION ===
 Method: None
