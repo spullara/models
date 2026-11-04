@@ -1,9 +1,9 @@
 Model: gpt-4o-mini-search-preview
 Provider: openai_responses
-Evaluated: 2026-11-04T23:36:13.226128+00:00
+Evaluated: 2026-11-04T23:43:13.858225+00:00
 
 === TIMING ===
-Response time: 0.31s
+Response time: 0.27s
 
 === CODE EXTRACTION ===
 Method: None
