@@ -1,9 +1,9 @@
 Model: gpt-3.5-turbo-instruct-0914
 Provider: openai_completion
-Evaluated: 2026-11-04T22:53:11.367675+00:00
+Evaluated: 2026-11-04T22:56:10.811878+00:00
 
 === TIMING ===
-Response time: 0.71s
+Response time: 0.23s
 
 === CODE EXTRACTION ===
 Method: None
