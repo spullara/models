@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-04 23:57:25
+Last updated: 2026-11-05 00:48:25
 
-## Updates This Week (2026-10-29 to 2026-11-04)
+## Updates This Week (2026-10-30 to 2026-11-05)
 
 ### OpenAI
 
@@ -14,6 +14,8 @@ Last updated: 2026-11-04 23:57:25
 
 **Deleted**
 
+- sora-2 (deleted: 2026-11-05)
+- sora-2-pro (deleted: 2026-11-05)
 - babbage-002 (deleted: 2026-11-04)
 - computer-use-preview (deleted: 2026-11-04)
 - computer-use-preview-2025-03-11 (deleted: 2026-11-04)
@@ -67,13 +69,6 @@ Last updated: 2026-11-04 23:57:25
 
 - grok-imagine-image-quality (deleted: 2026-11-02)
 
-### Mistral
-
-**Deleted**
-
-- mistral-large-4-0-8 (deleted: 2026-10-29)
-- mistral-large-4-0-8-fp4 (deleted: 2026-10-29)
-
 ### Qwen
 
 **Added**
@@ -101,7 +96,7 @@ Last updated: 2026-11-04 23:57:25
 
 Model counts shown as: **Available/Deleted**
 
-**OpenAI**: 100/102
+**OpenAI**: 98/104
 
 **Anthropic**: 14/13
 
@@ -185,8 +180,6 @@ Model counts shown as: **Available/Deleted**
 - gpt-4o-transcribe-diarize (added: 2025-10-15)
 - gpt-5-search-api-2025-10-14 (added: 2025-10-14)
 - gpt-5-search-api (added: 2025-10-14)
-- sora-2-pro (added: 2025-10-06)
-- sora-2 (added: 2025-10-06)
 - gpt-realtime-mini (added: 2025-10-06)
 - gpt-image-1-mini (added: 2025-10-06)
 - gpt-audio-mini (added: 2025-10-06)
@@ -231,6 +224,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- sora-2-pro (deleted: 2026-11-05)
+- sora-2 (deleted: 2026-11-05)
 - o4-mini-deep-research-2025-06-26 (deleted: 2026-11-04)
 - o4-mini-deep-research (deleted: 2026-11-04)
 - o4-mini-2025-04-16 (deleted: 2026-11-04)
