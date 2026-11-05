@@ -1,7 +1,6 @@
 models/antigravity-preview-05-2026
 models/antigravity-preview-09-2026
 models/antigravity-preview-latest
-models/aqa
 models/deep-research-max-preview-04-2026
 models/deep-research-preview-04-2026
 models/deep-research-pro-preview-12-2025
@@ -39,6 +38,7 @@ models/gemini-flash-latest
 models/gemini-flash-lite-latest
 models/gemini-nano-banana-2.1
 models/gemini-omni-1.1-flash
+models/gemini-omni-1.2-flash
 models/gemini-omni-flash-preview
 models/gemini-pro-latest
 models/gemini-robotics-er-2-preview
