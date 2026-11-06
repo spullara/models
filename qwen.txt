@@ -103,6 +103,7 @@ qwen3.8-flash
 qwen3.8-livetranslate-flash-realtime
 qwen3.8-max
 qwen3.8-max-0902
+qwen3.8-max-prime
 qwen3.8-omni-flash
 qwen3.8-omni-flash-realtime
 qwq-plus-2025-03-05
