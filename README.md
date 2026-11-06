@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-06 07:59:25
+Last updated: 2026-11-06 08:29:26
 
 ## Updates This Week (2026-10-31 to 2026-11-06)
 
@@ -83,6 +83,7 @@ Last updated: 2026-11-06 07:59:25
 
 **Added**
 
+- mock-algo-v1-new-1 (added: 2026-11-06)
 - qwen3.8-max-prime (added: 2026-11-06)
 - pre-mock_ptu_auth_v2_base (added: 2026-10-31)
 - pre-mock_ptu_auth_v2_cross_site_denied (added: 2026-10-31)
@@ -121,7 +122,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 6/14
 
-**Qwen**: 115/98
+**Qwen**: 116/98
 
 **Meta**: 9/1
 
@@ -774,6 +775,7 @@ Model counts shown as: **Available/Deleted**
 ### Current Models
 
 - qwen3.8-max-prime (added: 2026-11-06)
+- mock-algo-v1-new-1 (added: 2026-11-06)
 - pre-mock_ptu_auth_v2_workspace_disabled (added: 2026-10-31)
 - pre-mock_ptu_auth_v2_unassociated (added: 2026-10-31)
 - pre-mock_ptu_auth_v2_quota_only_free (added: 2026-10-31)
