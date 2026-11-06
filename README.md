@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-05 00:48:25
+Last updated: 2026-11-06 07:59:25
 
-## Updates This Week (2026-10-30 to 2026-11-05)
+## Updates This Week (2026-10-31 to 2026-11-06)
 
 ### OpenAI
 
@@ -63,6 +63,16 @@ Last updated: 2026-11-05 00:48:25
 - rc-ada-or-vm (deleted: 2026-11-03)
 - rc-ada-sh-vm (deleted: 2026-11-03)
 
+### Gemini
+
+**Added**
+
+- models/gemini-omni-1.2-flash (added: 2026-11-05)
+
+**Deleted**
+
+- models/aqa (deleted: 2026-11-05)
+
 ### Grok
 
 **Deleted**
@@ -73,6 +83,7 @@ Last updated: 2026-11-05 00:48:25
 
 **Added**
 
+- qwen3.8-max-prime (added: 2026-11-06)
 - pre-mock_ptu_auth_v2_base (added: 2026-10-31)
 - pre-mock_ptu_auth_v2_cross_site_denied (added: 2026-10-31)
 - pre-mock_ptu_auth_v2_deprecating_old (added: 2026-10-31)
@@ -100,7 +111,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 14/13
 
-**Gemini**: 50/113
+**Gemini**: 50/114
 
 **Grok**: 13/22
 
@@ -110,7 +121,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 6/14
 
-**Qwen**: 114/98
+**Qwen**: 115/98
 
 **Meta**: 9/1
 
@@ -368,6 +379,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-omni-1.2-flash (added: 2026-11-05)
 - models/gemini-4-argon (added: 2026-10-13)
 - models/gemini-nano-banana-2.1 (added: 2026-10-06)
 - models/gemini-3.8-flash-tts (added: 2026-09-22)
@@ -417,10 +429,10 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-2.5-flash (added: 2025-06-17)
 - models/gemini-2.5-pro-preview-tts (added: 2025-05-21)
 - models/gemini-2.5-flash-preview-tts (added: 2025-05-21)
-- models/aqa (added: 2024-12-07)
 
 ### Deleted Models
 
+- models/aqa (deleted: 2026-11-05)
 - models/veo-3.1-generate-preview (deleted: 2026-10-13)
 - models/veo-3.1-fast-generate-preview (deleted: 2026-10-06)
 - models/veo-3.1-lite-generate-preview (deleted: 2026-09-23)
@@ -761,6 +773,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- qwen3.8-max-prime (added: 2026-11-06)
 - pre-mock_ptu_auth_v2_workspace_disabled (added: 2026-10-31)
 - pre-mock_ptu_auth_v2_unassociated (added: 2026-10-31)
 - pre-mock_ptu_auth_v2_quota_only_free (added: 2026-10-31)
