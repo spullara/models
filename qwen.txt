@@ -13,7 +13,6 @@ glm-5.3-prime
 kimi-k2.7-code
 kimi-k3
 kimi/kimi-k3
-mock-algo-v1-new-1
 pre-mock_new_gateway_session_affinity
 pre-mock_ptu_auth_v2_base
 pre-mock_ptu_auth_v2_cross_site_denied
