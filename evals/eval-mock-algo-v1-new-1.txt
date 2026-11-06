@@ -1,0 +1,19 @@
+Model: mock-algo-v1-new-1
+Provider: qwen
+Evaluated: 2026-11-06T08:29:07.740235+00:00
+
+=== TIMING ===
+Response time: 0.9s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 404: {"error":{"message":"Model not exist.","type":"invalid_request_error","param":null,"code":"model_not_found"},"request_id":"e918b61e-1205-9baf-a138-77142e7c0c81"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
