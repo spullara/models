@@ -1,0 +1,19 @@
+Model: qwen3.8-max-prime
+Provider: qwen
+Evaluated: 2026-11-06T07:59:08.707669+00:00
+
+=== TIMING ===
+Response time: 0.86s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 403: {"error":{"message":"Access denied. For details, see: https://www.alibabacloud.com/help/en/model-studio/error-code#access-denied","type":"access_denied","param":null,"code":"access_denied"},"id":"chatcmpl-2c731917-cf31-9597-8ccf-7be3d884940b","request_id":"2c731917-cf31-9597-8ccf-7be3d884940b"}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
