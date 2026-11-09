@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-09 03:03:22
+Last updated: 2026-11-09 03:04:23
 
 ## Updates This Week (2026-11-03 to 2026-11-09)
 
@@ -77,10 +77,19 @@ Last updated: 2026-11-09 03:03:22
 
 **Deleted**
 
+- pre-mock_new_gateway_session_affinity (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_base (deleted: 2026-11-09)
 - pre-mock_ptu_auth_v2_cross_site_denied (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_deprecating_old (deleted: 2026-11-09)
 - pre-mock_ptu_auth_v2_force_allowed (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_force_denied (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_green_always (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_postpay_allowed (deleted: 2026-11-09)
 - pre-mock_ptu_auth_v2_quota_available (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_quota_exhausted (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_quota_only_free (deleted: 2026-11-09)
 - pre-mock_ptu_auth_v2_unassociated (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_workspace_disabled (deleted: 2026-11-09)
 - mock-algo-v1-new-1 (deleted: 2026-11-06)
 - qwen3.8-max-prime (deleted: 2026-11-06)
 
@@ -102,7 +111,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 6/14
 
-**Qwen**: 110/104
+**Qwen**: 101/113
 
 **Meta**: 9/1
 
@@ -754,17 +763,8 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
-- pre-mock_ptu_auth_v2_workspace_disabled (added: 2026-10-31)
-- pre-mock_ptu_auth_v2_quota_only_free (added: 2026-10-31)
-- pre-mock_ptu_auth_v2_quota_exhausted (added: 2026-10-31)
-- pre-mock_ptu_auth_v2_postpay_allowed (added: 2026-10-31)
-- pre-mock_ptu_auth_v2_green_always (added: 2026-10-31)
-- pre-mock_ptu_auth_v2_force_denied (added: 2026-10-31)
-- pre-mock_ptu_auth_v2_deprecating_old (added: 2026-10-31)
-- pre-mock_ptu_auth_v2_base (added: 2026-10-31)
 - qwen-audio-3.1-realtime-flash (added: 2026-10-27)
 - deepseek-v4.1-flash-1017 (added: 2026-10-17)
-- pre-mock_new_gateway_session_affinity (added: 2026-10-16)
 - qwen3.8-omni-flash-realtime (added: 2026-09-21)
 - glm-5.3-prime (added: 2026-09-21)
 - qwen-audio-3.1-realtime-plus (added: 2026-09-20)
@@ -867,10 +867,19 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- pre-mock_ptu_auth_v2_workspace_disabled (deleted: 2026-11-09)
 - pre-mock_ptu_auth_v2_unassociated (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_quota_only_free (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_quota_exhausted (deleted: 2026-11-09)
 - pre-mock_ptu_auth_v2_quota_available (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_postpay_allowed (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_green_always (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_force_denied (deleted: 2026-11-09)
 - pre-mock_ptu_auth_v2_force_allowed (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_deprecating_old (deleted: 2026-11-09)
 - pre-mock_ptu_auth_v2_cross_site_denied (deleted: 2026-11-09)
+- pre-mock_ptu_auth_v2_base (deleted: 2026-11-09)
+- pre-mock_new_gateway_session_affinity (deleted: 2026-11-09)
 - qwen3.8-max-prime (deleted: 2026-11-06)
 - mock-algo-v1-new-1 (deleted: 2026-11-06)
 - tongyi-skynet-llm-fd (deleted: 2026-10-26)
