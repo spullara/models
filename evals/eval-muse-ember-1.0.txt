@@ -1,0 +1,178 @@
+Model: muse-ember-1.0
+Provider: meta
+Evaluated: 2026-11-09T17:49:07.291268+00:00
+
+=== TIMING ===
+Response time: 12.31s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    m = len(grid[0])
+
+    if n == 1 and m == 1:
+        return (grid[0][0], "")
+
+    # dp[i][j][k]: maximum sum from (i, j) to the target, including
+    # grid[i][j], when k moves have already been made (k = moves % 3).
+    # choice[i][j][k]: move to take from (i, j) in that state.
+    dp = [[[None] * 3 for _ in range(m)] for _ in range(n)]
+    choice = [[[None] * 3 for _ in range(m)] for _ in range(n)]
+
+    for i in range(n - 1, -1, -1):
+        for j in range(m - 1, -1, -1):
+            for k in range(3):
+                if i == n - 1 and j == m - 1:
+                    dp[i][j][k] = grid[i][j]
+                    continue
+
+                moves = []
+
+                # k == 2 means the next move is the 3rd, 6th, 9th, ...
+                if k == 2:
+                    if i + 1 < n and j + 1 < m:
+                        moves.append(('X', i + 1, j + 1))
+                    else:
+                        if j + 1 < m:
+                            moves.append(('R', i, j + 1))
+                        if i + 1 < n:
+                            moves.append(('D', i + 1, j))
+                else:
+                    if j + 1 < m:
+                        moves.append(('R', i, j + 1))
+                    if i + 1 < n:
+                        moves.append(('D', i + 1, j))
+                    if i + 1 < n and j + 1 < m:
+                        moves.append(('X', i + 1, j + 1))
+
+                best = None
+                best_move = None
+                nk = (k + 1) % 3
+
+                for ch, ni, nj in moves:
+                    nxt = dp[ni][nj][nk]
+                    if nxt is None:
+                        continue
+                    total = grid[i][j] + nxt
+                    if best is None or total > best:
+                        best = total
+                        best_move = ch
+
+                dp[i][j][k] = best
+                choice[i][j][k] = best_move
+
+    if dp[0][0][0] is None:
+        return (0, "")
+
+    path_chars = []
+    i = j = k = 0
+    while not (i == n - 1 and j == m - 1):
+        ch = choice[i][j][k]
+        if ch is None:
+            break
+        path_chars.append(ch)
+        if ch == 'R':
+            j += 1
+        elif ch == 'D':
+            i += 1
+        elif ch == 'X':
+            i += 1
+            j += 1
+        k = (k + 1) % 3
+
+    return (dp[0][0][0], "".join(path_chars))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    m = len(grid[0])
+
+    if n == 1 and m == 1:
+        return (grid[0][0], "")
+
+    # dp[i][j][k]: maximum sum from (i, j) to the target, including
+    # grid[i][j], when k moves have already been made (k = moves % 3).
+    # choice[i][j][k]: move to take from (i, j) in that state.
+    dp = [[[None] * 3 for _ in range(m)] for _ in range(n)]
+    choice = [[[None] * 3 for _ in range(m)] for _ in range(n)]
+
+    for i in range(n - 1, -1, -1):
+        for j in range(m - 1, -1, -1):
+            for k in range(3):
+                if i == n - 1 and j == m - 1:
+                    dp[i][j][k] = grid[i][j]
+                    continue
+
+                moves = []
+
+                # k == 2 means the next move is the 3rd, 6th, 9th, ...
+                if k == 2:
+                    if i + 1 < n and j + 1 < m:
+                        moves.append(('X', i + 1, j + 1))
+                    else:
+                        if j + 1 < m:
+                            moves.append(('R', i, j + 1))
+                        if i + 1 < n:
+                            moves.append(('D', i + 1, j))
+                else:
+                    if j + 1 < m:
+                        moves.append(('R', i, j + 1))
+                    if i + 1 < n:
+                        moves.append(('D', i + 1, j))
+                    if i + 1 < n and j + 1 < m:
+                        moves.append(('X', i + 1, j + 1))
+
+                best = None
+                best_move = None
+                nk = (k + 1) % 3
+
+                for ch, ni, nj in moves:
+                    nxt = dp[ni][nj][nk]
+                    if nxt is None:
+                        continue
+                    total = grid[i][j] + nxt
+                    if best is None or total > best:
+                        best = total
+                        best_move = ch
+
+                dp[i][j][k] = best
+                choice[i][j][k] = best_move
+
+    if dp[0][0][0] is None:
+        return (0, "")
+
+    path_chars = []
+    i = j = k = 0
+    while not (i == n - 1 and j == m - 1):
+        ch = choice[i][j][k]
+        if ch is None:
+            break
+        path_chars.append(ch)
+        if ch == 'R':
+            j += 1
+        elif ch == 'D':
+            i += 1
+        elif ch == 'X':
+            i += 1
+            j += 1
+        k = (k + 1) % 3
+
+    return (dp[0][0][0], "".join(path_chars))
