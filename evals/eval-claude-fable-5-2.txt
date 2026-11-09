@@ -1,0 +1,181 @@
+Model: claude-fable-5-2
+Provider: anthropic
+Evaluated: 2026-11-09T19:14:27.869641+00:00
+
+=== TIMING ===
+Response time: 20.33s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    # Handle degenerate input
+    if not grid or not grid[0]:
+        return (0, "")
+
+    rows = len(grid)
+    cols = len(grid[0])
+
+    # best[r][c][k] = max sum on arrival at (r, c) having made a number of
+    # moves congruent to k modulo 3. None means unreachable.
+    best = [[[None] * 3 for _ in range(cols)] for _ in range(rows)]
+    # parent[r][c][k] = the move ('R', 'D', 'X') used to arrive in this state
+    parent = [[[None] * 3 for _ in range(cols)] for _ in range(rows)]
+
+    best[0][0][0] = grid[0][0]
+
+    for r in range(rows):
+        for c in range(cols):
+            can_right = c + 1 < cols
+            can_down = r + 1 < rows
+            can_diag = can_right and can_down
+
+            for k in range(3):
+                cur = best[r][c][k]
+                if cur is None:
+                    continue
+
+                nk = (k + 1) % 3
+
+                # k == 2 means the next move is the 3rd, 6th, 9th, ...
+                # It must be diagonal if a diagonal is possible from here.
+                if k == 2 and can_diag:
+                    moves = (("X", r + 1, c + 1),)
+                else:
+                    moves = []
+                    if can_right:
+                        moves.append(("R", r, c + 1))
+                    if can_down:
+                        moves.append(("D", r + 1, c))
+                    if can_diag:
+                        moves.append(("X", r + 1, c + 1))
+
+                for ch, nr, nc in moves:
+                    val = cur + grid[nr][nc]
+                    if best[nr][nc][nk] is None or val > best[nr][nc][nk]:
+                        best[nr][nc][nk] = val
+                        parent[nr][nc][nk] = ch
+
+    # Choose the best final state at the bottom-right cell
+    end_r, end_c = rows - 1, cols - 1
+    best_k = None
+    for k in range(3):
+        v = best[end_r][end_c][k]
+        if v is not None and (best_k is None or v > best[end_r][end_c][best_k]):
+            best_k = k
+
+    max_sum = best[end_r][end_c][best_k]
+
+    # Reconstruct the path by walking the parent pointers backwards
+    path = []
+    r, c, k = end_r, end_c, best_k
+    while r != 0 or c != 0:
+        ch = parent[r][c][k]
+        path.append(ch)
+        if ch == "R":
+            c -= 1
+        elif ch == "D":
+            r -= 1
+        else:  # "X"
+            r -= 1
+            c -= 1
+        k = (k - 1) % 3
+
+    path.reverse()
+    return (max_sum, "".join(path))
+```
+
+The function uses dynamic programming over the state (row, column, moves made mod 3), so it runs in O(N²) time and handles negative values.
+
+The rules left a few things open, so I assumed the following:
+
+- **Sum:** it includes the starting cell and every cell visited after it.
+- **Forced diagonal:** on a 3rd, 6th, 9th... move, X is the only option unless the current cell is in the last row or last column, in which case R or D is allowed.
+- **Ties:** if several paths give the same maximum sum, any one of them is returned.
+- **Edge cases:** an empty grid returns `(0, "")`, and a 1×1 grid returns `(grid[0][0], "")`.
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    # Handle degenerate input
+    if not grid or not grid[0]:
+        return (0, "")
+
+    rows = len(grid)
+    cols = len(grid[0])
+
+    # best[r][c][k] = max sum on arrival at (r, c) having made a number of
+    # moves congruent to k modulo 3. None means unreachable.
+    best = [[[None] * 3 for _ in range(cols)] for _ in range(rows)]
+    # parent[r][c][k] = the move ('R', 'D', 'X') used to arrive in this state
+    parent = [[[None] * 3 for _ in range(cols)] for _ in range(rows)]
+
+    best[0][0][0] = grid[0][0]
+
+    for r in range(rows):
+        for c in range(cols):
+            can_right = c + 1 < cols
+            can_down = r + 1 < rows
+            can_diag = can_right and can_down
+
+            for k in range(3):
+                cur = best[r][c][k]
+                if cur is None:
+                    continue
+
+                nk = (k + 1) % 3
+
+                # k == 2 means the next move is the 3rd, 6th, 9th, ...
+                # It must be diagonal if a diagonal is possible from here.
+                if k == 2 and can_diag:
+                    moves = (("X", r + 1, c + 1),)
+                else:
+                    moves = []
+                    if can_right:
+                        moves.append(("R", r, c + 1))
+                    if can_down:
+                        moves.append(("D", r + 1, c))
+                    if can_diag:
+                        moves.append(("X", r + 1, c + 1))
+
+                for ch, nr, nc in moves:
+                    val = cur + grid[nr][nc]
+                    if best[nr][nc][nk] is None or val > best[nr][nc][nk]:
+                        best[nr][nc][nk] = val
+                        parent[nr][nc][nk] = ch
+
+    # Choose the best final state at the bottom-right cell
+    end_r, end_c = rows - 1, cols - 1
+    best_k = None
+    for k in range(3):
+        v = best[end_r][end_c][k]
+        if v is not None and (best_k is None or v > best[end_r][end_c][best_k]):
+            best_k = k
+
+    max_sum = best[end_r][end_c][best_k]
+
+    # Reconstruct the path by walking the parent pointers backwards
+    path = []
+    r, c, k = end_r, end_c, best_k
+    while r != 0 or c != 0:
+        ch = parent[r][c][k]
+        path.append(ch)
+        if ch == "R":
+            c -= 1
+        elif ch == "D":
+            r -= 1
+        else:  # "X"
+            r -= 1
+            c -= 1
+        k = (k - 1) % 3
+
+    path.reverse()
+    return (max_sum, "".join(path))
