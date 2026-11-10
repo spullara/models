@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-09 19:15:06
+Last updated: 2026-11-10 15:45:58
 
-## Updates This Week (2026-11-03 to 2026-11-09)
+## Updates This Week (2026-11-04 to 2026-11-10)
 
 ### OpenAI
 
@@ -60,8 +60,6 @@ Last updated: 2026-11-09 19:15:06
 - o4-mini-2025-04-16 (deleted: 2026-11-04)
 - o4-mini-deep-research (deleted: 2026-11-04)
 - o4-mini-deep-research-2025-06-26 (deleted: 2026-11-04)
-- rc-ada-or-vm (deleted: 2026-11-03)
-- rc-ada-sh-vm (deleted: 2026-11-03)
 
 ### Anthropic
 
@@ -73,10 +71,12 @@ Last updated: 2026-11-09 19:15:06
 
 **Added**
 
+- models/gemini-4-carbon (added: 2026-11-10)
 - models/gemini-omni-1.2-flash (added: 2026-11-05)
 
 **Deleted**
 
+- models/gemini-embedding-2 (deleted: 2026-11-10)
 - models/aqa (deleted: 2026-11-05)
 
 ### Qwen
@@ -113,7 +113,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 15/13
 
-**Gemini**: 50/114
+**Gemini**: 50/115
 
 **Grok**: 13/22
 
@@ -382,6 +382,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-4-carbon (added: 2026-11-10)
 - models/gemini-omni-1.2-flash (added: 2026-11-05)
 - models/gemini-4-argon (added: 2026-10-13)
 - models/gemini-nano-banana-2.1 (added: 2026-10-06)
@@ -404,7 +405,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.5-flash (added: 2026-05-19)
 - models/antigravity-preview-05-2026 (added: 2026-05-19)
 - models/gemini-3.1-flash-lite (added: 2026-05-07)
-- models/gemini-embedding-2 (added: 2026-04-22)
 - models/deep-research-preview-04-2026 (added: 2026-04-21)
 - models/deep-research-max-preview-04-2026 (added: 2026-04-21)
 - models/gemini-3.1-flash-tts-preview (added: 2026-04-15)
@@ -435,6 +435,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/gemini-embedding-2 (deleted: 2026-11-10)
 - models/aqa (deleted: 2026-11-05)
 - models/veo-3.1-generate-preview (deleted: 2026-10-13)
 - models/veo-3.1-fast-generate-preview (deleted: 2026-10-06)
