@@ -1,65 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-10 15:45:58
+Last updated: 2026-11-12 13:02:23
 
-## Updates This Week (2026-11-04 to 2026-11-10)
-
-### OpenAI
-
-**Added**
-
-- gpt-image-2.6-flare (added: 2026-11-04)
-- gpt-image-2.6-sunburst (added: 2026-11-04)
-
-**Deleted**
-
-- sora-2 (deleted: 2026-11-05)
-- sora-2-pro (deleted: 2026-11-05)
-- babbage-002 (deleted: 2026-11-04)
-- computer-use-preview (deleted: 2026-11-04)
-- computer-use-preview-2025-03-11 (deleted: 2026-11-04)
-- davinci-002 (deleted: 2026-11-04)
-- gpt-3.5-turbo (deleted: 2026-11-04)
-- gpt-3.5-turbo-0125 (deleted: 2026-11-04)
-- gpt-3.5-turbo-1106 (deleted: 2026-11-04)
-- gpt-3.5-turbo-16k (deleted: 2026-11-04)
-- gpt-3.5-turbo-instruct (deleted: 2026-11-04)
-- gpt-3.5-turbo-instruct-0914 (deleted: 2026-11-04)
-- gpt-4 (deleted: 2026-11-04)
-- gpt-4-0613 (deleted: 2026-11-04)
-- gpt-4-turbo (deleted: 2026-11-04)
-- gpt-4-turbo-2024-04-09 (deleted: 2026-11-04)
-- gpt-4.1-nano (deleted: 2026-11-04)
-- gpt-4.1-nano-2025-04-14 (deleted: 2026-11-04)
-- gpt-4o-2024-05-13 (deleted: 2026-11-04)
-- gpt-4o-mini-search-preview (deleted: 2026-11-04)
-- gpt-4o-mini-search-preview-2025-03-11 (deleted: 2026-11-04)
-- gpt-4o-search-preview (deleted: 2026-11-04)
-- gpt-4o-search-preview-2025-03-11 (deleted: 2026-11-04)
-- gpt-5-chat-latest (deleted: 2026-11-04)
-- gpt-5-codex (deleted: 2026-11-04)
-- gpt-5.1-chat-latest (deleted: 2026-11-04)
-- gpt-5.1-codex (deleted: 2026-11-04)
-- gpt-5.1-codex-max (deleted: 2026-11-04)
-- gpt-5.1-codex-mini (deleted: 2026-11-04)
-- gpt-5.2-chat-latest (deleted: 2026-11-04)
-- gpt-5.2-codex (deleted: 2026-11-04)
-- gpt-5.3-chat-latest (deleted: 2026-11-04)
-- gpt-audio-mini-2025-10-06 (deleted: 2026-11-04)
-- gpt-image-1 (deleted: 2026-11-04)
-- o1 (deleted: 2026-11-04)
-- o1-2024-12-17 (deleted: 2026-11-04)
-- o1-pro (deleted: 2026-11-04)
-- o1-pro-2025-03-19 (deleted: 2026-11-04)
-- o3-deep-research (deleted: 2026-11-04)
-- o3-deep-research-2025-06-26 (deleted: 2026-11-04)
-- o3-mini (deleted: 2026-11-04)
-- o3-mini-2025-01-31 (deleted: 2026-11-04)
-- o4-mini (deleted: 2026-11-04)
-- o4-mini-2025-04-16 (deleted: 2026-11-04)
-- o4-mini-deep-research (deleted: 2026-11-04)
-- o4-mini-deep-research-2025-06-26 (deleted: 2026-11-04)
+## Updates This Week (2026-11-06 to 2026-11-12)
 
 ### Anthropic
 
@@ -72,12 +16,10 @@ Last updated: 2026-11-10 15:45:58
 **Added**
 
 - models/gemini-4-carbon (added: 2026-11-10)
-- models/gemini-omni-1.2-flash (added: 2026-11-05)
 
 **Deleted**
 
 - models/gemini-embedding-2 (deleted: 2026-11-10)
-- models/aqa (deleted: 2026-11-05)
 
 ### Qwen
 
@@ -117,7 +59,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 13/22
 
-**Mistral**: 55/74
+**Mistral**: 56/73
 
 **DeepSeek**: 2/4
 
@@ -643,6 +585,7 @@ Model counts shown as: **Available/Deleted**
 - mistral-ocr-latest (added: 2025-11-24)
 - mistral-medium-latest (added: 2025-11-24)
 - mistral-medium (added: 2025-11-24)
+- mistral-large-latest (added: 2025-11-24)
 - mistral-embed-2312 (added: 2025-11-24)
 - mistral-embed (added: 2025-11-24)
 - ministral-8b-latest (added: 2025-11-24)
@@ -659,7 +602,6 @@ Model counts shown as: **Available/Deleted**
 - mistral-large-4-0-8-fp4 (deleted: 2026-10-29)
 - mistral-large-4-0-8 (deleted: 2026-10-29)
 - mistral-ocr-4-0 (deleted: 2026-10-14)
-- mistral-large-latest (deleted: 2026-09-03)
 - mistral-large-2512 (deleted: 2026-09-03)
 - mistral-medium-2508 (deleted: 2026-08-31)
 - mistral-medium-2505 (deleted: 2026-08-31)
