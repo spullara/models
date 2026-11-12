@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-12 13:02:23
+Last updated: 2026-11-12 17:45:54
 
 ## Updates This Week (2026-11-06 to 2026-11-12)
 
@@ -15,10 +15,12 @@ Last updated: 2026-11-12 13:02:23
 
 **Added**
 
+- models/gemini-4-hydrogen (added: 2026-11-12)
 - models/gemini-4-carbon (added: 2026-11-10)
 
 **Deleted**
 
+- models/gemini-embedding-2-preview (deleted: 2026-11-12)
 - models/gemini-embedding-2 (deleted: 2026-11-10)
 
 ### Qwen
@@ -55,7 +57,7 @@ Model counts shown as: **Available/Deleted**
 
 **Anthropic**: 15/13
 
-**Gemini**: 50/115
+**Gemini**: 50/116
 
 **Grok**: 13/22
 
@@ -324,6 +326,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- models/gemini-4-hydrogen (added: 2026-11-12)
 - models/gemini-4-carbon (added: 2026-11-10)
 - models/gemini-omni-1.2-flash (added: 2026-11-05)
 - models/gemini-4-argon (added: 2026-10-13)
@@ -354,7 +357,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemma-4-26b-a4b-it (added: 2026-04-02)
 - models/lyria-3-pro-preview (added: 2026-03-25)
 - models/lyria-3-clip-preview (added: 2026-03-25)
-- models/gemini-embedding-2-preview (added: 2026-03-10)
 - models/gemini-3.1-flash-lite-preview (added: 2026-03-03)
 - models/gemini-3.1-flash-image-preview (added: 2026-02-26)
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
@@ -377,6 +379,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
+- models/gemini-embedding-2-preview (deleted: 2026-11-12)
 - models/gemini-embedding-2 (deleted: 2026-11-10)
 - models/aqa (deleted: 2026-11-05)
 - models/veo-3.1-generate-preview (deleted: 2026-10-13)
