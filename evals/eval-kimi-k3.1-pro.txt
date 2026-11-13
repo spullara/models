@@ -1,9 +1,9 @@
 Model: kimi-k3.1-pro
-Provider: kimi
-Evaluated: 2026-10-23T16:25:09.683160+00:00
+Provider: qwen
+Evaluated: 2026-11-13T02:51:07.611609+00:00
 
 === TIMING ===
-Response time: 198.83s
+Response time: 282.25s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -20,151 +20,123 @@ Path valid: YES
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 0:
-        raise ValueError("grid must not be empty")
+        return 0, ""
 
-    # dp[r][c][phase] is the best remaining sum after leaving (r, c),
-    # excluding grid[r][c]. phase is the number of moves made, modulo 3.
-    dp = [[[None, None, None] for _ in range(n)] for _ in range(n)]
-    choice = [[["", "", ""] for _ in range(n)] for _ in range(n)]
+    def options(r: int, c: int, k: int):
+        """Yield (move, next_row, next_col) in lexical move order."""
+        can_diagonal = r + 1 < n and c + 1 < n
+
+        # k == 2 means the next move is move 3, 6, 9, etc.
+        if k == 2 and can_diagonal:
+            yield "X", r + 1, c + 1
+            return
+
+        if r + 1 < n:
+            yield "D", r + 1, c
+        if c + 1 < n:
+            yield "R", r, c + 1
+        if k != 2 and can_diagonal:
+            yield "X", r + 1, c + 1
+
+    # dp[r][c][k] is the maximum sum still collectible after leaving (r, c),
+    # excluding grid[r][c]. k is the number of moves already made modulo 3.
+    dp = [[[None] * 3 for _ in range(n)] for _ in range(n)]
     dp[n - 1][n - 1] = [0, 0, 0]
 
-    # Every move increases the row or column, so reverse row-major order
-    # ensures all successor states have already been computed.
+    # Fill backwards so every destination state is already computed.
     for r in range(n - 1, -1, -1):
         for c in range(n - 1, -1, -1):
             if r == n - 1 and c == n - 1:
                 continue
 
-            can_r = c + 1 < n
-            can_d = r + 1 < n
-            can_x = can_r and can_d
-
-            for phase in range(3):
-                next_phase = (phase + 1) % 3
-
-                # phase == 2 means the next move is move 3, 6, 9, ...
-                if phase == 2 and can_x:
-                    options = (("X", r + 1, c + 1),)
-                else:
-                    options = []
-                    if can_r:
-                        options.append(("R", r, c + 1))
-                    if can_d:
-                        options.append(("D", r + 1, c))
-                    if can_x:
-                        options.append(("X", r + 1, c + 1))
-
+            for k in range(3):
                 best = None
-                best_move = ""
-                for move, nr, nc in options:
-                    tail = dp[nr][nc][next_phase]
-                    if tail is None:
-                        continue
-                    value = grid[nr][nc] + tail
+                next_k = (k + 1) % 3
+
+                for _, nr, nc in options(r, c, k):
+                    value = grid[nr][nc] + dp[nr][nc][next_k]
                     if best is None or value > best:
                         best = value
-                        best_move = move
 
-                dp[r][c][phase] = best
-                choice[r][c][phase] = best_move
+                dp[r][c][k] = best
 
-    best_tail = dp[0][0][0]
-    if best_tail is None:
-        raise ValueError("no valid path exists")
+    max_sum = grid[0][0] + dp[0][0][0]
 
+    # Reconstruct an optimal path. Since options are ordered D, R, X,
+    # choosing the first optimal move also gives a deterministic
+    # lexicographically smallest optimal path.
     path = []
-    r = c = 0
-    phase = 0
+    r = c = k = 0
 
-    while r != n - 1 or c != n - 1:
-        move = choice[r][c][phase]
-        path.append(move)
+    while (r, c) != (n - 1, n - 1):
+        next_k = (k + 1) % 3
+        for move, nr, nc in options(r, c, k):
+            if grid[nr][nc] + dp[nr][nc][next_k] == dp[r][c][k]:
+                path.append(move)
+                r, c, k = nr, nc, next_k
+                break
 
-        if move == "R":
-            c += 1
-        elif move == "D":
-            r += 1
-        else:  # X
-            r += 1
-            c += 1
-
-        phase = (phase + 1) % 3
-
-    return grid[0][0] + best_tail, "".join(path)
+    return max_sum, "".join(path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     n = len(grid)
     if n == 0:
-        raise ValueError("grid must not be empty")
+        return 0, ""
 
-    # dp[r][c][phase] is the best remaining sum after leaving (r, c),
-    # excluding grid[r][c]. phase is the number of moves made, modulo 3.
-    dp = [[[None, None, None] for _ in range(n)] for _ in range(n)]
-    choice = [[["", "", ""] for _ in range(n)] for _ in range(n)]
+    def options(r: int, c: int, k: int):
+        """Yield (move, next_row, next_col) in lexical move order."""
+        can_diagonal = r + 1 < n and c + 1 < n
+
+        # k == 2 means the next move is move 3, 6, 9, etc.
+        if k == 2 and can_diagonal:
+            yield "X", r + 1, c + 1
+            return
+
+        if r + 1 < n:
+            yield "D", r + 1, c
+        if c + 1 < n:
+            yield "R", r, c + 1
+        if k != 2 and can_diagonal:
+            yield "X", r + 1, c + 1
+
+    # dp[r][c][k] is the maximum sum still collectible after leaving (r, c),
+    # excluding grid[r][c]. k is the number of moves already made modulo 3.
+    dp = [[[None] * 3 for _ in range(n)] for _ in range(n)]
     dp[n - 1][n - 1] = [0, 0, 0]
 
-    # Every move increases the row or column, so reverse row-major order
-    # ensures all successor states have already been computed.
+    # Fill backwards so every destination state is already computed.
     for r in range(n - 1, -1, -1):
         for c in range(n - 1, -1, -1):
             if r == n - 1 and c == n - 1:
                 continue
 
-            can_r = c + 1 < n
-            can_d = r + 1 < n
-            can_x = can_r and can_d
-
-            for phase in range(3):
-                next_phase = (phase + 1) % 3
-
-                # phase == 2 means the next move is move 3, 6, 9, ...
-                if phase == 2 and can_x:
-                    options = (("X", r + 1, c + 1),)
-                else:
-                    options = []
-                    if can_r:
-                        options.append(("R", r, c + 1))
-                    if can_d:
-                        options.append(("D", r + 1, c))
-                    if can_x:
-                        options.append(("X", r + 1, c + 1))
-
+            for k in range(3):
                 best = None
-                best_move = ""
-                for move, nr, nc in options:
-                    tail = dp[nr][nc][next_phase]
-                    if tail is None:
-                        continue
-                    value = grid[nr][nc] + tail
+                next_k = (k + 1) % 3
+
+                for _, nr, nc in options(r, c, k):
+                    value = grid[nr][nc] + dp[nr][nc][next_k]
                     if best is None or value > best:
                         best = value
-                        best_move = move
 
-                dp[r][c][phase] = best
-                choice[r][c][phase] = best_move
+                dp[r][c][k] = best
 
-    best_tail = dp[0][0][0]
-    if best_tail is None:
-        raise ValueError("no valid path exists")
+    max_sum = grid[0][0] + dp[0][0][0]
 
+    # Reconstruct an optimal path. Since options are ordered D, R, X,
+    # choosing the first optimal move also gives a deterministic
+    # lexicographically smallest optimal path.
     path = []
-    r = c = 0
-    phase = 0
+    r = c = k = 0
 
-    while r != n - 1 or c != n - 1:
-        move = choice[r][c][phase]
-        path.append(move)
+    while (r, c) != (n - 1, n - 1):
+        next_k = (k + 1) % 3
+        for move, nr, nc in options(r, c, k):
+            if grid[nr][nc] + dp[nr][nc][next_k] == dp[r][c][k]:
+                path.append(move)
+                r, c, k = nr, nc, next_k
+                break
 
-        if move == "R":
-            c += 1
-        elif move == "D":
-            r += 1
-        else:  # X
-            r += 1
-            c += 1
-
-        phase = (phase + 1) % 3
-
-    return grid[0][0] + best_tail, "".join(path)
+    return max_sum, "".join(path)
