@@ -12,6 +12,7 @@ glm-5.3
 glm-5.3-prime
 kimi-k2.7-code
 kimi-k3
+kimi-k3.1-pro
 kimi/kimi-k3
 qwen-audio-3.0-asr-flash
 qwen-audio-3.1-realtime-flash
