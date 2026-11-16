@@ -1,15 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-13 09:00:35
+Last updated: 2026-11-16 23:32:32
 
-## Updates This Week (2026-11-07 to 2026-11-13)
-
-### Anthropic
-
-**Added**
-
-- claude-fable-5-2 (added: 2026-11-09)
+## Updates This Week (2026-11-10 to 2026-11-16)
 
 ### Gemini
 
@@ -25,6 +19,10 @@ Last updated: 2026-11-13 09:00:35
 
 ### Mistral
 
+**Added**
+
+- voxtral-mini-tts-3-1 (added: 2026-11-16)
+
 **Deleted**
 
 - mistral-large-4 (deleted: 2026-11-13)
@@ -36,28 +34,6 @@ Last updated: 2026-11-13 09:00:35
 **Added**
 
 - kimi-k3.1-pro (added: 2026-11-13)
-
-**Deleted**
-
-- pre-mock_new_gateway_session_affinity (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_base (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_cross_site_denied (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_deprecating_old (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_force_allowed (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_force_denied (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_green_always (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_postpay_allowed (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_quota_available (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_quota_exhausted (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_quota_only_free (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_unassociated (deleted: 2026-11-09)
-- pre-mock_ptu_auth_v2_workspace_disabled (deleted: 2026-11-09)
-
-### Meta
-
-**Added**
-
-- muse-ember-1.0 (added: 2026-11-09)
 
 ## Summary
 
@@ -71,7 +47,7 @@ Model counts shown as: **Available/Deleted**
 
 **Grok**: 13/22
 
-**Mistral**: 53/76
+**Mistral**: 54/76
 
 **DeepSeek**: 2/4
 
@@ -553,6 +529,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- voxtral-mini-tts-3-1 (added: 2026-11-16)
 - voxtral-small-transcribe-3-0 (added: 2026-10-20)
 - voxtral-small-transcribe-3 (added: 2026-10-20)
 - voxtral-mini-tts-3-0 (added: 2026-10-20)
