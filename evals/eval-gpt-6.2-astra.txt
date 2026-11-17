@@ -1,26 +1,118 @@
 Model: gpt-6.2-astra
 Provider: openai_responses
-Evaluated: 2026-11-17T17:42:08.152789+00:00
+Evaluated: 2026-11-17T18:01:59.843979+00:00
 
 === TIMING ===
-Response time: 0.64s
+Response time: 7.55s
 
 === CODE EXTRACTION ===
-Method: None
-Syntax valid: NO
+Method: markdown_python
+Syntax valid: YES
 
 === EXECUTION ===
-API Error: HTTP 404: {
-  "error": {
-    "message": "The model `gpt-6.2-astra` does not exist or you do not have access to it.",
-    "type": "invalid_request_error",
-    "param": null,
-    "code": "model_not_found"
-  }
-}
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
 
 === RAW RESPONSE ===
-(no response)
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a nonempty square")
+
+    # best[r][c][phase] includes the current cell's value.
+    # phase is the number of moves already made, modulo 3.
+    best = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+    choice = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+    best[-1][-1] = [grid[-1][-1]] * 3
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                continue
+
+            moves = []
+            if c + 1 < n:
+                moves.append(("R", r, c + 1))
+            if r + 1 < n:
+                moves.append(("D", r + 1, c))
+            can_diag = r + 1 < n and c + 1 < n
+            if can_diag:
+                moves.append(("X", r + 1, c + 1))
+
+            for phase in range(3):
+                next_phase = (phase + 1) % 3
+                if phase == 2 and can_diag:
+                    move, nr, nc = "X", r + 1, c + 1
+                else:
+                    move, nr, nc = max(
+                        moves, key=lambda m: best[m[1]][m[2]][next_phase]
+                    )
+                best[r][c][phase] = grid[r][c] + best[nr][nc][next_phase]
+                choice[r][c][phase] = move
+
+    path = []
+    r = c = phase = 0
+    while r != n - 1 or c != n - 1:
+        move = choice[r][c][phase]
+        path.append(move)
+        if move in ("D", "X"):
+            r += 1
+        if move in ("R", "X"):
+            c += 1
+        phase = (phase + 1) % 3
+
+    return best[0][0][0], "".join(path)
+```
 
 === EXTRACTED CODE ===
-(no code extracted)
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a nonempty square")
+
+    # best[r][c][phase] includes the current cell's value.
+    # phase is the number of moves already made, modulo 3.
+    best = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+    choice = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+    best[-1][-1] = [grid[-1][-1]] * 3
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                continue
+
+            moves = []
+            if c + 1 < n:
+                moves.append(("R", r, c + 1))
+            if r + 1 < n:
+                moves.append(("D", r + 1, c))
+            can_diag = r + 1 < n and c + 1 < n
+            if can_diag:
+                moves.append(("X", r + 1, c + 1))
+
+            for phase in range(3):
+                next_phase = (phase + 1) % 3
+                if phase == 2 and can_diag:
+                    move, nr, nc = "X", r + 1, c + 1
+                else:
+                    move, nr, nc = max(
+                        moves, key=lambda m: best[m[1]][m[2]][next_phase]
+                    )
+                best[r][c][phase] = grid[r][c] + best[nr][nc][next_phase]
+                choice[r][c][phase] = move
+
+    path = []
+    r = c = phase = 0
+    while r != n - 1 or c != n - 1:
+        move = choice[r][c][phase]
+        path.append(move)
+        if move in ("D", "X"):
+            r += 1
+        if move in ("R", "X"):
+            c += 1
+        phase = (phase + 1) % 3
+
+    return best[0][0][0], "".join(path)
