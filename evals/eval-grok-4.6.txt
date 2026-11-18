@@ -1,9 +1,9 @@
 Model: grok-4.6
 Provider: grok
-Evaluated: 2026-10-26T18:54:04.541433+00:00
+Evaluated: 2026-11-18T22:11:48.428620+00:00
 
 === TIMING ===
-Response time: 61.6s
+Response time: 62.31s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,109 +18,97 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
+    n = len(grid)
+    if n == 0:
         return (0, "")
 
-    n = len(grid)
-    NEG = -10**18
+    memo = {}
 
-    from functools import lru_cache
+    def dp(r: int, c: int, m: int) -> tuple[int, str]:
+        key = (r, c, m)
+        if key in memo:
+            return memo[key]
 
-    @lru_cache(maxsize=None)
-    def dfs(r: int, c: int, moves: int) -> tuple[int, str]:
+        val = grid[r][c]
         if r == n - 1 and c == n - 1:
-            return (grid[r][c], "")
+            memo[key] = (val, "")
+            return memo[key]
 
-        next_num = moves + 1
-        must_x = next_num % 3 == 0
-        can_x = r + 1 < n and c + 1 < n
+        must_diag = (m + 1) % 3 == 0
         can_r = c + 1 < n
         can_d = r + 1 < n
+        can_x = can_r and can_d
 
-        best_sum = NEG
-        best_path = ""
-
-        def consider(nr: int, nc: int, ch: str) -> None:
-            nonlocal best_sum, best_path
-            s, p = dfs(nr, nc, moves + 1)
-            if s <= NEG // 2:
-                return
-            total = grid[r][c] + s
-            path = ch + p
-            if total > best_sum or (total == best_sum and path < best_path):
-                best_sum = total
-                best_path = path
-
-        if must_x and can_x:
-            consider(r + 1, c + 1, "X")
+        moves = []
+        if must_diag and can_x:
+            moves.append((1, 1, "X"))
         else:
             if can_r:
-                consider(r, c + 1, "R")
+                moves.append((0, 1, "R"))
             if can_d:
-                consider(r + 1, c, "D")
-            if can_x and not must_x:
-                consider(r + 1, c + 1, "X")
+                moves.append((1, 0, "D"))
+            if not must_diag and can_x:
+                moves.append((1, 1, "X"))
 
-        if best_sum == NEG:
-            return (NEG, "")
-        return (best_sum, best_path)
+        best_sum = None
+        best_path = ""
+        for dr, dc, ch in moves:
+            s, p = dp(r + dr, c + dc, m + 1)
+            total = val + s
+            if best_sum is None or total > best_sum:
+                best_sum = total
+                best_path = ch + p
 
-    s, p = dfs(0, 0, 0)
-    if s <= NEG // 2:
-        return (0, "")
-    return (s, p)
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+
+    return dp(0, 0, 0)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    if not grid or not grid[0]:
+    n = len(grid)
+    if n == 0:
         return (0, "")
 
-    n = len(grid)
-    NEG = -10**18
+    memo = {}
 
-    from functools import lru_cache
+    def dp(r: int, c: int, m: int) -> tuple[int, str]:
+        key = (r, c, m)
+        if key in memo:
+            return memo[key]
 
-    @lru_cache(maxsize=None)
-    def dfs(r: int, c: int, moves: int) -> tuple[int, str]:
+        val = grid[r][c]
         if r == n - 1 and c == n - 1:
-            return (grid[r][c], "")
+            memo[key] = (val, "")
+            return memo[key]
 
-        next_num = moves + 1
-        must_x = next_num % 3 == 0
-        can_x = r + 1 < n and c + 1 < n
+        must_diag = (m + 1) % 3 == 0
         can_r = c + 1 < n
         can_d = r + 1 < n
+        can_x = can_r and can_d
 
-        best_sum = NEG
-        best_path = ""
-
-        def consider(nr: int, nc: int, ch: str) -> None:
-            nonlocal best_sum, best_path
-            s, p = dfs(nr, nc, moves + 1)
-            if s <= NEG // 2:
-                return
-            total = grid[r][c] + s
-            path = ch + p
-            if total > best_sum or (total == best_sum and path < best_path):
-                best_sum = total
-                best_path = path
-
-        if must_x and can_x:
-            consider(r + 1, c + 1, "X")
+        moves = []
+        if must_diag and can_x:
+            moves.append((1, 1, "X"))
         else:
             if can_r:
-                consider(r, c + 1, "R")
+                moves.append((0, 1, "R"))
             if can_d:
-                consider(r + 1, c, "D")
-            if can_x and not must_x:
-                consider(r + 1, c + 1, "X")
+                moves.append((1, 0, "D"))
+            if not must_diag and can_x:
+                moves.append((1, 1, "X"))
 
-        if best_sum == NEG:
-            return (NEG, "")
-        return (best_sum, best_path)
+        best_sum = None
+        best_path = ""
+        for dr, dc, ch in moves:
+            s, p = dp(r + dr, c + dc, m + 1)
+            total = val + s
+            if best_sum is None or total > best_sum:
+                best_sum = total
+                best_path = ch + p
 
-    s, p = dfs(0, 0, 0)
-    if s <= NEG // 2:
-        return (0, "")
-    return (s, p)
+        memo[key] = (best_sum, best_path)
+        return memo[key]
+
+    return dp(0, 0, 0)
