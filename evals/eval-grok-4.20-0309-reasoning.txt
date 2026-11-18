@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-10-26T18:50:15.089855+00:00
+Evaluated: 2026-11-18T22:09:12.990277+00:00
 
 === TIMING ===
-Response time: 79.83s
+Response time: 44.51s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -20,93 +20,131 @@ Path valid: YES
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
-    N = len(grid)
-    memo = {}
-    def dfs(i: int, j: int, moves: int) -> tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return (grid[i][j], "")
-        key = (i, j, moves)
-        if key in memo:
-            return memo[key]
-        is_must_diag = ((moves + 1) % 3 == 0)
-        best_sum = float('-inf')
-        best_path = ""
-        can_diag = (i < N - 1 and j < N - 1)
-        can_right = (j < N - 1)
-        can_down = (i < N - 1)
-        directions = []
-        if is_must_diag:
-            if can_diag:
-                directions.append(('X', i + 1, j + 1))
-            else:
-                if can_right:
-                    directions.append(('R', i, j + 1))
-                if can_down:
-                    directions.append(('D', i + 1, j))
-        else:
-            if can_right:
-                directions.append(('R', i, j + 1))
-            if can_down:
-                directions.append(('D', i + 1, j))
-            if can_diag:
-                directions.append(('X', i + 1, j + 1))
-        for char, ni, nj in directions:
-            fut_sum, fut_path = dfs(ni, nj, moves + 1)
-            curr_total = grid[i][j] + fut_sum
-            if curr_total > best_sum:
-                best_sum = curr_total
-                best_path = char + fut_path
-        memo[key] = (best_sum, best_path)
-        return memo[key]
-    max_sum, path = dfs(0, 0, 0)
-    if max_sum == float('-inf'):
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+    
+    MAX_MOVES = 2 * (n - 1) + 1
+    INF = float('-inf')
+    dp = [[[INF for _ in range(MAX_MOVES)] for _ in range(n)] for _ in range(n)]
+    path_table = [[["" for _ in range(MAX_MOVES)] for _ in range(n)] for _ in range(n)]
+    
+    dp[0][0][0] = grid[0][0]
+    path_table[0][0][0] = ""
+    
+    for k in range(MAX_MOVES - 1):
+        for r in range(n):
+            for c in range(n):
+                if dp[r][c][k] == INF:
+                    continue
+                move_num = k + 1
+                must_diagonal = (move_num % 3 == 0)
+                can_right = c + 1 < n
+                can_down = r + 1 < n
+                can_diag = r + 1 < n and c + 1 < n
+                
+                possible = []
+                if must_diagonal:
+                    if can_diag:
+                        possible.append(('X', r + 1, c + 1))
+                    else:
+                        if can_right:
+                            possible.append(('R', r, c + 1))
+                        if can_down:
+                            possible.append(('D', r + 1, c))
+                else:
+                    if can_right:
+                        possible.append(('R', r, c + 1))
+                    if can_down:
+                        possible.append(('D', r + 1, c))
+                    if can_diag:
+                        possible.append(('X', r + 1, c + 1))
+                
+                curr_sum = dp[r][c][k]
+                curr_path = path_table[r][c][k]
+                for mchar, nr, nc in possible:
+                    new_sum = curr_sum + grid[nr][nc]
+                    new_k = k + 1
+                    if new_sum > dp[nr][nc][new_k]:
+                        dp[nr][nc][new_k] = new_sum
+                        path_table[nr][nc][new_k] = curr_path + mchar
+    
+    target_r = n - 1
+    target_c = n - 1
+    max_sum = INF
+    best_path = ""
+    for k in range(MAX_MOVES):
+        if dp[target_r][target_c][k] > max_sum:
+            max_sum = dp[target_r][target_c][k]
+            best_path = path_table[target_r][target_c][k]
+    
+    if max_sum == INF:
         return (0, "")
-    return (max_sum, path)
+    return (int(max_sum), best_path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
-    N = len(grid)
-    memo = {}
-    def dfs(i: int, j: int, moves: int) -> tuple[int, str]:
-        if i == N - 1 and j == N - 1:
-            return (grid[i][j], "")
-        key = (i, j, moves)
-        if key in memo:
-            return memo[key]
-        is_must_diag = ((moves + 1) % 3 == 0)
-        best_sum = float('-inf')
-        best_path = ""
-        can_diag = (i < N - 1 and j < N - 1)
-        can_right = (j < N - 1)
-        can_down = (i < N - 1)
-        directions = []
-        if is_must_diag:
-            if can_diag:
-                directions.append(('X', i + 1, j + 1))
-            else:
-                if can_right:
-                    directions.append(('R', i, j + 1))
-                if can_down:
-                    directions.append(('D', i + 1, j))
-        else:
-            if can_right:
-                directions.append(('R', i, j + 1))
-            if can_down:
-                directions.append(('D', i + 1, j))
-            if can_diag:
-                directions.append(('X', i + 1, j + 1))
-        for char, ni, nj in directions:
-            fut_sum, fut_path = dfs(ni, nj, moves + 1)
-            curr_total = grid[i][j] + fut_sum
-            if curr_total > best_sum:
-                best_sum = curr_total
-                best_path = char + fut_path
-        memo[key] = (best_sum, best_path)
-        return memo[key]
-    max_sum, path = dfs(0, 0, 0)
-    if max_sum == float('-inf'):
+    n = len(grid)
+    if n == 1:
+        return (grid[0][0], "")
+    
+    MAX_MOVES = 2 * (n - 1) + 1
+    INF = float('-inf')
+    dp = [[[INF for _ in range(MAX_MOVES)] for _ in range(n)] for _ in range(n)]
+    path_table = [[["" for _ in range(MAX_MOVES)] for _ in range(n)] for _ in range(n)]
+    
+    dp[0][0][0] = grid[0][0]
+    path_table[0][0][0] = ""
+    
+    for k in range(MAX_MOVES - 1):
+        for r in range(n):
+            for c in range(n):
+                if dp[r][c][k] == INF:
+                    continue
+                move_num = k + 1
+                must_diagonal = (move_num % 3 == 0)
+                can_right = c + 1 < n
+                can_down = r + 1 < n
+                can_diag = r + 1 < n and c + 1 < n
+                
+                possible = []
+                if must_diagonal:
+                    if can_diag:
+                        possible.append(('X', r + 1, c + 1))
+                    else:
+                        if can_right:
+                            possible.append(('R', r, c + 1))
+                        if can_down:
+                            possible.append(('D', r + 1, c))
+                else:
+                    if can_right:
+                        possible.append(('R', r, c + 1))
+                    if can_down:
+                        possible.append(('D', r + 1, c))
+                    if can_diag:
+                        possible.append(('X', r + 1, c + 1))
+                
+                curr_sum = dp[r][c][k]
+                curr_path = path_table[r][c][k]
+                for mchar, nr, nc in possible:
+                    new_sum = curr_sum + grid[nr][nc]
+                    new_k = k + 1
+                    if new_sum > dp[nr][nc][new_k]:
+                        dp[nr][nc][new_k] = new_sum
+                        path_table[nr][nc][new_k] = curr_path + mchar
+    
+    target_r = n - 1
+    target_c = n - 1
+    max_sum = INF
+    best_path = ""
+    for k in range(MAX_MOVES):
+        if dp[target_r][target_c][k] > max_sum:
+            max_sum = dp[target_r][target_c][k]
+            best_path = path_table[target_r][target_c][k]
+    
+    if max_sum == INF:
         return (0, "")
-    return (max_sum, path)
+    return (int(max_sum), best_path)
