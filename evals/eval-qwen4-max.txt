@@ -1,0 +1,198 @@
+Model: qwen4-max
+Provider: qwen
+Evaluated: 2026-11-18T07:24:06.657008+00:00
+
+=== TIMING ===
+Response time: 40.96s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Find the maximum-sum path from the top-left to the bottom-right of an
+    N x N grid.
+
+    Moves: 'R' (right), 'D' (down), 'X' (diagonal down-right).
+    Every 3rd move (move #3, #6, #9, ...) must be diagonal whenever a
+    diagonal move is legal from the current cell (i.e. it stays in bounds).
+    If the diagonal is not possible, 'R' or 'D' may be used instead.
+
+    The sum includes the starting cell and every cell visited afterwards.
+
+    Returns (max_sum, path_string).
+    """
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    NEG = float("-inf")
+
+    # dp[i][j][k] = best achievable sum starting at (i, j) (including
+    # grid[i][j]) given that k = (number of moves already made) % 3.
+    dp = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    choice = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    for i in range(n - 1, -1, -1):
+        for j in range(n - 1, -1, -1):
+            if i == n - 1 and j == n - 1:
+                for k in range(3):
+                    dp[i][j][k] = grid[i][j]
+                continue
+
+            can_r = j + 1 < n
+            can_d = i + 1 < n
+            can_x = can_r and can_d
+
+            for k in range(3):
+                nk = (k + 1) % 3          # move-count mod 3 after moving
+                forced_diagonal = (k == 2)  # next move is the 3rd, 6th, ...
+
+                if forced_diagonal and can_x:
+                    moves = (("X", i + 1, j + 1),)
+                else:
+                    moves = []
+                    if can_r:
+                        moves.append(("R", i, j + 1))
+                    if can_d:
+                        moves.append(("D", i + 1, j))
+                    if can_x:
+                        moves.append(("X", i + 1, j + 1))
+
+                best = NEG
+                best_move = None
+                for ch, ni, nj in moves:
+                    sub = dp[ni][nj][nk]
+                    if sub == NEG:
+                        continue
+                    total = grid[i][j] + sub
+                    if total > best:
+                        best = total
+                        best_move = ch
+
+                dp[i][j][k] = best
+                choice[i][j][k] = best_move
+
+    total = dp[0][0][0]
+    if total == NEG:
+        return (0, "")
+
+    # Reconstruct the path by following the stored optimal choices.
+    path = []
+    i = j = 0
+    k = 0
+    while not (i == n - 1 and j == n - 1):
+        ch = choice[i][j][k]
+        if ch is None:
+            break
+        path.append(ch)
+        if ch == "R":
+            j += 1
+        elif ch == "D":
+            i += 1
+        else:
+            i += 1
+            j += 1
+        k = (k + 1) % 3
+
+    return (int(total), "".join(path))
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    """
+    Find the maximum-sum path from the top-left to the bottom-right of an
+    N x N grid.
+
+    Moves: 'R' (right), 'D' (down), 'X' (diagonal down-right).
+    Every 3rd move (move #3, #6, #9, ...) must be diagonal whenever a
+    diagonal move is legal from the current cell (i.e. it stays in bounds).
+    If the diagonal is not possible, 'R' or 'D' may be used instead.
+
+    The sum includes the starting cell and every cell visited afterwards.
+
+    Returns (max_sum, path_string).
+    """
+    if not grid or not grid[0]:
+        return (0, "")
+
+    n = len(grid)
+    NEG = float("-inf")
+
+    # dp[i][j][k] = best achievable sum starting at (i, j) (including
+    # grid[i][j]) given that k = (number of moves already made) % 3.
+    dp = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    choice = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+
+    for i in range(n - 1, -1, -1):
+        for j in range(n - 1, -1, -1):
+            if i == n - 1 and j == n - 1:
+                for k in range(3):
+                    dp[i][j][k] = grid[i][j]
+                continue
+
+            can_r = j + 1 < n
+            can_d = i + 1 < n
+            can_x = can_r and can_d
+
+            for k in range(3):
+                nk = (k + 1) % 3          # move-count mod 3 after moving
+                forced_diagonal = (k == 2)  # next move is the 3rd, 6th, ...
+
+                if forced_diagonal and can_x:
+                    moves = (("X", i + 1, j + 1),)
+                else:
+                    moves = []
+                    if can_r:
+                        moves.append(("R", i, j + 1))
+                    if can_d:
+                        moves.append(("D", i + 1, j))
+                    if can_x:
+                        moves.append(("X", i + 1, j + 1))
+
+                best = NEG
+                best_move = None
+                for ch, ni, nj in moves:
+                    sub = dp[ni][nj][nk]
+                    if sub == NEG:
+                        continue
+                    total = grid[i][j] + sub
+                    if total > best:
+                        best = total
+                        best_move = ch
+
+                dp[i][j][k] = best
+                choice[i][j][k] = best_move
+
+    total = dp[0][0][0]
+    if total == NEG:
+        return (0, "")
+
+    # Reconstruct the path by following the stored optimal choices.
+    path = []
+    i = j = 0
+    k = 0
+    while not (i == n - 1 and j == n - 1):
+        ch = choice[i][j][k]
+        if ch is None:
+            break
+        path.append(ch)
+        if ch == "R":
+            j += 1
+        elif ch == "D":
+            i += 1
+        else:
+            i += 1
+            j += 1
+        k = (k + 1) % 3
+
+    return (int(total), "".join(path))
