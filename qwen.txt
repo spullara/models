@@ -93,6 +93,7 @@ qwen3.8-max
 qwen3.8-max-0902
 qwen3.8-omni-flash
 qwen3.8-omni-flash-realtime
+qwen4-max
 qwq-plus-2025-03-05
 text-embedding-v3
 text-embedding-v4
