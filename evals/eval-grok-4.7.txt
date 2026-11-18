@@ -1,9 +1,9 @@
 Model: grok-4.7
 Provider: grok
-Evaluated: 2026-10-26T18:55:06.175867+00:00
+Evaluated: 2026-11-18T22:12:50.765491+00:00
 
 === TIMING ===
-Response time: 113.73s
+Response time: 123.67s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,127 +18,117 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
+    """Max-sum path from top-left to bottom-right.
+
+    Moves: R (right), D (down), X (diagonal down-right).
+    Move numbers 3, 6, 9, ... must be X when that step stays inside the grid;
+    otherwise R or D may be used. The returned sum includes every visited cell.
+    Ties are broken by the lexicographically smallest path string.
+    """
+    if not grid or not grid[0]:
         return (0, "")
 
-    # best[r][c][k] = (max sum, path) reaching (r, c) with moves_made % 3 == k.
-    # Sum includes every visited cell, starting at top-left.
-    best: list[list[list[tuple[int, str] | None]]] = [
-        [[None, None, None] for _ in range(n)] for _ in range(n)
+    n = len(grid)
+    # best[r][c][k] = (max sum from (r, c) to the end, path)
+    # k = (moves already taken) % 3. Sum includes grid[r][c].
+    best: list[list[list[tuple[int, str]]]] = [
+        [[(0, "") for _ in range(3)] for _ in range(n)] for _ in range(n)
     ]
-    best[0][0][0] = (grid[0][0], "")
 
-    for step in range(2 * n - 1):
-        for r in range(max(0, step - (n - 1)), min(step, n - 1) + 1):
-            c = step - r
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
             for k in range(3):
-                state = best[r][c][k]
-                if state is None or (r == n - 1 and c == n - 1):
+                if r == n - 1 and c == n - 1:
+                    best[r][c][k] = (grid[r][c], "")
                     continue
 
-                cur_sum, cur_path = state
-                diag_ok = r + 1 < n and c + 1 < n
-                # Moves 3, 6, 9, ... are required to be diagonal when in bounds.
-                must_diag = k == 2
+                must_x = k == 2
+                can_x = r + 1 < n and c + 1 < n
+                moves: list[tuple[str, int, int]] = []
 
-                if must_diag and diag_ok:
-                    options = (("X", r + 1, c + 1),)
+                if must_x and can_x:
+                    moves.append(("X", r + 1, c + 1))
                 else:
-                    options = []
                     if c + 1 < n:
-                        options.append(("R", r, c + 1))
+                        moves.append(("R", r, c + 1))
                     if r + 1 < n:
-                        options.append(("D", r + 1, c))
-                    if diag_ok:
-                        options.append(("X", r + 1, c + 1))
+                        moves.append(("D", r + 1, c))
+                    if can_x:
+                        moves.append(("X", r + 1, c + 1))
 
-                nk = (k + 1) % 3
-                for move, nr, nc in options:
-                    new_sum = cur_sum + grid[nr][nc]
-                    new_path = cur_path + move
-                    prev = best[nr][nc][nk]
+                chosen_sum: int | None = None
+                chosen_path = ""
+                for mv, nr, nc in moves:
+                    sub_sum, sub_path = best[nr][nc][(k + 1) % 3]
+                    total = grid[r][c] + sub_sum
+                    path = mv + sub_path
                     if (
-                        prev is None
-                        or new_sum > prev[0]
-                        or (new_sum == prev[0] and new_path < prev[1])
+                        chosen_sum is None
+                        or total > chosen_sum
+                        or (total == chosen_sum and path < chosen_path)
                     ):
-                        best[nr][nc][nk] = (new_sum, new_path)
+                        chosen_sum = total
+                        chosen_path = path
 
-    answer: tuple[int, str] | None = None
-    for k in range(3):
-        state = best[n - 1][n - 1][k]
-        if state is None:
-            continue
-        if (
-            answer is None
-            or state[0] > answer[0]
-            or (state[0] == answer[0] and state[1] < answer[1])
-        ):
-            answer = state
+                best[r][c][k] = (chosen_sum if chosen_sum is not None else grid[r][c], chosen_path)
 
-    return answer if answer is not None else (grid[0][0], "")
+    return best[0][0][0]
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
+    """Max-sum path from top-left to bottom-right.
+
+    Moves: R (right), D (down), X (diagonal down-right).
+    Move numbers 3, 6, 9, ... must be X when that step stays inside the grid;
+    otherwise R or D may be used. The returned sum includes every visited cell.
+    Ties are broken by the lexicographically smallest path string.
+    """
+    if not grid or not grid[0]:
         return (0, "")
 
-    # best[r][c][k] = (max sum, path) reaching (r, c) with moves_made % 3 == k.
-    # Sum includes every visited cell, starting at top-left.
-    best: list[list[list[tuple[int, str] | None]]] = [
-        [[None, None, None] for _ in range(n)] for _ in range(n)
+    n = len(grid)
+    # best[r][c][k] = (max sum from (r, c) to the end, path)
+    # k = (moves already taken) % 3. Sum includes grid[r][c].
+    best: list[list[list[tuple[int, str]]]] = [
+        [[(0, "") for _ in range(3)] for _ in range(n)] for _ in range(n)
     ]
-    best[0][0][0] = (grid[0][0], "")
 
-    for step in range(2 * n - 1):
-        for r in range(max(0, step - (n - 1)), min(step, n - 1) + 1):
-            c = step - r
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
             for k in range(3):
-                state = best[r][c][k]
-                if state is None or (r == n - 1 and c == n - 1):
+                if r == n - 1 and c == n - 1:
+                    best[r][c][k] = (grid[r][c], "")
                     continue
 
-                cur_sum, cur_path = state
-                diag_ok = r + 1 < n and c + 1 < n
-                # Moves 3, 6, 9, ... are required to be diagonal when in bounds.
-                must_diag = k == 2
+                must_x = k == 2
+                can_x = r + 1 < n and c + 1 < n
+                moves: list[tuple[str, int, int]] = []
 
-                if must_diag and diag_ok:
-                    options = (("X", r + 1, c + 1),)
+                if must_x and can_x:
+                    moves.append(("X", r + 1, c + 1))
                 else:
-                    options = []
                     if c + 1 < n:
-                        options.append(("R", r, c + 1))
+                        moves.append(("R", r, c + 1))
                     if r + 1 < n:
-                        options.append(("D", r + 1, c))
-                    if diag_ok:
-                        options.append(("X", r + 1, c + 1))
+                        moves.append(("D", r + 1, c))
+                    if can_x:
+                        moves.append(("X", r + 1, c + 1))
 
-                nk = (k + 1) % 3
-                for move, nr, nc in options:
-                    new_sum = cur_sum + grid[nr][nc]
-                    new_path = cur_path + move
-                    prev = best[nr][nc][nk]
+                chosen_sum: int | None = None
+                chosen_path = ""
+                for mv, nr, nc in moves:
+                    sub_sum, sub_path = best[nr][nc][(k + 1) % 3]
+                    total = grid[r][c] + sub_sum
+                    path = mv + sub_path
                     if (
-                        prev is None
-                        or new_sum > prev[0]
-                        or (new_sum == prev[0] and new_path < prev[1])
+                        chosen_sum is None
+                        or total > chosen_sum
+                        or (total == chosen_sum and path < chosen_path)
                     ):
-                        best[nr][nc][nk] = (new_sum, new_path)
+                        chosen_sum = total
+                        chosen_path = path
 
-    answer: tuple[int, str] | None = None
-    for k in range(3):
-        state = best[n - 1][n - 1][k]
-        if state is None:
-            continue
-        if (
-            answer is None
-            or state[0] > answer[0]
-            or (state[0] == answer[0] and state[1] < answer[1])
-        ):
-            answer = state
+                best[r][c][k] = (chosen_sum if chosen_sum is not None else grid[r][c], chosen_path)
 
-    return answer if answer is not None else (grid[0][0], "")
+    return best[0][0][0]
