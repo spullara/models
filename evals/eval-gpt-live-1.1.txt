@@ -1,0 +1,26 @@
+Model: gpt-live-1.1
+Provider: openai_responses
+Evaluated: 2026-11-19T19:53:07.472577+00:00
+
+=== TIMING ===
+Response time: 1.81s
+
+=== CODE EXTRACTION ===
+Method: None
+Syntax valid: NO
+
+=== EXECUTION ===
+API Error: HTTP 500: {
+  "error": {
+    "message": "An error occurred while processing your request. You can retry your request, or contact us through our help center at help.openai.com if the error persists. Please include the request ID req_bc225b312d114cc6b2bff5c97c77c76a in your message.",
+    "type": "server_error",
+    "param": null,
+    "code": "server_error"
+  }
+}
+
+=== RAW RESPONSE ===
+(no response)
+
+=== EXTRACTED CODE ===
+(no code extracted)
