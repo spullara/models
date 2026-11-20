@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-20 19:32:27
+Last updated: 2026-11-20 19:35:33
 
 ## Updates This Week (2026-11-14 to 2026-11-20)
 
@@ -21,7 +21,7 @@ Last updated: 2026-11-20 19:32:27
 
 **Deleted**
 
-- models/gemini-embedding-001 (deleted: 2026-11-20)
+- models/deep-research-pro-preview-12-2025 (deleted: 2026-11-20)
 
 ### Grok
 
@@ -361,7 +361,6 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-3.1-pro-preview-customtools (added: 2026-02-19)
 - models/gemini-3.1-pro-preview (added: 2026-02-19)
 - models/gemini-3-flash-preview (added: 2025-12-17)
-- models/deep-research-pro-preview-12-2025 (added: 2025-12-11)
 - models/nano-banana-pro-preview (added: 2025-11-20)
 - models/gemini-3-pro-image-preview (added: 2025-11-20)
 - models/gemini-2.5-computer-use-preview-10-2025 (added: 2025-10-07)
@@ -370,6 +369,7 @@ Model counts shown as: **Available/Deleted**
 - models/gemini-flash-lite-latest (added: 2025-09-25)
 - models/gemini-flash-latest (added: 2025-09-25)
 - models/gemini-2.5-flash-lite (added: 2025-07-22)
+- models/gemini-embedding-001 (added: 2025-07-14)
 - models/gemini-2.5-pro (added: 2025-06-17)
 - models/gemini-2.5-flash (added: 2025-06-17)
 - models/gemini-2.5-pro-preview-tts (added: 2025-05-21)
@@ -377,7 +377,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Deleted Models
 
-- models/gemini-embedding-001 (deleted: 2026-11-20)
+- models/deep-research-pro-preview-12-2025 (deleted: 2026-11-20)
 - models/gemini-embedding-2-preview (deleted: 2026-11-12)
 - models/gemini-embedding-2 (deleted: 2026-11-10)
 - models/aqa (deleted: 2026-11-05)
