@@ -1,6 +1,6 @@
 Model: models/deep-research-pro-preview-12-2025
 Provider: gemini
-Evaluated: 2026-11-20T19:28:07.109704+00:00
+Evaluated: 2026-11-20T19:32:07.244701+00:00
 
 === TIMING ===
 Response time: 0.17s
@@ -10,11 +10,11 @@ Method: None
 Syntax valid: NO
 
 === EXECUTION ===
-API Error: HTTP 400: {
+API Error: HTTP 404: {
   "error": {
-    "code": 400,
-    "message": "This model only supports Interactions API.",
-    "status": "INVALID_ARGUMENT"
+    "code": 404,
+    "message": "The preview agent 'deep-research-pro-preview-12-2025' has been shut down. Please migrate your workloads to 'deep-research-preview-04-2026' instead.",
+    "status": "NOT_FOUND"
   }
 }
 
