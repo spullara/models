@@ -1,9 +1,9 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-19 20:10:23
+Last updated: 2026-11-20 02:02:25
 
-## Updates This Week (2026-11-13 to 2026-11-19)
+## Updates This Week (2026-11-14 to 2026-11-20)
 
 ### OpenAI
 
@@ -36,16 +36,13 @@ Last updated: 2026-11-19 20:10:23
 - labs-leanstral-1-5 (deleted: 2026-11-18)
 - labs-leanstral-1-5-1 (deleted: 2026-11-18)
 - voxtral-mini-tts-3-1 (deleted: 2026-11-17)
-- mistral-large-4 (deleted: 2026-11-13)
-- mistral-large-4-0 (deleted: 2026-11-13)
-- mistral-large-latest (deleted: 2026-11-13)
 
 ### Qwen
 
 **Added**
 
+- mindlab/macaron-v1.1-venti-pro (added: 2026-11-20)
 - qwen4-max (added: 2026-11-18)
-- kimi-k3.1-pro (added: 2026-11-13)
 
 ## Summary
 
@@ -65,7 +62,7 @@ Model counts shown as: **Available/Deleted**
 
 **Kimi**: 6/14
 
-**Qwen**: 103/113
+**Qwen**: 104/113
 
 **Meta**: 10/1
 
@@ -725,6 +722,7 @@ Model counts shown as: **Available/Deleted**
 
 ### Current Models
 
+- mindlab/macaron-v1.1-venti-pro (added: 2026-11-20)
 - qwen4-max (added: 2026-11-18)
 - kimi-k3.1-pro (added: 2026-11-13)
 - qwen-audio-3.1-realtime-flash (added: 2026-10-27)
