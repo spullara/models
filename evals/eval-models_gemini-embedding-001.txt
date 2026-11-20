@@ -1,9 +1,9 @@
 Model: models/gemini-embedding-001
 Provider: gemini
-Evaluated: 2026-11-20T19:25:06.878261+00:00
+Evaluated: 2026-11-20T19:27:07.688876+00:00
 
 === TIMING ===
-Response time: 0.16s
+Response time: 0.15s
 
 === CODE EXTRACTION ===
 Method: None
