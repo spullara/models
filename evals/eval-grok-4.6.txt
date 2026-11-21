@@ -1,9 +1,9 @@
 Model: grok-4.6
 Provider: grok
-Evaluated: 2026-11-21T00:47:48.891939+00:00
+Evaluated: 2026-11-21T04:53:57.527986+00:00
 
 === TIMING ===
-Response time: 69.01s
+Response time: 68.93s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,121 +18,117 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
+    if not grid or not grid[0]:
         return (0, "")
-    if n == 1:
-        return (grid[0][0], "")
 
-    dp = [[[None] * 3 for _ in range(n)] for _ in range(n)]
-    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = grid[0][0]
+    n = len(grid)
+    # dp[r][c][mod] = (max_sum, path) after `mod` moves (mod 3), or None
+    dp = [[[None, None] for _ in range(3)] for _ in range(n)]
+    # Use a parallel structure of optionals via a sentinel
+    UNSET = object()
+    dp = [[[UNSET for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
 
-    for i in range(n):
-        for j in range(n):
-            for phase in range(3):
-                if dp[i][j][phase] is None:
+    def in_bounds(r, c):
+        return 0 <= r < n and 0 <= c < n
+
+    for r in range(n):
+        for c in range(n):
+            for mod in range(3):
+                state = dp[r][c][mod]
+                if state is UNSET:
                     continue
-                if i == n - 1 and j == n - 1:
+                if r == n - 1 and c == n - 1:
                     continue
 
-                can_r = j + 1 < n
-                can_d = i + 1 < n
-                can_x = can_r and can_d
-                must_x = phase == 2
+                cur_sum, path = state
+                must_diag = mod == 2  # next move index 3, 6, 9, ...
+                can_x = in_bounds(r + 1, c + 1)
+                moves = []
 
-                options = []
-                if must_x and can_x:
-                    options.append(("X", i + 1, j + 1))
+                if must_diag and can_x:
+                    moves.append(("X", r + 1, c + 1))
                 else:
-                    if can_r:
-                        options.append(("R", i, j + 1))
-                    if can_d:
-                        options.append(("D", i + 1, j))
-                    if can_x:
-                        options.append(("X", i + 1, j + 1))
+                    if in_bounds(r, c + 1):
+                        moves.append(("R", r, c + 1))
+                    if in_bounds(r + 1, c):
+                        moves.append(("D", r + 1, c))
+                    if not must_diag and can_x:
+                        moves.append(("X", r + 1, c + 1))
 
-                new_phase = (phase + 1) % 3
-                for ch, ni, nj in options:
-                    new_sum = dp[i][j][phase] + grid[ni][nj]
-                    if dp[ni][nj][new_phase] is None or new_sum > dp[ni][nj][new_phase]:
-                        dp[ni][nj][new_phase] = new_sum
-                        parent[ni][nj][new_phase] = (i, j, phase, ch)
+                new_mod = (mod + 1) % 3
+                for ch, nr, nc in moves:
+                    new_sum = cur_sum + grid[nr][nc]
+                    new_path = path + ch
+                    prev = dp[nr][nc][new_mod]
+                    if prev is UNSET or new_sum > prev[0]:
+                        dp[nr][nc][new_mod] = (new_sum, new_path)
 
-    best_sum = None
-    best_phase = 0
-    for p in range(3):
-        s = dp[n - 1][n - 1][p]
-        if s is not None and (best_sum is None or s > best_sum):
-            best_sum = s
-            best_phase = p
+    best = None
+    for mod in range(3):
+        state = dp[n - 1][n - 1][mod]
+        if state is UNSET:
+            continue
+        if best is None or state[0] > best[0]:
+            best = state
 
-    path_chars = []
-    i, j, p = n - 1, n - 1, best_phase
-    while parent[i][j][p] is not None:
-        pi, pj, pp, ch = parent[i][j][p]
-        path_chars.append(ch)
-        i, j, p = pi, pj, pp
-    path_chars.reverse()
-    return (best_sum, "".join(path_chars))
+    return best if best is not None else (grid[0][0], "")
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
+    if not grid or not grid[0]:
         return (0, "")
-    if n == 1:
-        return (grid[0][0], "")
 
-    dp = [[[None] * 3 for _ in range(n)] for _ in range(n)]
-    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
-    dp[0][0][0] = grid[0][0]
+    n = len(grid)
+    # dp[r][c][mod] = (max_sum, path) after `mod` moves (mod 3), or None
+    dp = [[[None, None] for _ in range(3)] for _ in range(n)]
+    # Use a parallel structure of optionals via a sentinel
+    UNSET = object()
+    dp = [[[UNSET for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    dp[0][0][0] = (grid[0][0], "")
 
-    for i in range(n):
-        for j in range(n):
-            for phase in range(3):
-                if dp[i][j][phase] is None:
+    def in_bounds(r, c):
+        return 0 <= r < n and 0 <= c < n
+
+    for r in range(n):
+        for c in range(n):
+            for mod in range(3):
+                state = dp[r][c][mod]
+                if state is UNSET:
                     continue
-                if i == n - 1 and j == n - 1:
+                if r == n - 1 and c == n - 1:
                     continue
 
-                can_r = j + 1 < n
-                can_d = i + 1 < n
-                can_x = can_r and can_d
-                must_x = phase == 2
+                cur_sum, path = state
+                must_diag = mod == 2  # next move index 3, 6, 9, ...
+                can_x = in_bounds(r + 1, c + 1)
+                moves = []
 
-                options = []
-                if must_x and can_x:
-                    options.append(("X", i + 1, j + 1))
+                if must_diag and can_x:
+                    moves.append(("X", r + 1, c + 1))
                 else:
-                    if can_r:
-                        options.append(("R", i, j + 1))
-                    if can_d:
-                        options.append(("D", i + 1, j))
-                    if can_x:
-                        options.append(("X", i + 1, j + 1))
+                    if in_bounds(r, c + 1):
+                        moves.append(("R", r, c + 1))
+                    if in_bounds(r + 1, c):
+                        moves.append(("D", r + 1, c))
+                    if not must_diag and can_x:
+                        moves.append(("X", r + 1, c + 1))
 
-                new_phase = (phase + 1) % 3
-                for ch, ni, nj in options:
-                    new_sum = dp[i][j][phase] + grid[ni][nj]
-                    if dp[ni][nj][new_phase] is None or new_sum > dp[ni][nj][new_phase]:
-                        dp[ni][nj][new_phase] = new_sum
-                        parent[ni][nj][new_phase] = (i, j, phase, ch)
+                new_mod = (mod + 1) % 3
+                for ch, nr, nc in moves:
+                    new_sum = cur_sum + grid[nr][nc]
+                    new_path = path + ch
+                    prev = dp[nr][nc][new_mod]
+                    if prev is UNSET or new_sum > prev[0]:
+                        dp[nr][nc][new_mod] = (new_sum, new_path)
 
-    best_sum = None
-    best_phase = 0
-    for p in range(3):
-        s = dp[n - 1][n - 1][p]
-        if s is not None and (best_sum is None or s > best_sum):
-            best_sum = s
-            best_phase = p
+    best = None
+    for mod in range(3):
+        state = dp[n - 1][n - 1][mod]
+        if state is UNSET:
+            continue
+        if best is None or state[0] > best[0]:
+            best = state
 
-    path_chars = []
-    i, j, p = n - 1, n - 1, best_phase
-    while parent[i][j][p] is not None:
-        pi, pj, pp, ch = parent[i][j][p]
-        path_chars.append(ch)
-        i, j, p = pi, pj, pp
-    path_chars.reverse()
-    return (best_sum, "".join(path_chars))
+    return best if best is not None else (grid[0][0], "")
