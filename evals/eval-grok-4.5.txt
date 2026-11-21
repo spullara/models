@@ -1,9 +1,9 @@
 Model: grok-4.5
 Provider: grok
-Evaluated: 2026-11-18T22:11:17.605770+00:00
+Evaluated: 2026-11-21T00:34:12.381619+00:00
 
 === TIMING ===
-Response time: 30.79s
+Response time: 33.59s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -24,54 +24,47 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
 
-    memo = {}
+    memo: dict[tuple[int, int, int], tuple[int, str] | None] = {}
 
-    def dfs(i, j, moves_made):
+    def dfs(i: int, j: int, moves_made: int) -> tuple[int, str] | None:
         if i == n - 1 and j == n - 1:
             return (grid[i][j], "")
 
-        key = (i, j, moves_made % 3)
+        key = (i, j, moves_made)
         if key in memo:
             return memo[key]
 
-        next_move_num = moves_made + 1
-        must_diagonal = (next_move_num % 3 == 0)
+        must_diagonal = ((moves_made + 1) % 3 == 0)
 
-        can_x = i + 1 < n and j + 1 < n
-        can_r = j + 1 < n
-        can_d = i + 1 < n
+        possible: list[tuple[str, int, int]] = []
+        if i + 1 < n and j + 1 < n:
+            possible.append(("X", i + 1, j + 1))
+        if j + 1 < n:
+            possible.append(("R", i, j + 1))
+        if i + 1 < n:
+            possible.append(("D", i + 1, j))
 
-        candidates = []
-        if must_diagonal:
-            if can_x:
-                candidates = [('X', i + 1, j + 1)]
-            else:
-                if can_r:
-                    candidates.append(('R', i, j + 1))
-                if can_d:
-                    candidates.append(('D', i + 1, j))
-        else:
-            if can_r:
-                candidates.append(('R', i, j + 1))
-            if can_d:
-                candidates.append(('D', i + 1, j))
-            if can_x:
-                candidates.append(('X', i + 1, j + 1))
+        if must_diagonal and any(ch == "X" for ch, _, _ in possible):
+            possible = [p for p in possible if p[0] == "X"]
 
-        best_sum = float('-inf')
-        best_path = ""
+        best: tuple[int, str] | None = None
+        for ch, ni, nj in possible:
+            result = dfs(ni, nj, moves_made + 1)
+            if result is None:
+                continue
+            sub_sum, sub_path = result
+            total_sum = grid[i][j] + sub_sum
+            total_path = ch + sub_path
+            if best is None or total_sum > best[0]:
+                best = (total_sum, total_path)
 
-        for move_char, ni, nj in candidates:
-            sub_sum, sub_path = dfs(ni, nj, moves_made + 1)
-            total = grid[i][j] + sub_sum
-            if total > best_sum:
-                best_sum = total
-                best_path = move_char + sub_path
+        memo[key] = best
+        return best
 
-        memo[key] = (best_sum, best_path)
-        return memo[key]
-
-    return dfs(0, 0, 0)
+    result = dfs(0, 0, 0)
+    if result is None:
+        return (0, "")
+    return result
 ```
 
 === EXTRACTED CODE ===
@@ -82,51 +75,44 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
 
-    memo = {}
+    memo: dict[tuple[int, int, int], tuple[int, str] | None] = {}
 
-    def dfs(i, j, moves_made):
+    def dfs(i: int, j: int, moves_made: int) -> tuple[int, str] | None:
         if i == n - 1 and j == n - 1:
             return (grid[i][j], "")
 
-        key = (i, j, moves_made % 3)
+        key = (i, j, moves_made)
         if key in memo:
             return memo[key]
 
-        next_move_num = moves_made + 1
-        must_diagonal = (next_move_num % 3 == 0)
+        must_diagonal = ((moves_made + 1) % 3 == 0)
 
-        can_x = i + 1 < n and j + 1 < n
-        can_r = j + 1 < n
-        can_d = i + 1 < n
+        possible: list[tuple[str, int, int]] = []
+        if i + 1 < n and j + 1 < n:
+            possible.append(("X", i + 1, j + 1))
+        if j + 1 < n:
+            possible.append(("R", i, j + 1))
+        if i + 1 < n:
+            possible.append(("D", i + 1, j))
 
-        candidates = []
-        if must_diagonal:
-            if can_x:
-                candidates = [('X', i + 1, j + 1)]
-            else:
-                if can_r:
-                    candidates.append(('R', i, j + 1))
-                if can_d:
-                    candidates.append(('D', i + 1, j))
-        else:
-            if can_r:
-                candidates.append(('R', i, j + 1))
-            if can_d:
-                candidates.append(('D', i + 1, j))
-            if can_x:
-                candidates.append(('X', i + 1, j + 1))
+        if must_diagonal and any(ch == "X" for ch, _, _ in possible):
+            possible = [p for p in possible if p[0] == "X"]
 
-        best_sum = float('-inf')
-        best_path = ""
+        best: tuple[int, str] | None = None
+        for ch, ni, nj in possible:
+            result = dfs(ni, nj, moves_made + 1)
+            if result is None:
+                continue
+            sub_sum, sub_path = result
+            total_sum = grid[i][j] + sub_sum
+            total_path = ch + sub_path
+            if best is None or total_sum > best[0]:
+                best = (total_sum, total_path)
 
-        for move_char, ni, nj in candidates:
-            sub_sum, sub_path = dfs(ni, nj, moves_made + 1)
-            total = grid[i][j] + sub_sum
-            if total > best_sum:
-                best_sum = total
-                best_path = move_char + sub_path
+        memo[key] = best
+        return best
 
-        memo[key] = (best_sum, best_path)
-        return memo[key]
-
-    return dfs(0, 0, 0)
+    result = dfs(0, 0, 0)
+    if result is None:
+        return (0, "")
+    return result
