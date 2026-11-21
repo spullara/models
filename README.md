@@ -1,7 +1,7 @@
 These are the model lists from OpenAI, Anthropic, Gemini, Grok, Mistral, DeepSeek, Kimi, Qwen, and Meta.
 It is updated automatically when model files change.
 
-Last updated: 2026-11-21 04:50:53
+Last updated: 2026-11-21 04:52:51
 
 ## Updates This Week (2026-11-15 to 2026-11-21)
 
@@ -27,13 +27,8 @@ Last updated: 2026-11-21 04:50:53
 
 **Deleted**
 
-- grok-4.20-0309-non-reasoning (deleted: 2026-11-21)
-- grok-4.20-0309-reasoning (deleted: 2026-11-21)
-- grok-4.20-multi-agent-0309 (deleted: 2026-11-21)
-- grok-4.3 (deleted: 2026-11-21)
-- grok-4.5 (deleted: 2026-11-21)
-- grok-4.6 (deleted: 2026-11-21)
-- grok-4.7 (deleted: 2026-11-21)
+- grok-imagine-image (deleted: 2026-11-21)
+- grok-imagine-image-2.0 (deleted: 2026-11-21)
 - grok-build-0.1 (deleted: 2026-11-19)
 
 ### Mistral
@@ -61,7 +56,7 @@ Model counts shown as: **Available/Deleted**
 
 **Gemini**: 50/117
 
-**Grok**: 5/30
+**Grok**: 10/25
 
 **Mistral**: 51/79
 
@@ -507,20 +502,20 @@ Model counts shown as: **Available/Deleted**
 ### Current Models
 
 - grok-imagine-video-1.5-lite (added: 2026-10-01)
-- grok-imagine-image-2.0 (added: 2026-08-11)
+- grok-4.7 (added: 2026-09-21)
+- grok-4.6 (added: 2026-08-12)
+- grok-4.5 (added: 2026-07-08)
 - grok-imagine-video-1.5 (added: 2026-06-17)
+- grok-4.3 (added: 2026-04-30)
+- grok-4.20-multi-agent-0309 (added: 2026-03-19)
+- grok-4.20-0309-reasoning (added: 2026-03-19)
+- grok-4.20-0309-non-reasoning (added: 2026-03-19)
 - grok-imagine-video (added: 2026-01-29)
-- grok-imagine-image (added: 2026-01-29)
 
 ### Deleted Models
 
-- grok-4.7 (deleted: 2026-11-21)
-- grok-4.6 (deleted: 2026-11-21)
-- grok-4.5 (deleted: 2026-11-21)
-- grok-4.3 (deleted: 2026-11-21)
-- grok-4.20-multi-agent-0309 (deleted: 2026-11-21)
-- grok-4.20-0309-reasoning (deleted: 2026-11-21)
-- grok-4.20-0309-non-reasoning (deleted: 2026-11-21)
+- grok-imagine-image-2.0 (deleted: 2026-11-21)
+- grok-imagine-image (deleted: 2026-11-21)
 - grok-build-0.1 (deleted: 2026-11-19)
 - grok-imagine-image-quality (deleted: 2026-11-02)
 - grok-imagine-video-0428 (deleted: 2026-06-26)
