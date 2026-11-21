@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-non-reasoning
 Provider: grok
-Evaluated: 2026-11-21T00:32:07.549180+00:00
+Evaluated: 2026-11-21T00:45:06.987907+00:00
 
 === TIMING ===
-Response time: 6.27s
+Response time: 4.33s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,7 +17,7 @@ Path valid: NO
 Path error: Move 3 must be diagonal (X) but was D
 
 === RAW RESPONSE ===
-**Answer:**
+**Answer**
 
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
@@ -28,73 +28,63 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
     
-    # dp[i][j][k]: max sum to reach (i,j) with k moves made so far
-    # We also keep track of the path that got us there
+    # dp[i][j][k] = (max_sum, path) when arriving at (i,j) after k moves
+    # k % 3 == 0 means next move must be diagonal if possible
     INF = float('-inf')
-    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
-    parent = [[["" for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    dp = [[[ (INF, "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
     
-    # Base: start position, 0 moves
-    dp[0][0][0] = grid[0][0]
+    # Start
+    dp[0][0][0] = (grid[0][0], "")
     
-    directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+    directions = [
+        (0, 1, 'R'),   # right
+        (1, 0, 'D'),   # down
+        (1, 1, 'X')    # diagonal
+    ]
     
     for i in range(n):
         for j in range(n):
             for moves in range(3):
-                if dp[i][j][moves] == INF:
+                if dp[i][j][moves][0] == INF:
                     continue
-                current_sum = dp[i][j][moves]
+                current_sum, path = dp[i][j][moves]
                 
-                # Next move number (1-based)
-                next_move_num = (i + j) + 1
-                must_diagonal = (next_move_num % 3 == 0)
+                # Next move must be diagonal if (total_moves + 1) % 3 == 0
+                total_moves = (i + j)  # since each move increases i+j by 1 or 2
+                must_diagonal = (total_moves % 3 == 2)  # after this many moves, next is 3rd,6th,9th...
                 
-                for di, dj, dir_char in directions:
+                for di, dj, char in directions:
                     ni, nj = i + di, j + dj
                     if ni >= n or nj >= n:
                         continue
                     
-                    # Check if diagonal is required but not possible
-                    if must_diagonal and dir_char != 'X':
-                        # Only allow non-X if X is impossible
-                        x_possible = (i + 1 < n and j + 1 < n)
+                    # Enforce diagonal rule
+                    if must_diagonal and char != 'X':
+                        # Only allow non-diagonal if X is impossible
+                        x_possible = (i+1 < n and j+1 < n)
                         if x_possible:
                             continue
                     
-                    new_moves = (moves + 1) % 3
                     new_sum = current_sum + grid[ni][nj]
+                    new_path = path + char
+                    new_moves = (moves + 1) % 3
                     
-                    if new_sum > dp[ni][nj][new_moves]:
-                        dp[ni][nj][new_moves] = new_sum
-                        parent[ni][nj][new_moves] = (i, j, moves, dir_char)
+                    # Update if better
+                    if new_sum > dp[ni][nj][new_moves][0]:
+                        dp[ni][nj][new_moves] = (new_sum, new_path)
     
     # Find best at bottom-right
     best_sum = INF
-    best_mod = -1
-    for m in range(3):
-        if dp[n-1][n-1][m] > best_sum:
-            best_sum = dp[n-1][n-1][m]
-            best_mod = m
+    best_path = ""
+    for k in range(3):
+        if dp[n-1][n-1][k][0] > best_sum:
+            best_sum = dp[n-1][n-1][k][0]
+            best_path = dp[n-1][n-1][k][1]
     
-    if best_sum == INF:
-        return (0, "")
-    
-    # Reconstruct path
-    path = []
-    ci, cj, cm = n-1, n-1, best_mod
-    while (ci, cj) != (0, 0):
-        pi, pj, pm, move_char = parent[ci][cj][cm]
-        path.append(move_char)
-        ci, cj, cm = pi, pj, pm
-    
-    path.reverse()
-    path_str = ''.join(path)
-    
-    return (int(best_sum), path_str)
+    return (int(best_sum), best_path)
 ```
 
-This solution uses dynamic programming with state `(i, j, moves % 3)` to track position and the move count modulo 3 (to enforce the "every 3rd move must be diagonal if possible" rule). It correctly handles the constraint that diagonal moves are mandatory on turns 3, 6, 9, ... unless not possible, in which case R or D may be used. The path is reconstructed by backtracking through parent pointers.
+**Note**: This implementation uses dynamic programming with state `(i, j, moves_mod3)` to track position and the move count modulo 3, correctly enforcing that every 3rd move must be diagonal (`X`) when possible. It returns both the maximum achievable sum and the corresponding path string.
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
@@ -105,67 +95,57 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 1:
         return (grid[0][0], "")
     
-    # dp[i][j][k]: max sum to reach (i,j) with k moves made so far
-    # We also keep track of the path that got us there
+    # dp[i][j][k] = (max_sum, path) when arriving at (i,j) after k moves
+    # k % 3 == 0 means next move must be diagonal if possible
     INF = float('-inf')
-    dp = [[[INF] * 3 for _ in range(n)] for _ in range(n)]
-    parent = [[["" for _ in range(3)] for _ in range(n)] for _ in range(n)]
+    dp = [[[ (INF, "") for _ in range(3)] for _ in range(n)] for _ in range(n)]
     
-    # Base: start position, 0 moves
-    dp[0][0][0] = grid[0][0]
+    # Start
+    dp[0][0][0] = (grid[0][0], "")
     
-    directions = [(0, 1, 'R'), (1, 0, 'D'), (1, 1, 'X')]
+    directions = [
+        (0, 1, 'R'),   # right
+        (1, 0, 'D'),   # down
+        (1, 1, 'X')    # diagonal
+    ]
     
     for i in range(n):
         for j in range(n):
             for moves in range(3):
-                if dp[i][j][moves] == INF:
+                if dp[i][j][moves][0] == INF:
                     continue
-                current_sum = dp[i][j][moves]
+                current_sum, path = dp[i][j][moves]
                 
-                # Next move number (1-based)
-                next_move_num = (i + j) + 1
-                must_diagonal = (next_move_num % 3 == 0)
+                # Next move must be diagonal if (total_moves + 1) % 3 == 0
+                total_moves = (i + j)  # since each move increases i+j by 1 or 2
+                must_diagonal = (total_moves % 3 == 2)  # after this many moves, next is 3rd,6th,9th...
                 
-                for di, dj, dir_char in directions:
+                for di, dj, char in directions:
                     ni, nj = i + di, j + dj
                     if ni >= n or nj >= n:
                         continue
                     
-                    # Check if diagonal is required but not possible
-                    if must_diagonal and dir_char != 'X':
-                        # Only allow non-X if X is impossible
-                        x_possible = (i + 1 < n and j + 1 < n)
+                    # Enforce diagonal rule
+                    if must_diagonal and char != 'X':
+                        # Only allow non-diagonal if X is impossible
+                        x_possible = (i+1 < n and j+1 < n)
                         if x_possible:
                             continue
                     
-                    new_moves = (moves + 1) % 3
                     new_sum = current_sum + grid[ni][nj]
+                    new_path = path + char
+                    new_moves = (moves + 1) % 3
                     
-                    if new_sum > dp[ni][nj][new_moves]:
-                        dp[ni][nj][new_moves] = new_sum
-                        parent[ni][nj][new_moves] = (i, j, moves, dir_char)
+                    # Update if better
+                    if new_sum > dp[ni][nj][new_moves][0]:
+                        dp[ni][nj][new_moves] = (new_sum, new_path)
     
     # Find best at bottom-right
     best_sum = INF
-    best_mod = -1
-    for m in range(3):
-        if dp[n-1][n-1][m] > best_sum:
-            best_sum = dp[n-1][n-1][m]
-            best_mod = m
+    best_path = ""
+    for k in range(3):
+        if dp[n-1][n-1][k][0] > best_sum:
+            best_sum = dp[n-1][n-1][k][0]
+            best_path = dp[n-1][n-1][k][1]
     
-    if best_sum == INF:
-        return (0, "")
-    
-    # Reconstruct path
-    path = []
-    ci, cj, cm = n-1, n-1, best_mod
-    while (ci, cj) != (0, 0):
-        pi, pj, pm, move_char = parent[ci][cj][cm]
-        path.append(move_char)
-        ci, cj, cm = pi, pj, pm
-    
-    path.reverse()
-    path_str = ''.join(path)
-    
-    return (int(best_sum), path_str)
+    return (int(best_sum), best_path)
