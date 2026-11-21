@@ -1,9 +1,9 @@
 Model: grok-4.5
 Provider: grok
-Evaluated: 2026-11-21T00:46:54.770321+00:00
+Evaluated: 2026-11-21T04:53:13.667360+00:00
 
 === TIMING ===
-Response time: 54.09s
+Response time: 43.83s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -27,42 +27,45 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     from functools import lru_cache
 
     @lru_cache(None)
-    def dp(i: int, j: int, moves: int) -> tuple[int, str]:
-        if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
+    def dfs(r: int, c: int, move_num: int) -> tuple[int, str]:
+        """Max sum of cells visited after (r,c), plus move-string to end."""
+        if r == n - 1 and c == n - 1:
+            return (0, "")
 
-        current = grid[i][j]
-        next_move_num = moves + 1
-        must_diagonal = (next_move_num % 3 == 0)
+        must_diag = (move_num % 3 == 0)
+        can_diag = (r + 1 < n and c + 1 < n)
+        moves: list[tuple[str, int, int]] = []
 
-        can_x = i + 1 < n and j + 1 < n
-        can_r = j + 1 < n
-        can_d = i + 1 < n
-
-        possible_moves = []
-        if must_diagonal and can_x:
-            possible_moves.append(('X', i + 1, j + 1))
+        if must_diag:
+            if can_diag:
+                moves.append(("X", r + 1, c + 1))
+            else:
+                if c + 1 < n:
+                    moves.append(("R", r, c + 1))
+                if r + 1 < n:
+                    moves.append(("D", r + 1, c))
         else:
-            if can_r:
-                possible_moves.append(('R', i, j + 1))
-            if can_d:
-                possible_moves.append(('D', i + 1, j))
-            if can_x:
-                possible_moves.append(('X', i + 1, j + 1))
+            if c + 1 < n:
+                moves.append(("R", r, c + 1))
+            if r + 1 < n:
+                moves.append(("D", r + 1, c))
+            if can_diag:
+                moves.append(("X", r + 1, c + 1))
 
-        best_s = float('-inf')
+        best_s = float("-inf")
         best_p = ""
-        for move_char, ni, nj in possible_moves:
-            sub_sum, sub_path = dp(ni, nj, moves + 1)
-            total = current + sub_sum
-            if total > best_s:
+        for ch, nr, nc in moves:
+            sub_s, sub_p = dfs(nr, nc, move_num + 1)
+            total = grid[nr][nc] + sub_s
+            cand = ch + sub_p
+            if total > best_s or (total == best_s and cand < best_p):
                 best_s = total
-                best_p = move_char + sub_path
+                best_p = cand
 
         return (best_s, best_p)
 
-    total_sum, path = dp(0, 0, 0)
-    return (total_sum, path)
+    rest, path = dfs(0, 0, 1)
+    return (grid[0][0] + rest, path)
 ```
 
 === EXTRACTED CODE ===
@@ -76,39 +79,42 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     from functools import lru_cache
 
     @lru_cache(None)
-    def dp(i: int, j: int, moves: int) -> tuple[int, str]:
-        if i == n - 1 and j == n - 1:
-            return (grid[i][j], "")
+    def dfs(r: int, c: int, move_num: int) -> tuple[int, str]:
+        """Max sum of cells visited after (r,c), plus move-string to end."""
+        if r == n - 1 and c == n - 1:
+            return (0, "")
 
-        current = grid[i][j]
-        next_move_num = moves + 1
-        must_diagonal = (next_move_num % 3 == 0)
+        must_diag = (move_num % 3 == 0)
+        can_diag = (r + 1 < n and c + 1 < n)
+        moves: list[tuple[str, int, int]] = []
 
-        can_x = i + 1 < n and j + 1 < n
-        can_r = j + 1 < n
-        can_d = i + 1 < n
-
-        possible_moves = []
-        if must_diagonal and can_x:
-            possible_moves.append(('X', i + 1, j + 1))
+        if must_diag:
+            if can_diag:
+                moves.append(("X", r + 1, c + 1))
+            else:
+                if c + 1 < n:
+                    moves.append(("R", r, c + 1))
+                if r + 1 < n:
+                    moves.append(("D", r + 1, c))
         else:
-            if can_r:
-                possible_moves.append(('R', i, j + 1))
-            if can_d:
-                possible_moves.append(('D', i + 1, j))
-            if can_x:
-                possible_moves.append(('X', i + 1, j + 1))
+            if c + 1 < n:
+                moves.append(("R", r, c + 1))
+            if r + 1 < n:
+                moves.append(("D", r + 1, c))
+            if can_diag:
+                moves.append(("X", r + 1, c + 1))
 
-        best_s = float('-inf')
+        best_s = float("-inf")
         best_p = ""
-        for move_char, ni, nj in possible_moves:
-            sub_sum, sub_path = dp(ni, nj, moves + 1)
-            total = current + sub_sum
-            if total > best_s:
+        for ch, nr, nc in moves:
+            sub_s, sub_p = dfs(nr, nc, move_num + 1)
+            total = grid[nr][nc] + sub_s
+            cand = ch + sub_p
+            if total > best_s or (total == best_s and cand < best_p):
                 best_s = total
-                best_p = move_char + sub_path
+                best_p = cand
 
         return (best_s, best_p)
 
-    total_sum, path = dp(0, 0, 0)
-    return (total_sum, path)
+    rest, path = dfs(0, 0, 1)
+    return (grid[0][0] + rest, path)
