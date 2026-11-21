@@ -1,9 +1,9 @@
 Model: grok-4.20-0309-reasoning
 Provider: grok
-Evaluated: 2026-11-18T22:09:12.990277+00:00
+Evaluated: 2026-11-21T00:32:13.848328+00:00
 
 === TIMING ===
-Response time: 44.51s
+Response time: 39.36s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -17,134 +17,106 @@ Path valid: YES
 
 === RAW RESPONSE ===
 ```python
+import functools
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
-    n = len(grid)
-    if n == 1:
-        return (grid[0][0], "")
+    N = len(grid)
     
-    MAX_MOVES = 2 * (n - 1) + 1
-    INF = float('-inf')
-    dp = [[[INF for _ in range(MAX_MOVES)] for _ in range(n)] for _ in range(n)]
-    path_table = [[["" for _ in range(MAX_MOVES)] for _ in range(n)] for _ in range(n)]
+    @functools.lru_cache(None)
+    def helper(r: int, c: int, mod: int) -> tuple[int, str]:
+        if r == N - 1 and c == N - 1:
+            return (grid[r][c], "")
+        
+        forced = (mod == 2)
+        candidates = []
+        
+        if forced:
+            if r + 1 < N and c + 1 < N:
+                candidates.append((r + 1, c + 1, 'X'))
+            else:
+                if c + 1 < N:
+                    candidates.append((r, c + 1, 'R'))
+                if r + 1 < N:
+                    candidates.append((r + 1, c, 'D'))
+        else:
+            if c + 1 < N:
+                candidates.append((r, c + 1, 'R'))
+            if r + 1 < N:
+                candidates.append((r + 1, c, 'D'))
+            if r + 1 < N and c + 1 < N:
+                candidates.append((r + 1, c + 1, 'X'))
+        
+        best_sum = -float('inf')
+        best_path = ""
+        for nr, nc, move in candidates:
+            sub_sum, sub_path = helper(nr, nc, (mod + 1) % 3)
+            if sub_sum == -float('inf'):
+                continue
+            total = grid[r][c] + sub_sum
+            if total > best_sum:
+                best_sum = total
+                best_path = move + sub_path
+        
+        if best_sum == -float('inf'):
+            return (-float('inf'), "")
+        return (best_sum, best_path)
     
-    dp[0][0][0] = grid[0][0]
-    path_table[0][0][0] = ""
-    
-    for k in range(MAX_MOVES - 1):
-        for r in range(n):
-            for c in range(n):
-                if dp[r][c][k] == INF:
-                    continue
-                move_num = k + 1
-                must_diagonal = (move_num % 3 == 0)
-                can_right = c + 1 < n
-                can_down = r + 1 < n
-                can_diag = r + 1 < n and c + 1 < n
-                
-                possible = []
-                if must_diagonal:
-                    if can_diag:
-                        possible.append(('X', r + 1, c + 1))
-                    else:
-                        if can_right:
-                            possible.append(('R', r, c + 1))
-                        if can_down:
-                            possible.append(('D', r + 1, c))
-                else:
-                    if can_right:
-                        possible.append(('R', r, c + 1))
-                    if can_down:
-                        possible.append(('D', r + 1, c))
-                    if can_diag:
-                        possible.append(('X', r + 1, c + 1))
-                
-                curr_sum = dp[r][c][k]
-                curr_path = path_table[r][c][k]
-                for mchar, nr, nc in possible:
-                    new_sum = curr_sum + grid[nr][nc]
-                    new_k = k + 1
-                    if new_sum > dp[nr][nc][new_k]:
-                        dp[nr][nc][new_k] = new_sum
-                        path_table[nr][nc][new_k] = curr_path + mchar
-    
-    target_r = n - 1
-    target_c = n - 1
-    max_sum = INF
-    best_path = ""
-    for k in range(MAX_MOVES):
-        if dp[target_r][target_c][k] > max_sum:
-            max_sum = dp[target_r][target_c][k]
-            best_path = path_table[target_r][target_c][k]
-    
-    if max_sum == INF:
+    total_sum, path = helper(0, 0, 0)
+    if total_sum == -float('inf'):
         return (0, "")
-    return (int(max_sum), best_path)
+    return (total_sum, path)
 ```
 
 === EXTRACTED CODE ===
+import functools
+
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if not grid or not grid[0]:
         return (0, "")
-    n = len(grid)
-    if n == 1:
-        return (grid[0][0], "")
+    N = len(grid)
     
-    MAX_MOVES = 2 * (n - 1) + 1
-    INF = float('-inf')
-    dp = [[[INF for _ in range(MAX_MOVES)] for _ in range(n)] for _ in range(n)]
-    path_table = [[["" for _ in range(MAX_MOVES)] for _ in range(n)] for _ in range(n)]
+    @functools.lru_cache(None)
+    def helper(r: int, c: int, mod: int) -> tuple[int, str]:
+        if r == N - 1 and c == N - 1:
+            return (grid[r][c], "")
+        
+        forced = (mod == 2)
+        candidates = []
+        
+        if forced:
+            if r + 1 < N and c + 1 < N:
+                candidates.append((r + 1, c + 1, 'X'))
+            else:
+                if c + 1 < N:
+                    candidates.append((r, c + 1, 'R'))
+                if r + 1 < N:
+                    candidates.append((r + 1, c, 'D'))
+        else:
+            if c + 1 < N:
+                candidates.append((r, c + 1, 'R'))
+            if r + 1 < N:
+                candidates.append((r + 1, c, 'D'))
+            if r + 1 < N and c + 1 < N:
+                candidates.append((r + 1, c + 1, 'X'))
+        
+        best_sum = -float('inf')
+        best_path = ""
+        for nr, nc, move in candidates:
+            sub_sum, sub_path = helper(nr, nc, (mod + 1) % 3)
+            if sub_sum == -float('inf'):
+                continue
+            total = grid[r][c] + sub_sum
+            if total > best_sum:
+                best_sum = total
+                best_path = move + sub_path
+        
+        if best_sum == -float('inf'):
+            return (-float('inf'), "")
+        return (best_sum, best_path)
     
-    dp[0][0][0] = grid[0][0]
-    path_table[0][0][0] = ""
-    
-    for k in range(MAX_MOVES - 1):
-        for r in range(n):
-            for c in range(n):
-                if dp[r][c][k] == INF:
-                    continue
-                move_num = k + 1
-                must_diagonal = (move_num % 3 == 0)
-                can_right = c + 1 < n
-                can_down = r + 1 < n
-                can_diag = r + 1 < n and c + 1 < n
-                
-                possible = []
-                if must_diagonal:
-                    if can_diag:
-                        possible.append(('X', r + 1, c + 1))
-                    else:
-                        if can_right:
-                            possible.append(('R', r, c + 1))
-                        if can_down:
-                            possible.append(('D', r + 1, c))
-                else:
-                    if can_right:
-                        possible.append(('R', r, c + 1))
-                    if can_down:
-                        possible.append(('D', r + 1, c))
-                    if can_diag:
-                        possible.append(('X', r + 1, c + 1))
-                
-                curr_sum = dp[r][c][k]
-                curr_path = path_table[r][c][k]
-                for mchar, nr, nc in possible:
-                    new_sum = curr_sum + grid[nr][nc]
-                    new_k = k + 1
-                    if new_sum > dp[nr][nc][new_k]:
-                        dp[nr][nc][new_k] = new_sum
-                        path_table[nr][nc][new_k] = curr_path + mchar
-    
-    target_r = n - 1
-    target_c = n - 1
-    max_sum = INF
-    best_path = ""
-    for k in range(MAX_MOVES):
-        if dp[target_r][target_c][k] > max_sum:
-            max_sum = dp[target_r][target_c][k]
-            best_path = path_table[target_r][target_c][k]
-    
-    if max_sum == INF:
+    total_sum, path = helper(0, 0, 0)
+    if total_sum == -float('inf'):
         return (0, "")
-    return (int(max_sum), best_path)
+    return (total_sum, path)
