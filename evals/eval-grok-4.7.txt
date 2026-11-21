@@ -1,9 +1,9 @@
 Model: grok-4.7
 Provider: grok
-Evaluated: 2026-11-21T00:48:57.928063+00:00
+Evaluated: 2026-11-21T04:55:06.493115+00:00
 
 === TIMING ===
-Response time: 109.03s
+Response time: 104.9s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -18,121 +18,115 @@ Path valid: YES
 === RAW RESPONSE ===
 ```python
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
+    if not grid or not grid[0]:
         return (0, "")
 
-    NEG = float("-inf")
-    best_sum = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
-    # parent[r][c][mod] = (prev_r, prev_c, prev_mod, move)
-    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    n = len(grid)
+    neg_inf = float("-inf")
+    # best[r][c][mod] = (max sum, one path) to reach (r, c)
+    # after a number of moves congruent to mod (mod 3).
+    best: list[list[list[tuple[float, str]]]] = [
+        [[(neg_inf, "") for _ in range(3)] for _ in range(n)] for _ in range(n)
+    ]
+    best[0][0][0] = (grid[0][0], "")
 
-    # mod = number of moves taken % 3; sum includes every visited cell
-    best_sum[0][0][0] = grid[0][0]
-
-    for diag in range(2 * n - 1):
-        r_lo = max(0, diag - (n - 1))
-        r_hi = min(diag, n - 1)
+    for dist in range(2 * n - 1):
+        r_lo = max(0, dist - (n - 1))
+        r_hi = min(dist, n - 1)
         for r in range(r_lo, r_hi + 1):
-            c = diag - r
+            c = dist - r
             for mod in range(3):
-                cur = best_sum[r][c][mod]
-                if cur == NEG or (r == n - 1 and c == n - 1):
+                cur_sum, cur_path = best[r][c][mod]
+                if cur_sum == neg_inf or (r == n - 1 and c == n - 1):
                     continue
 
-                # moves 3, 6, 9, ... are required when (moves_taken % 3) == 2
-                must_x = mod == 2
-                options = []
-                if r + 1 < n and c + 1 < n:
+                # Moves 3, 6, 9, ... are taken when moves-so-far % 3 == 2.
+                must_diagonal = mod == 2
+                diag_ok = r + 1 < n and c + 1 < n
+
+                options: list[tuple[str, int, int]] = []
+                if must_diagonal and diag_ok:
                     options.append(("X", r + 1, c + 1))
-                if c + 1 < n:
-                    options.append(("R", r, c + 1))
-                if r + 1 < n:
-                    options.append(("D", r + 1, c))
+                else:
+                    if c + 1 < n:
+                        options.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        options.append(("D", r + 1, c))
+                    if diag_ok:
+                        options.append(("X", r + 1, c + 1))
 
-                if must_x:
-                    diagonal = [opt for opt in options if opt[0] == "X"]
-                    options = diagonal if diagonal else [opt for opt in options if opt[0] != "X"]
+                for ch, nr, nc in options:
+                    new_sum = cur_sum + grid[nr][nc]
+                    new_mod = (mod + 1) % 3
+                    if new_sum > best[nr][nc][new_mod][0]:
+                        best[nr][nc][new_mod] = (new_sum, cur_path + ch)
 
-                for move, nr, nc in options:
-                    nmod = (mod + 1) % 3
-                    nsum = cur + grid[nr][nc]
-                    if nsum > best_sum[nr][nc][nmod]:
-                        best_sum[nr][nc][nmod] = nsum
-                        parent[nr][nc][nmod] = (r, c, mod, move)
+    ans_sum = neg_inf
+    ans_path = ""
+    for mod in range(3):
+        s, p = best[n - 1][n - 1][mod]
+        if s > ans_sum:
+            ans_sum = s
+            ans_path = p
 
-    end_scores = best_sum[n - 1][n - 1]
-    end_mod = max(range(3), key=lambda m: end_scores[m])
-    total = end_scores[end_mod]
-    if total == NEG:
+    if ans_sum == neg_inf:
         return (0, "")
-
-    moves = []
-    r, c, mod = n - 1, n - 1, end_mod
-    while not (r == 0 and c == 0 and mod == 0):
-        pr, pc, pmod, move = parent[r][c][mod]
-        moves.append(move)
-        r, c, mod = pr, pc, pmod
-    moves.reverse()
-    return (int(total), "".join(moves))
+    return (int(ans_sum), ans_path)
 ```
 
 === EXTRACTED CODE ===
 def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
-    n = len(grid)
-    if n == 0:
+    if not grid or not grid[0]:
         return (0, "")
 
-    NEG = float("-inf")
-    best_sum = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
-    # parent[r][c][mod] = (prev_r, prev_c, prev_mod, move)
-    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
+    n = len(grid)
+    neg_inf = float("-inf")
+    # best[r][c][mod] = (max sum, one path) to reach (r, c)
+    # after a number of moves congruent to mod (mod 3).
+    best: list[list[list[tuple[float, str]]]] = [
+        [[(neg_inf, "") for _ in range(3)] for _ in range(n)] for _ in range(n)
+    ]
+    best[0][0][0] = (grid[0][0], "")
 
-    # mod = number of moves taken % 3; sum includes every visited cell
-    best_sum[0][0][0] = grid[0][0]
-
-    for diag in range(2 * n - 1):
-        r_lo = max(0, diag - (n - 1))
-        r_hi = min(diag, n - 1)
+    for dist in range(2 * n - 1):
+        r_lo = max(0, dist - (n - 1))
+        r_hi = min(dist, n - 1)
         for r in range(r_lo, r_hi + 1):
-            c = diag - r
+            c = dist - r
             for mod in range(3):
-                cur = best_sum[r][c][mod]
-                if cur == NEG or (r == n - 1 and c == n - 1):
+                cur_sum, cur_path = best[r][c][mod]
+                if cur_sum == neg_inf or (r == n - 1 and c == n - 1):
                     continue
 
-                # moves 3, 6, 9, ... are required when (moves_taken % 3) == 2
-                must_x = mod == 2
-                options = []
-                if r + 1 < n and c + 1 < n:
+                # Moves 3, 6, 9, ... are taken when moves-so-far % 3 == 2.
+                must_diagonal = mod == 2
+                diag_ok = r + 1 < n and c + 1 < n
+
+                options: list[tuple[str, int, int]] = []
+                if must_diagonal and diag_ok:
                     options.append(("X", r + 1, c + 1))
-                if c + 1 < n:
-                    options.append(("R", r, c + 1))
-                if r + 1 < n:
-                    options.append(("D", r + 1, c))
+                else:
+                    if c + 1 < n:
+                        options.append(("R", r, c + 1))
+                    if r + 1 < n:
+                        options.append(("D", r + 1, c))
+                    if diag_ok:
+                        options.append(("X", r + 1, c + 1))
 
-                if must_x:
-                    diagonal = [opt for opt in options if opt[0] == "X"]
-                    options = diagonal if diagonal else [opt for opt in options if opt[0] != "X"]
+                for ch, nr, nc in options:
+                    new_sum = cur_sum + grid[nr][nc]
+                    new_mod = (mod + 1) % 3
+                    if new_sum > best[nr][nc][new_mod][0]:
+                        best[nr][nc][new_mod] = (new_sum, cur_path + ch)
 
-                for move, nr, nc in options:
-                    nmod = (mod + 1) % 3
-                    nsum = cur + grid[nr][nc]
-                    if nsum > best_sum[nr][nc][nmod]:
-                        best_sum[nr][nc][nmod] = nsum
-                        parent[nr][nc][nmod] = (r, c, mod, move)
+    ans_sum = neg_inf
+    ans_path = ""
+    for mod in range(3):
+        s, p = best[n - 1][n - 1][mod]
+        if s > ans_sum:
+            ans_sum = s
+            ans_path = p
 
-    end_scores = best_sum[n - 1][n - 1]
-    end_mod = max(range(3), key=lambda m: end_scores[m])
-    total = end_scores[end_mod]
-    if total == NEG:
+    if ans_sum == neg_inf:
         return (0, "")
-
-    moves = []
-    r, c, mod = n - 1, n - 1, end_mod
-    while not (r == 0 and c == 0 and mod == 0):
-        pr, pc, pmod, move = parent[r][c][mod]
-        moves.append(move)
-        r, c, mod = pr, pc, pmod
-    moves.reverse()
-    return (int(total), "".join(moves))
+    return (int(ans_sum), ans_path)
