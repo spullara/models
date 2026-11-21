@@ -1,9 +1,9 @@
 Model: grok-4.7
 Provider: grok
-Evaluated: 2026-11-21T00:35:50.549547+00:00
+Evaluated: 2026-11-21T00:48:57.928063+00:00
 
 === TIMING ===
-Response time: 111.44s
+Response time: 109.03s
 
 === CODE EXTRACTION ===
 Method: markdown_python
@@ -22,65 +22,59 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    # best_sum[r][c][k]: max sum from (r, c) to the end, including grid[r][c],
-    # given that k moves have already been made (k in {0, 1, 2}).
-    # best_move stores the first step of one such optimal path.
-    # On ties, D < R < X so the reconstructed path is lexicographically smallest.
-    best_sum: list[list[list[int | None]]] = [
-        [[None] * 3 for _ in range(n)] for _ in range(n)
-    ]
-    best_move = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+    NEG = float("-inf")
+    best_sum = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    # parent[r][c][mod] = (prev_r, prev_c, prev_mod, move)
+    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
 
-    for k in range(3):
-        best_sum[n - 1][n - 1][k] = grid[n - 1][n - 1]
+    # mod = number of moves taken % 3; sum includes every visited cell
+    best_sum[0][0][0] = grid[0][0]
 
-    for r in range(n - 1, -1, -1):
-        for c in range(n - 1, -1, -1):
-            if r == n - 1 and c == n - 1:
-                continue
-            for k in range(3):
-                force_x = (k + 1) % 3 == 0
-                can_x = r + 1 < n and c + 1 < n
-                can_r = c + 1 < n
-                can_d = r + 1 < n
+    for diag in range(2 * n - 1):
+        r_lo = max(0, diag - (n - 1))
+        r_hi = min(diag, n - 1)
+        for r in range(r_lo, r_hi + 1):
+            c = diag - r
+            for mod in range(3):
+                cur = best_sum[r][c][mod]
+                if cur == NEG or (r == n - 1 and c == n - 1):
+                    continue
 
-                if force_x and can_x:
-                    options = [("X", r + 1, c + 1)]
-                else:
-                    options = []
-                    if can_d:
-                        options.append(("D", r + 1, c))
-                    if can_r:
-                        options.append(("R", r, c + 1))
-                    if can_x:
-                        options.append(("X", r + 1, c + 1))
+                # moves 3, 6, 9, ... are required when (moves_taken % 3) == 2
+                must_x = mod == 2
+                options = []
+                if r + 1 < n and c + 1 < n:
+                    options.append(("X", r + 1, c + 1))
+                if c + 1 < n:
+                    options.append(("R", r, c + 1))
+                if r + 1 < n:
+                    options.append(("D", r + 1, c))
 
-                nxt = (k + 1) % 3
-                chosen_sum: int | None = None
-                chosen_mv = ""
-                for ch, nr, nc in options:
-                    total = grid[r][c] + best_sum[nr][nc][nxt]
-                    if chosen_sum is None or total > chosen_sum:
-                        chosen_sum = total
-                        chosen_mv = ch
-                best_sum[r][c][k] = chosen_sum
-                best_move[r][c][k] = chosen_mv
+                if must_x:
+                    diagonal = [opt for opt in options if opt[0] == "X"]
+                    options = diagonal if diagonal else [opt for opt in options if opt[0] != "X"]
 
-    path_chars: list[str] = []
-    r = c = k = 0
-    while r != n - 1 or c != n - 1:
-        ch = best_move[r][c][k]
-        path_chars.append(ch)
-        if ch == "D":
-            r += 1
-        elif ch == "R":
-            c += 1
-        else:
-            r += 1
-            c += 1
-        k = (k + 1) % 3
+                for move, nr, nc in options:
+                    nmod = (mod + 1) % 3
+                    nsum = cur + grid[nr][nc]
+                    if nsum > best_sum[nr][nc][nmod]:
+                        best_sum[nr][nc][nmod] = nsum
+                        parent[nr][nc][nmod] = (r, c, mod, move)
 
-    return (best_sum[0][0][0], "".join(path_chars))
+    end_scores = best_sum[n - 1][n - 1]
+    end_mod = max(range(3), key=lambda m: end_scores[m])
+    total = end_scores[end_mod]
+    if total == NEG:
+        return (0, "")
+
+    moves = []
+    r, c, mod = n - 1, n - 1, end_mod
+    while not (r == 0 and c == 0 and mod == 0):
+        pr, pc, pmod, move = parent[r][c][mod]
+        moves.append(move)
+        r, c, mod = pr, pc, pmod
+    moves.reverse()
+    return (int(total), "".join(moves))
 ```
 
 === EXTRACTED CODE ===
@@ -89,62 +83,56 @@ def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
     if n == 0:
         return (0, "")
 
-    # best_sum[r][c][k]: max sum from (r, c) to the end, including grid[r][c],
-    # given that k moves have already been made (k in {0, 1, 2}).
-    # best_move stores the first step of one such optimal path.
-    # On ties, D < R < X so the reconstructed path is lexicographically smallest.
-    best_sum: list[list[list[int | None]]] = [
-        [[None] * 3 for _ in range(n)] for _ in range(n)
-    ]
-    best_move = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+    NEG = float("-inf")
+    best_sum = [[[NEG] * 3 for _ in range(n)] for _ in range(n)]
+    # parent[r][c][mod] = (prev_r, prev_c, prev_mod, move)
+    parent = [[[None] * 3 for _ in range(n)] for _ in range(n)]
 
-    for k in range(3):
-        best_sum[n - 1][n - 1][k] = grid[n - 1][n - 1]
+    # mod = number of moves taken % 3; sum includes every visited cell
+    best_sum[0][0][0] = grid[0][0]
 
-    for r in range(n - 1, -1, -1):
-        for c in range(n - 1, -1, -1):
-            if r == n - 1 and c == n - 1:
-                continue
-            for k in range(3):
-                force_x = (k + 1) % 3 == 0
-                can_x = r + 1 < n and c + 1 < n
-                can_r = c + 1 < n
-                can_d = r + 1 < n
+    for diag in range(2 * n - 1):
+        r_lo = max(0, diag - (n - 1))
+        r_hi = min(diag, n - 1)
+        for r in range(r_lo, r_hi + 1):
+            c = diag - r
+            for mod in range(3):
+                cur = best_sum[r][c][mod]
+                if cur == NEG or (r == n - 1 and c == n - 1):
+                    continue
 
-                if force_x and can_x:
-                    options = [("X", r + 1, c + 1)]
-                else:
-                    options = []
-                    if can_d:
-                        options.append(("D", r + 1, c))
-                    if can_r:
-                        options.append(("R", r, c + 1))
-                    if can_x:
-                        options.append(("X", r + 1, c + 1))
+                # moves 3, 6, 9, ... are required when (moves_taken % 3) == 2
+                must_x = mod == 2
+                options = []
+                if r + 1 < n and c + 1 < n:
+                    options.append(("X", r + 1, c + 1))
+                if c + 1 < n:
+                    options.append(("R", r, c + 1))
+                if r + 1 < n:
+                    options.append(("D", r + 1, c))
 
-                nxt = (k + 1) % 3
-                chosen_sum: int | None = None
-                chosen_mv = ""
-                for ch, nr, nc in options:
-                    total = grid[r][c] + best_sum[nr][nc][nxt]
-                    if chosen_sum is None or total > chosen_sum:
-                        chosen_sum = total
-                        chosen_mv = ch
-                best_sum[r][c][k] = chosen_sum
-                best_move[r][c][k] = chosen_mv
+                if must_x:
+                    diagonal = [opt for opt in options if opt[0] == "X"]
+                    options = diagonal if diagonal else [opt for opt in options if opt[0] != "X"]
 
-    path_chars: list[str] = []
-    r = c = k = 0
-    while r != n - 1 or c != n - 1:
-        ch = best_move[r][c][k]
-        path_chars.append(ch)
-        if ch == "D":
-            r += 1
-        elif ch == "R":
-            c += 1
-        else:
-            r += 1
-            c += 1
-        k = (k + 1) % 3
+                for move, nr, nc in options:
+                    nmod = (mod + 1) % 3
+                    nsum = cur + grid[nr][nc]
+                    if nsum > best_sum[nr][nc][nmod]:
+                        best_sum[nr][nc][nmod] = nsum
+                        parent[nr][nc][nmod] = (r, c, mod, move)
 
-    return (best_sum[0][0][0], "".join(path_chars))
+    end_scores = best_sum[n - 1][n - 1]
+    end_mod = max(range(3), key=lambda m: end_scores[m])
+    total = end_scores[end_mod]
+    if total == NEG:
+        return (0, "")
+
+    moves = []
+    r, c, mod = n - 1, n - 1, end_mod
+    while not (r == 0 and c == 0 and mod == 0):
+        pr, pc, pmod, move = parent[r][c][mod]
+        moves.append(move)
+        r, c, mod = pr, pc, pmod
+    moves.reverse()
+    return (int(total), "".join(moves))
