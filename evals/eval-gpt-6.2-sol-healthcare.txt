@@ -1,0 +1,110 @@
+Model: gpt-6.2-sol-healthcare
+Provider: openai_responses
+Evaluated: 2026-11-24T17:33:19.989617+00:00
+
+=== TIMING ===
+Response time: 9.94s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a non-empty square")
+
+    # best[r][c][phase] includes grid[r][c].
+    # phase is the number of moves already taken, modulo 3.
+    best = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+
+    def moves(r: int, c: int, phase: int):
+        diagonal_possible = r + 1 < n and c + 1 < n
+        if diagonal_possible:
+            yield r + 1, c + 1, "X"
+            if phase == 2:
+                return
+        if c + 1 < n:
+            yield r, c + 1, "R"
+        if r + 1 < n:
+            yield r + 1, c, "D"
+
+    best[n - 1][n - 1] = [grid[n - 1][n - 1]] * 3
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == c == n - 1:
+                continue
+            for phase in range(3):
+                next_phase = (phase + 1) % 3
+                best[r][c][phase] = grid[r][c] + max(
+                    best[nr][nc][next_phase]
+                    for nr, nc, _ in moves(r, c, phase)
+                )
+
+    path = []
+    r = c = phase = 0
+    while (r, c) != (n - 1, n - 1):
+        next_phase = (phase + 1) % 3
+        r, c, move = max(
+            moves(r, c, phase),
+            key=lambda step: best[step[0]][step[1]][next_phase],
+        )
+        path.append(move)
+        phase = next_phase
+
+    return best[0][0][0], "".join(path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be a non-empty square")
+
+    # best[r][c][phase] includes grid[r][c].
+    # phase is the number of moves already taken, modulo 3.
+    best = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+
+    def moves(r: int, c: int, phase: int):
+        diagonal_possible = r + 1 < n and c + 1 < n
+        if diagonal_possible:
+            yield r + 1, c + 1, "X"
+            if phase == 2:
+                return
+        if c + 1 < n:
+            yield r, c + 1, "R"
+        if r + 1 < n:
+            yield r + 1, c, "D"
+
+    best[n - 1][n - 1] = [grid[n - 1][n - 1]] * 3
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == c == n - 1:
+                continue
+            for phase in range(3):
+                next_phase = (phase + 1) % 3
+                best[r][c][phase] = grid[r][c] + max(
+                    best[nr][nc][next_phase]
+                    for nr, nc, _ in moves(r, c, phase)
+                )
+
+    path = []
+    r = c = phase = 0
+    while (r, c) != (n - 1, n - 1):
+        next_phase = (phase + 1) % 3
+        r, c, move = max(
+            moves(r, c, phase),
+            key=lambda step: best[step[0]][step[1]][next_phase],
+        )
+        path.append(move)
+        phase = next_phase
+
+    return best[0][0][0], "".join(path)
