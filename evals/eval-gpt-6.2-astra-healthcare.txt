@@ -1,0 +1,110 @@
+Model: gpt-6.2-astra-healthcare
+Provider: openai_responses
+Evaluated: 2026-11-24T17:32:07.060690+00:00
+
+=== TIMING ===
+Response time: 8.09s
+
+=== CODE EXTRACTION ===
+Method: markdown_python
+Syntax valid: YES
+
+=== EXECUTION ===
+Returned sum: 60
+Calculated sum: 60
+Sum matches: YES
+Path valid: YES
+
+=== RAW RESPONSE ===
+```python
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be nonempty and square")
+
+    # State: (row, column, number of moves already made modulo 3).
+    scores = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+    choices = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+    moves = (("R", 0, 1), ("D", 1, 0), ("X", 1, 1))
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                scores[r][c] = [grid[r][c]] * 3
+                continue
+
+            diagonal_possible = r + 1 < n and c + 1 < n
+            for phase in range(3):
+                next_phase = (phase + 1) % 3
+                best = None
+                for move, dr, dc in moves:
+                    if phase == 2 and diagonal_possible and move != "X":
+                        continue
+                    nr, nc = r + dr, c + dc
+                    if nr >= n or nc >= n:
+                        continue
+                    total = grid[r][c] + scores[nr][nc][next_phase]
+                    if best is None or total > best:
+                        best = total
+                        scores[r][c][phase] = total
+                        choices[r][c][phase] = move
+
+    r = c = phase = 0
+    path = []
+    while r != n - 1 or c != n - 1:
+        move = choices[r][c][phase]
+        path.append(move)
+        if move in ("D", "X"):
+            r += 1
+        if move in ("R", "X"):
+            c += 1
+        phase = (phase + 1) % 3
+
+    return scores[0][0][0], "".join(path)
+```
+
+=== EXTRACTED CODE ===
+def solve_grid(grid: list[list[int]]) -> tuple[int, str]:
+    n = len(grid)
+    if n == 0 or any(len(row) != n for row in grid):
+        raise ValueError("grid must be nonempty and square")
+
+    # State: (row, column, number of moves already made modulo 3).
+    scores = [[[0] * 3 for _ in range(n)] for _ in range(n)]
+    choices = [[[""] * 3 for _ in range(n)] for _ in range(n)]
+    moves = (("R", 0, 1), ("D", 1, 0), ("X", 1, 1))
+
+    for r in range(n - 1, -1, -1):
+        for c in range(n - 1, -1, -1):
+            if r == n - 1 and c == n - 1:
+                scores[r][c] = [grid[r][c]] * 3
+                continue
+
+            diagonal_possible = r + 1 < n and c + 1 < n
+            for phase in range(3):
+                next_phase = (phase + 1) % 3
+                best = None
+                for move, dr, dc in moves:
+                    if phase == 2 and diagonal_possible and move != "X":
+                        continue
+                    nr, nc = r + dr, c + dc
+                    if nr >= n or nc >= n:
+                        continue
+                    total = grid[r][c] + scores[nr][nc][next_phase]
+                    if best is None or total > best:
+                        best = total
+                        scores[r][c][phase] = total
+                        choices[r][c][phase] = move
+
+    r = c = phase = 0
+    path = []
+    while r != n - 1 or c != n - 1:
+        move = choices[r][c][phase]
+        path.append(move)
+        if move in ("D", "X"):
+            r += 1
+        if move in ("R", "X"):
+            c += 1
+        phase = (phase + 1) % 3
+
+    return scores[0][0][0], "".join(path)
